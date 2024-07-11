@@ -8,7 +8,7 @@ This repo contains the constantly-in-progress [Home Assistant](https://home-assi
 Make sure that you :star: this repo, so that you can get updates right in your notification feed.
 
 ### Dashboard:
-| [![dashboard-desktop](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop.png)<br>Desktop/Tablet | [![dashboard-mobile](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-mobile.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-mobile-full.png)<br>Mobile<br>(click to view all tiles) |
+| [![dashboard-desktop-dark](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-dark-desktop.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-dark-desktop.png)<br>Dark Theme | [![dashboard-desktop-light](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light-full.png)<br>Light Theme |
 |:---:|:---:|
 
 ### Wall Mounted Tablet:
