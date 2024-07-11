@@ -1,0 +1,206 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Themes
+# @description :
+#
+################################################################################
+
+extra_module_url:
+  - /hacsfiles/lovelace-card-mod/card-mod.js
+  - /hacsfiles/hass-bha-icons/hass-bha-icons.js
+  - /hacsfiles/hass-hue-icons/hass-hue-icons.js
+
+themes:
+  casamaxson:
+    red-color-hex: "#F54436"
+    red-color-rgb: "245, 68, 54"
+    orange-color-hex: "FF9800"
+    orange-color-rgb: "255, 152, 0"
+    yellow-color-hex: "#FF9101"
+    yellow-color-rgb: "255, 145, 1"
+    green-color-hex: "#01C852"
+    green-color-rgb: "1, 200, 82"
+    blue-color-hex: "#3D5AFE"
+    blue-color-rgb: "61, 90, 254"
+    purple-color-hex: "#661FFF"
+    purple-color-rgb: "102, 31, 255"
+    grey-color-hex: "#BBBBBB"
+    grey-color-rgb: "187, 187, 187"
+
+    dark-grey-color: "#606060"
+    black-color-hex: "#000000"
+    black-color-rgb: "35, 35, 35"
+    white-color-hex: "#ffffff"
+    white-color-rgb: "206, 206, 206"
+
+    layout-margin: "0"
+    layout-padding: "0"
+    # masonry-view-card-margin: "0"
+    # vertical-stack-card-gap: "0"
+
+    layout--grid-column-gap: "4vw"
+    layout--grid-row-gap: "2vw"
+
+    # Styles: Tile Card
+    tile-card--padding: "20px"
+    tile-card--border-width: "2px"
+    tile-card--border-radius: "12px"
+
+    # Styles: Tile Badge
+    tile-card-badge--size: 18px
+    tile-card-badge--padding: 8px
+
+    # Styles: Button
+    entity-card--background-color: "var( --tile-card--background-color )"
+    entity-card--border-color: "var( --tile-card--background-color )"
+    entity-card--icon-color: "var( --tile-card--icon-color )"
+    entity-card--name-color: "var( --tile-card--name-color )"
+
+    # Styles: Chip
+    chip-card--border-width: "1px"
+    chip-card--background-color: "var( --popup--background-color )"
+    chip-card--icon-color: "var( --tile-card--icon-color )"
+    chip-card--name-color: "var( --tile-card--name-color )"
+    chip-card--state-color: "var( --tile-card--state-color )"
+    chip-card--label-color: "var( --tile-card--label-color )"
+
+    # Styles: Popup
+    popup--grid-padding: 0
+    popup--grid-margin: 0
+    popup--grid-gap-column: 3%
+    popup--grid-gap-row: 1.5%
+
+    # Map Sensor Colors
+    map-icon--sensor-off: "var( --grey-color-rgb )"
+    map-icon--sensor-on: "var( --green-color-rgb )"
+    map-icon--sensor-unavail: "var( --purple-color-rgb )"
+
+    map-icon--sensor-cover-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-cover-on: "var( --map-icon--sensor-on )"
+    map-icon--sensor-cover-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-door-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-door-on: "var( --red-color-rgb )"
+    map-icon--sensor-door-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-fan-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-fan-on: "var( --map-icon--sensor-on )"
+    map-icon--sensor-fan-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-leak-off: "var( --blue-color-rgb )"
+    map-icon--sensor-leak-on: "var( --red-color-rgb )"
+    map-icon--sensor-leak-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-light-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-light-on: "var( --yellow-color-rgb )"
+    map-icon--sensor-light-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-lock-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-lock-on: "var( --red-color-rgb )"
+    map-icon--sensor-lock-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-media-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-media-on: "var( --map-icon--sensor-on )"
+    map-icon--sensor-media-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-presence-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-presence-on: "var( --map-icon--sensor-on )"
+    map-icon--sensor-presence-unavail: "var( --map-icon--sensor-unavail )"
+
+    map-icon--sensor-valve-off: "var( --map-icon--sensor-off )"
+    map-icon--sensor-valve-on: "var( --red-color-rgb )"
+    map-icon--sensor-valve-unavail: "var( --map-icon--sensor-unavail )"
+
+    modes:
+      dark:
+        tile-card--background-color: "rgb( 28, 28, 28 )"
+        tile-card--border-color: "transparent"
+        tile-card--ripple-color: "rgba( 255, 255, 255, 0.3 )"
+        tile-card--tap-highlight-color: "var( --tile-card--ripple-color )"
+        tile-card--icon-color: "rgba( 255, 255, 255, 0.3 )"
+        tile-card--name-color: "rgba( 255, 255, 255, 0.7 )"
+        tile-card--state-color: "var( --tile-card--icon-color )"
+        tile-card--label-color: "var( --tile-card--icon-color )"
+
+        tile-card--background-color--inverse: "rgb( 207, 207, 207 )"
+        tile-card--border-color--inverse: "transparent"
+        tile-card--ripple-color--inverse: "rgba( 28, 28, 28, 0.3 )"
+        tile-card--tap-highlight-color--inverse: "var( --tile-card--ripple-color--inverse )"
+        tile-card--icon-color--inverse: "rgb( var( --blue-color-rgb ) )"
+        tile-card--name-color--inverse: "rgba( 0, 0, 0, 0.90 )"
+        tile-card--state-color--inverse: "rgba( 0, 0, 0, 0.65 )"
+        tile-card--label-color--inverse: "var( --tile-card--state-color--inverse )"
+
+        tile-card--icon-color--unavail--inverse: "var( --grey-color-rgb )"
+
+        tile-card-btn--background-color: "transparent"
+        tile-card-btn--border-color: "rgba( 225, 225, 225, 0.25 )"
+        tile-card-btn--icon-color: "var( --tile-card-btn--border-color )"
+
+        tile-card-btn--background-color--inverse: transparent
+        tile-card-btn--border-color--inverse: "rgba( 0, 0, 0, 0.25 )"
+        tile-card-btn--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
+
+        tile-card-badge--background-color: "var( --tile-card--background-color )"
+        tile-card-badge--border-color: "var( --tile-card-btn--border-color )"
+        tile-card-badge--icon-color: "var( --tile-card-btn--border-color )"
+
+        tile-card-badge--background-color--inverse: "var( --tile-card--background-color--inverse )"
+        tile-card-badge--border-color--inverse: "var( --tile-card-btn--border-color--inverse )"
+        tile-card-badge--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
+
+        popup--border-width: "var( --tile-border-width )"
+        popup--border-color: "rgba( 255, 255, 255, 0.25 )"
+        popup--background-color: "var( --tile-card--background-color )"
+
+        chip-card--border-color: "rgba( 255, 255, 255, 0.12 )"
+
+        sidebar--text-color: "rgba( var( --white-color-rgb ), 0.6 )"
+        sidebar--text-color--priority: "var( --tile-card--name-color )"
+
+      light:
+        tile-card--background-color: "rgb( 234, 234, 234 )"
+        tile-card--border-color: "transparent"
+        tile-card--ripple-color: "rgba( 0, 0, 0, 0.3 )"
+        tile-card--tap-highlight-color: "var( --tile-card--ripple-color )"
+        tile-card--icon-color: "rgba( 0, 0, 0, 0.4 )"
+        tile-card--name-color: "rgba( 0, 0, 0, 0.7 )"
+        tile-card--state-color: "var( --tile-card--icon-color )"
+        tile-card--label-color: "var( --tile-card--icon-color )"
+
+        tile-card--background-color--inverse: "rgb( 255, 255, 255 )"
+        tile-card--border-color--inverse: "rgb( 227, 227, 227 )"
+        tile-card--ripple-color--inverse: "rgba( 227, 227, 227, 0.3 )"
+        tile-card--tap-highlight-color--inverse: "var( --tile-card--ripple-color--inverse )"
+        tile-card--icon-color--inverse: "rgb( var( --blue-color-rgb ) )"
+        tile-card--name-color--inverse: "rgba( 0, 0, 0, 0.90 )"
+        tile-card--state-color--inverse: "rgba( 0, 0, 0, 0.50 )"
+        tile-card--label-color--inverse: "var( --tile-card--state-color--inverse )"
+
+        tile-card--icon-color--unavail--inverse: "var( --grey-color-rgb )"
+
+        tile-card-btn--background-color: "transparent"
+        tile-card-btn--border-color: "rgba( 0, 0, 0, 0.25 )"
+        tile-card-btn--icon-color: "var( --tile-card-btn--border-color )"
+
+        tile-card-btn--background-color--inverse: transparent
+        tile-card-btn--border-color--inverse: "var( --tile-card-btn--border-color )"
+        tile-card-btn--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
+
+        tile-card-badge--background-color: "var( --tile-card--background-color )"
+        tile-card-badge--border-color: "var( --tile-card-btn--border-color )"
+        tile-card-badge--icon-color: "var( --tile-card-btn--border-color )"
+
+        tile-card-badge--background-color--inverse: "var( --tile-card--background-color--inverse )"
+        tile-card-badge--border-color--inverse: "var( --tile-card--border-color--inverse )"
+        tile-card-badge--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
+
+        popup--border-width: "var( --tile-border-width )"
+        popup--border-color: "rgba( 0, 0, 0, 0.25 )"
+        popup--background-color: "var( --tile-card--background-color )"
+
+        chip-card--border-color: "rgba( 0, 0, 0, 0.12 )"
+
+        sidebar--text-color: "rgba( var( --black-color-rgb ), 0.6 )"
+        sidebar--text-color--priority: "var( --tile-card--name-color )"

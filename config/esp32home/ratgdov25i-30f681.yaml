@@ -1,0 +1,17 @@
+substitutions:
+  name: ratgdov25i-30f681
+  friendly_name: RATGDO, Garage Door Opener
+packages:
+  ratgdo.esphome: github://ratgdo/esphome-ratgdo/v25iboard.yaml@main
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+api:
+  encryption:
+    key: !secret ratgdo_api_key
+
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password

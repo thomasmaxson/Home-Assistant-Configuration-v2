@@ -1,0 +1,14 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Group
+# @description :
+#
+################################################################################
+
+group:
+  residents:
+    name: Residents
+    entities:
+      - person.thomas
+      - person.jessica

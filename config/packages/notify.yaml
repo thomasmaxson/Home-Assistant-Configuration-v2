@@ -1,0 +1,13 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Notify
+# @description : A collection of notification scripts and configurations
+#
+################################################################################
+#
+# TEXT TO SPEECH
+# --------------------------------------------------
+
+tts:
+  platform: google_translate

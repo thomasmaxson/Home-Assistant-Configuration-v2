@@ -1,0 +1,119 @@
+- id: '1632277288633'
+  alias: 'Set Default: Theme on Load'
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: frontend.set_theme
+    data:
+      name: tihiti
+  mode: single
+- id: '1651337763691'
+  alias: Remove Snapshots, Older than 7 Days
+  description: ''
+  trigger:
+  - platform: time
+    at: 02:30:00
+  condition: []
+  action:
+  - service: delete.files_in_folder
+    data:
+      folder: /config/www/snapshots/
+      time: 604800
+  mode: single
+- id: '1718905474959'
+  alias: Reload Bluetooth Integration
+  description: Reload Bluetooth integration when devices become unavailable.
+  trigger:
+  - platform: state
+    entity_id:
+    - cover.blinds_bedroom_4
+    - cover.bedroom_1_large_window_left
+    - cover.bedroom_1_large_window_right
+    to: unavailable
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - service: bluetooth.reload
+  mode: single
+- id: '1720282032691'
+  alias: 'Reminder: Turn on Notification for Waste Solid Take Out'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.waste_take_out_solid
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.reminder_waste_take_out_solid
+  mode: single
+- id: '1720282140273'
+  alias: 'Reminder: Turn on Notification for Waste Solid Bring In'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.waste_bring_in_solid
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.reminder_waste_bring_in_solid
+  mode: single
+- id: '1720282258205'
+  alias: 'Reminder: Turn on Notification for Recycling Bring In'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.waste_bring_in_recycle
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.reminder_waste_bring_in_recycle
+  mode: single
+- id: '1720282315649'
+  alias: 'Reminder: Turn on Notification for Recycling Take Out'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.waste_take_out_recycle
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.reminder_waste_take_out_recycle
+  mode: single

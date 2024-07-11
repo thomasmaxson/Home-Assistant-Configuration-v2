@@ -1,0 +1,131 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Sidebar Content
+# @description :
+#
+################################################################################
+
+template:
+  - sensor:
+      - unique_id: sidebar
+        state: template
+        attributes:
+          time: >
+            {%- set hours = now().strftime( '%I' ) %}
+            {%- set minutes = now().strftime( '%M' ) %}
+
+            {{ hours }}<span class="time-colon">:</span>{{ minutes }}
+
+          date: |
+            {%- set weekday = now().strftime( '%A' ) %}
+            {%- set month = now().strftime( '%B' ) %}
+
+            {{ weekday }},<br>
+            {{ month }} {{ now().day }}
+
+          greeting: |
+            {%- set time = now().hour %}
+
+            {%- if time <= 5 -%}
+              Good Night
+
+            {%- elif time <= 11 -%}
+              Good Morning
+
+            {%- elif time <= 19 -%}
+              Good Afternoon
+
+            {%- else %}
+              Good Evening
+
+            {%- endif -%}
+
+          weather: |
+            {%- if is_state( 'input_boolean.sidebar_display_weather_forecast', 'on' ) %}
+              {%- set ignore = [ 'null', 'unknown', 'unavailable' ] -%}
+              {%- set temperature = states( 'sensor.pirateweather_temperature' ) %}
+
+              {%- if temperature not in ignore %}
+                It is currently {{ temperature | round }}°
+
+                {%- if is_state( 'weather.pirateweather', 'rainy' ) %}
+                  {{ [
+                    'with expected rain', 
+                    'with expected showers'
+                  ] | random }}
+
+                {%- elif is_state( 'weather.pirateweather', 'cloudy' ) %}
+                  {{ [
+                    'with clouds', 
+                    'with cloudy skies'
+                  ] | random }}
+
+                {%- elif is_state( 'weather.pirateweather', 'partlycloudy' ) %}
+                  {{ [
+                    'with some clouds', 
+                    'with partly cloudy skies',
+                    'with scattered clouds'
+                  ] | random }}
+
+                {%- else %}
+                  {%- if is_state( 'sun.sun', 'above_horizon' ) %}
+                    {{ [
+                      'and sunny', 
+                      'with sunshine'
+                    ] | random }}
+
+                  {%- else %}
+                    {{ [
+                      'and clear', 
+                      'with clear skies'
+                    ] | random }}
+
+                  {%- endif %}
+                {%- endif %}
+
+              {%- else %}
+                Unable to load weather information
+
+              {%- endif %}
+            {%- endif %}
+
+          holiday: |
+            {%- if is_state( 'input_boolean.sidebar_display_holidays', 'on' ) %}
+              {%- if states.calendar.holidays_in_united_states.state == 'on' %}
+                Today is {{ states.calendar.holidays_in_united_states.attributes.message }}
+
+              {%- endif %}
+            {%- endif %}
+
+          birthday: |
+            {%- if is_state( 'input_boolean.sidebar_display_celebrations', 'on' ) %}
+              {%- if states.calendar.birthdays.state == 'on' %}
+                Today is {{ states.calendar.birthdays.attributes.message }}. {{ [
+                  'Ready for another lap around the sun?',
+                  'They can cry if they want to.',
+                  'The confetti cannon is ready.',
+                  'I hope the cake is tasty.'
+                ] | random }}
+              {%- endif %}
+            {%- endif %}
+
+          neighborhood: |
+            {%- if is_state( 'input_boolean.sidebar_display_neighborhood', 'on' ) %}
+              {%- if states.calendar.regency_lakes.state == 'on' %}
+                {%- set message = states.calendar.regency_lakes.attributes.message %}
+                {%- set description = states.calendar.regency_lakes.attributes.description %}
+
+                {%- if description != '' %}
+                  {{ description }}
+
+                {%- elif message != '' %}
+                  {{ message }} in {{ [
+                    'your neighborhood', 
+                    'Regency Lakes', 
+                    'Osprey Point'
+                  ] | random }} today
+
+                {%- endif %}
+              {%- endif %}
+            {%- endif %}

@@ -1,0 +1,49 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Configuration
+# @description :
+#
+################################################################################
+
+homeassistant:
+  external_url: !secret homeassistant_external_url
+  internal_url: !secret homeassistant_internal_url
+
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret homeassistant_latitude
+  longitude: !secret homeassistant_longitude
+
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret homeassistant_elevation
+
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/New_York
+
+  country: US
+
+  # Custom specific entities
+  packages: !include_dir_named packages
+
+  # Required for HA File Size addon
+  allowlist_external_dirs:
+    - /config
+    - /config/www/snapshots
+
+# If you remove this, YOU WILL HAVE A BAD TIME
+# Home Assistant will not run properly on restart
+default_config:
+
+automation: !include automations.yaml
+scene: !include scenes.yaml
+script: !include scripts.yaml
+frontend: !include themes.yaml
+
+#
+# CUSTOM: Delete integration
+# ----------------------------------------
+
+delete:

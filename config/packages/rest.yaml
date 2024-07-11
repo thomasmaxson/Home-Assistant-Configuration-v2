@@ -1,0 +1,56 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Rest Commands
+# @description :
+#
+################################################################################
+
+rest_command:
+  kiosk_command:
+    url: !secret rest_url_kiosk_command
+
+sensor:
+  # https://www.egglec.com.au/post/fully-kiosk-browser-and-home-assistant
+  - platform: rest
+    name: Kitchen Tablet
+    resource: !secret rest_url_kiosk_device_info
+    json_attributes:
+      - ip4
+      - batteryLevel
+      - isPlugged
+      - plugged
+      - kioskMode
+      - screenBrightness
+      - motionDetectorState
+      - maintenanceMode
+      - appFreeMemory
+      - appUsedMemory
+      - totalFreeMemory
+      - totalUsedMemory
+      - mac
+      - startUrl
+      - currentPage
+      - screenOrientation
+      - screenBrightness
+      - screenLocked
+      - screenOn
+      - batteryTemperature
+    value_template: "{{ value_json.screenOn }}"
+    scan_interval: 10
+
+  - platform: rest
+    name: Kitchen Tablet Settings
+    json_attributes:
+      - timeToScreenOffV2
+      - screenBrightness
+      - microphoneAccess
+      - motionSensitivity
+      - motionDection
+      - motionDetectionAcoustic
+      - motionSensitivityAcoustic
+      - screenOffInDarkness
+      - darknessLevel
+    resource: !secret rest_url_kiosk_device_settings
+    value_template: "{{ value_json.startURL }}"
+    scan_interval: 10

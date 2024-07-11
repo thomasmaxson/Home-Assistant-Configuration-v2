@@ -1,0 +1,101 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Notifications
+# @description :
+#
+################################################################################
+
+template:
+  - sensor:
+      - unique_id: notifications
+        state: template
+        attributes:
+          laundry_complete_washer: |
+            {%- if is_state( 'input_boolean.reminder_laundry_complete_washer', 'on' ) -%}
+              {{ 'Your washed clothes are ready to be dried.' }}
+            {%- endif -%}
+          laundry_complete_dryer: |
+            {%- if is_state( 'input_boolean.reminder_laundry_complete_dryer', 'on' ) -%}
+              {{ 'Your dried clothes are ready to be folded.' }}
+            {%- endif -%}
+          waste_bring_in: |
+            {%- if is_state( 'input_boolean.reminder_waste_bring_in_solid', 'on' ) -%}
+              {%- set ignore = [ null, 'off', 'unknown', 'unavailable' ] -%}
+
+              {%- set state_bring_in_solid = states( 'schedule.waste_bring_in_solid' ) %}
+              {%- set is_bring_in_solid    = iif( ( state_bring_in_solid not in ignore ), true, false ) -%}
+
+              {%- if ( is_bring_in_solid ) -%}
+                {{ [ 
+                  'Do not forget to bring the trash bins in.',
+                  'The trash bins will feel lonely if you leave them outside.',
+                  'The HOA will get mad if you leave the trash bins out on the street.'
+                ] | random }}
+
+              {%- endif -%}
+            {%- endif -%}
+
+          waste_take_out: |
+            {%- if is_state( 'input_boolean.reminder_waste_take_out_solid', 'on' ) -%}
+              {%- set ignore = [ null, 'off', 'unknown', 'unavailable' ] -%}
+
+              {%- set state_take_out_solid = states( 'schedule.waste_take_out_solid' ) %}
+              {%- set is_take_out_solid    = iif( ( state_take_out_solid not in ignore ), true, false ) -%}
+
+              {%- set state_take_out_bulk = states( 'schedule.waste_take_out_bulk' ) %}
+              {%- set is_take_out_bulk    = iif( ( state_take_out_bulk not in ignore ), true, false ) -%}
+
+              {%- if ( ( is_take_out_solid ) and ( is_take_out_bulk ) ) -%}
+                {{ [ 
+                  'Tomorrow is the big day: trash and bulk trash day! ',
+                  'Trash and bulk trash should go out before tomorrow morning. ',
+                  'Do not forget to take the trash and bulk trash out. '
+                ] | random }}
+
+              {%- elif ( is_take_out_solid ) -%}
+                {{ [ 
+                  'Tomorrow is the big day, trash day! ',
+                  'Trash should go out before tomorrow morning. ',
+                  'Do not forget to take the trash out. '
+                ] | random }}
+
+              {%- elif ( is_take_out_bulk ) -%}
+                {{ [ 
+                  'Tomorrow is the big day, bulk trash day! ',
+                  'Bulk trash should go out before tomorrow morning. ',
+                  'Do not forget to take the bulk trash out. '
+                ] | random }}
+
+              {%- endif -%}
+            {%- endif -%}
+
+          recycle_bring_in: |
+            {%- if is_state( 'input_boolean.reminder_waste_bring_in_recycle', 'on' ) -%}
+              {%- set ignore = [ null, 'off', 'unknown', 'unavailable' ] -%}
+
+              {%- set state_bring_in_recycle = states( 'schedule.waste_bring_in_recycle' ) %}
+              {%- set is_bring_in_recycle    = iif( ( state_bring_in_recycle not in ignore ), true, false ) -%}
+
+              {%- if ( is_bring_in_recycle ) -%}
+                {{ [ 
+                  'Do not forget to take the recycling to the drop-off center.'
+                ] | random }}
+
+              {%- endif -%}
+            {%- endif -%}
+
+          recycle_take_out: |
+            {%- if is_state( 'input_boolean.reminder_waste_take_out_recycle', 'on' ) -%}
+              {%- set ignore = [ null, 'off', 'unknown', 'unavailable' ] -%}
+
+              {%- set state_take_out_recycle = states( 'schedule.waste_take_out_recycle' ) %}
+              {%- set is_take_out_recycle = iif( ( state_take_out_recycle not in ignore ), true, false ) -%}
+
+              {%- if ( is_take_out_recycle ) -%}
+                {{ [ 
+                  'Tomorrow is the big day, recycling day! '
+                ] | random }}
+
+              {%- endif -%}
+            {%- endif -%}

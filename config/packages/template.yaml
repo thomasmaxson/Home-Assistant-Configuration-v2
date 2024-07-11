@@ -1,0 +1,426 @@
+################################################################################
+#
+# @author      : Thomas Maxson
+# @package     : Template Sensors
+# @description :
+#
+################################################################################
+
+sensor:
+  - platform: template
+    sensors:
+      is_week_even:
+        friendly_name: "Is Week Even"
+        value_template: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 0 %}
+          {{ iif( ( True == output ), 'on', 'off' ) }}
+        icon_template: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 0 %}
+          {{ iif( ( True == output ), 'mdi:calendar-check', 'mdi:calendar-remove' ) }}
+
+      is_week_odd:
+        friendly_name: "Is Week Odd"
+        value_template: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 1 %}
+          {{ iif( ( True == output ), 'on', 'off' ) }}
+        icon_template: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 1 %}
+          {{ iif( ( True == output ), 'mdi:calendar-check', 'mdi:calendar-remove' ) }}
+
+      custom_fire_tablet_battery:
+        # device_class: battery
+        friendly_name: Battery Level
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ states( 'sensor.fire_tablet_battery' ) }}
+        icon_template: >-
+          {%- set battery_level = states( 'sensor.fire_tablet_battery' ) -%}
+          {%- set battery_round = ( battery_level | int(0) / 10 ) | int(0) * 10 -%}
+
+          {%- if battery_level == 0 -%}
+            mdi:battery-alert
+          {%- elif battery_round >= 80 -%}
+            mdi:battery
+          {%- elif battery_round <= 20 -%}
+            mdi:battery-outline
+          {%- else -%}
+            mdi:battery-{{ battery_round }}
+          {%- endif -%}
+
+      # fire_tablet_last_app_start_formatted:
+      #   #device_class: timestamp
+      #   friendly_name: Last App Restart
+      #   icon_template: mdi:clock-outline
+      #   value_template: >
+      #     {% set timestamp = states.sensor.fire_tablet_last_app_start.last_updated %}
+      #     {{ relative_time( timestamp ) }}
+
+      fire_tablet_used_memory:
+        device_class: data_size
+        icon_template: mdi:memory
+        unit_of_measurement: MB
+        value_template: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+          {%- set total_memory = states( 'sensor.fire_tablet_total_memory' ) | int( 0 ) -%}
+          {%- set free_memory  = states( 'sensor.fire_tablet_free_memory' ) | int( 0 ) -%}
+
+          {%- if total_memory not in ignore and total_memory not in ignore %}
+            {%- set used_memory = ( total_memory - free_memory ) | int( 0 ) | float | round( 2 ) -%}
+            {%- if used_memory > 0 and total_memory > 0 %}
+              {{ ( used_memory / total_memory * 100 )  | float | round( 2 ) }}
+            {%- else %}
+              Unknown
+            {%- endif %}
+          {%- else %}
+            Unknown
+          {%- endif %}
+
+      # Count lights that are ON
+      total_lights_on:
+        device_class: data_size
+        friendly_name: Total Lights On
+        icon_template: mdi:lightbulb
+        value_template: >-
+          {% set entity = 'light.lights_all' %}
+          {% set reject = [] %}
+          {% set state  = 'on' %}
+
+          {{ expand( state_attr( entity, 'entity_id' ) ) 
+            | selectattr( 'state', 'eq', state ) 
+            | map( attribute = 'entity_id' ) 
+            | reject( 'in', reject ) 
+            | list | count }}
+
+      # Count INTERIOR Doors that are OPEN (aka ON)
+      total_doors_open:
+        device_class: data_size
+        friendly_name: Total Doors Open
+        icon_template: mdi:door-open
+        value_template: >-
+          {% set entity = 'binary_sensor.doors_all_interior' %}
+          {% set reject = [] %}
+          {% set state  = 'on' %}
+
+          {{ expand( state_attr( entity, 'entity_id' ) ) 
+            | selectattr( 'state', 'eq', state ) 
+            | map( attribute = 'entity_id' ) 
+            | reject( 'in', reject ) 
+            | list | count }}
+
+template:
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /5
+    sensor:
+      - name: "Laundry Washer Combined Details"
+        icon: mdi:washing-machine
+        state: >-
+          {{ states( 'sensor.laundry_washer_machine_state' ) }}
+        attributes:
+          original_time: >-
+            {{ states( 'input_text.laundry_washer_original_duration' ) }}
+          time_remaining: >-
+            {{ states( 'sensor.laundry_washer_time_remaining' ) }}
+          cycle_type: >-
+            {{ states( 'sensor.laundry_washer_sub_cycle' ) | string }}
+          cycle_end: >-
+            {{ states( 'binary_sensor.laundry_washer_end_of_cycle' ) }}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /5
+    sensor:
+      - name: "Laundry Dryer Combined Details"
+        icon: mdi:tumble-dryer
+        state: >-
+          {{ states( 'sensor.laundry_dryer_machine_state' ) }}
+        attributes:
+          original_time: >-
+            {{ states( 'input_text.laundry_dryer_original_duration' ) }}
+          time_remaining: >-
+            {{ states( 'sensor.laundry_dryer_time_remaining' ) }}
+          cycle_type: >-
+            {{ states( 'sensor.laundry_dryer_sub_cycle' ) | string }}
+          cycle_end: >-
+            {{ states( 'binary_sensor.laundry_dryer_end_of_cycle' ) }}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /30
+    sensor:
+      - name: "Days Until, Waste Day - Solid"
+        icon: mdi:trash-can-outline
+        state: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+
+          {%- set entity = 'schedule.waste_bring_in_solid' %}
+          {%- set nextEvent = state_attr( entity, 'next_event' ) %}
+
+          {%- if entity in ignore %}
+            -----
+
+          {%- else %}
+            {%- if 'on' == states( entity ) %}
+              Now
+            {%- else %}
+              {%- set date_today = as_timestamp( now() ) | timestamp_custom( '%F' ) %}
+              {%- set date_tomorrow = ( as_timestamp( now() + timedelta( days = 1 ) ) ) | timestamp_custom( '%F' ) %}
+              {%- set date_nextEvent = as_timestamp( nextEvent ) | timestamp_custom( '%F' ) %}
+
+              {%- set daysUntil = ( ( as_timestamp( date_nextEvent ) - as_timestamp( date_today ) ) | int /60/1440 ) | round( 0 ) | string %}
+
+              {%- if date_today == date_nextEvent %}
+                Today
+
+              {%- elif date_tomorrow == date_nextEvent %}
+                Tomorrow
+
+              {%- else %}
+                {{ iif( ( '1' == daysUntil ), daysUntil + ' day away', daysUntil + ' days away' ) }}
+
+              {%- endif %}
+            {%- endif %}
+          {%- endif %}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /30
+    sensor:
+      - name: "Days Until, Waste Day - Bulk"
+        icon: mdi:forest
+        state: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+
+          {%- set entity = 'schedule.waste_bring_in_bulk' %}
+          {%- set nextEvent = state_attr( entity, 'next_event' ) %}
+
+          {%- if entity in ignore %}
+            -----
+
+          {%- else %}
+            {%- if 'on' == states( entity ) %}
+              Now
+            {%- else %}
+              {%- set date_today = as_timestamp( now() ) | timestamp_custom( '%F' ) %}
+              {%- set date_tomorrow = ( as_timestamp( now() + timedelta( days = 1 ) ) ) | timestamp_custom( '%F' ) %}
+              {%- set date_nextEvent = as_timestamp( nextEvent ) | timestamp_custom( '%F' ) %}
+
+              {%- set daysUntil = ( ( as_timestamp( date_nextEvent ) - as_timestamp( date_today ) ) | int /60/1440 ) | round( 0 ) | string %}
+
+              {%- if date_today == date_nextEvent %}
+                Today
+
+              {%- elif date_tomorrow == date_nextEvent %}
+                Tomorrow
+
+              {%- else %}
+                {{ iif( ( '1' == daysUntil ), daysUntil + ' day away', daysUntil + ' days away' ) }}
+
+              {%- endif %}
+            {%- endif %}
+          {%- endif %}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /30
+    sensor:
+      - name: "Days Until, Recycle Drop Off"
+        icon: mdi:recycle
+        state: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+
+          {%- set entity = 'schedule.waste_bring_in_recycle' %}
+          {%- set nextEvent = state_attr( entity, 'next_event' ) %}
+
+          {%- if entity in ignore %}
+            -----
+
+          {%- else %}
+            {%- if 'on' == states( entity ) %}
+              Now
+            {%- else %}
+              {%- set date_today = as_timestamp( now() ) | timestamp_custom( '%F' ) %}
+              {%- set date_tomorrow = ( as_timestamp( now() + timedelta( days = 1 ) ) ) | timestamp_custom( '%F' ) %}
+              {%- set date_nextEvent = as_timestamp( nextEvent ) | timestamp_custom( '%F' ) %}
+
+              {%- set daysUntil = ( ( as_timestamp( date_nextEvent ) - as_timestamp( date_today ) ) | int /60/1440 ) | round( 0 ) | string %}
+
+              {%- if date_today == date_nextEvent %}
+                Today
+
+              {%- elif date_tomorrow == date_nextEvent %}
+                Tomorrow
+
+              {%- else %}
+                {{ iif( ( '1' == daysUntil ), daysUntil + ' day away', daysUntil + ' days away' ) }}
+
+              {%- endif %}
+            {%- endif %}
+          {%- endif %}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /30
+    sensor:
+      - name: "Days Until, Waste Day - Recycle"
+        icon: mdi:recycle
+        state: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+
+          {%- set entity = 'schedule.waste_bring_in_recycle' %}
+          {%- set nextEvent = state_attr( entity, 'next_event' ) %}
+
+          {%- if entity in ignore %}
+            -----
+
+          {%- else %}
+            {%- if 'on' == states( entity ) %}
+              Now
+            {%- else %}
+              {%- set date_today = as_timestamp( now() ) | timestamp_custom( '%F' ) %}
+              {%- set date_tomorrow = ( as_timestamp( now() + timedelta( days = 1 ) ) ) | timestamp_custom( '%F' ) %}
+              {%- set date_nextEvent = as_timestamp( nextEvent ) | timestamp_custom( '%F' ) %}
+
+              {%- set daysUntil = ( ( as_timestamp( date_nextEvent ) - as_timestamp( date_today ) ) | int /60/1440 ) | round( 0 ) | string %}
+
+              {%- if date_today == date_nextEvent %}
+                Today
+
+              {%- elif date_tomorrow == date_nextEvent %}
+                Tomorrow
+
+              {%- else %}
+                {{ iif( ( '1' == daysUntil ), daysUntil + ' day away', daysUntil + ' days away' ) }}
+
+              {%- endif %}
+            {%- endif %}
+          {%- endif %}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every XX seconds
+      - platform: time_pattern
+        seconds: /30
+    sensor:
+      - name: "Days Until, Cleaning Day"
+        icon: mdi:spray-bottle
+        state: >-
+          {%- set ignore = [ 'unknown', 'unavailable' ] -%}
+
+          {%- set entity = 'calendar.casamaxson_cleaning_schedule' %}
+          {%- set eventStart = state_attr( entity, 'start_time' ) | as_timestamp %}
+          {%- set eventEnd   = state_attr( entity, 'end_time' ) | as_timestamp %}
+
+          {%- set untilDays = ( ( eventStart - now().replace( hour = 0, minute = 0, second = 0, microsecond = 0 ).timestamp() ) / 86400 ) | round( 0 ) | string %}
+
+          {%- set untilMinStart = ( ( eventStart - now().timestamp() ) / 60 ) | int %}
+          {%- set untilMinEnd   = ( ( eventEnd - now().timestamp() ) / 60 ) | int %}
+
+          {%- if entity in ignore %}
+            -----
+
+          {%- else %}
+            {%- if untilMinStart <= 0 and untilMinEnd >= 0 %}
+              Now
+            
+            {%- elif untilDays == '0' %}
+              Today
+            
+            {%- elif untilDays == '1' %}
+              Tomorrow
+            
+            {%- else %}
+              {{ iif( ( '1' == untilDays ), untilDays + ' day away', untilDays + ' days away' ) }}
+            
+            {%- endif %}
+          {%- endif %}
+
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every minute
+      - platform: time_pattern
+        hours: "00"
+        minutes: "/01"
+        seconds: "00"
+    sensor:
+      - name: "Sunset Automations Status"
+        state: >-
+          {%- set offset = ( 30 * 60 ) %}
+          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
+          {%- set modified_sunset = ( next_sunset - offset ) | int %}
+          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
+          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
+
+          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+            Active
+          {%- elif( ts_current > ts_next_sunset ) %}
+            Complete
+          {%- else %}
+            Run at {{ modified_sunset | timestamp_custom( '%I:%M %p' ) }}
+          {%- endif %}
+        icon: >-
+          {%- set offset = ( 30 * 60 ) %}
+          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
+          {%- set modified_sunset = ( next_sunset - offset ) | int %}
+          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
+          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
+
+          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+          mdi:clock-alert-outline
+          {%- elif( ts_current > ts_next_sunset ) %}
+          mdi:clock-check-outline
+          {%- else %}
+          mdi:clock-outline
+          {%- endif %}

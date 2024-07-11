@@ -1,0 +1,53 @@
+esphome:
+  name: "fridge-and-freezer-temps"
+  friendly_name: Refrigerator and Freezer Temperatures
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# dallas:
+#   - pin: GPIO4
+one_wire:
+  - platform: gpio
+    pin: GPIO4
+
+sensor:
+  #- platform: dallas
+  - platform: dallas_temp
+    address: 0x373ce104573b9028
+    name: "Refrigerator Temperature"
+    filters:
+        - offset: -3
+  #- platform: dallas
+  - platform: dallas_temp
+    address: 0x563ce1045708c728
+    name: "Freezer Temperature"
+    filters:
+        - offset: -3
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret fridge_freezer_temperature_api_key
+
+# Over The Air Updates
+ota:
+  - platform: esphome
+    password: !secret fridge_freezer_temperature_ota_password
+
+wifi:
+  ssid: !secret wifi_iot_ssid
+  password: !secret wifi_iot_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Fridge-Temps Fallback Hotspot"
+    password: !secret fridge_freezer_temperature_hotspot_password
+
+captive_portal:
+    
