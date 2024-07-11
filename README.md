@@ -88,9 +88,15 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 <details>
 <summary>Click to Expand</summary>
 
+##### Automations
 * [Node RED](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/custom_integration/)
+
+##### Dashboard
+* [Bubble Card](https://github.com/Clooos/Bubble-Card)
 * [Button Card](https://github.com/custom-cards/button-card)
 * [Mushroom Cards](https://github.com/piitaya/lovelace-mushroom)
+
+##### Device Integration
 * [Alexa Media Player](https://github.com/custom-components/alexa_media_player)
 * [Apple TV](https://www.home-assistant.io/integrations/apple_tv)
 * [Browser Mod](https://github.com/thomasloven/hass-browser_mod)
