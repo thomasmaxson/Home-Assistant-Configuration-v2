@@ -7,23 +7,24 @@ This repo contains the constantly-in-progress [Home Assistant](https://home-assi
 
 Make sure that you :star: this repo, so that you can get updates right in your notification feed.
 
-### Dashboard:
-| [![dashboard-desktop](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/dashboard-desktop.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/dashboard-desktop.png)<br>Desktop/Tablet | [![dashboard-mobile](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/dashboard-mobile.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/dashboard-mobile-full.png)<br>Mobile<br>(click to view all tiles) |
+#### Dashboard:
+| [![dashboard-desktop-dark](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-dark.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-dark.png)<br>Dark Theme | [![dashboard-desktop-light](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light.png)<br>Light Theme |
 |:---:|:---:|
-
-### Wall Mounted Tablet:
-| [![wallmount](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/wall-mount.jpeg)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/wall-mount.jpeg)<br>Wall Mounted Tablet |
-|:---:|
+| [![dashboard-notifications](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-notifications.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-notifications.png)<br>Notifications |
 
 #### Modals:
-| [![modal-bedroom-1](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-bedroom-1.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-bedroom-1.png)<br>Main Bedroom | [![modal-bedroom-4](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-bedroom-4.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-bedroom-4.png)<br>Office |
+| [![modal-bedroom-1](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-1.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-1.png)<br>Main Bedroom | [![modal-bedroom-4](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-4.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-4.png)<br>Office |
 |:---:|:---:|
-| [![modal-laundry-room](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-laundry-room.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/laundry-room.png)<br>Laundry Room | [![modal-configure](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-configure.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/modal-Configure.png)<br>Configure |
+| [![modal-laundry-room](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-laundry-room.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/laundry-room.png)<br>Laundry Room | [![modal-configure](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-configure.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-Configure.png)<br>Configure |
 
 #### Subviews:
-| [![lights](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-lights.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-lights.png)<br>Lights | [![devices](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-devices.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-devices.png)<br>Devices |
+| [![lights](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-lights.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-lights.png)<br>Lights | [![devices](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-devices.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-devices.png)<br>Devices |
 |:---:|:---:|
-| [![laundry](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-laundry-details.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-laundry-details.png)<br>Laundry Details | [![residents](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-residents.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration/main/config/www/images/dashboard/subview-residents.png)<br>Residents |
+| [![laundry](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-laundry-details.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-laundry-details.png)<br>Laundry Details | [![residents](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-residents.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/subview-residents.png)<br>Residents |
+
+### Wall Mounted Tablet:
+| [![wallmount](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/wall-mount.jpeg)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/wall-mount.jpeg)<br>Wall Mounted Tablet |
+|:---:|
 
 <hr>
 
@@ -87,9 +88,15 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 <details>
 <summary>Click to Expand</summary>
 
+##### Automations
 * [Node RED](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/custom_integration/)
+
+##### Dashboard
+* [Bubble Card](https://github.com/Clooos/Bubble-Card)
 * [Button Card](https://github.com/custom-cards/button-card)
 * [Mushroom Cards](https://github.com/piitaya/lovelace-mushroom)
+
+##### Device Integration
 * [Alexa Media Player](https://github.com/custom-components/alexa_media_player)
 * [Apple TV](https://www.home-assistant.io/integrations/apple_tv)
 * [Browser Mod](https://github.com/thomasloven/hass-browser_mod)
