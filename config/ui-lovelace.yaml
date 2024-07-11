@@ -10,14 +10,14 @@ views:
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
       grid-template-areas: |
-        ".  zoneSidebar  tileFoyer   tileKit    tileLivR   tileDinR   ."
-        ".  zoneSidebar  modalFoyer  modalKit   modalLivR  modalDinR  ."
-        ".  zoneSidebar  tileBdr1    tileBdr2   tileBdr3   tileBdr4   ."
-        ".  zoneSidebar  modalBdr1   modalBdr2  modalBdr3  modalBdr4  ."
-        ".  zoneSidebar  tileLaund   tileGar    tileOut    tileMisc   ."
-        ".  zoneSidebar  modalLaund  modalGar   modalOut   modalMisc  ."
-        ".  zoneSidebar  overflow1   overflow2  overflow3  overflow4  ."
-        ".  zoneSidebar  modalSys    modalSys   modalConf  modalConf  ."
+        ".  zoneSbar  tileFoyer   tileKit    tileLivR   tileDinR   ."
+        ".  zoneSbar  modalFoyer  modalKit   modalLivR  modalDinR  ."
+        ".  zoneSbar  tileBdr1    tileBdr2   tileBdr3   tileBdr4   ."
+        ".  zoneSbar  modalBdr1   modalBdr2  modalBdr3  modalBdr4  ."
+        ".  zoneSbar  tileLaund   tileGar    tileOut    tileMisc   ."
+        ".  zoneSbar  modalLaund  modalGar   modalOut   modalMisc  ."
+        ".  zoneSbar  overflow1   overflow2  overflow3  overflow4  ."
+        ".  zoneSbar  modalSbar   modalSys   modalConf  modalConf  ."
       mediaquery:
         '(max-width: 576px)':
           margin: 2vw 1vw 0 1vw
@@ -26,69 +26,70 @@ views:
           grid-auto-rows: min-content
           grid-template-columns: 0 repeat( 2, 1fr ) 0
           grid-template-areas: |
-            ".  zoneSidebar  zoneSidebar  ."
-            ".  tileFoyer    tileKit      ."
-            ".  modalFoyer   modalKit     ."
-            ".  tileLivR     tileDinR     ."
-            ".  modalLivR    modalDinR    ."
-            ".  tileBdr1     tileBdr2     ."
-            ".  modalBdr1    modalBdr2    ."
-            ".  tileBdr3     tileBdr4     ."
-            ".  modalBdr3    modalBdr4    ."
-            ".  tileLaund    tileGar      ."
-            ".  popLaund     modalGar     ."
-            ".  tileOut      tileMisc     ."
-            ".  modalOut     modalMisc    ."
-            ".  overflow1    overflow2    ."
-            ".  overflow3    overflow4    ."
-            ".  tilePer1     tilePer2     ."
-            ".  modalSys     modalConf    ."
+            ".  zoneSbar   zoneSbar  ."
+            ".  tileFoyer  tileKit      ."
+            ".  modalFoyer modalKit     ."
+            ".  tileLivR   tileDinR     ."
+            ".  modalLivR  modalDinR    ."
+            ".  tileBdr1   tileBdr2     ."
+            ".  modalBdr1  modalBdr2    ."
+            ".  tileBdr3   tileBdr4     ."
+            ".  modalBdr3  modalBdr4    ."
+            ".  tileLaund  tileGar      ."
+            ".  popLaund   modalGar     ."
+            ".  tileOut    tileMisc     ."
+            ".  modalOut   modalMisc    ."
+            ".  overflow1  overflow2    ."
+            ".  overflow3  overflow4    ."
+            ".  tilePer1   tilePer2     ."
+            ".  modalSbar  modalSys     ."
+            ".  modalConf  .            ."
         '(max-width: 992px)':
           grid-row-gap: 1.25vw
           grid-column-gap: 2.5vw
           grid-auto-rows: min-content
           grid-template-columns: 1vw repeat( 3, 1fr ) 1vw
           grid-template-areas: |
-            ".  zoneSidebar  zoneSidebar  zoneSidebar  ."
-            ".  tileFoyer    tileKit      tileLivR     ."
-            ".  modalFoyer   modalKit     modalLivR    ."
-            ".  tileDinR     tileBdr1     tileBdr2     ."
-            ".  modalDinR    modalBdr1    modalBdr2    ."
-            ".  tileBdr3     tileBdr4     tileLaund    ."
-            ".  modalBdr3    modalBdr4    modalLaund   ."
-            ".  tileGar      tileOut      tileMisc     ."
-            ".  modalFar     modalOut     modalMisc    ."
-            ".  overflow1    overflow2    overflow3    ."
-            ".  .            overflow4    .            ."
-            ".  modalSys     modalConf    .            ."
+            ".  zoneSbar    zoneSbar   zoneSbar     ."
+            ".  tileFoyer   tileKit    tileLivR     ."
+            ".  modalFoyer  modalKit   modalLivR    ."
+            ".  tileDinR    tileBdr1   tileBdr2     ."
+            ".  modalDinR   modalBdr1  modalBdr2    ."
+            ".  tileBdr3    tileBdr4   tileLaund    ."
+            ".  modalBdr3   modalBdr4  modalLaund   ."
+            ".  tileGar     tileOut    tileMisc     ."
+            ".  modalFar    modalOut   modalMisc    ."
+            ".  overflow1   overflow2  overflow3    ."
+            ".  .           overflow4  .            ."
+            ".  modalSybar  modalSys   modalConf    ."
         '(max-width: 1200px)':
           grid-row-gap: 1vw
           grid-column-gap: 2vw
           grid-auto-rows: min-content
           grid-template-columns: 0 30% repeat( 3, 1fr ) 0
           grid-template-areas: |
-            ".  zoneSidebar  tileFoyer    tileKit      tileLivR    ."
-            ".  zoneSidebar  modalFoyer   modalKit     modalLivR   ."
-            ".  zoneSidebar  tileDinR     tileBdr1     tileBdr2    ."
-            ".  zoneSidebar  modalDinR    modalBdr1    modalBdr2   ."
-            ".  zoneSidebar  tileBdr3     tileBdr4     tileLaund   ."
-            ".  zoneSidebar  modalBdr3    modalBdr4    modalLaund  ."
-            ".  zoneSidebar  tileGar      tileOut      tileMisc    ."
-            ".  zoneSidebar  modalFar     modalOut     modalMisc   ."
-            ".  zoneSidebar  overflow1    overflow2    overflow3   ."
-            ".  zoneSidebar  overflow4    .            .           ."
-            ".  zoneSidebar  modalSys     modalConf    .           ."
+            ".  zoneSbar  tileFoyer    tileKit      tileLivR    ."
+            ".  zoneSbar  modalFoyer   modalKit     modalLivR   ."
+            ".  zoneSbar  tileDinR     tileBdr1     tileBdr2    ."
+            ".  zoneSbar  modalDinR    modalBdr1    modalBdr2   ."
+            ".  zoneSbar  tileBdr3     tileBdr4     tileLaund   ."
+            ".  zoneSbar  modalBdr3    modalBdr4    modalLaund  ."
+            ".  zoneSbar  tileGar      tileOut      tileMisc    ."
+            ".  zoneSbar  modalFar     modalOut     modalMisc   ."
+            ".  zoneSbar  overflow1    overflow2    overflow3   ."
+            ".  zoneSbar  overflow4    .            .           ."
+            ".  zoneSbar  modalSbar    modalSys     modalConf   ."
     icon: ''
     cards:
       - type: custom:button-card
         view_layout:
-          grid-area: zoneSidebar
+          grid-area: zoneSbar
         styles:
           card:
             - display: none
       - type: custom:mod-card
         view_layout:
-          grid-area: zoneSidebar
+          grid-area: zoneSbar
         style:
           hui-vertical-stack-card$: |
             #root { gap: 0 !important;}
@@ -133,8 +134,6 @@ views:
             - type: custom:button-card
               entity: sensor.template_sidebar
               template: sidebar_content
-              tap_action:
-                action: none
       - type: custom:button-card
         view_layout:
           grid-area: tileFoyer
@@ -3397,6 +3396,92 @@ views:
         view_layout:
           grid-area: modalSys
       - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#details-sidebar'
+            styles: |-
+              #root {
+                border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
+                background-color: var( --popup--background-color ) !important;
+              }
+
+              .bubble-header-container { height: 0 !important;}
+
+              .bubble-header, 
+              .bubble-close-button { display: none !important;}
+
+              .bubble-pop-up-container { 
+                  padding-top: 0 !important;
+                  margin-top: 0 !important;
+              }
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_opacity: '90'
+            bg_blur: '6'
+            bg_color: var( --modal--background-color )
+          - type: custom:layout-card
+            layout_type: custom:grid-layout
+            layout:
+              grid-auto-rows: min-content
+              grid-template-columns: min-content 1fr min-content
+              grid-template-areas: '"icon title action"'
+            cards:
+              - type: custom:mushroom-template-card
+                view_layout:
+                  grid-area: icon
+                show_name: false
+                show_state: false
+                show_label: false
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding: 0 !important;
+                      border: none;
+                      margin: 1px 5px 0 -5px;
+                    }
+
+                    mushroom-shape-icon { 
+                      --shape-color: transparent !important;
+                    }
+                icon: mdi:list-box
+              - type: custom:mushroom-title-card
+                title: SIdebar Extras
+                card_mod:
+                  style: |
+                    ha-card { 
+                      --title-padding: 0 !important;
+                      margin-top: 6px;
+                      margin-right: 0;
+                      margin-left: 0;
+                    }
+              - type: custom:button-card
+                view_layout:
+                  grid-area: action
+                template: button__close_popup
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: input_boolean.sidebar_display_weather_forecast
+                    name: Weather Forecast
+                    secondary_info: none
+                  - entity: input_boolean.sidebar_display_holidays
+                    name: Upcoming Holidays
+                    secondary_info: none
+                  - entity: input_boolean.sidebar_display_celebrations
+                    name: Upcoming Celebrations
+                    secondary_info: none
+                  - entity: input_boolean.sidebar_display_neighborhood
+                    name: Display Neighborhood Events
+                    secondary_info: none
+                state_color: false
+                show_header_toggle: false
+                title: Content Visibility
+        view_layout:
+          grid-area: modalSbar
+      - type: vertical-stack
         view_layout:
           grid-area: modalConf
         cards:
@@ -3808,8 +3893,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 25%
-              left: 22%
+              top: 15%
+              left: 19%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-1 ) )
           - type: state-icon
@@ -3819,7 +3904,7 @@ views:
               action: toggle
             style:
               top: 25%
-              left: 15%
+              left: 12%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains-bedroom-1 ) )
           - type: state-icon
@@ -4338,8 +4423,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 20%
-              left: 76%
+              top: 18%
+              left: 84%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-1 ) )
           - type: state-icon
@@ -5941,7 +6026,6 @@ views:
               details: sensor.laundry_washer_combined_details
             styles:
               name:
-                - padding-top: 15px
                 - font-size: 20px
               state:
                 - font-size: 18px
@@ -5982,7 +6066,6 @@ views:
               details: sensor.laundry_dryer_combined_details
             styles:
               name:
-                - padding-top: 15px
                 - font-size: 20px
               state:
                 - font-size: 18px
@@ -7989,31 +8072,26 @@ button_card_templates:
         - border-width: 1px
         - border-color: rgba( 255, 255, 255, 0.12 )
       grid:
-        - grid-auto-rows: min-content
-        - grid-template-columns: 23% 12px 1fr
+        - grid-template-rows: repeat( 2, 50% )
+        - grid-template-columns: min-content 12px 1fr
         - grid-template-areas: |
             "i . n"
             "i . s"
       name:
-        - place-self: self-start
-        - min-height: 0
+        - place-self: center
+        - justify-self: flex-start
         - font-size: 16px
         - font-weight: 600
       state:
-        - place-self: self-start
-        - min-height: 0
-        - font-size: 14px
-        - font-weight: 300
-      label:
         - place-self: center
-        - padding: 10px 0 5px
-        - min-height: 0
+        - justify-self: flex-start
         - font-size: 14px
         - font-weight: 300
       img_cell:
         - align-items: start
       icon:
-        - width: 90%
+        - width: 100%
+        - min-width: 60px
   person_tile:
     template:
       - button_data_setup
@@ -9107,7 +9185,8 @@ button_card_templates:
     show_state: false
     show_icon: false
     tap_action:
-      action: none
+      action: navigate
+      navigation_path: '#details-sidebar'
     double_tap_action:
       action: none
     hold_action:
