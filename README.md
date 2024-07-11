@@ -11,9 +11,10 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 | [![wallmount](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/wall-mount.jpeg)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/wall-mount.jpeg)<br>Wall Mounted Tablet |
 |:---:|
 
-### Theme:
+#### Dashboard:
 | [![dashboard-desktop-dark](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-dark.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-dark.png)<br>Dark Theme | [![dashboard-desktop-light](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-desktop-light.png)<br>Light Theme |
 |:---:|:---:|
+| [![dashboard-notifications](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-notifications.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/dashboard-notifications.png)<br>Notifications |
 
 #### Modals:
 | [![modal-bedroom-1](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-1.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-1.png)<br>Main Bedroom | [![modal-bedroom-4](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-4.png)](https://raw.githubusercontent.com/thomasmaxson/Home-Assistant-Configuration-v2/main/config/www/images/dashboard/modal-bedroom-4.png)<br>Office |
