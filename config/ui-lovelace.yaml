@@ -7468,8 +7468,11 @@ views:
               tom:
                 type: vertical-stack
                 cards:
-                  - type: custom:mushroom-title-card
-                    title: Tom's Details
+                  - type: entities
+                    show_header_toggle: false
+                    entities:
+                      - entity: person.thomas
+                        name: Tom's Details
                   - type: custom:layout-card
                     layout_type: grid
                     layout:
@@ -7637,8 +7640,11 @@ views:
               jess:
                 type: vertical-stack
                 cards:
-                  - type: custom:mushroom-title-card
-                    title: Jess' Details
+                  - type: entities
+                    show_header_toggle: false
+                    entities:
+                      - entity: person.jessica
+                        name: Jess' Details
                   - type: custom:layout-card
                     layout_type: grid
                     layout:
