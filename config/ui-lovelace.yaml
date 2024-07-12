@@ -8939,7 +8939,6 @@ button_card_templates:
         - padding-bottom: 1vw
       icon:
         - '--state-light-on-color': rgb( var( --green-color-rgb ) )
-        - '--state-light-off-color': rgb( var( --white-color-rgb ) )
   state_switch_tile__person:
     template:
       - state_switch_tile
