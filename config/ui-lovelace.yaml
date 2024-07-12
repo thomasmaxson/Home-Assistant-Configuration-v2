@@ -1683,7 +1683,7 @@ views:
                   - entity: input_boolean.sync_bedroom_2_bedside_lamps
                     name: Sync Bedside Lamps
                   - entity: input_boolean.automation_bedroom_2_door_open_close
-                name: Toggle lights when door opens/closes
+                    name: Toggle lights when door opens/closes
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr3
@@ -2152,7 +2152,7 @@ views:
                   - entity: input_boolean.sync_bedroom_4_lights
                     name: Sync room lights
                   - entity: input_boolean.automation_bedroom_4_door_open_close
-                name: Toggle lights when door opens/closes
+                    name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalBdr4
       - type: custom:button-card
@@ -2399,7 +2399,7 @@ views:
                     #states { padding: 0;}
                 entities:
                   - entity: input_boolean.automation_laundry_room_door_open_close
-                name: Toggle lights when door opens/closes
+                    name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalLaund
       - type: custom:button-card
@@ -3537,8 +3537,6 @@ views:
         view_layout:
           grid-area: modalSys
       - type: vertical-stack
-        view_layout:
-          grid-area: modalConf
         cards:
           - type: custom:bubble-card
             card_type: pop-up
@@ -3664,8 +3662,8 @@ views:
                     title: Door Triggered Automations
                     card_mod:
                       style: >
-                        #states > div:nth-child(5) { padding-left: 45px
-                        !important;}          
+                        #states > div:nth-child( 5 ),  #states > div:nth-child(
+                        6 ){ padding-left: 45px !important;}          
                     entities:
                       - entity: input_boolean.automation_foyer_door_open_close
                         name: Main Entry (Primary and Secondary)
@@ -3675,7 +3673,9 @@ views:
                         name: Sliding Glass Door
                       - entity: input_boolean.automation_bedroom_1_door_open_close
                         name: Main Bedroom
-                      - entity: input_boolean.closet_automatic_turn_off
+                      - entity: input_boolean.automation_bedroom_1_door_open_close
+                        name: Main Bedroom Closets
+                      - entity: input_boolean.automation_closet_doors_open_close
                         name: Auto-Shutoff Closet Lights
                       - entity: input_boolean.automation_bedroom_2_door_open_close
                         name: Guest Bedroom
@@ -3784,6 +3784,9 @@ views:
                         row:
                           entity: input_boolean.household_notify_bedroom_4
                           name: His Office Echo Dot
+            layout: {}
+        view_layout:
+          grid-area: modalConf
     theme: casamaxson
   - title: Controls
     path: page-controls
