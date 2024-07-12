@@ -5978,7 +5978,7 @@ views:
                   - entity: input_boolean.enable_motion_camera_recording
                     name: Record Motion Cameras
                   - entity: input_boolean.camera_int_privacy_mode
-                    name: Interior Privacy
+                    name: Disable Private Interior Cameras
       - type: vertical-stack
         cards:
           - type: custom:mushroom-title-card
@@ -6000,7 +6000,10 @@ views:
                 template: state_switch_tile
                 entity: input_boolean.enable_interior_camera_recording
                 name: Interior
-                icon: mdi:tooltip-account
+                icon: |
+                  [[[
+                    return ( ( states['input_boolean.camera_int_privacy_mode'].state == 'on' ) ) ? 'mdi:tooltip' : 'mdi:tooltip-account';
+                  ]]]
                 tap_action:
                   action: navigate
                   navigation_path: '#camera-interior'
@@ -6011,7 +6014,7 @@ views:
                 template: state_switch_tile
                 entity: input_boolean.enable_motion_camera_recording
                 name: Motion
-                icon: mdi:tooltip-check
+                icon: mdi:tooltip-plus
                 tap_action:
                   action: navigate
                   navigation_path: '#camera-motion'
@@ -8900,6 +8903,7 @@ button_card_templates:
         - padding: 15px 20px 7px 20px
       name:
         - place-self: center
+        - padding-bottom: 6px
         - min-height: 0
       state:
         - place-self: center
