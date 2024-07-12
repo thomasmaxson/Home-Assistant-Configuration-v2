@@ -2849,8 +2849,24 @@ views:
                 action: navigate
                 navigation_path: /lovelace/page-residents
               variables:
-                icon_on: mdi:account
-                icon_off: mdi:account-outline
+                icon: |
+                  [[[ 
+                    let personEntities = [
+                      states['person.thomas'],
+                      states['person.jessica']
+                    ];
+
+                    for( var i = 0; i < personEntities.length; i++ )
+                    { 
+                      if( personEntities[i] !== undefined && personEntities[i].state != 'home' )
+                      { 
+                       return 'mdi:account';
+
+                      } // endif
+                    } // endif
+
+                    return 'mdi:account-outline';
+                  ]]]
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
