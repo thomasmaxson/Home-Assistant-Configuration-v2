@@ -8945,8 +8945,8 @@ button_card_templates:
       - state_switch_tile
     variables:
       img_path: '[[[ return states[entity.entity_id].attributes.entity_picture ]]]'
-      text_state_on: 'Home'
-      text_state_off: 'Away'
+      text_state_on: Home
+      text_state_off: Away
     icon: false
     custom_fields:
       picture: |
