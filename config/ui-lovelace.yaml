@@ -42,9 +42,6 @@ views:
             ".  modalOut   modalMisc    ."
             ".  overflow1  overflow2    ."
             ".  overflow3  overflow4    ."
-            ".  tilePer1   tilePer2     ."
-            ".  modalSbar  modalSys     ."
-            ".  modalConf  .            ."
             ".  modalSys   modalConf    ."
         '(max-width: 992px)':
           grid-row-gap: 1.25vw
