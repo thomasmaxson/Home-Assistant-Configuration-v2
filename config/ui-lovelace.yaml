@@ -1456,6 +1456,8 @@ views:
                     name: Sync bedside lamps
                   - entity: input_boolean.automation_bedroom_1_door_open_close
                     name: Toggle lights when door opens/closes
+                  - entity: input_boolean.automation_closet_doors_open_close
+                    name: Toggle closet light when door opens/closes
                   - entity: input_boolean.closet_automatic_turn_off
                     name: Automatically turn off closet lights
         view_layout:
