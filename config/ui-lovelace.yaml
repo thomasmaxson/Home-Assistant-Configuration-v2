@@ -10,14 +10,14 @@ views:
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
       grid-template-areas: |
-        ".  zoneSbar  tileFoyer   tileKit    tileLivR   tileDinR   ."
-        ".  zoneSbar  modalFoyer  modalKit   modalLivR  modalDinR  ."
-        ".  zoneSbar  tileBdr1    tileBdr2   tileBdr3   tileBdr4   ."
-        ".  zoneSbar  modalBdr1   modalBdr2  modalBdr3  modalBdr4  ."
-        ".  zoneSbar  tileLaund   tileGar    tileOut    tileMisc   ."
-        ".  zoneSbar  modalLaund  modalGar   modalOut   modalMisc  ."
-        ".  zoneSbar  overflow1   overflow2  overflow3  overflow4  ."
-        ".  zoneSbar  modalSbar   modalSys   modalConf  modalConf  ."
+        ".  zoneSbar   tileFoyer   tileKit    tileLivR   tileDinR   ."
+        ".  zoneSbar   modalFoyer  modalKit   modalLivR  modalDinR  ."
+        ".  zoneSbar   tileBdr1    tileBdr2   tileBdr3   tileBdr4   ."
+        ".  zoneSbar   modalBdr1   modalBdr2  modalBdr3  modalBdr4  ."
+        ".  zoneSbar   tileLaund   tileGar    tileOut    tileMisc   ."
+        ".  zoneSbar   modalLaund  modalGar   modalOut   modalMisc  ."
+        ".  zoneSbar   overflow1   overflow2  overflow3  overflow4  ."
+        ".  modalSbar  .           .          modalSys   modalConf  ."
       mediaquery:
         '(max-width: 576px)':
           margin: 2vw 1vw 0 1vw
@@ -26,7 +26,8 @@ views:
           grid-auto-rows: min-content
           grid-template-columns: 0 repeat( 2, 1fr ) 0
           grid-template-areas: |
-            ".  zoneSbar   zoneSbar  ."
+            ".  zoneSbar   zoneSbar     ."
+            ".  modalSbar  .            ."
             ".  tileFoyer  tileKit      ."
             ".  modalFoyer modalKit     ."
             ".  tileLivR   tileDinR     ."
@@ -44,6 +45,7 @@ views:
             ".  tilePer1   tilePer2     ."
             ".  modalSbar  modalSys     ."
             ".  modalConf  .            ."
+            ".  modalSys   modalConf    ."
         '(max-width: 992px)':
           grid-row-gap: 1.25vw
           grid-column-gap: 2.5vw
@@ -51,6 +53,7 @@ views:
           grid-template-columns: 1vw repeat( 3, 1fr ) 1vw
           grid-template-areas: |
             ".  zoneSbar    zoneSbar   zoneSbar     ."
+            ".  modalSbar   .          .            ."
             ".  tileFoyer   tileKit    tileLivR     ."
             ".  modalFoyer  modalKit   modalLivR    ."
             ".  tileDinR    tileBdr1   tileBdr2     ."
@@ -61,24 +64,26 @@ views:
             ".  modalFar    modalOut   modalMisc    ."
             ".  overflow1   overflow2  overflow3    ."
             ".  .           overflow4  .            ."
-            ".  modalSybar  modalSys   modalConf    ."
+            ".  .           .          modalSys     ."
+            ".  modalConf   .          .            ."
         '(max-width: 1200px)':
           grid-row-gap: 1vw
           grid-column-gap: 2vw
           grid-auto-rows: min-content
           grid-template-columns: 0 30% repeat( 3, 1fr ) 0
           grid-template-areas: |
-            ".  zoneSbar  tileFoyer    tileKit      tileLivR    ."
-            ".  zoneSbar  modalFoyer   modalKit     modalLivR   ."
-            ".  zoneSbar  tileDinR     tileBdr1     tileBdr2    ."
-            ".  zoneSbar  modalDinR    modalBdr1    modalBdr2   ."
-            ".  zoneSbar  tileBdr3     tileBdr4     tileLaund   ."
-            ".  zoneSbar  modalBdr3    modalBdr4    modalLaund  ."
-            ".  zoneSbar  tileGar      tileOut      tileMisc    ."
-            ".  zoneSbar  modalFar     modalOut     modalMisc   ."
-            ".  zoneSbar  overflow1    overflow2    overflow3   ."
-            ".  zoneSbar  overflow4    .            .           ."
-            ".  zoneSbar  modalSbar    modalSys     modalConf   ."
+            ".  zoneSbar   tileFoyer    tileKit      tileLivR    ."
+            ".  zoneSbar   modalFoyer   modalKit     modalLivR   ."
+            ".  zoneSbar   tileDinR     tileBdr1     tileBdr2    ."
+            ".  zoneSbar   modalDinR    modalBdr1    modalBdr2   ."
+            ".  zoneSbar   tileBdr3     tileBdr4     tileLaund   ."
+            ".  zoneSbar   modalBdr3    modalBdr4    modalLaund  ."
+            ".  zoneSbar   tileGar      tileOut      tileMisc    ."
+            ".  zoneSbar   modalFar     modalOut     modalMisc   ."
+            ".  zoneSbar   overflow1    overflow2    overflow3   ."
+            ".  zoneSbar   overflow4    .            .           ."
+            ".  modalSbar  .            .            modalSys    ."
+            ".  .          modalConf    .            .           ."
     icon: ''
     cards:
       - type: custom:button-card
@@ -139,7 +144,6 @@ views:
           grid-area: tileFoyer
         template: room_tile
         name: Foyer
-        icon: hue:room-hallway
         entity: light.all_lights_foyer
         triggers_update:
           - lock.front_door
@@ -157,6 +161,8 @@ views:
             entity_id: lock.front_door
         variables:
           path: '#details-foyer'
+          icon_on: mdi:home
+          icon_off: mdi:home-outline
           data_door: binary_sensor.door_front_primary
           data_lightOn: light.lights_primary_foyer
           data_temperature: sensor.temperature_foyer
@@ -241,7 +247,7 @@ views:
                     mushroom-shape-icon { 
                       --shape-color: transparent !important;
                     }
-                icon: hue:room-hallway
+                icon: mdi:home
               - type: custom:mushroom-title-card
                 title: Foyer
                 card_mod:
@@ -448,13 +454,14 @@ views:
           grid-area: tileKit
         template: room_tile
         name: Kitchen
-        icon: mdi:fridge
         entity: light.all_lights_kitchen
         triggers_update:
           - light.all_lights_kitchen
           - binary_sensor.all_leak_sensors_kitchen
         variables:
           path: '#details-kitchen'
+          icon_on: mdi:fridge
+          icon_off: mdi:fridge-outline
           data_door: false
           data_lightOn: light.kitchen_ceiling_lights
           data_temperature: false
@@ -855,13 +862,14 @@ views:
           grid-area: tileLivR
         template: room_tile
         name: Living Room
-        icon: mdi:sofa
         entity: light.all_lights_living_room
         triggers_update:
           - light.all_lights_living_room
           - binary_sensor.door_living
         variables:
           path: '#details-living-room'
+          icon_on: mdi:sofa
+          icon_off: mdi:sofa-outline
           data_door: binary_sensor.door_living
           data_lightOn: light.living_room_corner_lamp
           data_temperature: sensor.temperature_living_room
@@ -1055,16 +1063,15 @@ views:
           grid-area: tileDinR
         template: room_tile
         name: Dining Room
-        icon: hue:room-dining
         entity: light.all_lights_dining_room
         variables:
           path: '#details-dining-room'
+          icon_on: mdi:table-furniture
+          icon_off: mdi:table-furniture
           data_door: false
           data_lightOn: light.dining_room_chandelier
           data_temperature: sensor.temperature_living_room
       - type: vertical-stack
-        view_layout:
-          grid-area: modalDinR
         cards:
           - type: custom:bubble-card
             card_type: pop-up
@@ -1114,7 +1121,7 @@ views:
                     mushroom-shape-icon { 
                       --shape-color: transparent !important;
                     }
-                icon: hue:room-dining
+                icon: mdi:table-furniture
               - type: custom:mushroom-title-card
                 title: Dining Room
                 card_mod:
@@ -1182,12 +1189,13 @@ views:
                     entity: light.dining_room_chandelier
                     collapsible_controls: true
                     show_brightness_control: true
+        view_layout:
+          grid-area: modalDinR
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr1
         template: room_tile
         name: Main Bedroom
-        icon: hue:room-bedroom
         entity: light.all_lights_bedroom_1
         triggers_update:
           - cover.large_window_curtains_bedroom_1
@@ -1195,6 +1203,8 @@ views:
           - binary_sensor.door_bedroom_1
         variables:
           path: '#details-bedroom-1'
+          icon_on: mdi:bed-king
+          icon_off: mdi:bed-king-outline
           data_curtains: cover.large_window_curtains_bedroom_1
           data_door: binary_sensor.door_bedroom_1
           data_lightOn: light.bedroom_1_bedside_lamps
@@ -1249,7 +1259,7 @@ views:
                     mushroom-shape-icon { 
                       --shape-color: transparent !important;
                     }
-                icon: hue:room-bedroom
+                icon: mdi:bed-king
               - type: custom:mushroom-title-card
                 title: Main Bedroom
                 card_mod:
@@ -1458,13 +1468,14 @@ views:
           grid-area: tileBdr2
         template: room_tile
         name: Guest Bedroom
-        icon: mdi:bed
         entity: light.all_lights_bedroom_2
         triggers_update:
           - light.all_lights_bedroom_2
           - binary_sensor.door_bedroom_2
         variables:
           path: '#details-bedroom-2'
+          icon_on: mdi:bed
+          icon_off: mdi:bed-outline
           data_door: binary_sensor.door_bedroom_2
           data_lightOn: light.bedroom_2_bedside_lamps
           data_temperature: sensor.temperature_bedroom_2
@@ -1681,13 +1692,14 @@ views:
           grid-area: tileBdr3
         template: room_tile
         name: Jess' Office
-        icon: mdi:desk
         entity: light.all_lights_bedroom_3
         triggers_update:
           - light.all_lights_bedroom_3
           - binary_sensor.door_bedroom_3
         variables:
           path: '#details-bedroom-3'
+          icon_on: mdi:monitor-account
+          icon_off: mdi:monitor
           data_door: binary_sensor.door_bedroom_3
           data_lightOn: light.bedroom_3_lights
           data_temperature: sensor.temperature_bedroom_3
@@ -1698,8 +1710,6 @@ views:
         hold_action:
           action: none
       - type: vertical-stack
-        view_layout:
-          grid-area: modalBdr3
         cards:
           - type: custom:bubble-card
             card_type: pop-up
@@ -1749,7 +1759,7 @@ views:
                     mushroom-shape-icon { 
                       --shape-color: transparent !important;
                     }
-                icon: mdi:desk
+                icon: mdi:monitor
               - type: custom:mushroom-title-card
                 title: Jess' Office
                 card_mod:
@@ -1816,12 +1826,13 @@ views:
                 icon: true
                 source: true
                 volume: true
+        view_layout:
+          grid-area: modalBdr3
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr4
         template: room_tile
         name: Tom's Office
-        icon: mdi:desk-lamp
         entity: light.all_lights_bedroom_4
         triggers_update:
           - cover.blinds_bedroom_4
@@ -1829,6 +1840,8 @@ views:
           - binary_sensor.door_bedroom_4
         variables:
           path: '#details-bedroom-4'
+          icon_on: mdi:desk-lamp-on
+          icon_off: mdi:desk-lamp
           data_blinds: cover.blinds_bedroom_4
           data_door: binary_sensor.door_bedroom_4
           data_lightOn: light.bedroom_4_lights
@@ -2028,7 +2041,7 @@ views:
                 layout: horizontal
                 name: Window Blind
                 entity: cover.blinds_bedroom_4
-                collapsible_controls: true
+                collapsible_controls: false
                 show_tilt_position_control: true
           - type: conditional
             conditions:
@@ -2150,7 +2163,6 @@ views:
           grid-area: tileLaund
         template: room_tile
         name: Laundry Room
-        icon: mdi:washing-machine
         entity: light.all_lights_laundry_room
         trigger_update:
           - light.all_lights_laundry_room
@@ -2161,6 +2173,7 @@ views:
           - sensor.reminder_laundry_complete_dryer
         variables:
           path: '#details-laundry-room'
+          icon: mdi:washing-machine
           data_door: binary_sensor.door_laundry
           data_lightOn: light.laundry_ceiling_light
           data_temperature: sensor.motion_temperature_laundry_room
@@ -2397,7 +2410,6 @@ views:
           grid-area: tileGar
         template: room_tile
         name: Garage
-        icon: mdi:car
         entity: light.all_lights_garage
         trigger_update:
           - cover.garage_door
@@ -2413,6 +2425,8 @@ views:
             entity_id: cover.garage_door
         variables:
           path: '#details-garage'
+          icon_on: mdi:car
+          icon_off: mdi:car-outline
           data_door: binary_sensor.door_garage
           data_lightOn: light.garage_ceiling
           data_temperature: sensor.temperature_garage
@@ -2626,10 +2640,10 @@ views:
           grid-area: tileOut
         template: room_tile
         name: Outside
-        icon: mdi:palm-tree
         entity: light.all_lights_outside
         variables:
           path: '#details-outside'
+          icon: mdi:palm-tree
           data_door: false
           data_lightOn: light.backyard_string_lights
           data_temperature: sensor.temperature_attic
@@ -2807,6 +2821,8 @@ views:
                 navigation_path: '#details-other'
               variables:
                 path: '#details-other'
+                icon_on: mdi:lightbulb-multiple
+                icon_off: mdi:lightbulb-multiple-outline
                 data_lightOn: light.all_lights_other
                 badge_alert: |
                   [[[ 
@@ -2832,10 +2848,12 @@ views:
             - type: custom:button-card
               template: room_tile__slim
               name: Residents
-              icon: mdi:account
               tap_action:
                 action: navigate
                 navigation_path: /lovelace/page-residents
+              variables:
+                icon_on: mdi:account
+                icon_off: mdi:account-outline
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -2886,7 +2904,7 @@ views:
                     mushroom-shape-icon { 
                       --shape-color: transparent !important;
                     }
-                icon: mdi:lightbulb-group
+                icon: mdi:lightbulb-multiple
               - type: custom:mushroom-title-card
                 title: Other
                 card_mod:
@@ -3126,7 +3144,7 @@ views:
             switch( lightOnCount )
             { 
               case 0:
-                return 'mdi:lightbulb-off';
+                return 'mdi:lightbulb-outline';
                 break;
               case 1:
                 return 'mdi:lightbulb';
@@ -3205,7 +3223,7 @@ views:
           grid-area: overflow3
         template: button__icon_name
         name: Systems
-        icon: mdi:information
+        icon: mdi:information-outline
         tap_action:
           action: navigate
           navigation_path: '#details-system'
@@ -3214,187 +3232,13 @@ views:
           grid-area: overflow4
         template: button__icon_name
         name: Configure
-        icon: mdi:cog
+        icon: mdi:cog-outline
         tap_action:
           action: navigate
           navigation_path: '#details-configure'
         hold_action:
           action: navigate
           navigation_path: /lovelace/page-helpers
-      - type: vertical-stack
-        cards:
-          - type: custom:bubble-card
-            card_type: pop-up
-            hash: '#details-system'
-            styles: |-
-              #root {
-                border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
-                background-color: var( --popup--background-color ) !important;
-              }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 90%
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:information
-              - type: custom:mushroom-title-card
-                title: Systems
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
-          - type: custom:layout-card
-            layout_type: custom:masonry-layout
-            cards:
-              - type: vertical-stack
-                cards:
-                  - type: custom:mini-graph-card
-                    name: Download Speed
-                    icon: mdi:speedometer
-                    show:
-                      legend: false
-                      points: false
-                    animate: true
-                    decimals: 0
-                    color_thresholds:
-                      - value: 0
-                        color: '#F54436'
-                      - value: 250
-                        color: '#FF9800'
-                      - value: 500
-                        color: '#FF9101'
-                      - value: 750
-                        color: '#01C852'
-                    hours_to_show: 12
-                    points_per_hour: 2
-                    line_width: 2
-                    tap_action:
-                      action: none
-                    entities:
-                      - entity: sensor.speedtest_download
-                  - type: custom:mini-graph-card
-                    name: Upload Speed
-                    icon: mdi:speedometer
-                    show:
-                      legend: false
-                      points: false
-                    animate: true
-                    decimals: 0
-                    color_thresholds:
-                      - value: 0
-                        color: '#F54436'
-                      - value: 250
-                        color: '#FF9800'
-                      - value: 500
-                        color: '#FF9101'
-                      - value: 750
-                        color: '#01C852'
-                    hours_to_show: 12
-                    points_per_hour: 2
-                    line_width: 2
-                    tap_action:
-                      action: none
-                    entities:
-                      - entity: sensor.speedtest_upload
-              - type: vertical-stack
-                cards:
-                  - type: entities
-                    title: Home Assistant
-                    show_header_toggle: false
-                    entities:
-                      - entity: sensor.processor_temperature
-                        name: CPU Temperature
-                      - entity: sensor.processor_use_percent
-                        name: CPU Usage
-                      - type: divider
-                      - entity: sensor.mariadb_database_size
-                        name: Database Size
-                      - entity: sensor.home_assistant_log_size
-                        name: Home Assistant Log Size
-                  - type: entities
-                    title: Last Restart
-                    entities:
-                      - entity: sensor.uptime
-                        name: Home Assistant
-                      - entity: sensor.casamaxson_udmp_uptime
-                        name: UniFi Dream Machine Pro
-                      - entity: sensor.casamaxson_unvr_uptime
-                        name: UniFi Network Video Recorder
-              - type: vertical-stack
-                cards:
-                  - type: entities
-                    title: Amazon Fire HD Tablet
-                    show_header_toggle: false
-                    entities:
-                      - entity: switch.fire_tablet_screen
-                        name: Display
-                        icon: hass:tablet
-                      - entity: number.fire_tablet_screen_brightness
-                        name: Brightness
-                      - entity: light.tablet_plug
-                        name: Charger
-                      - type: divider
-                      - entity: sensor.fire_tablet_battery
-                        name: Battery Level
-                      - entity: sensor.fire_tablet_total_memory
-                        name: Total Memory
-                        icon: hass:memory
-                      - entity: sensor.fire_tablet_used_memory
-                        name: Used Memory
-                        icon: mdi:database
-                      - type: divider
-                      - entity: input_button.home_assistant_restart
-                        icon: mdi:restart
-                        name: Restart System
-                        tap_action:
-                          action: call-service
-                          service: homeassistant.restart
-            layout: {}
-        view_layout:
-          grid-area: modalSys
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -3481,6 +3325,204 @@ views:
                 title: Content Visibility
         view_layout:
           grid-area: modalSbar
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#details-system'
+            styles: |-
+              #root {
+                border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
+                background-color: var( --popup--background-color ) !important;
+              }
+
+              .bubble-header-container { height: 0 !important;}
+
+              .bubble-header, 
+              .bubble-close-button { display: none !important;}
+
+              .bubble-pop-up-container { 
+                  padding-top: 0 !important;
+                  margin-top: 0 !important;
+              }
+            margin: 7px
+            width_desktop: 90%
+            width_mobile: 100%
+            bg_opacity: '90'
+            bg_blur: '6'
+            bg_color: var( --modal--background-color )
+          - type: custom:layout-card
+            layout_type: custom:grid-layout
+            layout:
+              grid-auto-rows: min-content
+              grid-template-columns: min-content 1fr min-content
+              grid-template-areas: '"icon title action"'
+            cards:
+              - type: custom:mushroom-template-card
+                view_layout:
+                  grid-area: icon
+                show_name: false
+                show_state: false
+                show_label: false
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding: 0 !important;
+                      border: none;
+                      margin: 1px 5px 0 -5px;
+                    }
+
+                    mushroom-shape-icon { 
+                      --shape-color: transparent !important;
+                    }
+                icon: mdi:information
+              - type: custom:mushroom-title-card
+                title: Systems
+                card_mod:
+                  style: |
+                    ha-card { 
+                      --title-padding: 0 !important;
+                      margin-top: 6px;
+                      margin-right: 0;
+                      margin-left: 0;
+                    }
+              - type: custom:button-card
+                view_layout:
+                  grid-area: action
+                template: button__close_popup
+          - type: custom:layout-card
+            layout_type: custom:masonry-layout
+            cards:
+              - type: vertical-stack
+                cards:
+                  - type: custom:mini-graph-card
+                    name: Download Speed
+                    icon: mdi:download
+                    show:
+                      legend: false
+                      points: false
+                    animate: true
+                    decimals: 0
+                    color_thresholds:
+                      - value: 0
+                        color: '#F54436'
+                      - value: 250
+                        color: '#FF9800'
+                      - value: 500
+                        color: '#FF9101'
+                      - value: 750
+                        color: '#01C852'
+                    hours_to_show: 12
+                    points_per_hour: 2
+                    line_width: 2
+                    tap_action:
+                      action: none
+                    entities:
+                      - entity: sensor.speedtest_download
+                  - type: custom:mini-graph-card
+                    name: Upload Speed
+                    icon: mdi:upload
+                    show:
+                      legend: false
+                      points: false
+                    animate: true
+                    decimals: 0
+                    color_thresholds:
+                      - value: 0
+                        color: '#F54436'
+                      - value: 250
+                        color: '#FF9800'
+                      - value: 500
+                        color: '#FF9101'
+                      - value: 750
+                        color: '#01C852'
+                    hours_to_show: 12
+                    points_per_hour: 2
+                    line_width: 2
+                    tap_action:
+                      action: none
+                    entities:
+                      - entity: sensor.speedtest_upload
+                  - type: custom:mini-graph-card
+                    name: Ping
+                    icon: mdi:lan-pending
+                    show:
+                      legend: false
+                      points: false
+                    animate: true
+                    decimals: 0
+                    color_thresholds:
+                      - value: 0
+                        color: '#01C852'
+                      - value: 15
+                        color: '#FF9101'
+                      - value: 30
+                        color: '#FF9800'
+                      - value: 45
+                        color: '#F54436'
+                    hours_to_show: 12
+                    points_per_hour: 2
+                    line_width: 2
+                    tap_action:
+                      action: none
+                    entities:
+                      - entity: sensor.speedtest_ping
+              - type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Home Assistant
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.processor_temperature
+                        name: CPU Temperature
+                      - entity: sensor.processor_use_percent
+                        name: CPU Usage
+                      - type: divider
+                      - entity: sensor.mariadb_database_size
+                        name: Database Size
+                      - entity: sensor.home_assistant_log_size
+                        name: Home Assistant Log Size
+                  - type: entities
+                    title: Last Restart
+                    entities:
+                      - entity: sensor.uptime
+                        name: Home Assistant
+                      - entity: sensor.casamaxson_udmp_uptime
+                        name: UniFi Dream Machine Pro
+                      - entity: sensor.casamaxson_unvr_uptime
+                        name: UniFi Network Video Recorder
+              - type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Amazon Fire HD Tablet
+                    show_header_toggle: false
+                    entities:
+                      - entity: switch.fire_tablet_screen
+                        name: Display
+                        icon: hass:tablet
+                      - entity: number.fire_tablet_screen_brightness
+                        name: Brightness
+                      - entity: light.tablet_plug
+                        name: Charger
+                      - type: divider
+                      - entity: sensor.fire_tablet_battery
+                        name: Battery Level
+                      - entity: sensor.fire_tablet_total_memory
+                        name: Total Memory
+                        icon: hass:memory
+                      - entity: sensor.fire_tablet_used_memory
+                        name: Used Memory
+                        icon: mdi:database
+                      - type: divider
+                      - entity: input_button.home_assistant_restart
+                        icon: mdi:restart
+                        name: Restart System
+                        tap_action:
+                          action: call-service
+                          service: homeassistant.restart
+            layout: {}
+        view_layout:
+          grid-area: modalSys
       - type: vertical-stack
         view_layout:
           grid-area: modalConf
@@ -5880,130 +5922,219 @@ views:
     cards:
       - type: vertical-stack
         cards:
-          - type: custom:mushroom-title-card
-            title: Door Controls
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              padding: var( --popup--grid-padding )
-              margin: var( --popup--grid-margin )
-              grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-              grid-auto-rows: auto
-              grid-row-gap: var( --popup--grid-gap-row )
-              grid-column-gap: var( --popup--grid-gap-column )
+          - type: vertical-stack
             cards:
-              - type: custom:mushroom-lock-card
-                entity: lock.front_door
-                layout: vertical
-                icon_type: none
-                primary_info: name
-                secondary_info: state
-                hold_action:
-                  action: more-info
-                double_tap_action:
-                  action: more-info
-              - type: custom:mushroom-cover-card
-                entity: cover.garage_door
-                name: Garage Door
-                layout: vertical
-                icon_type: none
-                primary_info: name
-                secondary_info: state
-                show_buttons_control: true
-                hold_action:
-                  action: more-info
-                double_tap_action:
-                  action: more-info
-      - type: entities
-        title: Exterior Cameras
-        show_header_toggle: false
-        card_mod:
-          style: |
-            ha-card.type-entities { 
-              --ha-card-border-color: transparent;
-              --ha-card-border-width: 0;
-              --ha-card-border-radius: 0;
-              --ha-card-background: transparent;
-              padding-right: 0;
-              padding-bottom: 18px;
-              padding-left: 0;
-              border-bottom: 1px solid var( --divider-color );
-            }
+              - type: custom:mushroom-title-card
+                title: Access
+              - type: custom:layout-card
+                layout_type: custom:grid-layout
+                layout:
+                  padding: var( --popup--grid-padding )
+                  margin: var( --popup--grid-margin )
+                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
+                  grid-auto-rows: auto
+                  grid-row-gap: var( --popup--grid-gap-row )
+                  grid-column-gap: var( --popup--grid-gap-column )
+                cards:
+                  - type: custom:mushroom-lock-card
+                    entity: lock.front_door
+                    layout: vertical
+                    icon_type: none
+                    primary_info: name
+                    secondary_info: state
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: more-info
+                  - type: custom:mushroom-cover-card
+                    entity: cover.garage_door
+                    name: Garage Door
+                    layout: vertical
+                    icon_type: none
+                    primary_info: name
+                    secondary_info: state
+                    show_buttons_control: true
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: more-info
+              - type: entities
+                title: Camera Settings
+                show_header_toggle: false
+                card_mod:
+                  style: |
+                    ha-card.type-entities { 
+                      --ha-card-border-color: transparent;
+                      --ha-card-border-width: 0;
+                      --ha-card-border-radius: 0;
+                      --ha-card-background: transparent;
+                      padding-right: 0;
+                      padding-left: 0;
+                    }
 
-            #states { padding: 0;}
-        entities:
-          - entity: input_boolean.enable_exterior_camera_recording
-            name: Enable Recording
-          - entity: camera.ext_doorbell
-            secondary_info: none
-            name: Main Entry Doorbell
-          - entity: camera.ext_backyard_northeast
-            name: Backyard, Northeast
-          - entity: camera.ext_backyard_southeast
-            name: Backyard, Southeast
-          - entity: camera.ext_front_yard_northeast
-            secondary_info: none
-            name: Front Yard, Northeast
-          - entity: camera.ext_front_yard_southeast
-            name: Front Yard, Southeast
-            secondary_info: none
-          - entity: camera.ext_side_yard_northeast
-            name: Side Yard, North
-          - entity: camera.ext_side_yard_southeast
-            name: Side Yard, South
-      - type: entities
-        title: Interior Cameras
-        show_header_toggle: false
-        card_mod:
-          style: |
-            ha-card.type-entities { 
-              --ha-card-border-color: transparent;
-              --ha-card-border-width: 0;
-              --ha-card-border-radius: 0;
-              --ha-card-background: transparent;
-              padding-right: 0;
-              padding-bottom: 18px;
-              padding-left: 0;
-              border-bottom: 1px solid var( --divider-color );
-            }
+                    #states { padding: 0;}
+                entities:
+                  - entity: input_boolean.enable_exterior_camera_recording
+                    name: Record Exterior Cameras
+                  - entity: input_boolean.enable_interior_camera_recording
+                    name: Record Interior Cameras
+                  - entity: input_boolean.enable_motion_camera_recording
+                    name: Record Motion Cameras
+                  - entity: input_boolean.camera_int_privacy_mode
+                    name: Interior Privacy
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Cameras
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: state_switch_tile
+                entity: input_boolean.enable_exterior_camera_recording
+                name: Exterior
+                icon: mdi:tooltip-image
+                tap_action:
+                  action: navigate
+                  navigation_path: '#camera-exterior'
+                variables:
+                  text_state_on: Recording
+                  text_state_off: Stopped
+              - type: custom:button-card
+                template: state_switch_tile
+                entity: input_boolean.enable_interior_camera_recording
+                name: Interior
+                icon: mdi:tooltip-account
+                tap_action:
+                  action: navigate
+                  navigation_path: '#camera-interior'
+                variables:
+                  text_state_on: Recording
+                  text_state_off: Stopped
+              - type: custom:button-card
+                template: state_switch_tile
+                entity: input_boolean.enable_motion_camera_recording
+                name: Motion
+                icon: mdi:tooltip-check
+                tap_action:
+                  action: navigate
+                  navigation_path: '#camera-motion'
+                variables:
+                  text_state_on: Recording
+                  text_state_off: Stopped
+          - type: custom:state-switch
+            default: camera-exterior
+            entity: hash
+            states:
+              camera-exterior:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Exterior Cameras
+                    show_header_toggle: false
+                    entities:
+                      - entity: camera.ext_doorbell
+                        secondary_info: none
+                        name: Main Entry Doorbell
+                      - entity: camera.ext_backyard_northeast
+                        name: Backyard, Northeast
+                      - entity: camera.ext_backyard_southeast
+                        name: Backyard, Southeast
+                      - entity: camera.ext_front_yard_northeast
+                        secondary_info: none
+                        name: Front Yard, Northeast
+                      - entity: camera.ext_front_yard_southeast
+                        name: Front Yard, Southeast
+                        secondary_info: none
+                      - entity: camera.ext_side_yard_northeast
+                        name: Side Yard, North
+                      - entity: camera.ext_side_yard_southeast
+                        name: Side Yard, South
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          --ha-card-border-color: transparent;
+                          --ha-card-border-width: 0;
+                          --ha-card-border-radius: 0;
+                          --ha-card-background: transparent;
+                          padding-right: 0;
+                          padding-left: 0;
+                        }
 
-            #states { padding: 0;}
-        entities:
-          - entity: input_boolean.enable_interior_camera_recording
-            name: Enable Recording
-          - entity: camera.int_dining_room
-            name: Dining Room
-          - entity: camera.int_kitchen
-            secondary_info: none
-            name: Kitchen
-          - entity: camera.int_foyer
-            secondary_info: none
-            name: Foyer Entryway
-          - entity: camera.int_living_room
-            secondary_info: none
-            name: Living Room
-          - entity: camera.int_bdr1
-            name: Main Bedroom
-      - type: entities
-        title: Motion Only Cameras
-        show_header_toggle: false
-        card_mod:
-          style: |
-            ha-card.type-entities { 
-              --ha-card-border-color: transparent;
-              --ha-card-border-width: 0;
-              --ha-card-border-radius: 0;
-              --ha-card-background: transparent;
-              padding-right: 0;
-              padding-left: 0;
-            }
+                        #states { padding: 0;}
+              camera-interior:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Interior Cameras
+                    show_header_toggle: false
+                    entities:
+                      - entity: camera.int_dining_room
+                        name: Dining Room
+                      - entity: camera.int_kitchen
+                        secondary_info: none
+                        name: Kitchen
+                      - entity: camera.int_foyer
+                        secondary_info: none
+                        name: Foyer Entryway
+                      - entity: camera.int_living_room
+                        secondary_info: none
+                        name: Living Room
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          --ha-card-border-color: transparent;
+                          --ha-card-border-width: 0;
+                          --ha-card-border-radius: 0;
+                          --ha-card-background: transparent;
+                          padding-right: 0;
+                          padding-bottom: 18px;
+                          padding-left: 0;
+                          border-bottom: 1px solid var( --divider-color );
+                        }
 
-            #states { padding: 0;}
-        entities:
-          - entity: input_boolean.enable_motion_camera_recording
-            name: Enable Recording
-          - entity: camera.ext_garage
-            name: Garage
+                        #states { padding: 0;}
+                  - type: entities
+                    title: Private Interior Cameras
+                    show_header_toggle: false
+                    entities:
+                      - entity: camera.int_bdr1
+                        name: Main Bedroom
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          --ha-card-border-color: transparent;
+                          --ha-card-border-width: 0;
+                          --ha-card-border-radius: 0;
+                          --ha-card-background: transparent;
+                          padding-right: 0;
+                          padding-bottom: 18px;
+                          padding-left: 0;
+                          border-bottom: 1px solid var( --divider-color );
+                        }
+
+                        #states { padding: 0;}
+              camera-motion:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Motion Only Cameras
+                    show_header_toggle: false
+                    entities:
+                      - entity: camera.ext_garage
+                        name: Garage
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          --ha-card-border-color: transparent;
+                          --ha-card-border-width: 0;
+                          --ha-card-border-radius: 0;
+                          --ha-card-background: transparent;
+                          padding-right: 0;
+                          padding-left: 0;
+                        }
+
+                        #states { padding: 0;}
+    layout: {}
   - title: Laundry Details
     path: page-laundry
     theme: casamaxson
@@ -7295,21 +7426,21 @@ views:
           - type: horizontal-stack
             cards:
               - type: custom:button-card
-                template: person_tile
+                template: state_switch_tile__person
                 entity: person.thomas
                 name: Tom
                 tap_action:
                   action: navigate
                   navigation_path: '#tom'
               - type: custom:button-card
-                template: person_tile
+                template: state_switch_tile__person
                 entity: person.jessica
                 name: Jess
                 tap_action:
                   action: navigate
                   navigation_path: '#jess'
               - type: custom:button-card
-                template: person_tile
+                template: state_switch_tile__person
                 entity: input_boolean.status_dog_gouda
                 name: Gouda
                 variables:
@@ -7318,7 +7449,7 @@ views:
                   action: navigate
                   navigation_path: '#gouda'
               - type: custom:button-card
-                template: person_tile
+                template: state_switch_tile__person
                 entity: input_boolean.guests_home
                 name: Guest
                 variables:
@@ -8013,6 +8144,15 @@ button_card_templates:
       - button_data_setup
       - button_animation__bounce
       - button_theme__default
+    variables:
+      icon: |
+        [[[ if ( ! entity ) return '';
+          else return entity.icon; ]]]'
+      icon_on: '[[[ return variables.icon; ]]]'
+      icon_off: '[[[ return variables.icon; ]]]'
+    icon: |
+      [[[ if ( variables.state_on == 'on' ) return variables.icon_on;
+        else return variables.icon_off; ]]]
     styles:
       grid:
         - grid-column-gap: 12px
@@ -8092,74 +8232,6 @@ button_card_templates:
       icon:
         - width: 100%
         - min-width: 60px
-  person_tile:
-    template:
-      - button_data_setup
-      - button_animation__bounce
-      - button_theme__default
-    variables:
-      img_path: '[[[ return states[entity.entity_id].attributes.entity_picture ]]]'
-      text_state_on: Home
-      text_state_off: Away
-    layout: icon_name
-    show_label: false
-    show_state: true
-    state_display: |
-      [[[
-        if( variables.state_on )
-        { 
-          return variables.text_state_on;
-
-        } else if( variables.state == 'not_home' || variables.state == 'off' )
-        { 
-          return variables.text_state_off;
-
-        } else
-        { 
-          return variables.state;
-
-        }
-      ]]]
-    tap_action:
-      action: none
-    double_tap_action:
-      action: none
-    hold_action:
-      action: none
-    custom_fields:
-      picture: |
-        [[[ 
-          return ( variables.img_path ) 
-            ? `<img src="${variables.img_path}" style="border-radius: 100%; width: 100%; aspect-ratio: 1;">` 
-            : '';
-        ]]]
-    styles:
-      grid:
-        - grid-template-areas: |
-            "picture"
-            "n"
-            "s"
-        - grid-template-columns: 100%
-        - grid-auto-rows: min-content
-      card:
-        - padding: 15px 20px 7px 20px
-      name:
-        - place-self: center
-        - min-height: 0
-      state:
-        - place-self: center
-        - min-height: 0
-      icon:
-        - display: none
-      custom_fields:
-        picture:
-          - padding-bottom: 1vw
-          - filter: |
-              [[[ 
-                return ( variables.state_on ) 
-                  ? 'grayscale( 0 )' 
-                  : 'grayscale( 1 )';
-              ]]]
   room_tile:
     template:
       - button_data_setup
@@ -8181,6 +8253,11 @@ button_card_templates:
       badge_blinds: ''
       badge_curtains: ''
       badge_door: ''
+      icon: |
+        [[[ if ( ! entity ) return '';
+          else return entity.icon; ]]]'
+      icon_on: '[[[ return variables.icon; ]]]'
+      icon_off: '[[[ return variables.icon; ]]]'
       text_temperature: |
         [[[ 
           const theEntity = variables.data_temperature;
@@ -8212,6 +8289,9 @@ button_card_templates:
     show_icon: true
     show_label: '[[[ return ( variables.text_temperature !== "" ) ? true : false ]]]'
     show_state: false
+    icon: >-
+      [[[ return ( variables.state_on ) ? variables.icon_on :
+      variables.icon_off; ]]]
     label: '[[[ return variables.text_temperature ]]]'
     tap_action:
       action: call-service
@@ -8778,6 +8858,94 @@ button_card_templates:
         - box-shadow: none
       icon:
         - width: 25px
+  state_switch_tile:
+    template:
+      - button_data_setup
+      - button_animation__bounce
+      - button_theme__default
+    variables:
+      text_state_on: 'On'
+      text_state_off: 'Off'
+    layout: icon_name
+    show_label: false
+    show_state: true
+    state_display: |
+      [[[
+        if( variables.state_on )
+        { 
+          return variables.text_state_on;
+
+        } else if( variables.state == 'not_home' || variables.state == 'off' )
+        { 
+          return variables.text_state_off;
+
+        } else
+        { 
+          return variables.state;
+
+        }
+      ]]]
+    tap_action:
+      action: none
+    double_tap_action:
+      action: none
+    hold_action:
+      action: none
+    styles:
+      grid:
+        - grid-template-areas: |
+            "i"
+            "n"
+            "s"
+        - grid-template-columns: 100%
+        - grid-auto-rows: min-content
+      card:
+        - padding: 15px 20px 7px 20px
+      name:
+        - place-self: center
+        - min-height: 0
+      state:
+        - place-self: center
+        - min-height: 0
+      img_cell:
+        - padding-bottom: 1vw
+      icon:
+        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
+        - '--state-light-off-color': rgb( var( --white-color-rgb ) )
+  state_switch_tile__person:
+    template:
+      - state_switch_tile
+    variables:
+      img_path: '[[[ return states[entity.entity_id].attributes.entity_picture ]]]'
+    icon: false
+    custom_fields:
+      picture: |
+        [[[ 
+          return ( variables.img_path ) 
+            ? `<img src="${variables.img_path}" style="border-radius: 100%; width: 100%; aspect-ratio: 1;">` 
+            : '';
+        ]]]
+    styles:
+      grid:
+        - grid-template-areas: |
+            "picture"
+            "n"
+            "s"
+        - grid-template-columns: 100%
+        - grid-auto-rows: min-content
+      img_cell:
+        - display: none
+      icon:
+        - display: none
+      custom_fields:
+        picture:
+          - padding-bottom: 1vw
+          - filter: |
+              [[[ 
+                return ( variables.state_on ) 
+                  ? 'grayscale( 0 )' 
+                  : 'grayscale( 1 )';
+              ]]]
   entity_card:
     template:
       - button_data_setup
@@ -9273,5 +9441,5 @@ button_card_templates:
 
 
       @media screen and (max-width: 576px) {
-        p { font-size: clamp( 1.5rem, 2.25vw, 3rem );}
+        p { font-size: clamp( 2.25rem, 2.25vw, 3rem );}
       }
