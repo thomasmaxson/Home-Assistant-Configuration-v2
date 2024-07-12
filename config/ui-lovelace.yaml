@@ -8896,22 +8896,7 @@ button_card_templates:
     layout: icon_name
     show_label: false
     show_state: true
-    state_display: |
-      [[[
-        if( variables.state_on )
-        { 
-          return variables.text_state_on;
-
-        } else if( variables.state == 'not_home' || variables.state == 'off' )
-        { 
-          return variables.text_state_off;
-
-        } else
-        { 
-          return variables.state;
-
-        }
-      ]]]
+    state_display: '[[[ return ( variables.state_on ) ? variables.text_state_on : variables.text_state_off; ]]]'
     tap_action:
       action: none
     double_tap_action:
