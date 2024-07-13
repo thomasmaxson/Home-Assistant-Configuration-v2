@@ -220,45 +220,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:home
-              - type: custom:mushroom-title-card
-                title: Foyer
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:home
+              - title: Foyer
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -506,45 +472,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:fridge
-              - type: custom:mushroom-title-card
-                title: Kitchen
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:fridge
+              - title: Kitchen
           - type: horizontal-stack
             cards:
               - type: custom:button-card
@@ -905,45 +837,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:sofa
-              - type: custom:mushroom-title-card
-                title: Living Room
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:sofa
+              - title: Living Room
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -1093,45 +991,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:table-furniture
-              - type: custom:mushroom-title-card
-                title: Dining Room
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:silverware-variant
+              - title: Dining Room
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -1231,45 +1095,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-                      
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:bed-king
-              - type: custom:mushroom-title-card
-                title: Main Bedroom
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:bed-king
+              - title: Main Bedroom
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -1505,45 +1335,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:bed
-              - type: custom:mushroom-title-card
-                title: Guest Bedroom
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:bed
+              - title: Guest Bedroom
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -1733,45 +1529,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:monitor
-              - type: custom:mushroom-title-card
-                title: Jess' Office
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:monitor
+              - title: Jess' Office
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -1870,45 +1632,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:desk-lamp
-              - type: custom:mushroom-title-card
-                title: Tom's Office
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:desk-lamp
+              - title: Tom's Office
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -2244,45 +1972,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:washing-machine
-              - type: custom:mushroom-title-card
-                title: Laundry Room
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:washing-machine
+              - title: Laundry Room
           - type: horizontal-stack
             cards:
               - type: custom:button-card
@@ -2480,45 +2174,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:car
-              - type: custom:mushroom-title-card
-                title: Garage
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:car
+              - title: Garage
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -2671,45 +2331,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:palm-tree
-              - type: custom:mushroom-title-card
-                title: Outside
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:palm-tree
+              - title: Outside
           - type: custom:mod-card
             style:
               hui-horizontal-stack-card$: |
@@ -2894,45 +2520,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:lightbulb-multiple
-              - type: custom:mushroom-title-card
-                title: Other
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:lightbulb-multiple
+              - title: Other
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -3279,45 +2871,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:list-box
-              - type: custom:mushroom-title-card
-                title: SIdebar Extras
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:list-box
+              - title: Sidebar Extras
           - type: vertical-stack
             cards:
               - type: entities
@@ -3365,45 +2923,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:information
-              - type: custom:mushroom-title-card
-                title: Systems
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:information
+              - title: Systems
           - type: custom:layout-card
             layout_type: custom:masonry-layout
             cards:
@@ -3563,45 +3087,11 @@ views:
             bg_opacity: '90'
             bg_blur: '6'
             bg_color: var( --modal--background-color )
-          - type: custom:layout-card
-            layout_type: custom:grid-layout
-            layout:
-              grid-auto-rows: min-content
-              grid-template-columns: min-content 1fr min-content
-              grid-template-areas: '"icon title action"'
-            cards:
-              - type: custom:mushroom-template-card
-                view_layout:
-                  grid-area: icon
-                show_name: false
-                show_state: false
-                show_label: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 !important;
-                      border: none;
-                      margin: 1px 5px 0 -5px;
-                    }
-
-                    mushroom-shape-icon { 
-                      --shape-color: transparent !important;
-                    }
-                icon: mdi:cog
-              - type: custom:mushroom-title-card
-                title: Configure
-                card_mod:
-                  style: |
-                    ha-card { 
-                      --title-padding: 0 !important;
-                      margin-top: 6px;
-                      margin-right: 0;
-                      margin-left: 0;
-                    }
-              - type: custom:button-card
-                view_layout:
-                  grid-area: action
-                template: button__close_popup
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:cog
+              - title: Configure
           - type: custom:layout-card
             layout_type: custom:masonry-layout
             cards:
@@ -8868,22 +8358,6 @@ button_card_templates:
         return Math.round( states[theEntity].state ).toFixed( 0 ) + measurement;
       ]]]
     show_state: false
-  button__close_popup:
-    template:
-      - button_animation__bounce
-    tap_action:
-      action: navigate
-      navigation_path: /lovelace/home
-    icon: mdi:close
-    show_name: false
-    styles:
-      card:
-        - width: 40px
-        - height: 40px
-        - border-radius: 100%
-        - box-shadow: none
-      icon:
-        - width: 25px
   state_switch_tile:
     template:
       - button_data_setup
@@ -9458,3 +8932,61 @@ button_card_templates:
       @media screen and (max-width: 576px) {
         p { font-size: clamp( 2.25rem, 2.25vw, 3rem );}
       }
+decluttering_templates:
+  room_popup__header:
+    card:
+      type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        grid-auto-rows: min-content
+        grid-template-columns: min-content 1fr min-content
+        grid-template-areas: '"icon title action"'
+      cards:
+        - type: custom:mushroom-template-card
+          view_layout:
+            grid-area: icon
+          show_name: false
+          show_state: false
+          show_label: false
+          card_mod:
+            style: |
+              ha-card {
+                --icon-symbol-size: 32px;
+                padding: 0 !important;
+                border: none;
+                margin: 1px 5px 0 -5px;
+                width: 40px;
+              }
+    
+              mushroom-shape-icon { 
+                --shape-color: transparent !important;
+              }
+          icon: '[[icon]]'
+        - type: custom:mushroom-title-card
+          title: '[[title]]'
+          card_mod:
+            style: |
+              ha-card { 
+                --title-padding: 0 !important;
+                margin-top: 6px;
+                margin-right: 0;
+                margin-left: 0;
+              }
+        - type: custom:button-card
+          view_layout:
+            grid-area: action
+          template:
+            - button_animation__bounce
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace/home
+          icon: mdi:close
+          show_name: false
+          styles:
+            card:
+              - width: 40px
+              - height: 40px
+              - border-radius: 100%
+              - box-shadow: none
+            icon:
+              - width: 25px
