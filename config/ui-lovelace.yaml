@@ -8896,7 +8896,9 @@ button_card_templates:
     layout: icon_name
     show_label: false
     show_state: true
-    state_display: '[[[ return ( variables.state_on ) ? variables.text_state_on : variables.text_state_off; ]]]'
+    state_display: >-
+      [[[ return ( variables.state_on ) ? variables.text_state_on :
+      variables.text_state_off; ]]]
     tap_action:
       action: none
     double_tap_action:
