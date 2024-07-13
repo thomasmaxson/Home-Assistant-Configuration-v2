@@ -960,8 +960,7 @@ views:
         entity: light.all_lights_dining_room
         variables:
           path: '#details-dining-room'
-          icon_on: mdi:table-furniture
-          icon_off: mdi:table-furniture
+          icon: mdi:silverware-variant
           data_door: false
           data_lightOn: light.dining_room_chandelier
           data_temperature: sensor.temperature_living_room
