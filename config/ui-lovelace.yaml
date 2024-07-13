@@ -245,165 +245,137 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  '--masonry-view-card-margin': 0
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                  grid-auto-rows: auto
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                cards:
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Lights
-                      entity: light.foyer_ceiling_lights
-                      collapsible_controls: true
-                      show_brightness_control: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Entryway
-                      entity: light.foyer_entryway_ceiling
-                      collapsible_controls: true
-                      show_brightness_control: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_foyer_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Hallway
-                      entity: light.foyer_hallway_ceiling
-                      collapsible_controls: true
-                      show_brightness_control: true
-                  - type: custom:mushroom-light-card
-                    name: Upper Ledge
-                    entity: light.foyer_ceiling_ledge
-                    collapsible_controls: true
-                    show_brightness_control: true
-                    show_color_control: true
-                    use_light_color: true
-                  - type: custom:mushroom-light-card
-                    name: Under Table
-                    entity: light.foyer_under_table
-                    collapsible_controls: true
-                    show_brightness_control: true
-                    show_color_control: true
-                    use_light_color: true
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                    - type: custom:mushroom-climate-card
+                      entity: climate.ecobee
+                      name: Thermostat
+                      layout: vertical
+                      icon_type: none
+                      primary_info: name
+                      secondary_info: state
+                      show_temperature_control: true
+                      hvac_modes:
+                        - auto
+                        - cool
+                        - heat
+                      hold_action:
+                        action: more-info
+                      double_tap_action:
+                        action: more-info
+                    - type: custom:mushroom-lock-card
+                      entity: lock.front_door
+                      layout: vertical
+                      icon_type: none
+                      primary_info: name
+                      secondary_info: state
+                      hold_action:
+                        action: more-info
+                      double_tap_action:
+                        action: more-info
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Devices
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  '--masonry-view-card-margin': 0
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-lock-card
-                    entity: lock.front_door
-                    layout: vertical
-                    icon_type: none
-                    primary_info: name
-                    secondary_info: state
-                    hold_action:
-                      action: more-info
-                    double_tap_action:
-                      action: more-info
-                  - type: custom:mushroom-climate-card
-                    entity: climate.ecobee
-                    name: Thermostat
-                    layout: vertical
-                    icon_type: none
-                    primary_info: name
-                    secondary_info: state
-                    show_temperature_control: true
-                    hvac_modes:
-                      - auto
-                      - cool
-                      - heat
-                    hold_action:
-                      action: more-info
-                    double_tap_action:
-                      action: more-info
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Water Detection
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Air Conditioner
-                    entity: binary_sensor.leak_air_conditioner
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Lights
+                          entity: light.foyer_ceiling_lights
+                          collapsible_controls: true
+                          show_brightness_control: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Entryway
+                          entity: light.foyer_entryway_ceiling
+                          collapsible_controls: true
+                          show_brightness_control: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_foyer_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Hallway
+                          entity: light.foyer_hallway_ceiling
+                          collapsible_controls: true
+                          show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        name: Upper Ledge
+                        entity: light.foyer_ceiling_ledge
+                        collapsible_controls: true
+                        show_brightness_control: true
+                        show_color_control: true
+                        use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: Under Table
+                        entity: light.foyer_under_table
+                        collapsible_controls: true
+                        show_brightness_control: true
+                        show_color_control: true
+                        use_light_color: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Show More
+              - cards:
+                  - type: custom:mushroom-title-card
+                    title: ''
+                    subtitle: 'Leak Detection'
+                  - type: custom:decluttering-card
+                    template: room_popup__grid_2_columns
                     variables:
-                      data_entity: sensor.leak_battery_air_conditioner
-          - type: custom:expander-card
-            title: Configure
-            card_mod:
-              style: |
-                ha-card { 
-                  color: red !important;
-                }
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.sync_foyer_lights
-                    name: Sync Ceiling Lights
-                  - entity: input_boolean.automation_foyer_door_open_close
-                    name: Turn on entryway light when door opens at night
+                      - cards: 
+                          - type: custom:button-card
+                            template: entity_card__leak
+                            name: Air Conditioner
+                            entity: binary_sensor.leak_air_conditioner
+                            variables:
+                              data_entity: sensor.leak_battery_air_conditioner
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                        - entities: 
+                          - type: section
+                            label: Group Lights
+                          - entity: input_boolean.sync_foyer_lights
+                            name: Sync Ceiling Lights
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_foyer_door_open_close
+                            name: Turn on entryway light when door opens at night
             title-card-clickable: true
         view_layout:
           grid-area: modalFoyer
@@ -482,305 +454,291 @@ views:
                 - type: custom:button-card
                   template: chip_detail__leak
                   entity: binary_sensor.all_leak_sensors_kitchen
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.echo_kitchen
-                    state:
-                      - playing
-                      - paused
-            card:
-              type: custom:mini-media-player
-              entity: media_player.echo_kitchen
-              name: Amazon Echo
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_kitchen
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_kitchen
+                          name: Amazon Echo
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Lights
-                      entity: light.kitchen_ceiling_lights
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 1
-                      entity: light.kitchen_light_1
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 2
-                      entity: light.kitchen_light_2
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 3
-                      entity: light.kitchen_light_3
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 4
-                      entity: light.kitchen_light_4
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 5
-                      entity: light.kitchen_light_5
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_kitchen_ceiling_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Ceiling Light 6
-                      entity: light.kitchen_light_6
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Cabinet Up Lights
-                      entity: light.cabinet_upper_lights
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Coffee Bar Up Lights
-                      entity: light.kitchen_cabinet_upper_coffee_bar
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_cabinet_above_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Range/Oven Up Lights
-                      entity: light.kitchen_cabinet_upper_range
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mini-graph-card
+                        name: Refrigerator
+                        show:
+                          icon: false
+                          points: false
+                        animate: true
+                        decimals: 0
+                        line_color: var( --blue-color-hex )
+                        tap_action:
+                          action: none
+                        entities:
+                          - entity: sensor.temperature_refrigerator
+                      - type: custom:mini-graph-card
+                        name: Freezer
+                        show:
+                          icon: false
+                          points: false
+                        animate: true
+                        decimals: 0
+                        line_color: var( --grey-color-hex )
+                        tap_action:
+                          action: none
+                        entities:
+                          - entity: sensor.temperature_freezer
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Devices
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mini-graph-card
-                    name: Refrigerator
-                    show:
-                      icon: false
-                      points: false
-                    animate: true
-                    decimals: 0
-                    line_color: var( --blue-color-hex )
-                    tap_action:
-                      action: none
-                    entities:
-                      - entity: sensor.temperature_refrigerator
-                  - type: custom:mini-graph-card
-                    name: Freezer
-                    show:
-                      icon: false
-                      points: false
-                    animate: true
-                    decimals: 0
-                    line_color: var( --grey-color-hex )
-                    tap_action:
-                      action: none
-                    entities:
-                      - entity: sensor.temperature_freezer
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Sink
-                    entity: binary_sensor.leak_sink_kitchen
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Lights
+                          entity: light.kitchen_ceiling_lights
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 1
+                          entity: light.kitchen_light_1
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 2
+                          entity: light.kitchen_light_2
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 3
+                          entity: light.kitchen_light_3
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 4
+                          entity: light.kitchen_light_4
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 5
+                          entity: light.kitchen_light_5
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_kitchen_ceiling_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Ceiling Light 6
+                          entity: light.kitchen_light_6
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Cabinet Up Lights
+                          entity: light.cabinet_upper_lights
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Coffee Bar Up Lights
+                          entity: light.kitchen_cabinet_upper_coffee_bar
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_cabinet_above_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Range/Oven Up Lights
+                          entity: light.kitchen_cabinet_upper_range
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Show More
+              - cards:
+                  - type: custom:mushroom-title-card
+                    title: ''
+                    subtitle: 'Outlets'
+                  - type: custom:decluttering-card
+                    template: room_popup__grid_2_columns
                     variables:
-                      data_entity: sensor.leak_battery_sink_kitchen
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Dish Washer
-                    entity: binary_sensor.leak_dish_washer
+                      - cards: 
+                          - type: custom:mushroom-light-card
+                            name: Above Coffee Bar
+                            entity: switch.plug_kitchen_cabinets_upper_coffee_bar
+                          - type: custom:mushroom-light-card
+                            name: Above Range
+                            entity: switch.plug_kitchen_cabinets_upper_range
+                          - type: custom:mushroom-light-card
+                            name: Tablet Power
+                            entity: light.tablet_plug
+                  - type: custom:mushroom-title-card
+                    title: ''
+                    subtitle: 'Leak Detection'
+                  - type: custom:decluttering-card
+                    template: room_popup__grid_2_columns
                     variables:
-                      data_entity: sensor.leak_battery_dish_washer
-          - type: custom:expander-card
-            title: Other
-            cards:
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Above Coffee Bar
-                    entity: switch.plug_kitchen_cabinets_upper_coffee_bar
-                  - type: custom:mushroom-light-card
-                    name: Above Range
-                    entity: switch.plug_kitchen_cabinets_upper_range
-                  - type: custom:mushroom-light-card
-                    name: Tablet Power
-                    entity: light.tablet_plug
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.sync_kitchen_ceiling_lights
-                    name: Sync Ceiling Lights
-                  - entity: input_boolean.sync_cabinet_above_lights
-                    name: Sync Cabinet Up Lights
+                      - cards: 
+                          - type: custom:button-card
+                            template: entity_card__leak
+                            name: Sink
+                            entity: binary_sensor.leak_sink_kitchen
+                            variables:
+                              data_entity: sensor.leak_battery_sink_kitchen
+                          - type: custom:button-card
+                            template: entity_card__leak
+                            name: Dish Washer
+                            entity: binary_sensor.leak_dish_washer
+                            variables:
+                              data_entity: sensor.leak_battery_dish_washer
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Group Lights
+                          - entity: input_boolean.sync_kitchen_ceiling_lights
+                            name: Ceiling Lights
+                          - entity: input_boolean.sync_cabinet_above_lights
+                            name: Cabinet Up Lights
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_kitchen
+                            name: Allow Annoucements
         view_layout:
           grid-area: modalKit
       - type: custom:button-card
@@ -854,94 +812,82 @@ views:
                   entity: light.all_lights_living_room
           - type: vertical-stack
             cards:
-              - type: conditional
-                conditions:
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity: media_player.appletv_living_room
-                        state:
-                          - playing
-                          - paused
-                          - buffering
-                card:
-                  type: custom:mini-media-player
-                  entity: media_player.appletv_living_room
-                  name: AppleTV
-                  artwork: cover
-                  hide:
-                    icon: true
-                    source: true
-                    volume: true
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_living_room
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_living_room
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Ceiling
-                    entity: light.living_room_corner_lamp
-                    collapsible_controls: true
-                    show_brightness_control: true
-                    show_color_control: true
-                    use_light_color: true
-                  - type: custom:mushroom-light-card
-                    name: TV Ambient Lights
-                    entity: light.tv_ambient_lights
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-media-player-card
+                        name: Television
+                        primary_info: name
+                        secondary_info: none
+                        entity: media_player.sony_bravia_tv
+                        collapsible_controls: true
+                        media_controls: on_off
+                        volume_controls: volume_mute volume_buttons
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Devices
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-media-player-card
-                    name: Television
-                    primary_info: name
-                    secondary_info: none
-                    entity: media_player.sony_bravia_tv
-                    collapsible_controls: true
-                    media_controls: on_off
-                    volume_controls: volume_mute volume_buttons
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.automation_living_room_door_open_close
-                    name: Turn on exterior string light when door opens at night
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Ceiling
+                        entity: light.living_room_corner_lamp
+                        collapsible_controls: true
+                        show_brightness_control: true
+                        show_color_control: true
+                        use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: TV Ambient Lights
+                        entity: light.tv_ambient_lights
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_kitchen
+                            name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_living_room_door_open_close
+                            name: Turn on exterior string light when door opens at night
         view_layout:
           grid-area: modalLivR
       - type: custom:button-card
@@ -997,44 +943,57 @@ views:
                 - type: custom:button-card
                   template: chip_detail__light
                   entity: light.all_lights_dining_room
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.echo_dot_dining_room
-                    state:
-                      - playing
-                      - paused
-            card:
-              type: custom:mini-media-player
-              entity: media_player.echo_dot_dining_room
-              name: Amazon Echo Dot
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_dining_room
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_dining_room
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Chandelier
-                    entity: light.dining_room_chandelier
-                    collapsible_controls: true
-                    show_brightness_control: true
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Chandelier
+                        entity: light.dining_room_chandelier
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_dining_room
+                            name: Allow Annoucements
         view_layout:
           grid-area: modalDinR
       - type: custom:button-card
@@ -1101,175 +1060,159 @@ views:
                   entity: light.all_lights_bedroom_1
           - type: vertical-stack
             cards:
-              - type: conditional
-                conditions:
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity: media_player.appletv_bedroom_1
-                        state:
-                          - playing
-                          - paused
-                          - buffering
-                card:
-                  type: custom:mini-media-player
-                  entity: media_player.appletv_bedroom_1
-                  name: AppleTV
-                  artwork: cover
-                  hide:
-                    icon: true
-                    source: true
-                    volume: true
-              - type: conditional
-                conditions:
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity: media_player.echo_dot_bedroom_1
-                        state:
-                          - playing
-                          - paused
-                card:
-                  type: custom:mini-media-player
-                  entity: media_player.echo_dot_bedroom_1
-                  name: Amazon Echo Dot
-                  artwork: cover
-                  hide:
-                    icon: true
-                    source: true
-                    volume: true
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_bedroom_1
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_bedroom_1
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_bedroom_1
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_bedroom_1
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Bedside Lamps
-                      entity: light.bedroom_1_bedside_lamps
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Jess' Bedside Lamp
-                      entity: light.bedroom_1_lamp_hers
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_1_bedside_lamps
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Tom's Bedside Lamp
-                      entity: light.bedroom_1_lamp_his
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: custom:mushroom-light-card
-                    entity: light.closet_hallway_ceiling_light
-                    name: Hallway
-                    collapsible_controls: true
-                    show_brightness_control: true
-                  - type: custom:mushroom-light-card
-                    entity: light.closet_hallway_light_hers
-                    name: Jess' Closet
-                    collapsible_controls: true
-                    show_brightness_control: true
-                  - type: custom:mushroom-light-card
-                    entity: light.closet_hallway_light_his
-                    name: Tom's Closet
-                    collapsible_controls: true
-                    show_brightness_control: true
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Bedside Lamps
+                          entity: light.bedroom_1_bedside_lamps
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Jess' Bedside Lamp
+                          entity: light.bedroom_1_lamp_hers
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Tom's Bedside Lamp
+                          entity: light.bedroom_1_lamp_his
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_ceiling_light
+                        name: Hallway
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_light_hers
+                        name: Jess' Closet
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_light_his
+                        name: Tom's Closet
+                        collapsible_controls: true
+                        show_brightness_control: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Windows
-              - type: custom:mushroom-cover-card
-                layout: horizontal
-                name: Curtains
-                entity: cover.large_window_curtains_bedroom_1
-                collapsible_controls: true
-                show_buttons_control: true
-          - type: custom:expander-card
-            title: Other
-            cards:
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Camera Power
-                    entity: light.camera_power_bdr1
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.sync_bedroom_1_bedside_lamps
-                    name: Sync bedside lamps
-                  - entity: input_boolean.automation_bedroom_1_door_open_close
-                    name: Toggle lights when door opens/closes
-                  - entity: input_boolean.automation_closet_doors_open_close
-                    name: Toggle closet light when door opens/closes
-                  - entity: input_boolean.closet_automatic_turn_off
-                    name: Automatically turn off closet lights
+                subtitle: 'Windows'
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-cover-card
+                        layout: horizontal
+                        name: Curtains
+                        entity: cover.large_window_curtains_bedroom_1
+                        collapsible_controls: true
+                        show_buttons_control: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Group Lights
+                          - entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            name: Sync bedside lamps
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_bedroom_1
+                            name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_bedroom_1_door_open_close
+                            name: Toggle lights when door opens/closes
+                          - entity: input_boolean.automation_closet_doors_open_close
+                            name: Toggle closet light when door opens/closes
+                          - entity: input_boolean.closet_automatic_turn_off
+                            name: Automatically turn off closet lights
         view_layout:
           grid-area: modalBdr1
       - type: custom:button-card
@@ -1334,129 +1277,127 @@ views:
                 - type: custom:button-card
                   template: chip_detail__light
                   entity: light.all_lights_bedroom_2
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.appletv_bedroom_2
-                    state:
-                      - playing
-                      - paused
-                      - buffering
-            card:
-              type: custom:mini-media-player
-              entity: media_player.appletv_bedroom_2
-              name: AppleTV
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.echo_dot_bedroom_2
-                    state:
-                      - playing
-                      - paused
-            card:
-              type: custom:mini-media-player
-              entity: media_player.echo_dot_bedroom_2
-              name: Amazon Echo Dot
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_bedroom_2
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_bedroom_2
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_bedroom_2
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_bedroom_2
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Bedside Lamps
-                      entity: light.bedroom_2_bedside_lamps
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Right Bedside Lamp
-                      entity: light.bedroom_2_lamp_right
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_2_bedside_lamps
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Left Bedside Lamp
-                      entity: light.bedroom_2_lamp_left
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    name: Sync Bedside Lamps
-                  - entity: input_boolean.automation_bedroom_2_door_open_close
-                    name: Toggle lights when door opens/closes
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Bedside Lamps
+                          entity: light.bedroom_2_bedside_lamps
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Right Bedside Lamp
+                          entity: light.bedroom_2_lamp_right
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Left Bedside Lamp
+                          entity: light.bedroom_2_lamp_left
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Group Lights
+                          - entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            name: Sync Bedside Lamps
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_bedroom_2
+                            name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_bedroom_2_door_open_close
+                            name: Toggle lights when door opens/closes
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr3
@@ -1520,43 +1461,62 @@ views:
                 - type: custom:button-card
                   template: chip_detail__door
                   entity: binary_sensor.door_bedroom_3
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.appletv_bedroom_3
-                    state:
-                      - playing
-                      - paused
-                      - buffering
-            card:
-              type: custom:mini-media-player
-              entity: media_player.appletv_bedroom_3
-              name: AppleTV
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.echo_dot_bedroom_3
-                    state:
-                      - playing
-                      - paused
-            card:
-              type: custom:mini-media-player
-              entity: media_player.echo_dot_bedroom_3
-              name: Amazon Echo Dot
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_bedroom_3
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_bedroom_3
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_bedroom_3
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_bedroom_3
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_bedroom_3
+                            name: Allow Annoucements
         view_layout:
           grid-area: modalBdr3
       - type: custom:button-card
@@ -1621,233 +1581,217 @@ views:
                 - type: custom:button-card
                   template: chip_detail__light
                   entity: light.all_lights_bedroom_4
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.appletv_bedroom_4
-                    state:
-                      - playing
-                      - paused
-                      - buffering
-            card:
-              type: custom:mini-media-player
-              entity: media_player.appletv_bedroom_4
-              name: AppleTV
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
-          - type: conditional
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity: media_player.echo_dot_bedroom_4
-                    state:
-                      - playing
-                      - paused
-            card:
-              type: custom:mini-media-player
-              entity: media_player.echo_dot_bedroom_4
-              name: Amazon Echo Dot
-              artwork: cover
-              hide:
-                icon: true
-                source: true
-                volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_bedroom_4
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_bedroom_4
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_bedroom_4
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_bedroom_4
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state: 'on'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Room Lights
-                      entity: light.bedroom_4_lights
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Desk Lamp
-                      entity: light.bedroom_4_desk_lamp
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: conditional
-                    conditions:
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state_not: unavailable
-                      - condition: state
-                        entity: input_boolean.sync_bedroom_4_lights
-                        state: 'off'
-                    card:
-                      type: custom:mushroom-light-card
-                      name: Lightstrip
-                      entity: light.bedroom_4_lightstrip
-                      collapsible_controls: true
-                      show_brightness_control: true
-                      show_color_control: true
-                      use_light_color: true
-                  - type: custom:mushroom-light-card
-                    name: TIE Fighter
-                    entity: light.bedroom_4_tie_fighter_lamp
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Room Lights
+                          entity: light.bedroom_4_lights
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Desk Lamp
+                          entity: light.bedroom_4_desk_lamp
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.sync_bedroom_4_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Lightstrip
+                          entity: light.bedroom_4_lightstrip
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: TIE Fighter
+                        entity: light.bedroom_4_tie_fighter_lamp
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Windows
-              - type: custom:mushroom-cover-card
-                layout: horizontal
-                name: Window Blind
-                entity: cover.blinds_bedroom_4
-                collapsible_controls: false
-                show_tilt_position_control: true
-          - type: conditional
-            conditions:
-              - condition: state
-                entity: sensor.desk_bedroom_4_desk_height
-                state_not: unavailable
-              - condition: state
-                entity: select.desk_bedroom_4_height_units
-                state_not: unavailable
-            card:
-              type: vertical-stack
-              cards:
-                - type: custom:mushroom-template-card
-                  primary: >-
-                    {% set height = states( 'sensor.desk_bedroom_4_desk_height'
-                    ) %}
+                subtitle: 'Windows'
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-cover-card
+                        layout: horizontal
+                        name: Window Blind
+                        entity: cover.blinds_bedroom_4
+                        collapsible_controls: false
+                        show_tilt_position_control: true
+          - type: vertical-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: >-
+                  {% set height = states( 'sensor.desk_bedroom_4_desk_height'
+                  ) %}
 
-                    {% set unit = states( 'select.desk_bedroom_4_height_units' )
-                    %} Desk Height ({{height}} {{unit}})
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --card-primary-color: var( --subtitle-color ) !important;
-                        --card-primary-font-size: var( --subtitle-font-size ) !important;
-                        --card-primary-font-weight: var( --subtitle-font-weight ) !important;
-                        --card-primary-line-height: var( --subtitle-line-height ) !important;
-                        --card-primary-letter-spacing: var( --subtitle-letter-spacing ) !important;
-                        border: none;
-                        box-shadow: none;
-                        background: rgba( 0, 0, 0, 0 );
-                        margin: 0;
-                        cursor: default;
-                      }
-                - type: custom:layout-card
-                  layout_type: custom:grid-layout
-                  layout:
-                    padding: var( --popup--grid-padding )
-                    margin: var( --popup--grid-margin )
-                    grid-row-gap: var( --popup--grid-gap-row )
-                    grid-column-gap: var( --popup--grid-gap-column )
-                    grid-auto-rows: auto
-                    grid-template-columns: repeat( 4, minmax( 0, 1fr ) )
-                  cards:
-                    - type: custom:button-card
-                      entity: button.desk_bedroom_4_preset_1
-                      name: Lowest
-                      template: button__bdr4_desk_control
-                      variables:
-                        entity_height: sensor.desk_bedroom_4_desk_height
-                        height_min: 0
-                        height_max: 30
-                    - type: custom:button-card
-                      entity: button.desk_bedroom_4_preset_2
-                      name: Sitting
-                      template: button__bdr4_desk_control
-                      variables:
-                        entity_height: sensor.desk_bedroom_4_desk_height
-                        height_min: 30
-                        height_max: 34.5
-                    - type: custom:button-card
-                      entity: button.desk_bedroom_4_preset_3
-                      name: Standing
-                      template: button__bdr4_desk_control
-                      variables:
-                        entity_height: sensor.desk_bedroom_4_desk_height
-                        height_min: 34.5
-                        height_max: 45.5
-                    - type: custom:button-card
-                      entity: button.desk_bedroom_4_preset_4
-                      name: Highest
-                      template: button__bdr4_desk_control
-                      variables:
-                        entity_height: sensor.desk_bedroom_4_desk_height
-                        height_min: 45.5
-                        height_max: 100
-          - type: custom:expander-card
-            title: Other
-            cards:
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Multimedia Power
-                    entity: light.bedroom_4_media_plug
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
+                  {% set unit = states( 'select.desk_bedroom_4_height_units' )
+                  %} Desk Height ({{height}} {{unit}})
                 card_mod:
                   style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
+                    ha-card {
+                      --card-primary-color: var( --subtitle-color ) !important;
+                      --card-primary-font-size: var( --subtitle-font-size ) !important;
+                      --card-primary-font-weight: var( --subtitle-font-weight ) !important;
+                      --card-primary-line-height: var( --subtitle-line-height ) !important;
+                      --card-primary-letter-spacing: var( --subtitle-letter-spacing ) !important;
+                      border: none;
+                      box-shadow: none;
+                      background: rgba( 0, 0, 0, 0 );
+                      margin: 0;
+                      cursor: default;
                     }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.sync_bedroom_4_lights
-                    name: Sync room lights
-                  - entity: input_boolean.automation_bedroom_4_door_open_close
-                    name: Toggle lights when door opens/closes
+              - type: custom:decluttering-card
+                template: room_popup__grid_4_columns
+                variables:
+                  - cards: 
+                      - type: custom:button-card
+                        entity: button.desk_bedroom_4_preset_1
+                        name: Lowest
+                        template: button__bdr4_desk_control
+                        variables:
+                          entity_height: sensor.desk_bedroom_4_desk_height
+                          height_min: 0
+                          height_max: 30
+                      - type: custom:button-card
+                        entity: button.desk_bedroom_4_preset_2
+                        name: Sitting
+                        template: button__bdr4_desk_control
+                        variables:
+                          entity_height: sensor.desk_bedroom_4_desk_height
+                          height_min: 30
+                          height_max: 34.5
+                      - type: custom:button-card
+                        entity: button.desk_bedroom_4_preset_3
+                        name: Standing
+                        template: button__bdr4_desk_control
+                        variables:
+                          entity_height: sensor.desk_bedroom_4_desk_height
+                          height_min: 34.5
+                          height_max: 45.5
+                      - type: custom:button-card
+                        entity: button.desk_bedroom_4_preset_4
+                        name: Highest
+                        template: button__bdr4_desk_control
+                        variables:
+                          entity_height: sensor.desk_bedroom_4_desk_height
+                          height_min: 45.5
+                          height_max: 100
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Show More
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__grid_2_columns
+                    variables:
+                      - title: Outlets
+                      - cards:
+                          - type: custom:mushroom-light-card
+                            name: Multimedia Power
+                            entity: light.bedroom_4_media_plug
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Group Lights
+                          - entity: input_boolean.sync_bedroom_4_lights
+                            name: Sync room lights
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_bedroom_4
+                            name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_bedroom_4_door_open_close
+                            name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalBdr4
       - type: custom:button-card
@@ -1960,109 +1904,86 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Ceiling
-                    entity: light.laundry_ceiling_light
-                    collapsible_controls: true
-                    show_brightness_control: true
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:button-card
+                        template: laundry_card
+                        name: Washing Machine
+                        entity: sensor.custom_laundry_washer_machine_state
+                        tap_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        double_tap_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        hold_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        variables:
+                          details: sensor.laundry_washer_combined_details
+                      - type: custom:button-card
+                        template: laundry_card
+                        name: Tumble Dryer
+                        entity: sensor.custom_laundry_dryer_machine_state
+                        tap_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        double_tap_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        hold_action:
+                          action: navigate
+                          navigation_path: /lovelace/page-laundry
+                        variables:
+                          details: sensor.laundry_dryer_combined_details
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Devices
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: laundry_card
-                    name: Washing Machine
-                    entity: sensor.custom_laundry_washer_machine_state
-                    tap_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
-                    double_tap_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
-                    hold_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Ceiling
+                        entity: light.laundry_ceiling_light
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Show More
+              - cards:
+                  - type: custom:mushroom-title-card
+                    title: ''
+                    subtitle: 'Leak Detection'
+                  - type: custom:decluttering-card
+                    template: room_popup__grid_2_columns
                     variables:
-                      details: sensor.laundry_washer_combined_details
-                  - type: custom:button-card
-                    template: laundry_card
-                    name: Tumble Dryer
-                    entity: sensor.custom_laundry_dryer_machine_state
-                    tap_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
-                    double_tap_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
-                    hold_action:
-                      action: navigate
-                      navigation_path: /lovelace/page-laundry
+                      - cards:
+                          - type: custom:button-card
+                            template: entity_card__leak
+                            name: Washing Machine
+                            entity: binary_sensor.leak_washing_machine
+                            variables:
+                              data_entity: sensor.leak_battery_washing_machine
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
                     variables:
-                      details: sensor.laundry_dryer_combined_details
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Water Detection
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Washing Machine
-                    entity: binary_sensor.leak_washing_machine
-                    variables:
-                      data_entity: sensor.leak_battery_washing_machine
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.automation_laundry_room_door_open_close
-                    name: Toggle lights when door opens/closes
+                      - entities:
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_laundry_room_door_open_close
+                            name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalLaund
       - type: custom:button-card
@@ -2167,93 +2088,66 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Ceiling
-                    entity: light.garage_ceiling
-                    collapsible_controls: true
-                  - type: custom:mushroom-light-card
-                    name: Opener
-                    entity: light.garage_door_light
-                    collapsible_controls: true
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-cover-card
+                        entity: cover.garage_door
+                        name: Garage Door
+                        layout: vertical
+                        icon_type: none
+                        primary_info: name
+                        secondary_info: state
+                        show_buttons_control: true
+                        hold_action:
+                          action: more-info
+                        double_tap_action:
+                          action: more-info
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Devices
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  '--masonry-view-card-margin': 0
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-cover-card
-                    entity: cover.garage_door
-                    name: Garage Door
-                    layout: vertical
-                    icon_type: none
-                    primary_info: name
-                    secondary_info: state
-                    show_buttons_control: true
-                    hold_action:
-                      action: more-info
-                    double_tap_action:
-                      action: more-info
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Ceiling
+                        entity: light.garage_ceiling
+                        collapsible_controls: true
+                      - type: custom:mushroom-light-card
+                        name: Opener
+                        entity: light.garage_door_light
+                        collapsible_controls: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Fan
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-fan-card
-                    name: Fan
-                    entity: fan.custom_garage_fan
-                    collapsible_controls: true
-          - type: custom:expander-card
-            title: Configure
-            cards:
-              - type: entities
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-top: 12px;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.automation_garage_door_open_close
-                    name: Toggle lights when door opens/closes
+                subtitle: 'Fans'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-fan-card
+                        name: Fan
+                        entity: fan.custom_garage_fan
+                        collapsible_controls: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Configure Area
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_garage_door_open_close
+                            name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalGar
       - type: custom:button-card
@@ -2313,62 +2207,48 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Foyer Entryway
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Entryway
-                    entity: light.foyer_exterior_entryway
-                    collapsible_controls: true
-                    show_brightness_control: true
+                subtitle: 'Foyer Entry'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Entryway
+                        entity: light.foyer_exterior_entryway
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: vertical-stack
+            cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Front Yard Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Garage Exterior
-                    entity: light.garage_exterior
-                    collapsible_controls: true
-                    show_brightness_control: true
-                  - type: custom:mushroom-light-card
-                    name: Ground Lights
-                    entity: light.front_yard_accent_lights
-                    collapsible_controls: true
-                    show_brightness_control: true
+                subtitle: 'Front Yard Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Garage Exterior
+                        entity: light.garage_exterior
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        name: Ground Lights
+                        entity: light.front_yard_accent_lights
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: vertical-stack
+            cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Backyard Lights
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: String Lights
-                    entity: light.backyard_string_lights
-                    collapsible_controls: true
+                subtitle: 'Backyard Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: String Lights
+                        entity: light.backyard_string_lights
+                        collapsible_controls: true
         view_layout:
           grid-area: modalOut
       - type: custom:mod-card
@@ -2486,214 +2366,206 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
+                title: 'Bar'
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                    - type: custom:mushroom-light-card
+                      name: Fan Light
+                      entity: light.bar_ceiling_light
+                      collapsible_controls: true
+                      show_brightness_control: true
+                    - type: custom:mushroom-fan-card
+                      name: Ceiling Fan
+                      entity: fan.bar_ceiling_fan
+                      collapsible_controls: true
+                      show_percentage_control: true
+              - type: custom:mushroom-title-card
                 title: ''
-                subtitle: Bar
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Fan Light
-                    entity: light.bar_ceiling_light
-                    collapsible_controls: true
-                    show_brightness_control: true
-                  - type: custom:mushroom-fan-card
-                    name: Ceiling Fan
-                    entity: fan.bar_ceiling_fan
-                    collapsible_controls: true
-                    show_percentage_control: true
-                  - type: custom:mini-graph-card
-                    name: Wine Fridge (Top)
-                    show:
-                      icon: false
-                    animate: true
-                    line_color: var(--primary-color)
-                    decimals: 0
-                    tap_action:
-                      action: none
-                    entities:
-                      - sensor.temperature_wine_cooler_top
-                  - type: custom:mini-graph-card
-                    name: Wine Fridge (Bottom)
-                    show:
-                      icon: false
-                    animate: true
-                    line_color: var(--primary-color)
-                    decimals: 0
-                    tap_action:
-                      action: none
-                    entities:
-                      - sensor.temperature_wine_cooler_bottom
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Wine Cooler
-                    entity: binary_sensor.leak_wine_cooler
-                    variables:
-                      data_entity: sensor.leak_battery_wine_cooler
+                subtitle: 'Devices'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mini-graph-card
+                        name: Wine Fridge (Top)
+                        show:
+                          icon: false
+                        animate: true
+                        line_color: var(--primary-color)
+                        decimals: 0
+                        tap_action:
+                          action: none
+                        entities:
+                          - sensor.temperature_wine_cooler_top
+                      - type: custom:mini-graph-card
+                        name: Wine Fridge (Bottom)
+                        show:
+                          icon: false
+                        animate: true
+                        line_color: var(--primary-color)
+                        decimals: 0
+                        tap_action:
+                          action: none
+                        entities:
+                          - sensor.temperature_wine_cooler_bottom
+              - type: custom:decluttering-card
+                template: room_popup__expander
+                variables:
+                  - title: Show More
+                  - cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: 'Leak Detection'
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_2_columns
+                        variables:
+                          - cards:
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Wine Cooler
+                                entity: binary_sensor.leak_wine_cooler
+                                variables:
+                                  data_entity: sensor.leak_battery_wine_cooler
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Hallways
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Guest Hallway
-                    entity: light.guest_hallway_light
-                    collapsible_controls: true
-                    show_brightness_control: true
-                  - type: custom:mushroom-light-card
-                    name: Laundry Hallway
-                    entity: light.laundry_hallway_light
-                    collapsible_controls: true
-                    show_brightness_control: true
+                title: 'Hallways'
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
+                      - type: custom:mushroom-light-card
+                        name: Guest Hallway
+                        entity: light.guest_hallway_light
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        name: Laundry Hallway
+                        entity: light.laundry_hallway_light
+                        collapsible_controls: true
+                        show_brightness_control: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Main Bathroom
-              - type: conditional
-                conditions:
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity: media_player.echo_pop_main_bathroom
-                        state:
-                          - playing
-                          - paused
-                card:
-                  type: custom:mini-media-player
-                  entity: media_player.echo_pop_main_bathroom
-                  name: Amazon Echo Dot
-                  artwork: cover
-                  hide:
-                    icon: true
-                    source: true
-                    volume: true
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:mushroom-light-card
-                    name: Ceiling
-                    entity: light.switch_1_bathroom_main_light
-                    collapsible_controls: true
-                  - type: custom:mushroom-light-card
-                    name: Vanity
-                    entity: light.switch_2_bathroom_main_light
-                    collapsible_controls: true
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Left Sink
-                    entity: binary_sensor.leak_sink_bathroom_main_hers
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_main_hers
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Right Sink
-                    entity: binary_sensor.leak_sink_bathroom_main_his
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_main_his
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Toilet
-                    entity: binary_sensor.leak_toilet_bathroom_main
-                    variables:
-                      data_entity: sensor.leak_battery_toilet_bathroom_main
+                title: 'Main Bathroom'
+                subtitle: 'Lights'
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards: 
+                      - type: custom:mushroom-light-card
+                        name: Ceiling
+                        entity: light.switch_1_bathroom_main_light
+                        collapsible_controls: true
+                      - type: custom:mushroom-light-card
+                        name: Vanity
+                        entity: light.switch_2_bathroom_main_light
+                        collapsible_controls: true
+              - type: custom:decluttering-card
+                template: room_popup__expander
+                variables:
+                  - title: Show More
+                  - cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: 'Leak Detection'
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_2_columns
+                        variables:
+                          - cards:
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Left Sink
+                                entity: binary_sensor.leak_sink_bathroom_main_hers
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_main_hers
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Right Sink
+                                entity: binary_sensor.leak_sink_bathroom_main_his
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_main_his
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Toilet
+                                entity: binary_sensor.leak_toilet_bathroom_main
+                                variables:
+                                  data_entity: sensor.leak_battery_toilet_bathroom_main
+              - type: custom:decluttering-card
+                template: room_popup__expander
+                variables:
+                  - title: Configure Area
+                  - cards:
+                      - type: custom:decluttering-card
+                        template: room_popup__entities
+                        variables:
+                          - entities:
+                              - type: section
+                                label: Voice Assistant
+                              - entity: input_boolean.household_notify_bathroom_1
+                                name: Allow Annoucements
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Guest Bathroom
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    template: chip_detail__leak
-                    entity: binary_sensor.all_leak_sensors_bathroom_guest
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Sink
-                    entity: binary_sensor.leak_sink_bathroom_guest
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_guest
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Toilet
-                    entity: binary_sensor.leak_toilet_bathroom_guest
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_guest
+                title: 'Guest Bathroom'
+                subtitle: ''
+              - type: custom:decluttering-card
+                template: room_popup__expander
+                variables:
+                  - title: Show More
+                  - cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: 'Leak Detection'
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_2_columns
+                        variables:
+                          - cards:
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Sink
+                                entity: binary_sensor.leak_sink_bathroom_guest
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_guest
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Toilet
+                                entity: binary_sensor.leak_toilet_bathroom_guest
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_guest
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Half Bathroom
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    template: chip_detail__leak
-                    entity: binary_sensor.all_leak_sensors_bathroom_half
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  padding: var( --popup--grid-padding )
-                  margin: var( --popup--grid-margin )
-                  grid-template-columns: repeat( 2, minmax( 0, 1fr ) )
-                  grid-auto-rows: auto
-                  grid-row-gap: var( --popup--grid-gap-row )
-                  grid-column-gap: var( --popup--grid-gap-column )
-                cards:
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Sink
-                    entity: binary_sensor.leak_sink_bathroom_half
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_half
-                  - type: custom:button-card
-                    template: entity_card__leak
-                    name: Toilet
-                    entity: binary_sensor.leak_toilet_bathroom_half
-                    variables:
-                      data_entity: sensor.leak_battery_sink_bathroom_half
+                title: 'Half Bathroom'
+                subtitle: ''
+              - type: custom:decluttering-card
+                template: room_popup__expander
+                variables:
+                  - title: Show More
+                  - cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: 'Leak Detection'
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_2_columns
+                        variables:
+                          - cards:
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Sink
+                                entity: binary_sensor.leak_sink_bathroom_half
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_half
+                              - type: custom:button-card
+                                template: entity_card__leak
+                                name: Toilet
+                                entity: binary_sensor.leak_toilet_bathroom_half
+                                variables:
+                                  data_entity: sensor.leak_battery_sink_bathroom_half
         view_layout:
           grid-area: modalMisc
       - type: custom:button-card
@@ -3049,7 +2921,7 @@ views:
             template: room_popup__header
             variables:
               - icon: mdi:cog
-              - title: Configure
+              - title: Configure Area
           - type: custom:layout-card
             layout_type: custom:masonry-layout
             cards:
@@ -3225,14 +3097,14 @@ views:
                             state: 'on'
                         row:
                           entity: input_boolean.household_notify_bedroom_3
-                          name: Her Office Echo Dot
+                          name: Jess' Office Echo Dot
                       - type: conditional
                         conditions:
                           - entity: input_boolean.household_notify
                             state: 'on'
                         row:
                           entity: input_boolean.household_notify_bedroom_4
-                          name: His Office Echo Dot
+                          name: Tom's Office Echo Dot
             layout: {}
         view_layout:
           grid-area: modalConf
@@ -6968,34 +6840,24 @@ views:
                                   name: alarm.caf
                                   critical: 1
                                   volume: 1
-                  - type: custom:expander-card
-                    title: Daily Reminders
-                    cards:
-                      - type: entities
-                        show_header_toggle: false
-                        card_mod:
-                          style: |
-                            ha-card.type-entities { 
-                              --ha-card-border-color: transparent;
-                              --ha-card-border-width: 0;
-                              --ha-card-border-radius: 0;
-                              --ha-card-background: transparent;
-                              padding-top: 12px;
-                              padding-right: 0;
-                              padding-left: 0;
-                            }
-
-                            #states { padding: 0;}
-                        entities:
-                          - entity: >-
-                              input_boolean.reminder_medicine_morning_complete_thomas
-                            name: Morning Medication Taken
-                          - entity: >-
-                              input_boolean.reminder_medicine_afternoon_complete_thomas
-                            name: Afternoon Medication Taken
-                          - entity: >-
-                              input_boolean.reminder_medicine_evening_complete_thomas
-                            name: Evening Medication Taken
+                  - type: custom:decluttering-card
+                    template: room_popup__expander
+                    variables:
+                      - title: Daily Reminders
+                      - cards:
+                          - type: custom:decluttering-card
+                            template: room_popup__entities
+                            variables:
+                              - entities:
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_morning_complete_thomas
+                                    name: Morning Medication Taken
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_afternoon_complete_thomas
+                                    name: Afternoon Medication Taken
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_evening_complete_thomas
+                                    name: Evening Medication Taken
                   - type: custom:expander-card
                     title: Notification Settings
                     cards:
@@ -7140,34 +7002,24 @@ views:
                                   name: alarm.caf
                                   critical: 1
                                   volume: 1
-                  - type: custom:expander-card
-                    title: Daily Reminders
-                    cards:
-                      - type: entities
-                        show_header_toggle: false
-                        card_mod:
-                          style: |
-                            ha-card.type-entities { 
-                              --ha-card-border-color: transparent;
-                              --ha-card-border-width: 0;
-                              --ha-card-border-radius: 0;
-                              --ha-card-background: transparent;
-                              padding-top: 12px;
-                              padding-right: 0;
-                              padding-left: 0;
-                            }
-
-                            #states { padding: 0;}
-                        entities:
-                          - entity: >-
-                              input_boolean.reminder_medicine_morning_complete_jessica
-                            name: Morning Medication Taken
-                          - entity: >-
-                              input_boolean.reminder_medicine_afternoon_complete_jessica
-                            name: Afternoon Medication Taken
-                          - entity: >-
-                              input_boolean.reminder_medicine_evening_complete_jessica
-                            name: Evening Medication Taken
+                  - type: custom:decluttering-card
+                    template: room_popup__expander
+                    variables:
+                      - title: Daily Reminders
+                      - cards:
+                          - type: custom:decluttering-card
+                            template: room_popup__entities
+                            variables:
+                              - entities:
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_morning_complete_jessica
+                                    name: Morning Medication Taken
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_afternoon_complete_jessica
+                                    name: Afternoon Medication Taken
+                                  - entity: >-
+                                      input_boolean.reminder_medicine_evening_complete_jessica
+                                    name: Evening Medication Taken
                   - type: custom:expander-card
                     title: Notification Settings
                     cards:
@@ -7343,90 +7195,100 @@ views:
                 name: Waste, Take Out
       - type: vertical-stack
         cards:
-          - type: custom:expander-card
-            title: Sunrise Automations
-            cards:
-              - type: entities
-                title: Sunrise Automations
-                show_header_toggle: false
-                entities:
-                  - entity: input_boolean.sunrise_automations_run
-                    name: Enable
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.sunrise_automations_run
-                        state: 'on'
-                    row:
-                      entity: input_button.trigger_sunrise_automations_run
-                      name: Trigger
-          - type: custom:expander-card
-            title: Noon Automations
-            cards:
-              - type: entities
-                title: Noon Automations
-                show_header_toggle: false
-                entities:
-                  - entity: input_boolean.noon_automations_run
-                    name: Enable
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.noon_automations_run
-                        state: 'on'
-                    row:
-                      entity: input_button.trigger_noon_automations_run
-                      name: Trigger
-          - type: custom:expander-card
-            title: Sunset Automations
-            cards:
-              - type: entities
-                title: Sunset Automations
-                show_header_toggle: false
-                entities:
-                  - entity: input_boolean.sunset_automations_run
-                    name: Enable
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.sunset_automations_run
-                        state: 'on'
-                    row:
-                      entity: input_button.trigger_sunset_automations_run
-                      name: Trigger
-                  - entity: sensor.sunset_automations_status
-                    name: Sunset Automations
-                  - entity: input_boolean.sunset_automations_active
-                    name: Active
-          - type: custom:expander-card
-            title: Bedtime Automations
-            cards:
-              - type: entities
-                title: Bedtime Automations
-                show_header_toggle: false
-                entities:
-                  - entity: input_boolean.bedtime_automations_run
-                    name: Enable
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.bedtime_automations_run
-                        state: 'on'
-                    row:
-                      entity: input_button.trigger_bedtime_automations_run
-                      name: Trigger
-          - type: custom:expander-card
-            title: Midnight Automations
-            cards:
-              - type: entities
-                title: Midnight Automations
-                show_header_toggle: false
-                entities:
-                  - entity: input_boolean.midnight_automations_run
-                    name: Enable
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.midnight_automations_run
-                        state: 'on'
-                    row:
-                      entity: input_button.trigger_midnight_automations_run
-                      name: Trigger
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Sunrise Automations
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_boolean.sunrise_automations_run
+                            name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunrise_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_button.trigger_sunrise_automations_run
+                              name: Trigger
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Noon Automations
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_boolean.noon_automations_run
+                            name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.noon_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_button.trigger_noon_automations_run
+                              name: Trigger
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Sunset Automations
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_boolean.sunset_automations_run
+                            name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunset_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_button.trigger_sunset_automations_run
+                              name: Trigger
+                          - entity: sensor.sunset_automations_status
+                            name: Sunset Automations
+                          - entity: input_boolean.sunset_automations_active
+                            name: Active
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Bedtime Automations
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_boolean.bedtime_automations_run
+                            name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.bedtime_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_button.trigger_bedtime_automations_run
+                              name: Trigger
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Midnight Automations
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_boolean.midnight_automations_run
+                            name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.midnight_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_button.trigger_midnight_automations_run
+                              name: Trigger
     subview: true
 button_card_templates:
   button_data_setup:
@@ -7704,6 +7566,7 @@ button_card_templates:
       img_cell:
         - align-items: start
       icon:
+        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
         - width: 100%
         - min-width: 60px
   room_tile:
@@ -8948,6 +8811,42 @@ decluttering_templates:
               - box-shadow: none
             icon:
               - width: 25px
+  room_popup__grid:
+    defaults:
+      - columns: minmax( 0, 1fr )
+    card:
+      type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        '--masonry-view-card-margin': 0
+        padding: var( --popup--grid-padding )
+        margin: var( --popup--grid-margin )
+        grid-row-gap: var( --popup--grid-gap-row )
+        grid-column-gap: var( --popup--grid-gap-column )
+        grid-auto-rows: auto
+        grid-template-columns: '[[columns]]'
+      cards: '[[cards]]'
+  room_popup__grid_2_columns:
+    card:
+      type: custom:decluttering-card
+      template: room_popup__grid
+      variables:
+        - columns: repeat( 2, minmax( 0, 1fr ) )
+        - cards: '[[cards]]'
+  room_popup__grid_3_columns:
+    card:
+      type: custom:decluttering-card
+      template: room_popup__grid
+      variables:
+        - columns: repeat( 3, minmax( 0, 1fr ) )
+        - cards: '[[cards]]'
+  room_popup__grid_4_columns:
+    card:
+      type: custom:decluttering-card
+      template: room_popup__grid
+      variables:
+        - columns: repeat( 4, minmax( 0, 1fr ) )
+        - cards: '[[cards]]'
   room_popup__chips:
     card:
       type: custom:mod-card
@@ -8959,3 +8858,36 @@ decluttering_templates:
       card:
         type: horizontal-stack
         cards: '[[chips]]'
+  room_popup__entities:
+    card:
+      type: entities
+      show_header_toggle: false
+      card_mod:
+        style: |
+          ha-card.type-entities { 
+            --ha-card-border-color: transparent;
+            --ha-card-border-width: 0;
+            --ha-card-border-radius: 0;
+            --ha-card-background: transparent;
+            padding-top: 12px;
+            padding-right: 0;
+            padding-left: 0;
+          }
+
+          #states { padding: 0;}
+      entities: '[[entities]]'
+  room_popup__expander:
+    card:
+      type: custom:expander-card
+      title: '[[title]]'
+      cards: '[[cards]]'
+      card_mod:
+        style: |
+          ha-card.open .primary.title, 
+          ha-card.close .primary.title { 
+            line-height: var( --subtitle-line-height );
+            color: var( --subtitle-color );
+            font-size: var( --subtitle-font-size );
+            font-weight: var( --subtitle-font-weight );
+            letter-spacing: var( --subtitle-letter-spacing );
+          }
