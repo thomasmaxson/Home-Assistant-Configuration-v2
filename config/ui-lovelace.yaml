@@ -867,7 +867,6 @@ views:
           path: '#details-living-room'
           icon_on: mdi:sofa
           icon_off: mdi:sofa-outline
-          data_door: binary_sensor.door_living
           data_lightOn: light.living_room_corner_lamp
           data_temperature: sensor.temperature_living_room
           badge_alert: |
