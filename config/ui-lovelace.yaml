@@ -225,15 +225,10 @@ views:
             variables:
               - icon: mdi:home
               - title: Foyer
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_foyer
@@ -477,14 +472,16 @@ views:
             variables:
               - icon: mdi:fridge
               - title: Kitchen
-          - type: horizontal-stack
-            cards:
-              - type: custom:button-card
-                template: chip_detail__light
-                entity: light.all_lights_kitchen
-              - type: custom:button-card
-                template: chip_detail__leak
-                entity: binary_sensor.all_leak_sensors_kitchen
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                - type: custom:button-card
+                  template: chip_detail__light
+                  entity: light.all_lights_kitchen
+                - type: custom:button-card
+                  template: chip_detail__leak
+                  entity: binary_sensor.all_leak_sensors_kitchen
           - type: conditional
             conditions:
               - condition: or
@@ -842,15 +839,10 @@ views:
             variables:
               - icon: mdi:sofa
               - title: Living Room
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_living_room
@@ -995,15 +987,10 @@ views:
             variables:
               - icon: mdi:silverware-variant
               - title: Dining Room
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_living_room
@@ -1099,15 +1086,10 @@ views:
             variables:
               - icon: mdi:bed-king
               - title: Main Bedroom
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_bedroom_1
@@ -1339,15 +1321,10 @@ views:
             variables:
               - icon: mdi:bed
               - title: Guest Bedroom
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_bedroom_2
@@ -1533,15 +1510,10 @@ views:
             variables:
               - icon: mdi:monitor
               - title: Jess' Office
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_bedroom_3
@@ -1636,15 +1608,10 @@ views:
             variables:
               - icon: mdi:desk-lamp
               - title: Tom's Office
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_bedroom_4
@@ -1976,17 +1943,19 @@ views:
             variables:
               - icon: mdi:washing-machine
               - title: Laundry Room
-          - type: horizontal-stack
-            cards:
-              - type: custom:button-card
-                template: chip_detail__door
-                entity: binary_sensor.door_laundry_room
-              - type: custom:button-card
-                template: chip_detail__light
-                entity: light.all_lights_laundry_room
-              - type: custom:button-card
-                template: chip_detail__leak
-                entity: binary_sensor.all_leak_sensors_laundry_room
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                - type: custom:button-card
+                  template: chip_detail__door
+                  entity: binary_sensor.door_laundry_room
+                - type: custom:button-card
+                  template: chip_detail__light
+                  entity: light.all_lights_laundry_room
+                - type: custom:button-card
+                  template: chip_detail__leak
+                  entity: binary_sensor.all_leak_sensors_laundry_room
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2178,15 +2147,10 @@ views:
             variables:
               - icon: mdi:car
               - title: Garage
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_garage
@@ -2335,15 +2299,10 @@ views:
             variables:
               - icon: mdi:palm-tree
               - title: Outside
-          - type: custom:mod-card
-            style:
-              hui-horizontal-stack-card$: |
-                #root { 
-                  flex-wrap: wrap;
-                }
-            card:
-              type: horizontal-stack
-              cards:
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                 - type: custom:button-card
                   template: chip_detail__temperature
                   entity: sensor.temperature_attic
@@ -8989,3 +8948,14 @@ decluttering_templates:
               - box-shadow: none
             icon:
               - width: 25px
+  room_popup__chips:
+    card:
+      type: custom:mod-card
+      style:
+        hui-horizontal-stack-card$: |
+          #root { 
+            flex-wrap: wrap;
+          }
+      card:
+        type: horizontal-stack
+        cards: '[[chips]]'
