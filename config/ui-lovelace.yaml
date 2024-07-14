@@ -229,62 +229,62 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_foyer
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_front_primary
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_foyer
-                - type: custom:button-card
-                  template: chip_detail__leak
-                  entity: binary_sensor.all_leak_sensors_foyer
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_foyer
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_front_primary
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_foyer
+                  - type: custom:button-card
+                    template: chip_detail__leak
+                    entity: binary_sensor.all_leak_sensors_foyer
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
-                    - type: custom:mushroom-climate-card
-                      entity: climate.ecobee
-                      name: Thermostat
-                      layout: vertical
-                      icon_type: none
-                      primary_info: name
-                      secondary_info: state
-                      show_temperature_control: true
-                      hvac_modes:
-                        - auto
-                        - cool
-                        - heat
-                      hold_action:
-                        action: more-info
-                      double_tap_action:
-                        action: more-info
-                    - type: custom:mushroom-lock-card
-                      entity: lock.front_door
-                      layout: vertical
-                      icon_type: none
-                      primary_info: name
-                      secondary_info: state
-                      hold_action:
-                        action: more-info
-                      double_tap_action:
-                        action: more-info
+                  - cards:
+                      - type: custom:mushroom-climate-card
+                        entity: climate.ecobee
+                        name: Thermostat
+                        layout: vertical
+                        icon_type: none
+                        primary_info: name
+                        secondary_info: state
+                        show_temperature_control: true
+                        hvac_modes:
+                          - auto
+                          - cool
+                          - heat
+                        hold_action:
+                          action: more-info
+                        double_tap_action:
+                          action: more-info
+                      - type: custom:mushroom-lock-card
+                        entity: lock.front_door
+                        layout: vertical
+                        icon_type: none
+                        primary_info: name
+                        secondary_info: state
+                        hold_action:
+                          action: more-info
+                        double_tap_action:
+                          action: more-info
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: state
@@ -348,11 +348,11 @@ views:
               - cards:
                   - type: custom:mushroom-title-card
                     title: ''
-                    subtitle: 'Leak Detection'
+                    subtitle: Leak Detection
                   - type: custom:decluttering-card
                     template: room_popup__grid_2_columns
                     variables:
-                      - cards: 
+                      - cards:
                           - type: custom:button-card
                             template: entity_card__leak
                             name: Air Conditioner
@@ -362,12 +362,12 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
                     variables:
-                        - entities: 
+                      - entities:
                           - type: section
                             label: Group Lights
                           - entity: input_boolean.sync_foyer_lights
@@ -448,18 +448,18 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_kitchen
-                - type: custom:button-card
-                  template: chip_detail__leak
-                  entity: binary_sensor.all_leak_sensors_kitchen
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_kitchen
+                  - type: custom:button-card
+                    template: chip_detail__leak
+                    entity: binary_sensor.all_leak_sensors_kitchen
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -482,11 +482,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mini-graph-card
                         name: Refrigerator
                         show:
@@ -515,11 +515,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: state
@@ -687,11 +687,11 @@ views:
               - cards:
                   - type: custom:mushroom-title-card
                     title: ''
-                    subtitle: 'Outlets'
+                    subtitle: Outlets
                   - type: custom:decluttering-card
                     template: room_popup__grid_2_columns
                     variables:
-                      - cards: 
+                      - cards:
                           - type: custom:mushroom-light-card
                             name: Above Coffee Bar
                             entity: switch.plug_kitchen_cabinets_upper_coffee_bar
@@ -703,11 +703,11 @@ views:
                             entity: light.tablet_plug
                   - type: custom:mushroom-title-card
                     title: ''
-                    subtitle: 'Leak Detection'
+                    subtitle: Leak Detection
                   - type: custom:decluttering-card
                     template: room_popup__grid_2_columns
                     variables:
-                      - cards: 
+                      - cards:
                           - type: custom:button-card
                             template: entity_card__leak
                             name: Sink
@@ -723,7 +723,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -801,21 +801,21 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_living_room
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_living
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_living_room
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_living_room
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_living
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_living_room
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -839,11 +839,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-media-player-card
                         name: Television
                         primary_info: name
@@ -856,11 +856,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Ceiling
                         entity: light.living_room_corner_lamp
@@ -874,7 +874,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -886,8 +886,11 @@ views:
                             name: Allow Annoucements
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_living_room_door_open_close
-                            name: Turn on exterior string light when door opens at night
+                          - entity: >-
+                              input_boolean.automation_living_room_door_open_close
+                            name: >-
+                              Turn on exterior string light when door opens at
+                              night
         view_layout:
           grid-area: modalLivR
       - type: custom:button-card
@@ -937,18 +940,18 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_living_room
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_dining_room
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_living_room
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_dining_room
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -971,11 +974,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Chandelier
                         entity: light.dining_room_chandelier
@@ -984,7 +987,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1049,21 +1052,21 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_bedroom_1
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_bedroom_1
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_bedroom_1
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1105,11 +1108,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: state
@@ -1177,11 +1180,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Windows'
+                subtitle: Windows
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-cover-card
                         layout: horizontal
                         name: Curtains
@@ -1191,7 +1194,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1268,21 +1271,21 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_bedroom_2
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_bedroom_2
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_bedroom_2
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_bedroom_2
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_bedroom_2
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_bedroom_2
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1324,11 +1327,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: state
@@ -1380,7 +1383,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1455,18 +1458,18 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_bedroom_3
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_bedroom_3
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_bedroom_3
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_bedroom_3
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1507,7 +1510,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1572,21 +1575,21 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_bedroom_4
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_bedroom_4
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_bedroom_4
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_bedroom_4
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_bedroom_4
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_bedroom_4
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1628,11 +1631,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: conditional
                         conditions:
                           - condition: state
@@ -1688,11 +1691,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Windows'
+                subtitle: Windows
               - type: custom:decluttering-card
                 template: room_popup__grid
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-cover-card
                         layout: horizontal
                         name: Window Blind
@@ -1703,8 +1706,8 @@ views:
             cards:
               - type: custom:mushroom-template-card
                 primary: >-
-                  {% set height = states( 'sensor.desk_bedroom_4_desk_height'
-                  ) %}
+                  {% set height = states( 'sensor.desk_bedroom_4_desk_height' )
+                  %}
 
                   {% set unit = states( 'select.desk_bedroom_4_height_units' )
                   %} Desk Height ({{height}} {{unit}})
@@ -1725,7 +1728,7 @@ views:
               - type: custom:decluttering-card
                 template: room_popup__grid_4_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:button-card
                         entity: button.desk_bedroom_4_preset_1
                         name: Lowest
@@ -1763,10 +1766,12 @@ views:
             variables:
               - title: Show More
               - cards:
+                  - type: custom:mushroom-title-card
+                    title: ''
+                    subtitle: Outlets
                   - type: custom:decluttering-card
                     template: room_popup__grid_2_columns
                     variables:
-                      - title: Outlets
                       - cards:
                           - type: custom:mushroom-light-card
                             name: Multimedia Power
@@ -1774,7 +1779,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1891,24 +1896,24 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_laundry_room
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_laundry_room
-                - type: custom:button-card
-                  template: chip_detail__leak
-                  entity: binary_sensor.all_leak_sensors_laundry_room
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_laundry_room
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_laundry_room
+                  - type: custom:button-card
+                    template: chip_detail__leak
+                    entity: binary_sensor.all_leak_sensors_laundry_room
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:button-card
                         template: laundry_card
                         name: Washing Machine
@@ -1943,11 +1948,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Ceiling
                         entity: light.laundry_ceiling_light
@@ -1960,7 +1965,7 @@ views:
               - cards:
                   - type: custom:mushroom-title-card
                     title: ''
-                    subtitle: 'Leak Detection'
+                    subtitle: Leak Detection
                   - type: custom:decluttering-card
                     template: room_popup__grid_2_columns
                     variables:
@@ -1974,7 +1979,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -1982,7 +1987,8 @@ views:
                       - entities:
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_laundry_room_door_open_close
+                          - entity: >-
+                              input_boolean.automation_laundry_room_door_open_close
                             name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalLaund
@@ -2072,27 +2078,27 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_garage
-                - type: custom:button-card
-                  template: chip_detail__door
-                  entity: binary_sensor.door_garage
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_garage
-                - type: custom:button-card
-                  template: chip_detail__fan
-                  entity: fan.custom_garage_fan
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_garage
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_garage
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_garage
+                  - type: custom:button-card
+                    template: chip_detail__fan
+                    entity: fan.custom_garage_fan
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-cover-card
                         entity: cover.garage_door
                         name: Garage Door
@@ -2109,11 +2115,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Lights'
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Ceiling
                         entity: light.garage_ceiling
@@ -2126,11 +2132,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Fans'
+                subtitle: Fans
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-fan-card
                         name: Fan
                         entity: fan.custom_garage_fan
@@ -2138,7 +2144,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
-              - title: Configure Area
+              - title: Room Settings
               - cards:
                   - type: custom:decluttering-card
                     template: room_popup__entities
@@ -2197,21 +2203,21 @@ views:
             template: room_popup__chips
             variables:
               - chips:
-                - type: custom:button-card
-                  template: chip_detail__temperature
-                  entity: sensor.temperature_attic
-                - type: custom:button-card
-                  template: chip_detail__light
-                  entity: light.all_lights_outside
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_attic
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_outside
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Foyer Entry'
+                subtitle: Foyer Entry
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Entryway
                         entity: light.foyer_exterior_entryway
@@ -2221,11 +2227,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Front Yard Lights'
+                subtitle: Front Yard Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Garage Exterior
                         entity: light.garage_exterior
@@ -2240,11 +2246,11 @@ views:
             cards:
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Backyard Lights'
+                subtitle: Backyard Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: String Lights
                         entity: light.backyard_string_lights
@@ -2366,29 +2372,29 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: 'Bar'
-                subtitle: 'Lights'
+                title: Bar
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
-                    - type: custom:mushroom-light-card
-                      name: Fan Light
-                      entity: light.bar_ceiling_light
-                      collapsible_controls: true
-                      show_brightness_control: true
-                    - type: custom:mushroom-fan-card
-                      name: Ceiling Fan
-                      entity: fan.bar_ceiling_fan
-                      collapsible_controls: true
-                      show_percentage_control: true
+                  - cards:
+                      - type: custom:mushroom-light-card
+                        name: Fan Light
+                        entity: light.bar_ceiling_light
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-fan-card
+                        name: Ceiling Fan
+                        entity: fan.bar_ceiling_fan
+                        collapsible_controls: true
+                        show_percentage_control: true
               - type: custom:mushroom-title-card
                 title: ''
-                subtitle: 'Devices'
+                subtitle: Devices
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mini-graph-card
                         name: Wine Fridge (Top)
                         show:
@@ -2418,7 +2424,7 @@ views:
                   - cards:
                       - type: custom:mushroom-title-card
                         title: ''
-                        subtitle: 'Leak Detection'
+                        subtitle: Leak Detection
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
@@ -2432,8 +2438,8 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: 'Hallways'
-                subtitle: 'Lights'
+                title: Hallways
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
@@ -2451,12 +2457,12 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: 'Main Bathroom'
-                subtitle: 'Lights'
+                title: Main Bathroom
+                subtitle: Lights
               - type: custom:decluttering-card
                 template: room_popup__grid_2_columns
                 variables:
-                  - cards: 
+                  - cards:
                       - type: custom:mushroom-light-card
                         name: Ceiling
                         entity: light.switch_1_bathroom_main_light
@@ -2472,7 +2478,7 @@ views:
                   - cards:
                       - type: custom:mushroom-title-card
                         title: ''
-                        subtitle: 'Leak Detection'
+                        subtitle: Leak Detection
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
@@ -2498,7 +2504,7 @@ views:
               - type: custom:decluttering-card
                 template: room_popup__expander
                 variables:
-                  - title: Configure Area
+                  - title: Room Settings
                   - cards:
                       - type: custom:decluttering-card
                         template: room_popup__entities
@@ -2511,7 +2517,7 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: 'Guest Bathroom'
+                title: Guest Bathroom
                 subtitle: ''
               - type: custom:decluttering-card
                 template: room_popup__expander
@@ -2520,7 +2526,7 @@ views:
                   - cards:
                       - type: custom:mushroom-title-card
                         title: ''
-                        subtitle: 'Leak Detection'
+                        subtitle: Leak Detection
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
@@ -2540,7 +2546,7 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
-                title: 'Half Bathroom'
+                title: Half Bathroom
                 subtitle: ''
               - type: custom:decluttering-card
                 template: room_popup__expander
@@ -2549,7 +2555,7 @@ views:
                   - cards:
                       - type: custom:mushroom-title-card
                         title: ''
-                        subtitle: 'Leak Detection'
+                        subtitle: Leak Detection
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
@@ -2921,7 +2927,7 @@ views:
             template: room_popup__header
             variables:
               - icon: mdi:cog
-              - title: Configure Area
+              - title: Room Settings
           - type: custom:layout-card
             layout_type: custom:masonry-layout
             cards:
@@ -8778,7 +8784,7 @@ decluttering_templates:
                 margin: 1px 5px 0 -5px;
                 width: 40px;
               }
-    
+
               mushroom-shape-icon { 
                 --shape-color: transparent !important;
               }
