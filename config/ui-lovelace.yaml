@@ -8821,17 +8821,24 @@ decluttering_templates:
     defaults:
       - columns: minmax( 0, 1fr )
     card:
-      type: custom:layout-card
-      layout_type: custom:grid-layout
-      layout:
-        '--masonry-view-card-margin': 0
-        padding: var( --popup--grid-padding )
-        margin: var( --popup--grid-margin )
-        grid-row-gap: var( --popup--grid-gap-row )
-        grid-column-gap: var( --popup--grid-gap-column )
-        grid-auto-rows: auto
-        grid-template-columns: '[[columns]]'
-      cards: '[[cards]]'
+      type: custom:mod-card
+      style: |
+        layout-card {
+          --masonry-view-card-margin: 0;
+        }
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+        layout:
+          --masonry-view-card-margin: 0
+          padding: var( --popup--grid-padding )
+          padding-bottom: var( --popup--grid-gap-row )
+          margin: var( --popup--grid-margin )
+          grid-row-gap: var( --popup--grid-gap-row )
+          grid-column-gap: var( --popup--grid-gap-column )
+          grid-auto-rows: auto
+          grid-template-columns: '[[columns]]'
+        cards: '[[cards]]'
   room_popup__grid_2_columns:
     card:
       type: custom:decluttering-card
@@ -8875,10 +8882,12 @@ decluttering_templates:
             --ha-card-border-width: 0;
             --ha-card-border-radius: 0;
             --ha-card-background: transparent;
-            padding-top: 12px;
+            padding-top: 0;
             padding-right: 0;
             padding-left: 0;
           }
+
+          hui-section-row.type-section:first-child .divider { margin-top: 0;}
 
           #states { padding: 0;}
       entities: '[[entities]]'
@@ -8887,13 +8896,23 @@ decluttering_templates:
       type: custom:expander-card
       title: '[[title]]'
       cards: '[[cards]]'
+      padding: calc( var( --popup--grid-gap-column ) / 2 )
+      child-padding: 0
+      header-color: var( --subtitle-color )
       card_mod:
         style: |
-          ha-card.open .primary.title, 
-          ha-card.close .primary.title { 
-            line-height: var( --subtitle-line-height );
-            color: var( --subtitle-color );
-            font-size: var( --subtitle-font-size );
-            font-weight: var( --subtitle-font-weight );
-            letter-spacing: var( --subtitle-letter-spacing );
+          .expander-card { padding: 0;}
+
+          .expander-card.open .children-container { 
+            --child-padding: var( --popup--grid-gap-column ) !important;
+            padding-top: 0;
+          }
+
+          .expander-card.open .type-custom-mushroom-title-card { padding-top: 0;}
+
+          ha-card.open .header, 
+          ha-card.close .header { 
+            margin: 0;
+            color: var( --tile-card--name-color );
+            font-size: 110%;
           }
