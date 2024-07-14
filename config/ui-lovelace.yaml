@@ -163,36 +163,43 @@ views:
           data_door: binary_sensor.door_front_primary
           data_lightOn: light.lights_primary_foyer
           data_temperature: sensor.temperature_foyer
-          badge_alert: |
+          badge_danger: |
             [[[ 
+              let badgeIcon = '';
+
               if( states['binary_sensor.leak_air_conditioner'].state == 'on' )
               {
-                return '<ha-icon icon="mdi:water-alert"></ha-icon>';
+                badgeIcon = '<ha-icon icon="mdi:water-alert"></ha-icon>';
 
               } else
               { 
-                const state = states['lock.front_door'].state;
+                const lockState = states['lock.front_door'].state;
 
-                if( state === 'unlocked' )
+                if( lockState === 'unlocked' )
                 {
-                  return '<ha-icon icon="mdi:lock-open-variant"></ha-icon>';
+                  badgeIcon = '<ha-icon icon="mdi:lock-open-variant"></ha-icon>';
 
-                } else if( state === 'locked' )
-                {
-                  return '';
-
-                } else if( state === 'locking' || state === 'unlocking' )
-                {
-                  return '<ha-icon icon="mdi:clock-outline"></ha-icon>';
-
-                } else
+                } else if( [ 'locked', 'unlocking', 'locking' ].indexOf( lockState ) === -1 )
                 { 
-                  return '<ha-icon icon="mdi:help-circle"></ha-icon>';
+                  badgeIcon = '<ha-icon icon="mdi:help-circle"></ha-icon>';
 
                 } // endif
               } // endif
 
-              return '';
+              return badgeIcon;
+            ]]]
+          badge_warning: |
+            [[[ 
+              let badgeIcon = '';
+              const lockState = states['lock.front_door'].state;
+
+              if( [ 'unlocking', 'locking' ].indexOf( lockState ) >= 0 )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:clock-outline"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
             ]]]
       - type: vertical-stack
         cards:
@@ -395,16 +402,16 @@ views:
           data_door: false
           data_lightOn: light.kitchen_ceiling_lights
           data_temperature: false
-          badge_alert: |
+          badge_danger: |
             [[[ 
-              let leakEntities = [
+              let badgeEntities = [
                 states['binary_sensor.leak_sink_kitchen'],
                 states['binary_sensor.leak_dish_washer']
               ];
 
-              for( var i = 0; i < leakEntities.length; i++ )
+              for( var i = 0; i < badgeEntities.length; i++ )
               { 
-                if( leakEntities[i] !== undefined && leakEntities[i].state === 'on' )
+                if( badgeEntities[i] !== undefined && badgeEntities[i].state === 'on' )
                 { 
                  return '<ha-icon icon="mdi:water-alert"></ha-icon>';
 
@@ -756,7 +763,7 @@ views:
           icon_off: mdi:sofa-outline
           data_lightOn: light.living_room_corner_lamp
           data_temperature: sensor.temperature_living_room
-          badge_alert: |
+          badge_danger: |
             [[[ 
               if( states['binary_sensor.door_living'].state == 'on' )
               {
@@ -1818,9 +1825,38 @@ views:
           data_door: binary_sensor.door_laundry
           data_lightOn: light.laundry_ceiling_light
           data_temperature: sensor.motion_temperature_laundry_room
-          badge_alert: |
+          badge_danger: |
             [[[
-              let announcementCount = 0;
+              let badgeIcon = '';
+
+              if( states['binary_sensor.leak_washing_machine'].state == 'on' )
+              {
+                badgeIcon = '<ha-icon icon="mdi:water-alert"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
+            ]]]
+          badge_warning: |
+            [[[
+              let badgeIcon = '';
+
+              if( states['sensor.custom_laundry_washer_machine_state'].state == 'on' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:washing-machine"></ha-icon>';
+
+              } else if( states['sensor.custom_laundry_dryer_machine_state'].state == 'on' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
+            ]]]
+          badge_success: |
+            [[[
+              let badgeIcon = '';
+              let badgeCount = 0;
               let entities = [
                 states['input_boolean.reminder_laundry_complete_washer'],
                 states['input_boolean.reminder_laundry_complete_dryer']
@@ -1830,36 +1866,21 @@ views:
               { 
                 if( entities[i] !== undefined && entities[i].state === 'on' )
                 { 
-                  announcementCount += 1;
+                  badgeCount += 1;
 
                 } // endif
-              } // endif
+              } // endfor
 
-
-              if( states['binary_sensor.leak_washing_machine'].state == 'on' )
-              {
-                return '<ha-icon icon="mdi:water-alert"></ha-icon>';
-
-              } else if( announcementCount > 0 )
+              if( badgeCount > 0 )
               { 
-                let icon = '<ha-icon icon="mdi:alert"></ha-icon>';
+                badgeIcon = '<ha-icon icon="mdi:thumb-up"></ha-icon>';
 
-                if( announcementCount > 1 )
-                  icon = '<ha-icon icon="mdi:numeric-' + announcementCount + '-circle"></ha-icon>';
-
-                return icon;
-
-              } else if( states['sensor.custom_laundry_washer_machine_state'].state == 'on' )
-              {
-                return '<ha-icon icon="mdi:washing-machine"></ha-icon>';
-
-              } else if( states['sensor.custom_laundry_dryer_machine_state'].state == 'on' )
-              {
-                return '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
+                if( badgeCount > 1 )
+                  badgeIcon = '<ha-icon icon="mdi:numeric-' + badgeCount + '-circle"></ha-icon>';
 
               } // endif
 
-              return '';
+              return badgeIcon;
             ]]]
       - type: vertical-stack
         cards:
@@ -2017,31 +2038,39 @@ views:
           data_door: binary_sensor.door_garage
           data_lightOn: light.garage_ceiling
           data_temperature: sensor.temperature_garage
-          badge_alert: |
+          badge_danger: |
             [[[
-              const state = states['cover.garage_door'].state;
+              let badgeIcon = '';
+              const doorState = states['cover.garage_door'].state;
 
-              if( state === 'open' )
+              if( doorState === 'open' )
               {
-                return '<ha-icon icon="mdi:garage-open-variant"></ha-icon>';
+                badgeIcon = '<ha-icon icon="mdi:garage-open-variant"></ha-icon>';
 
-              } else if( state === 'closed' )
-              {
-                return '';
-
-              } else if( state === 'opening' )
-              {
-                return '<ha-icon icon="mdi:arrow-up-bold-box"></ha-icon>';
-
-              } else if( state === 'closing' )
-              {
-                return '<ha-icon icon="mdi:arrow-down-bold-box"></ha-icon>';
-
-              } else
+              } else if( [ 'closed', 'opening', 'closing' ].indexOf( doorState ) === -1 )
               { 
-                return '<ha-icon icon="mdi:help-circle"></ha-icon>';
+                badgeIcon = '<ha-icon icon="mdi:help-circle"></ha-icon>';
 
               } // endif
+
+              return badgeIcon;
+            ]]]
+          badge_warning: |
+            [[[
+              let badgeIcon = '';
+              const doorState = states['cover.garage_door'].state;
+
+              if( doorState === 'opening' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:arrow-up-bold-box"></ha-icon>';
+
+              } else if( doorState === 'closing' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:arrow-down-bold-box"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
             ]]]
       - type: vertical-stack
         cards:
@@ -2292,9 +2321,9 @@ views:
                 icon_on: mdi:lightbulb-multiple
                 icon_off: mdi:lightbulb-multiple-outline
                 data_lightOn: light.all_lights_other
-                badge_alert: |
+                badge_danger: |
                   [[[ 
-                    let leakEntities = [
+                    let badgeEntities = [
                       states['binary_sensor.leak_sink_bathroom_guest'],
                       states['binary_sensor.leak_toilet_bathroom_guest'],
                       states['binary_sensor.leak_sink_bathroom_half'],
@@ -2302,9 +2331,9 @@ views:
                       states['binary_sensor.leak_wine_cooler']
                     ];
 
-                    for( var i = 0; i < leakEntities.length; i++ )
+                    for( var i = 0; i < badgeEntities.length; i++ )
                     { 
-                      if( leakEntities[i] !== undefined && leakEntities[i].state === 'on' )
+                      if( badgeEntities[i] !== undefined && badgeEntities[i].state === 'on' )
                       { 
                        return '<ha-icon icon="mdi:water-alert"></ha-icon>';
 
@@ -5333,45 +5362,42 @@ views:
             cards:
               - type: custom:button-card
                 template: state_switch_tile
-                entity: input_boolean.enable_exterior_camera_recording
+                entity: input_select.camera_types
                 name: Exterior
                 icon: mdi:tooltip-image
-                tap_action:
-                  action: navigate
-                  navigation_path: '#camera-exterior'
                 variables:
+                  entity_alt: input_boolean.enable_exterior_camera_recording
+                  select_value: Exterior
                   text_state_on: Recording
                   text_state_off: Stopped
               - type: custom:button-card
                 template: state_switch_tile
-                entity: input_boolean.enable_interior_camera_recording
+                entity: input_select.camera_types
                 name: Interior
                 icon: |
                   [[[
                     return ( ( states['input_boolean.camera_int_privacy_mode'].state == 'on' ) ) ? 'mdi:tooltip' : 'mdi:tooltip-account';
                   ]]]
-                tap_action:
-                  action: navigate
-                  navigation_path: '#camera-interior'
                 variables:
+                  entity_alt: input_boolean.enable_interior_camera_recording
+                  select_value: Interior
                   text_state_on: Recording
                   text_state_off: Stopped
               - type: custom:button-card
                 template: state_switch_tile
-                entity: input_boolean.enable_motion_camera_recording
+                entity: input_select.camera_types
                 name: Motion
                 icon: mdi:tooltip-plus
-                tap_action:
-                  action: navigate
-                  navigation_path: '#camera-motion'
                 variables:
+                  entity_alt: input_boolean.enable_motion_camera_recording
+                  select_value: Motion
                   text_state_on: Recording
                   text_state_off: Stopped
           - type: custom:state-switch
             default: camera-exterior
-            entity: hash
+            entity: input_select.camera_types
             states:
-              camera-exterior:
+              Exterior:
                 type: vertical-stack
                 cards:
                   - type: entities
@@ -5407,7 +5433,7 @@ views:
                         }
 
                         #states { padding: 0;}
-              camera-interior:
+              Interior:
                 type: vertical-stack
                 cards:
                   - type: entities
@@ -5459,7 +5485,7 @@ views:
                         }
 
                         #states { padding: 0;}
-              camera-motion:
+              Motion:
                 type: vertical-stack
                 cards:
                   - type: entities
@@ -6773,45 +6799,43 @@ views:
             cards:
               - type: custom:button-card
                 template: state_switch_tile__person
-                entity: person.thomas
+                entity: input_select.residents
                 name: Tom
-                tap_action:
-                  action: navigate
-                  navigation_path: '#tom'
+                variables:
+                  entity_alt: person.thomas
+                  select_value: Thomas
               - type: custom:button-card
                 template: state_switch_tile__person
-                entity: person.jessica
+                entity: input_select.residents
                 name: Jess
-                tap_action:
-                  action: navigate
-                  navigation_path: '#jess'
+                variables:
+                  entity_alt: person.jessica
+                  select_value: Jessica
               - type: custom:button-card
                 template: state_switch_tile__person
-                entity: input_boolean.status_dog_gouda
+                entity: input_select.residents
                 name: Gouda
                 variables:
-                  img_path: /local/uploads/avatar-gouda.png
-                tap_action:
-                  action: navigate
-                  navigation_path: '#gouda'
+                  entity_alt: input_boolean.status_dog_gouda
+                  entity_picture: /local/uploads/avatar-gouda.png
+                  select_value: Gouda
               - type: custom:button-card
                 template: state_switch_tile__person
-                entity: input_boolean.guests_home
+                entity: input_select.residents
                 name: Guest
                 variables:
-                  img_path: /local/uploads/avatar-guest-dino.png
+                  entity_alt: input_boolean.guests_home
+                  entity_picture: /local/uploads/avatar-guest-dino.png
+                  select_value: Guests
                   text_state_on: Visiting
                   text_state_off: Traveling
-                tap_action:
-                  action: navigate
-                  navigation_path: '#guest'
           - type: custom:state-switch
-            default: tom
-            entity: hash
+            default: Thomas
+            entity: input_select.residents
             transition: slide-down
             transition_time: 350
             states:
-              tom:
+              Thomas:
                 type: vertical-stack
                 cards:
                   - type: entities
@@ -6864,116 +6888,123 @@ views:
                                   - entity: >-
                                       input_boolean.reminder_medicine_evening_complete_thomas
                                     name: Evening Medication Taken
-                  - type: custom:expander-card
-                    title: Notification Settings
-                    cards:
-                      - type: entities
-                        show_header_toggle: false
-                        card_mod:
-                          style: |
-                            ha-card.type-entities { 
-                              --ha-card-border-color: transparent;
-                              --ha-card-border-width: 0;
-                              --ha-card-border-radius: 0;
-                              --ha-card-background: transparent;
-                              padding-top: 12px;
-                              padding-right: 0;
-                              padding-left: 0;
-                            }
+                  - type: custom:decluttering-card
+                    template: room_popup__expander
+                    variables:
+                      - title: Notification Settings
+                      - cards:
+                          - type: entities
+                            show_header_toggle: false
+                            card_mod:
+                              style: |
+                                ha-card.type-entities { 
+                                  --ha-card-border-color: transparent;
+                                  --ha-card-border-width: 0;
+                                  --ha-card-border-radius: 0;
+                                  --ha-card-background: transparent;
+                                  padding-top: 12px;
+                                  padding-right: 0;
+                                  padding-left: 0;
+                                }
 
-                            #states { 
-                              --list-indent-size: 45px;
-                              padding: 0;
-                            }
+                                #states { 
+                                  --list-indent-size: 45px;
+                                  padding: 0;
+                                }
 
-                            #states > div:nth-child( 2 ), 
-                            #states > div:nth-child( 3 ), 
-                            #states > div:nth-child( 4 ), 
-                            #states > div:nth-child( 7 ), 
-                            #states > div:nth-child( 8 ) { 
-                              padding-left: var( --list-indent-size ) !important;
-                            }
+                                #states > div:nth-child( 2 ), 
+                                #states > div:nth-child( 3 ), 
+                                #states > div:nth-child( 4 ), 
+                                #states > div:nth-child( 7 ), 
+                                #states > div:nth-child( 8 ) { 
+                                  padding-left: var( --list-indent-size ) !important;
+                                }
 
-                            #states > div:nth-child( 5 ), 
-                            #states > div:nth-child( 6 ) { 
-                              padding-left: calc( var( --list-indent-size ) * 2 ) !important;
-                            }
-                        entities:
-                          - entity: input_boolean.app_notify_tom
-                            name: Allow Mobile Device Notifications
-                          - type: conditional
-                            conditions:
+                                #states > div:nth-child( 5 ), 
+                                #states > div:nth-child( 6 ) { 
+                                  padding-left: calc( var( --list-indent-size ) * 2 ) !important;
+                                }
+                            entities:
                               - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_schedule
-                              name: Schedule Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_info
-                              name: Informational Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_activity
-                              name: Activity Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                              - entity: input_boolean.app_notify_tom_alert_activity
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom_alert_activity
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_activity_door
-                              name: Door Status
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                              - entity: input_boolean.app_notify_tom_alert_activity
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom_alert_activity
-                                state_not: unavailable
-                            row:
-                              entity: >-
-                                input_boolean.app_notify_tom_alert_activity_person_location
-                              name: Person Location
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_warning
-                              name: Warning Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_tom
-                                state: 'on'
-                              - entity: input_boolean.app_notify_tom
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_tom_alert_critical
-                              name: Critical Notifications
-              jess:
+                                name: Allow Mobile Device Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_tom_alert_schedule
+                                  name: Schedule Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_tom_alert_info
+                                  name: Informational Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_tom_alert_activity
+                                  name: Activity Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_tom_alert_activity_door
+                                  name: Door Status
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_tom_alert_activity_person_location
+                                  name: Person Location
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_tom_alert_warning
+                                  name: Warning Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_tom_alert_critical
+                                  name: Critical Notifications
+              Jessica:
                 type: vertical-stack
                 cards:
                   - type: entities
@@ -7026,117 +7057,123 @@ views:
                                   - entity: >-
                                       input_boolean.reminder_medicine_evening_complete_jessica
                                     name: Evening Medication Taken
-                  - type: custom:expander-card
-                    title: Notification Settings
-                    cards:
-                      - type: entities
-                        show_header_toggle: false
-                        card_mod:
-                          style: |
-                            ha-card.type-entities { 
-                              --ha-card-border-color: transparent;
-                              --ha-card-border-width: 0;
-                              --ha-card-border-radius: 0;
-                              --ha-card-background: transparent;
-                              padding-top: 12px;
-                              padding-right: 0;
-                              padding-left: 0;
-                            }
+                  - type: custom:decluttering-card
+                    template: room_popup__expander
+                    variables:
+                      - title: Notification Settings
+                      - cards:
+                          - type: entities
+                            show_header_toggle: false
+                            card_mod:
+                              style: |
+                                ha-card.type-entities { 
+                                  --ha-card-border-color: transparent;
+                                  --ha-card-border-width: 0;
+                                  --ha-card-border-radius: 0;
+                                  --ha-card-background: transparent;
+                                  padding-top: 12px;
+                                  padding-right: 0;
+                                  padding-left: 0;
+                                }
 
-                            #states { 
-                              --list-indent-size: 45px;
-                              padding: 0;
-                            }
+                                #states { 
+                                  --list-indent-size: 45px;
+                                  padding: 0;
+                                }
 
-                            #states > div:nth-child( 2 ), 
-                            #states > div:nth-child( 3 ), 
-                            #states > div:nth-child( 4 ), 
-                            #states > div:nth-child( 7 ), 
-                            #states > div:nth-child( 8 ) { 
-                              padding-left: var( --list-indent-size ) !important;
-                            }
+                                #states > div:nth-child( 2 ), 
+                                #states > div:nth-child( 3 ), 
+                                #states > div:nth-child( 4 ), 
+                                #states > div:nth-child( 7 ), 
+                                #states > div:nth-child( 8 ) { 
+                                  padding-left: var( --list-indent-size ) !important;
+                                }
 
-                            #states > div:nth-child( 5 ), 
-                            #states > div:nth-child( 6 ) { 
-                              padding-left: calc( var( --list-indent-size ) * 2 ) !important;
-                            }
-                        entities:
-                          - entity: input_boolean.app_notify_jess
-                            name: Allow Mobile Device Notifications
-                          - type: conditional
-                            conditions:
+                                #states > div:nth-child( 5 ), 
+                                #states > div:nth-child( 6 ) { 
+                                  padding-left: calc( var( --list-indent-size ) * 2 ) !important;
+                                }
+                            entities:
                               - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_jess_alert_schedule
-                              name: Schedule Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_jess_alert_info
-                              name: Informational Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_jess_alert_activity
-                              name: Activity Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                              - entity: input_boolean.app_notify_jess_alert_activity
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess_alert_activity
-                                state_not: unavailable
-                            row:
-                              entity: >-
-                                input_boolean.app_notify_jess_alert_activity_door
-                              name: Door Status
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                              - entity: input_boolean.app_notify_jess_alert_activity
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess_alert_activity
-                                state_not: unavailable
-                            row:
-                              entity: >-
-                                input_boolean.app_notify_jess_alert_activity_person_location
-                              name: Person Location
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_jess_alert_warning
-                              name: Warning Notifications
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.app_notify_jess
-                                state: 'on'
-                              - entity: input_boolean.app_notify_jess
-                                state_not: unavailable
-                            row:
-                              entity: input_boolean.app_notify_jess_alert_critical
-                              name: Critical Notifications
-              gouda:
+                                name: Allow Mobile Device Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_jess_alert_schedule
+                                  name: Schedule Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_jess_alert_info
+                                  name: Informational Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_jess_alert_activity
+                                  name: Activity Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_jess_alert_activity_door
+                                  name: Door Status
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_jess_alert_activity_person_location
+                                  name: Person Location
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_jess_alert_warning
+                                  name: Warning Notifications
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                row:
+                                  entity: input_boolean.app_notify_jess_alert_critical
+                                  name: Critical Notifications
+              Gouda:
                 type: vertical-stack
                 cards:
                   - type: custom:mushroom-title-card
@@ -7147,7 +7184,7 @@ views:
                         name: Is Home
                       - entity: input_boolean.reminder_medicine_complete_gouda
                         name: Medication Given
-              guest:
+              Guests:
                 type: vertical-stack
                 cards:
                   - type: custom:mushroom-title-card
@@ -7592,10 +7629,12 @@ button_card_templates:
             ? ['on'].indexOf( ! entity || entity.state ) !== -1 
             : false;
         ]]]
-      badge_alert: ''
+      badge_danger: ''
+      badge_warning: ''
+      badge_success: ''
+      badge_door: ''
       badge_blinds: ''
       badge_curtains: ''
-      badge_door: ''
       icon: |
         [[[ if ( ! entity ) return '';
           else return entity.icon; ]]]'
@@ -7658,14 +7697,40 @@ button_card_templates:
                 - button_animation__ping_danger
               variables:
                 state_on: '[[[ return variables.state_on ]]]'
-                name_icon: '[[[ return variables.badge_alert ]]]'
+                name_icon: '[[[ return variables.badge_danger ]]]'
               styles:
                 card:
-                  - '--ha-card-border-color': rgb( 255, 255, 255 )
-                  - '--ha-card-background': rgb( var( --red-color-rgb ) )
+                  - '--ha-card-border-color': var( --tile-card-badge--danger--border-color )
+                  - '--ha-card-background': var( --tile-card-badge--danger--background-color )
                   - animation: ping_danger 2s infinite;
                 name:
-                  - color: rgb( 255, 255, 255 )
+                  - color: var( --tile-card-badge--danger--icon-color )
+            - type: custom:button-card
+              template:
+                - room_tile__badge
+              variables:
+                state_on: '[[[ return variables.state_on ]]]'
+                name_icon: '[[[ return variables.badge_warning ]]]'
+              styles:
+                card:
+                  - '--ha-card-border-color': var( --tile-card-badge--warning--border-color )
+                  - '--ha-card-background': var( --tile-card-badge--warning--background-color )
+                  - animation: ping_danger 2s infinite;
+                name:
+                  - color: var( --tile-card-badge--warning--icon-color )
+            - type: custom:button-card
+              template:
+                - room_tile__badge
+              variables:
+                state_on: '[[[ return variables.state_on ]]]'
+                name_icon: '[[[ return variables.badge_success ]]]'
+              styles:
+                card:
+                  - '--ha-card-border-color': var( --tile-card-badge--success--border-color )
+                  - '--ha-card-background': var( --tile-card-badge--success--background-color )
+                  - animation: ping_danger 2s infinite;
+                name:
+                  - color: var( --tile-card-badge--success--icon-color )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8191,20 +8256,39 @@ button_card_templates:
       - button_animation__bounce
       - button_theme__default
     variables:
+      state: |
+        [[[ 
+          return ( states[variables.entity_id].state == variables.select_value ) ? 'on' : 'off';
+        ]]]
+      state_on: |
+        [[[ 
+          return ( states[variables.entity_id].state == variables.select_value ) ? true : false;
+        ]]]
       text_state_on: 'On'
       text_state_off: 'Off'
     layout: icon_name
     show_label: false
     show_state: true
-    state_display: >-
-      [[[ return ( variables.state_on ) ? variables.text_state_on :
-      variables.text_state_off; ]]]
+    state_display: |
+      [[[ 
+        return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
+          ? variables.text_state_on 
+          : variables.text_state_off;
+      ]]]
     tap_action:
-      action: none
+      action: call-service
+      service: input_select.select_option
+      target:
+        entity_id: '[[[ return variables.entity_id; ]]]'
+      data:
+        option: '[[[ return variables.select_value; ]]]'
     double_tap_action:
       action: none
     hold_action:
       action: none
+    triggers_update:
+      - '[[[ return variables.entity; ]]]'
+      - '[[[ return variables.entity_alt; ]]]'
     styles:
       grid:
         - grid-template-areas: |
@@ -8226,42 +8310,53 @@ button_card_templates:
         - padding-bottom: 1vw
       icon:
         - '--state-light-on-color': rgb( var( --green-color-rgb ) )
+        - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
+        - '--disabled-text-color': rgb( var( --grey-color-rgb ) )
+        - border-radius: 100%
+        - width: 95%
+        - max-width: 48px
+        - color: |
+            [[[ 
+              return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
+                ? 'var( --state-light-on-color )'
+                : 'var( --state-light-off-color )';
+            ]]]
+      entity_picture:
+        - filter: |
+            [[[ 
+              return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
+                ? '' 
+                : 'grayscale( 1 )';
+            ]]]
+    state:
+      - value: '[[[ return variables.select_value; ]]]'
+        styles:
+          card:
+            - '--ha-card-border-color': var( --tile-card--border-color--inverse )
+            - '--ha-card-background': var( --tile-card--background-color--inverse )
+            - '--mdc-ripple-color': var( --tile-card--ripple-color--inverse )
+            - '-webkit-tap-highlight-color': var( --tile-card--tap-highlight-color--inverse )
+          name:
+            - '--primary-text-color': var( --tile-card--name-color--inverse )
+          state:
+            - '--primary-text-color': var( --tile-card--state-color--inverse )
+          label:
+            - '--primary-text-color': var( --tile-card--label-color--inverse )
   state_switch_tile__person:
     template:
       - state_switch_tile
     variables:
-      img_path: '[[[ return states[entity.entity_id].attributes.entity_picture ]]]'
+      entity_picture: ''
       text_state_on: Home
       text_state_off: Away
-    icon: false
-    custom_fields:
-      picture: |
-        [[[ 
-          return ( variables.img_path ) 
-            ? `<img src="${variables.img_path}" style="border-radius: 100%; width: 100%; aspect-ratio: 1;">` 
-            : '';
-        ]]]
-    styles:
-      grid:
-        - grid-template-areas: |
-            "picture"
-            "n"
-            "s"
-        - grid-template-columns: 100%
-        - grid-auto-rows: min-content
-      img_cell:
-        - display: none
-      icon:
-        - display: none
-      custom_fields:
-        picture:
-          - padding-bottom: 1vw
-          - filter: |
-              [[[ 
-                return ( variables.state_on ) 
-                  ? 'grayscale( 0 )' 
-                  : 'grayscale( 1 )';
-              ]]]
+    icon: true
+    show_entity_picture: true
+    entity_picture: |
+      [[[ 
+        return ( states[variables.entity_alt].attributes.entity_picture ) 
+          ? states[variables.entity_alt].attributes.entity_picture
+          : variables.entity_picture;
+      ]]]
   entity_card:
     template:
       - button_data_setup
@@ -8830,7 +8925,7 @@ decluttering_templates:
         type: custom:layout-card
         layout_type: custom:grid-layout
         layout:
-          --masonry-view-card-margin: 0
+          '--masonry-view-card-margin': 0
           padding: var( --popup--grid-padding )
           padding-bottom: var( --popup--grid-gap-row )
           margin: var( --popup--grid-margin )
@@ -8900,18 +8995,34 @@ decluttering_templates:
       child-padding: 0
       header-color: var( --subtitle-color )
       card_mod:
-        style: |
-          .expander-card { padding: 0;}
+        style: >
+          .expander-card { 
+            padding: 0;
+            margin-top: var( --popup--grid-gap-row )
+          }
+
+
+          .expander-card .children-container { 
+            padding-right: var( --popup--grid-gap-column );
+            padding-left: var( --popup--grid-gap-column );
+          }
+
 
           .expander-card.open .children-container { 
-            --child-padding: var( --popup--grid-gap-column ) !important;
+            --child-padding: var( --popup--grid-gap-column );
+            padding: var( --popup--grid-gap-column );
             padding-top: 0;
           }
 
-          .expander-card.open .type-custom-mushroom-title-card { padding-top: 0;}
+
+          .expander-card.open .type-custom-mushroom-title-card { padding-top:
+          0;}
+
 
           ha-card.open .header, 
+
           ha-card.close .header { 
+            padding: 20px;
             margin: 0;
             color: var( --tile-card--name-color );
             font-size: 110%;
