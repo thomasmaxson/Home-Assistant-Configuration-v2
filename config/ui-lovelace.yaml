@@ -206,27 +206,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-foyer'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -425,27 +416,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-kitchen'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -778,27 +760,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-living-room'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -917,27 +890,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-dining-room'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -1029,27 +993,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-bedroom-1'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -1248,27 +1203,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-bedroom-2'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -1435,27 +1381,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-bedroom-3'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -1552,27 +1489,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-bedroom-4'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -1887,27 +1815,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-laundry-room'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2077,27 +1996,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-garage'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2202,27 +2112,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-outside'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2372,27 +2273,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-other'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2715,27 +2607,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-sidebar'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 540px
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2767,27 +2650,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-system'
+            show_header: false
+            margin: 7px
+            width_desktop: 90%
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 90%
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2931,27 +2805,18 @@ views:
           - type: custom:bubble-card
             card_type: pop-up
             hash: '#details-configure'
+            show_header: false
+            margin: 7px
+            width_desktop: 90%
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
             styles: |-
               #root {
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
-
-              .bubble-header-container { height: 0 !important;}
-
-              .bubble-header, 
-              .bubble-close-button { display: none !important;}
-
-              .bubble-pop-up-container { 
-                  padding-top: 0 !important;
-                  margin-top: 0 !important;
-              }
-            margin: 7px
-            width_desktop: 90%
-            width_mobile: 100%
-            bg_opacity: '90'
-            bg_blur: '6'
-            bg_color: var( --modal--background-color )
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
