@@ -5465,11 +5465,73 @@ views:
     theme: casamaxson
     type: custom:horizontal-layout
     layout:
-      max_columns: 3
+      max_columns: 4
     subview: true
     cards:
       - type: vertical-stack
         cards:
+          - type: entities
+            title: Foyer
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sync_foyer_lights
+                    state: 'on'
+                row:
+                  type: custom:mushroom-light-card
+                  entity: light.foyer_entryway_ceiling
+                  name: Ceiling Lights
+                  collapsible_controls: true
+                  show_brightness_control: true
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sync_foyer_lights
+                    state: 'off'
+                row:
+                  type: custom:mushroom-light-card
+                  entity: light.foyer_entryway_ceiling
+                  name: Entryway
+                  collapsible_controls: true
+                  show_brightness_control: true
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sync_foyer_lights
+                    state: 'off'
+                row:
+                  type: custom:mushroom-light-card
+                  entity: light.foyer_hallway_ceiling
+                  name: Hallway
+                  collapsible_controls: true
+                  show_brightness_control: true
+              - type: custom:mushroom-light-card
+                entity: light.foyer_ceiling_ledge
+                name: Upper Ledge
+                collapsible_controls: true
+                show_brightness_control: true
+                show_color_control: true
+                use_light_color: true
+              - type: custom:mushroom-light-card
+                entity: light.foyer_under_table
+                name: Under Table
+                collapsible_controls: true
+                show_brightness_control: true
+                show_color_control: true
+                use_light_color: true
           - type: entities
             title: Kitchen
             show_header_toggle: false
@@ -5649,29 +5711,9 @@ views:
                   show_color_control: true
                   use_light_color: true
           - type: entities
-            title: Common Areas
+            title: Living Room
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
-              - type: custom:mushroom-light-card
-                entity: light.dining_room_chandelier
-                name: Dining Room, Chandelier
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
               - type: custom:mushroom-light-card
                 entity: light.living_room_corner_lamp
                 name: Living Room, Corner Lamp
@@ -5684,9 +5726,6 @@ views:
                 name: Television, Ambient Light
                 collapsible_controls: true
                 show_brightness_control: true
-          - type: entities
-            title: Foyer
-            show_header_toggle: false
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -5701,54 +5740,16 @@ views:
                 }
 
                 #states { padding: 0;}
-            entities:
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_entryway_ceiling
-                  name: Ceiling Lights
-                  collapsible_controls: true
-                  show_brightness_control: true
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_entryway_ceiling
-                  name: Entryway
-                  collapsible_controls: true
-                  show_brightness_control: true
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_hallway_ceiling
-                  name: Hallway
-                  collapsible_controls: true
-                  show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.foyer_ceiling_ledge
-                name: Upper Ledge
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.foyer_under_table
-                name: Under Table
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
           - type: entities
-            title: Bar
+            title: Dining Room
             show_header_toggle: false
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.dining_room_chandelier
+                name: Dining Room, Chandelier
+                collapsible_controls: true
+                show_brightness_control: true
+                show_color_control: true
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -5763,17 +5764,6 @@ views:
                 }
 
                 #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                entity: fan.bar_ceiling_fan
-                name: Ceiling Fan
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-light-card
-                entity: light.bar_ceiling_light
-                name: Ceiling Fan Light
-                collapsible_controls: true
-                show_brightness_control: true
       - type: vertical-stack
         cards:
           - type: entities
@@ -5863,32 +5853,6 @@ views:
                 collapsible_controls: true
                 show_brightness_control: true
           - type: entities
-            title: Main Bathroom
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.switch_1_bathroom_main_light
-                name: Ceiling
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.switch_2_bathroom_main_light
-                name: Vanity
-                collapsible_controls: true
-          - type: entities
             title: Guest Bedroom
             show_header_toggle: false
             card_mod:
@@ -5955,8 +5919,6 @@ views:
                   show_color_control: true
                   use_light_color: true
               - type: custom:mushroom-light-card
-                entity: light.guest_hallway_light
-                name: Hallway
                 collapsible_controls: true
                 show_brightness_control: true
           - type: entities
@@ -6039,6 +6001,12 @@ views:
           - type: entities
             title: Laundry Room
             show_header_toggle: false
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.laundry_ceiling_light
+                name: Ceiling
+                collapsible_controls: true
+                show_brightness_control: true
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -6053,17 +6021,6 @@ views:
                 }
 
                 #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.laundry_ceiling_light
-                name: Ceiling
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.laundry_hallway_light
-                name: Hallway
-                collapsible_controls: true
-                show_brightness_control: true
           - type: entities
             title: Garage
             show_header_toggle: false
@@ -6132,6 +6089,90 @@ views:
               - type: custom:mushroom-light-card
                 entity: light.backyard_string_lights
                 name: Backyard String Lights
+                collapsible_controls: true
+      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Bar
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
+              - type: custom:mushroom-fan-card
+                entity: fan.bar_ceiling_fan
+                name: Ceiling Fan
+                collapsible_controls: true
+                show_percentage_control: true
+              - type: custom:mushroom-light-card
+                entity: light.bar_ceiling_light
+                name: Ceiling Fan Light
+                collapsible_controls: true
+                show_brightness_control: true
+          - type: entities
+            title: Hallways
+            show_header_toggle: false
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.guest_hallway_light
+                name: Guest Hallway
+                collapsible_controls: true
+                show_brightness_control: true
+              - type: custom:mushroom-light-card
+                entity: light.laundry_hallway_light
+                name: Laundry Hallway
+                collapsible_controls: true
+                show_brightness_control: true
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+          - type: entities
+            title: Main Bathroom
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.switch_1_bathroom_main_light
+                name: Ceiling
+                collapsible_controls: true
+              - type: custom:mushroom-light-card
+                entity: light.switch_2_bathroom_main_light
+                name: Vanity
                 collapsible_controls: true
   - title: Devices
     path: page-devices
@@ -6436,25 +6477,15 @@ views:
           - type: entities
             title: Power Outlets
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:button-card
                 template: entity_card
                 name: Garage, Fan
                 entity: light.garage_fan
+              - type: custom:button-card
+                template: entity_card
+                entity: switch.plug_dish_washer
+                name: Kitchen, Dish Washer
               - type: custom:button-card
                 template: entity_card
                 name: Kitchen, Above Coffee Bar
@@ -6475,6 +6506,20 @@ views:
                 template: entity_card
                 name: Tom's Office, Media
                 entity: light.bedroom_4_media_plug
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
       - type: vertical-stack
         cards:
           - type: entities
