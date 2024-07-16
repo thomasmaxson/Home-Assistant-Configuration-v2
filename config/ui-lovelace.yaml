@@ -1365,17 +1365,11 @@ views:
           - binary_sensor.door_bedroom_3
         variables:
           path: '#details-bedroom-3'
-          icon_on: mdi:monitor-account
-          icon_off: mdi:monitor
+          icon_on: mdi:note
+          icon_off: mdi:note-outline
           data_door: binary_sensor.door_bedroom_3
           data_lightOn: light.bedroom_3_lights
           data_temperature: sensor.temperature_bedroom_3
-        tap_action:
-          action: none
-        double_tap_action:
-          action: none
-        hold_action:
-          action: none
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -1396,7 +1390,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
-              - icon: mdi:monitor
+              - icon: mdi:note
               - title: Jess' Office
           - type: custom:decluttering-card
             template: room_popup__chips
@@ -1408,6 +1402,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_bedroom_3
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.all_lights_bedroom_3
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1451,6 +1448,22 @@ views:
                             icon: true
                             source: true
                             volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: ''
+                subtitle: Lights
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
+                      - type: custom:mushroom-light-card
+                        name: Floor Lamp
+                        entity: light.bedroom_3_floor_lamp
+                        collapsible_controls: true
+                        show_brightness_control: true
+                        show_color_control: true
+                        use_light_color: true
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1464,6 +1477,10 @@ views:
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_bedroom_3
                             name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.automation_bedroom_3_door_open_close
+                            name: Toggle lights when door opens/closes
         view_layout:
           grid-area: modalBdr3
       - type: custom:button-card
@@ -5918,9 +5935,31 @@ views:
                   show_brightness_control: true
                   show_color_control: true
                   use_light_color: true
+          - type: entities
+            title: Jess' Office
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
               - type: custom:mushroom-light-card
+                name: Floor Lamp
+                entity: light.bedroom_3_floor_lamp
                 collapsible_controls: true
                 show_brightness_control: true
+                show_color_control: true
+                use_light_color: true
           - type: entities
             title: Tom's Office
             show_header_toggle: false
