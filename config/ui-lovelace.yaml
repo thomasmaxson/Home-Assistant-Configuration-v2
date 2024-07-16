@@ -158,8 +158,8 @@ views:
             entity_id: lock.front_door
         variables:
           path: '#details-foyer'
-          icon_on: mdi:home
-          icon_off: mdi:home-outline
+          icon_on: mdi:globe-light
+          icon_off: mdi:globe-light-outline
           data_door: binary_sensor.door_front_primary
           data_lightOn: light.lights_primary_foyer
           data_temperature: sensor.temperature_foyer
@@ -221,7 +221,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
-              - icon: mdi:home
+              - icon: mdi:globe-light
               - title: Foyer
           - type: custom:decluttering-card
             template: room_popup__chips
@@ -1766,7 +1766,8 @@ views:
           - sensor.reminder_laundry_complete_dryer
         variables:
           path: '#details-laundry-room'
-          icon: mdi:washing-machine
+          icon_on: mdi:tshirt-crew
+          icon_off: mdi:tshirt-crew-outline
           data_door: binary_sensor.door_laundry
           data_lightOn: light.laundry_ceiling_light
           data_temperature: sensor.motion_temperature_laundry_room
@@ -1847,7 +1848,7 @@ views:
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
-              - icon: mdi:washing-machine
+              - icon: mdi:tshirt-crew
               - title: Laundry Room
           - type: custom:decluttering-card
             template: room_popup__chips
