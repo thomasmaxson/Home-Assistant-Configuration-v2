@@ -518,6 +518,23 @@ views:
                           action: none
                         entities:
                           - entity: sensor.temperature_freezer
+
+                      - type: custom:button-card
+                        template: appliance_card
+                        name: Dishwasher
+                        entity: sensor.custom_dishwasher_state
+                        state_display: |
+                          [[[
+                            let stateText = ( entity.state ) ? 'Ready' : entity.state;
+
+                            if( states['binary_sensor.door_dishwasher'].state == 'on' )
+                            { 
+                              stateText += ' &bull; Door Open';
+
+                            } // endif
+
+                            return stateText;
+                          ]]]
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -7327,14 +7344,16 @@ button_card_templates:
             return false;
 
           const active_states = [ 
-            'home', 
             'on', 
             'open', 
+            'home', 
             'playing', 
             'paused', 
             'buffering', 
             'unlocked', 
-            'wet'
+            'wet',
+            'complete',
+            'done'
           ];
 
           if( states[variables.entity_id].attributes != undefined )
@@ -7345,7 +7364,7 @@ button_card_templates:
             { 
               for( var i = 0; i < deviceEntities.length; i++ )
               { 
-                if( active_states.indexOf( states[deviceEntities[i]].state ) >= 0 )
+                if( active_states.indexOf( states[deviceEntities[i]].state.toLowerCase() ) >= 0 )
                 { 
                   return true;
 
@@ -7356,7 +7375,7 @@ button_card_templates:
             } // endif
           } // endif
 
-          return ( active_states.indexOf( states[entity.entity_id].state ) >= 0 ) ? true : false;
+          return ( active_states.indexOf( states[entity.entity_id].state.toLowerCase() ) >= 0 ) ? true : false;
         ]]]
       state_on_count: |
         [[[ 
@@ -7454,23 +7473,48 @@ button_card_templates:
     styles:
       card:
         - '--ha-card-border-width': var( --tile-card--border-width )
-        - '--ha-card-border-color': var( --tile-card--border-color )
+        - '--ha-card-border-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--border-color--inverse )'
+                : 'var( --tile-card--border-color )';
+            ]]]
         - '--ha-card-border-radius': var( --tile-card--border-radius )
-        - '--ha-card-background': var( --tile-card--background-color )
+        - '--ha-card-background': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--background-color--inverse )'
+                : 'var( --tile-card--background-color )';
+            ]]]
         - '--mdc-ripple-color': var( --tile-card--ripple-color )
         - '-webkit-tap-highlight-color': var( --tile-card--tap-highlight-color )
         - padding: var( --tile-card--padding )
         - font-weight: 500
       name:
-        - '--primary-text-color': var( --tile-card--name-color )
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--name-color--inverse )'
+                : 'var( --tile-card--name-color-color )';
+            ]]]
         - color: var( --primary-text-color )
         - opacity: 1
       state:
-        - '--primary-text-color': var( --tile-card--state-color )
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--state-color--inverse )'
+                : 'var( --tile-card--state-color-color )';
+            ]]]
         - color: var( --primary-text-color )
         - opacity: 1
       label:
-        - '--primary-text-color': var( --tile-card--label-color )
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--label-color--inverse )'
+                : 'var( --tile-card--label-color-color )';
+            ]]]
         - color: var( --primary-text-color )
         - opacity: 1
       icon:
@@ -7529,48 +7573,37 @@ button_card_templates:
         - font-weight: 700
       icon:
         - width: 24px
-  laundry_card:
+  appliance_card:
     template:
       - button_data_setup
       - button_animation__bounce
       - button_theme__default
-    variables:
-      time_remaining: |
-        [[[ 
-          var theEntity = variables.details;
-
-          return states[theEntity].attributes.time_remaining;
-        ]]]
     layout: icon_name
     show_label: false
     show_state: true
-    state_display: |
-      [[[
-        const time = variables.time_remaining;
-
-        switch( entity.state )
-        { 
-          case 'on':
-            if( 'Off' == time || '00:00' == time )
-            { 
-              return 'Done';
-            } else
-            { 
-              return `${time} remaining`;
-            }
-            break;
-
-          case 'off':
-            return 'Ready';
-            break;
-        }
-      ]]]
     label: ''
+    tap_action:
+      action: none
+    double_tap_action:
+      action: none
+    hold_action:
+      action: none
     styles:
       card:
+        - '--ha-card-border-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--border-color--inverse )'
+                : 'var( --divider-color )';
+            ]]]
+        - '--ha-card-background': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--background-color--inverse )'
+                : 'var( --entity-card--background-color )';
+            ]]]
         - padding: 10px 5px
         - border-width: 1px
-        - border-color: rgba( 255, 255, 255, 0.12 )
       grid:
         - grid-template-rows: repeat( 2, 50% )
         - grid-template-columns: min-content 12px 1fr
@@ -7593,6 +7626,37 @@ button_card_templates:
         - '--state-light-on-color': rgb( var( --green-color-rgb ) )
         - width: 100%
         - min-width: 60px
+  laundry_card:
+    template:
+      - appliance_card
+    variables:
+      time_remaining: |
+        [[[ 
+          var theEntity = variables.details;
+
+          return states[theEntity].attributes.time_remaining;
+        ]]]
+    state_display: |
+      [[[
+        const time = variables.time_remaining;
+
+        switch( entity.state )
+        { 
+          case 'on':
+            if( 'Off' == time || '00:00' == time )
+            { 
+              return 'Done';
+            } else
+            { 
+              return `${time} remaining`;
+            }
+            break;
+
+          case 'off':
+            return 'Ready';
+            break;
+        }
+      ]]]
   room_tile:
     template:
       - button_data_setup
@@ -8309,20 +8373,6 @@ button_card_templates:
                 ? '' 
                 : 'grayscale( 1 )';
             ]]]
-    state:
-      - value: '[[[ return variables.select_value; ]]]'
-        styles:
-          card:
-            - '--ha-card-border-color': var( --tile-card--border-color--inverse )
-            - '--ha-card-background': var( --tile-card--background-color--inverse )
-            - '--mdc-ripple-color': var( --tile-card--ripple-color--inverse )
-            - '-webkit-tap-highlight-color': var( --tile-card--tap-highlight-color--inverse )
-          name:
-            - '--primary-text-color': var( --tile-card--name-color--inverse )
-          state:
-            - '--primary-text-color': var( --tile-card--state-color--inverse )
-          label:
-            - '--primary-text-color': var( --tile-card--label-color--inverse )
   state_switch_tile__person:
     template:
       - state_switch_tile
