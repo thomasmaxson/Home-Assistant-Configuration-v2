@@ -82,7 +82,7 @@ sensor:
           {%- if is_state( 'sensor.laundry_dryer_machine_state', 'Run' ) -%}
           mdi:tumble-dryer
           {%- elif is_state( 'sensor.laundry_dryer_machine_state', 'Off' ) -%}
-          mdi:tumble-dryer-off
+          mdi:tumble-dryer
           {%- else -%}
           mdi:cloud-question
           {%- endif -%}
@@ -101,7 +101,26 @@ sensor:
           {%- if is_state( 'sensor.laundry_washer_machine_state', 'Run' ) -%}
           mdi:washing-machine
           {%- elif is_state( 'sensor.laundry_washer_machine_state', 'Off' ) -%}
-          mdi:washing-machine-off
+          mdi:washing-machine
+          {%- else -%}
+          mdi:cloud-question
+          {%- endif -%}
+
+      custom_dishwasher_state:
+        friendly_name: "Dishwasher Status"
+        value_template: >-
+          {%- if is_state( 'input_select.status_dishwasher', 'Running' ) -%}
+            on
+          {%- elif is_state( 'input_select.status_dishwasher', 'Idle' ) or is_state( 'input_select.status_dishwasher', 'Complete' ) -%}
+            off
+          {%- else -%}
+            Unknown
+          {%- endif -%}
+        icon_template: >-
+          {%- if is_state( 'input_select.status_dishwasher', 'Running' ) -%}
+          mdi:dishwasher
+          {%- elif is_state( 'input_select.status_dishwasher', 'Idle' ) or is_state( 'input_select.status_dishwasher', 'Complete' ) -%}
+          mdi:dishwasher
           {%- else -%}
           mdi:cloud-question
           {%- endif -%}
