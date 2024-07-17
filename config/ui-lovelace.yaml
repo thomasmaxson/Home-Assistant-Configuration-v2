@@ -7158,16 +7158,25 @@ views:
             entities:
               - entity: input_boolean.reminder_waste_take_out_solid
                 name: Waste Bin Take Out
+                icon: mdi:trash-can
               - entity: input_boolean.reminder_waste_bring_in_solid
                 name: Waste Bin Bring In
+                icon: mdi:trash-can
               - entity: input_boolean.reminder_waste_take_out_recycle
                 name: Recycling Reminder
+                icon: mdi:recycle
               - entity: input_boolean.reminder_waste_bring_in_recycle
                 name: Recycling Dropoff
+                icon: mdi:recycle
+              - entity: input_boolean.reminder_dishwasher_complete
+                name: Dishwasher Complete
+                icon: mdi:dishwasher
               - entity: input_boolean.reminder_laundry_complete_washer
                 name: Washing Machine Complete
+                icon: mdi:washing-machine
               - entity: input_boolean.reminder_laundry_complete_dryer
                 name: Tumble Dryer Complete
+                icon: mdi:tumble-dryer
       - type: vertical-stack
         cards:
           - type: entities
@@ -8813,6 +8822,11 @@ decluttering_templates:
         grid-auto-rows: min-content
         grid-template-columns: min-content 1fr min-content
         grid-template-areas: '"icon title action"'
+      card_mod:
+        style: |
+          ha-card { 
+            --layout-margin: 0;
+          }
       cards:
         - type: custom:mushroom-template-card
           view_layout:
