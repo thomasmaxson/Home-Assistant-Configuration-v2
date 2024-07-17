@@ -134,6 +134,12 @@ views:
                 color: var( --green-color-rgb )
                 boolean: input_boolean.reminder_laundry_complete_dryer
             - type: custom:button-card
+              template: notification
+              variables:
+                key: dishwasher_complete
+                color: var( --green-color-rgb )
+                boolean: input_boolean.reminder_dishwasher_complete
+            - type: custom:button-card
               entity: sensor.template_sidebar
               template: sidebar_content
       - type: custom:button-card
@@ -410,6 +416,18 @@ views:
               } // endif
 
               return '';
+            ]]]
+          badge_warning: |
+            [[[
+              let badgeIcon = '';
+
+              if( states['input_select.status_dishwasher'].state == 'Running' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:dishwasher"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
             ]]]
       - type: vertical-stack
         cards:
@@ -6227,20 +6245,6 @@ views:
           - type: entities
             title: Door Sensors
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:button-card
                 template: entity_card
@@ -6330,6 +6334,28 @@ views:
                   icon_on_color: var( --green-color-rgb )
                   data_entity: sensor.door_battery_closet_hallway_his
                   data_type: battery
+              - type: custom:button-card
+                template: entity_card
+                name: Dishwasher Door
+                entity: binary_sensor.door_dishwasher
+                variables:
+                  icon_on_color: var( --green-color-rgb )
+                  data_entity: sensor.door_battery_closet_hallway_his
+                  data_type: battery
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
           - type: entities
             title: Presense Sensors
             show_header_toggle: false
@@ -6484,20 +6510,20 @@ views:
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
-                name: Wine Cooler
-                entity: binary_sensor.leak_wine_cooler_bar
+                name: Washing Machine
+                entity: binary_sensor.leak_washing_machine
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_wine_cooler
+                  data_entity: sensor.leak_battery_washing_machine
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
-                name: Washing Machine
-                entity: binary_sensor.leak_washing_machine_laundry
+                name: Wine Cooler
+                entity: binary_sensor.leak_wine_cooler
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_washing_machine
+                  data_entity: sensor.leak_battery_wine_cooler
                   data_type: battery
                   icon_type: battery_level
             card_mod:
@@ -6524,10 +6550,6 @@ views:
                 entity: light.garage_fan
               - type: custom:button-card
                 template: entity_card
-                entity: switch.plug_dish_washer
-                name: Kitchen, Dish Washer
-              - type: custom:button-card
-                template: entity_card
                 name: Kitchen, Above Coffee Bar
                 entity: switch.plug_kitchen_cabinets_upper_coffee_bar
               - type: custom:button-card
@@ -6536,12 +6558,12 @@ views:
                 entity: switch.plug_kitchen_cabinets_upper_range
               - type: custom:button-card
                 template: entity_card
-                name: Kitchen, Tablet
-                entity: light.tablet_plug
+                entity: switch.plug_dishwasher
+                name: Kitchen, Dishwasher
               - type: custom:button-card
                 template: entity_card
-                name: Main Bedroom, Camera
-                entity: light.camera_power_bdr1
+                name: Kitchen, Tablet
+                entity: light.tablet_plug
               - type: custom:button-card
                 template: entity_card
                 name: Tom's Office, Media
