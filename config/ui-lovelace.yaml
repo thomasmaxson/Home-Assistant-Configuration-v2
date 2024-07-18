@@ -24,10 +24,10 @@ views:
           grid-row-gap: 2.25vw
           grid-column-gap: 4.5vw
           grid-auto-rows: min-content
-          grid-template-columns: 0 repeat( 2, 1fr ) 0
+          grid-template-columns: 0 repeat( 2, 43.5% ) 0
           grid-template-areas: |
             ".  zoneSbar   zoneSbar     ."
-            ".  modalSbar  .            ."
+            ".  modalSbar  modalSbar    ."
             ".  tileFoyer  tileKit      ."
             ".  modalFoyer modalKit     ."
             ".  tileLivR   tileDinR     ."
@@ -392,6 +392,8 @@ views:
         triggers_update:
           - light.all_lights_kitchen
           - binary_sensor.all_leak_sensors_kitchen
+          - input_boolean.reminder_dishwasher_complete
+          - input_select.status_dishwasher
         variables:
           path: '#details-kitchen'
           icon_on: mdi:fridge
@@ -417,7 +419,19 @@ views:
 
               return '';
             ]]]
-          badge_warning: |
+          badge_success: |
+            [[[
+              let badgeIcon = '';
+
+              if( states['input_boolean.reminder_dishwasher_complete'].state == 'on' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:dishwasher"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
+            ]]]
+          badge_info: |
             [[[
               let badgeIcon = '';
 
@@ -518,7 +532,6 @@ views:
                           action: none
                         entities:
                           - entity: sensor.temperature_freezer
-
                       - type: custom:button-card
                         template: appliance_card
                         name: Dishwasher
@@ -1683,12 +1696,10 @@ views:
                 template: room_popup__grid
                 variables:
                   - cards:
-                      - type: custom:mushroom-cover-card
-                        layout: horizontal
-                        name: Window Blind
-                        entity: cover.blinds_bedroom_4
-                        collapsible_controls: false
-                        show_tilt_position_control: true
+                      - type: custom:decluttering-card
+                        template: mushroom__control_blinds
+                        variables:
+                          - entity: cover.blinds_bedroom_4
           - type: vertical-stack
             cards:
               - type: custom:mushroom-template-card
@@ -1818,7 +1829,7 @@ views:
 
               return badgeIcon;
             ]]]
-          badge_warning: |
+          badge_info: |
             [[[
               let badgeIcon = '';
 
@@ -1837,27 +1848,20 @@ views:
           badge_success: |
             [[[
               let badgeIcon = '';
-              let badgeCount = 0;
-              let entities = [
-                states['input_boolean.reminder_laundry_complete_washer'],
-                states['input_boolean.reminder_laundry_complete_dryer']
-              ];
+              const statusWasher = states['input_boolean.reminder_laundry_complete_washer'].state;
+              const statusDryer  = states['input_boolean.reminder_laundry_complete_dryer'].state;
 
-              for( var i = 0; i < entities.length; i++ )
+              if( statusWasher === 'on' && statusDryer === 'on' )
               { 
-                if( entities[i] !== undefined && entities[i].state === 'on' )
-                { 
-                  badgeCount += 1;
+                badgeIcon = '<ha-icon icon="mdi:numeric-2-circle"></ha-icon>';
 
-                } // endif
-              } // endfor
-
-              if( badgeCount > 0 )
+              } else if( statusWasher == 'on' && statusWasher == 'on' )
               { 
-                badgeIcon = '<ha-icon icon="mdi:thumb-up"></ha-icon>';
+                badgeIcon = '<ha-icon icon="mdi:washing-machine"></ha-icon>';
 
-                if( badgeCount > 1 )
-                  badgeIcon = '<ha-icon icon="mdi:numeric-' + badgeCount + '-circle"></ha-icon>';
+              } else if( statusDryer == 'on' && statusWasher == 'on' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
 
               } // endif
 
@@ -5248,30 +5252,6 @@ views:
                       action: more-info
                     double_tap_action:
                       action: more-info
-              - type: entities
-                title: Camera Settings
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.enable_exterior_camera_recording
-                    name: Record Exterior Cameras
-                  - entity: input_boolean.enable_interior_camera_recording
-                    name: Record Interior Cameras
-                  - entity: input_boolean.enable_motion_camera_recording
-                    name: Record Motion Cameras
-                  - entity: input_boolean.camera_int_privacy_mode
-                    name: Disable Private Interior Cameras
       - type: vertical-stack
         cards:
           - type: custom:mushroom-title-card
@@ -5424,6 +5404,34 @@ views:
                         }
 
                         #states { padding: 0;}
+      - type: vertical-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: Camera Settings
+                show_header_toggle: false
+                card_mod:
+                  style: |
+                    ha-card.type-entities { 
+                      --ha-card-border-color: transparent;
+                      --ha-card-border-width: 0;
+                      --ha-card-border-radius: 0;
+                      --ha-card-background: transparent;
+                      padding-right: 0;
+                      padding-left: 0;
+                    }
+
+                    #states { padding: 0;}
+                entities:
+                  - entity: input_boolean.enable_exterior_camera_recording
+                    name: Record Exterior Cameras
+                  - entity: input_boolean.enable_interior_camera_recording
+                    name: Record Interior Cameras
+                  - entity: input_boolean.enable_motion_camera_recording
+                    name: Record Motion Cameras
+                  - entity: input_boolean.camera_int_privacy_mode
+                    name: Disable Private Interior Cameras
     layout: {}
   - title: Laundry Details
     path: page-laundry
@@ -5774,11 +5782,6 @@ views:
                 show_brightness_control: true
                 show_color_control: true
                 use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.tv_ambient_lights
-                name: Television, Ambient Light
-                collapsible_controls: true
-                show_brightness_control: true
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -7565,6 +7568,33 @@ button_card_templates:
         - grid-template-areas: '"i n"'
         - margin: auto
         - width: auto
+  mushroom__control_icon:
+    template:
+      - button_data_setup
+    variables:
+      color: var( --primary-text-color )
+      border_color: transparent
+      background_color: rgba( var( --rgb-primary-text-color ), 0.05 )
+    show_name: false
+    show_label: false
+    show_state: false
+    styles:
+      card:
+        - '--ha-card-border-radius': 12px
+        - '--ha-card-border-color': '[[[ return variables.border_color ]]]'
+        - '--ha-card-background': '[[[ return variables.background_color ]]]'
+        - '--primary-text-color': '[[[ return variables.color ]]]'
+        - padding: 0
+        - border-width: 1px
+        - border-radius: 12px
+        - margin-top: 12px
+        - min-width: 0
+        - width: 42px
+        - height: 42px
+        - box-shadow: none
+      icon:
+        - width: 20px
+        - color: '[[[ return variables.color ]]]'
   button__icon_name:
     template:
       - button__base
@@ -7623,7 +7653,7 @@ button_card_templates:
       img_cell:
         - align-items: start
       icon:
-        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
+        - '--state-light-on-color': rgb( var( --blue-color-rgb ) )
         - width: 100%
         - min-width: 60px
   laundry_card:
@@ -7677,6 +7707,7 @@ button_card_templates:
       badge_danger: ''
       badge_warning: ''
       badge_success: ''
+      badge_info: ''
       badge_door: ''
       badge_blinds: ''
       badge_curtains: ''
@@ -7760,7 +7791,6 @@ button_card_templates:
                 card:
                   - '--ha-card-border-color': var( --tile-card-badge--warning--border-color )
                   - '--ha-card-background': var( --tile-card-badge--warning--background-color )
-                  - animation: ping_danger 2s infinite;
                 name:
                   - color: var( --tile-card-badge--warning--icon-color )
             - type: custom:button-card
@@ -7773,9 +7803,20 @@ button_card_templates:
                 card:
                   - '--ha-card-border-color': var( --tile-card-badge--success--border-color )
                   - '--ha-card-background': var( --tile-card-badge--success--background-color )
-                  - animation: ping_danger 2s infinite;
                 name:
                   - color: var( --tile-card-badge--success--icon-color )
+            - type: custom:button-card
+              template:
+                - room_tile__badge
+              variables:
+                state_on: '[[[ return variables.state_on ]]]'
+                name_icon: '[[[ return variables.badge_info ]]]'
+              styles:
+                card:
+                  - '--ha-card-border-color': var( --tile-card-badge--info--border-color )
+                  - '--ha-card-background': var( --tile-card-badge--info--background-color )
+                name:
+                  - color: var( --tile-card-badge--info--icon-color )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8354,7 +8395,7 @@ button_card_templates:
       img_cell:
         - padding-bottom: 1vw
       icon:
-        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
+        - '--state-light-on-color': rgb( var( --blue-color-rgb ) )
         - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
         - '--disabled-text-color': rgb( var( --grey-color-rgb ) )
         - border-radius: 100%
@@ -9063,3 +9104,117 @@ decluttering_templates:
             color: var( --tile-card--name-color );
             font-size: 110%;
           }
+  mushroom__control_blinds:
+    card:
+      type: custom:mod-card
+      style: |
+        ha-card {
+          --masonry-view-card-margin: 0;
+          --spacing: 0 12px 0 0;
+          border: 1px solid var( --divider-color );
+        }
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+        layout:
+          '--masonry-view-card-margin': 0
+          '--layout-padding': 0
+          '--layout-margin': 0
+          padding: 0
+          margin: 0
+          grid-column-gap: 12px
+          grid-auto-rows: auto
+          grid-template-columns: 1fr auto
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Blinds
+            secondary: >-
+              {{ states( '[[entity]]' ) | capitalize }}
+            icon: >-
+              {{ iif( is_state( '[[entity]]', 'closed' ), 'mdi:blinds-horizontal-closed', 'mdi:blinds-horizontal' ) }}
+            entity: cover.blinds_bedroom_4
+            badge_icon: none
+            badge_color: transparent
+            icon_color: >-
+              {{ iif( is_state( '[[entity]]', 'closed' ), 'var( --rgb-disabled )', 'var( --rgb-state-cover-open )' ) }}
+            card_mod:
+              style: |
+                ha-card {
+                  --ha-card-background: transparent;
+                  --ha-card-border-color: transparent;
+                  border-top-right-radius: 0;
+                  border-bottom-right-radius: 0;
+                  width: 100%;
+                }
+            tap_action:
+              action: more-info
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                template: mushroom__control_icon
+                entity: '[[entity]]'
+                icon: mdi:blinds-horizontal-closed
+                variables:
+                  background_color: |
+                    [[[ 
+                      return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                        ? 'rgba( 111, 111, 111, 0.05 )'
+                        : 'rgba( 225, 225, 225, 0.05 )';
+                    ]]]
+                  color: |
+                    [[[ 
+                      return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                        ? 'rgba( 255, 255, 255, 0.3 )'
+                        : 'rgb( var( --white-color-rgb ) )';
+                    ]]]
+                styles:
+                  card:
+                    - margin-left: auto
+                    - margin-right: -2px
+                    - cursor: |
+                        [[[ 
+                          return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                            ? 'not-allowed'
+                            : 'pointer';
+                        ]]]
+                tap_action:
+                  action: call-service
+                  haptic: success
+                  service: cover.set_cover_tilt_position
+                  service_data:
+                    entity_id: '[[entity]]'
+                    tilt_position: 100
+              - type: custom:button-card
+                template: mushroom__control_icon
+                entity: '[[entity]]'
+                icon: mdi:blinds-horizontal
+                variables:
+                  background_color: |
+                    [[[ 
+                      return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                        ? 'rgba( 111, 111, 111, 0.05 )'
+                        : 'rgba( 225, 225, 225, 0.05 )';
+                    ]]]
+                  color: |
+                    [[[ 
+                      return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                        ? 'rgba( 255, 255, 255, 0.3 )'
+                        : 'rgb( var( --white-color-rgb ) )';
+                    ]]]
+                styles:
+                  card:
+                    - margin-left: auto
+                    - margin-right: 12px
+                    - cursor: |
+                        [[[ 
+                          return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                            ? 'not-allowed'
+                            : 'pointer';
+                        ]]]
+                tap_action:
+                  action: call-service
+                  haptic: success
+                  service: cover.set_cover_tilt_position
+                  service_data:
+                    entity_id: '[[entity]]'
+                    tilt_position: 50
