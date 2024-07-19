@@ -399,6 +399,7 @@ views:
           icon_on: mdi:fridge
           icon_off: mdi:fridge-outline
           data_door: false
+          data_blinds: cover.blinds_kitchen
           data_lightOn: light.kitchen_ceiling_lights
           data_temperature: false
           badge_danger: |
@@ -717,6 +718,19 @@ views:
                           show_brightness_control: true
                           show_color_control: true
                           use_light_color: true
+          - type: custom:decluttering-card
+            template: room_popup__grid
+            variables:
+              - cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Window
+                      - type: custom:decluttering-card
+                        template: mushroom__control_blinds__horizontal
+                        variables:
+                          - entity: cover.blinds_kitchen
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -6088,9 +6102,18 @@ views:
                   show_color_control: true
                   use_light_color: true
               - type: custom:mushroom-light-card
+                entity: light.ceiling_fan_light_bedroom_4
+                name: Ceiling Fan Light
+                collapsible_controls: true
+              - type: custom:mushroom-light-card
                 entity: light.bedroom_4_tie_fighter_lamp
                 name: TIE Fighter Lamp
                 collapsible_controls: true
+              - type: custom:mushroom-fan-card
+                name: Ceiling Fan
+                entity: fan.ceiling_fan_bedroom_4
+                collapsible_controls: false
+                show_percentage_control: true
               - type: custom:mushroom-cover-card
                 entity: cover.blinds_bedroom_4
                 name: Window
@@ -7892,6 +7915,28 @@ button_card_templates:
                 state_on: '[[[ return variables.state_on ]]]'
                 name_icon: |
                   [[[
+                    const theEntity = variables.data_fan;
+
+                    if( theEntity != false && theEntity != undefined )
+                    { 
+                      return ( states[theEntity].state == 'on' ) ? '<ha-icon icon="mdi:ceiling-fan"></ha-icon>' : '';
+
+                    } // endif
+
+                    return '';
+                  ]]]
+            - type: custom:button-card
+              template:
+                - room_tile__badge
+              tap_action:
+                action: call-service
+                service: '[[[ return variables.tap_service ]]]'
+                target:
+                  entity_id: '[[[ return variables.tap_entity ]]]'
+              variables:
+                state_on: '[[[ return variables.state_on ]]]'
+                name_icon: |
+                  [[[
                     const theEntity = variables.data_blinds;
                     let output = '';
 
@@ -7907,28 +7952,6 @@ button_card_templates:
                     } // endif
 
                     return output;
-                  ]]]
-            - type: custom:button-card
-              template:
-                - room_tile__badge
-              tap_action:
-                action: call-service
-                service: '[[[ return variables.tap_service ]]]'
-                target:
-                  entity_id: '[[[ return variables.tap_entity ]]]'
-              variables:
-                state_on: '[[[ return variables.state_on ]]]'
-                name_icon: |
-                  [[[
-                    const theEntity = variables.data_fan;
-
-                    if( theEntity != false && theEntity != undefined )
-                    { 
-                      return ( states[theEntity].state == 'on' ) ? '<ha-icon icon="mdi:ceiling-fan"></ha-icon>' : '';
-
-                    } // endif
-
-                    return '';
                   ]]]
             - type: custom:button-card
               template:
@@ -9161,7 +9184,7 @@ decluttering_templates:
             color: var( --tile-card--name-color );
             font-size: 110%;
           }
-  mushroom__control_blinds:
+  mushroom__control_blinds__horizontal:
     card:
       type: custom:mod-card
       style: |
@@ -9208,7 +9231,7 @@ decluttering_templates:
           - type: horizontal-stack
             cards:
               - type: custom:button-card
-                template: mushroom__control_icon
+                template: mushroom__control_icon__horizontal
                 entity: '[[entity]]'
                 icon: mdi:blinds-horizontal-closed
                 variables:
@@ -9242,7 +9265,7 @@ decluttering_templates:
                     entity_id: '[[entity]]'
                     tilt_position: 100
               - type: custom:button-card
-                template: mushroom__control_icon
+                template: mushroom__control_icon__horizontal
                 entity: '[[entity]]'
                 icon: mdi:blinds-horizontal
                 variables:
@@ -9275,3 +9298,111 @@ decluttering_templates:
                   service_data:
                     entity_id: '[[entity]]'
                     tilt_position: 50
+  mushroom__control_blinds__vertical:
+    card:
+      type: custom:stack-in-card
+      mode: vertical
+      keep:
+        background: true
+        margin: true
+        border_radius: true
+      cards:
+        - type: custom:mushroom-template-card
+          layout: vertical
+          primary: Blinds
+          secondary: '{{ states( ''[[entity]]'' ) | capitalize }}'
+          icon: >-
+            {{ iif( is_state( '[[entity]]', 'closed' ),
+            'mdi:blinds-horizontal-closed', 'mdi:blinds-horizontal' ) }}
+          entity: cover.blinds_bedroom_4
+          badge_icon: none
+          badge_color: transparent
+          icon_color: >-
+            {{ iif( is_state( '[[entity]]', 'closed' ), 'var( --rgb-disabled )',
+            'var( --rgb-state-cover-open )' ) }}
+          card_mod:
+            style: |
+              ha-card {
+                --ha-card-background: transparent;
+                --ha-card-border-color: transparent;
+                padding-top: 4px !important;
+              }
+          tap_action:
+            action: more-info
+        - type: custom:stack-in-card
+          mode: horizontal
+          keep:
+            background: false
+            margin: false
+            border_radius: true
+          card_mod:
+            style: |
+              ha-card {
+                border: none;
+                margin-top: -11px;
+              }
+          cards:
+            - type: custom:button-card
+              template: mushroom__control_icon__vertical
+              entity: '[[entity]]'
+              icon: mdi:blinds-horizontal-closed
+              variables:
+                background_color: |
+                  [[[ 
+                    return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                      ? 'rgba( 111, 111, 111, 0.05 )'
+                      : 'rgba( 225, 225, 225, 0.05 )';
+                  ]]]
+                color: |
+                  [[[ 
+                    return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                      ? 'rgba( 255, 255, 255, 0.3 )'
+                      : 'rgb( var( --white-color-rgb ) )';
+                  ]]]
+              styles:
+                card:
+                  - cursor: |
+                      [[[ 
+                        return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                          ? 'not-allowed'
+                          : 'pointer';
+                      ]]]
+              tap_action:
+                action: call-service
+                haptic: success
+                service: cover.set_cover_tilt_position
+                service_data:
+                  entity_id: '[[entity]]'
+                  tilt_position: 100
+            - type: custom:button-card
+              template: mushroom__control_icon__vertical
+              entity: '[[entity]]'
+              icon: mdi:blinds-horizontal
+              variables:
+                background_color: |
+                  [[[ 
+                    return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                      ? 'rgba( 111, 111, 111, 0.05 )'
+                      : 'rgba( 225, 225, 225, 0.05 )';
+                  ]]]
+                color: |
+                  [[[ 
+                    return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                      ? 'rgba( 255, 255, 255, 0.3 )'
+                      : 'rgb( var( --white-color-rgb ) )';
+                  ]]]
+              styles:
+                card:
+                  - cursor: |
+                      [[[ 
+                        return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
+                          ? 'not-allowed'
+                          : 'pointer';
+                      ]]]
+              tap_action:
+                action: call-service
+                haptic: success
+                service: cover.set_cover_tilt_position
+                service_data:
+                  entity_id: '[[entity]]'
+                  tilt_position: 50
