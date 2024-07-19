@@ -1584,6 +1584,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_bedroom_4
+                  - type: custom:button-card
+                    template: chip_detail__fan
+                    entity: fan.ceiling_fan_bedroom_4
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1685,19 +1688,33 @@ views:
                           show_color_control: true
                           use_light_color: true
                       - type: custom:mushroom-light-card
+                        name: Ceiling Fan Light
+                        entity: light.ceiling_fan_light_bedroom_4
+                      - type: custom:mushroom-light-card
                         name: TIE Fighter
                         entity: light.bedroom_4_tie_fighter_lamp
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Windows
-              - type: custom:decluttering-card
-                template: room_popup__grid
-                variables:
-                  - cards:
+          - type: custom:decluttering-card
+            template: room_popup__grid_2_columns
+            variables:
+              - cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Ceiling Fan
+                      - type: custom:mushroom-fan-card
+                        name: Ceiling Fan
+                        entity: fan.ceiling_fan_bedroom_4
+                        layout: vertical
+                        collapsible_controls: false
+                        show_percentage_control: true
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Window
                       - type: custom:decluttering-card
-                        template: mushroom__control_blinds
+                        template: mushroom__control_blinds__vertical
                         variables:
                           - entity: cover.blinds_bedroom_4
           - type: vertical-stack
@@ -5771,6 +5788,11 @@ views:
                   show_brightness_control: true
                   show_color_control: true
                   use_light_color: true
+              - type: custom:mushroom-cover-card
+                entity: cover.blinds_kitchen
+                name: Window
+                show_position_control: false
+                show_tilt_position_control: true
           - type: entities
             title: Living Room
             show_header_toggle: false
@@ -6072,7 +6094,7 @@ views:
               - type: custom:mushroom-cover-card
                 entity: cover.blinds_bedroom_4
                 name: Window
-                show_position_control: true
+                show_position_control: false
                 show_tilt_position_control: true
       - type: vertical-stack
         cards:
@@ -7568,12 +7590,12 @@ button_card_templates:
         - grid-template-areas: '"i n"'
         - margin: auto
         - width: auto
-  mushroom__control_icon:
+  mushroom__control_icon__vertical:
     template:
       - button_data_setup
     variables:
       color: var( --primary-text-color )
-      border_color: transparent
+      border_color: rgba( 225, 225, 255, 0.12 )
       background_color: rgba( var( --rgb-primary-text-color ), 0.05 )
     show_name: false
     show_label: false
@@ -7587,14 +7609,26 @@ button_card_templates:
         - padding: 0
         - border-width: 1px
         - border-radius: 12px
+        - height: 40px
+        - box-shadow: none
+      img_cell:
+        - width: 100%
+      icon:
+        - width: 20px
+        - color: '[[[ return variables.color ]]]'
+  mushroom__control_icon__horizontal:
+    template:
+      - mushroom__control_icon__vertical
+    variables:
+      color: var( --primary-text-color )
+      border_color: transparent
+      background_color: rgba( var( --rgb-primary-text-color ), 0.05 )
+    styles:
+      card:
         - margin-top: 12px
         - min-width: 0
         - width: 42px
         - height: 42px
-        - box-shadow: none
-      icon:
-        - width: 20px
-        - color: '[[[ return variables.color ]]]'
   button__icon_name:
     template:
       - button__base
@@ -7697,6 +7731,7 @@ button_card_templates:
       data_blinds: false
       data_curtains: false
       data_door: false
+      data_fan: false
       data_temperature: false
       state_on: |
         [[[ 
@@ -7872,6 +7907,28 @@ button_card_templates:
                     } // endif
 
                     return output;
+                  ]]]
+            - type: custom:button-card
+              template:
+                - room_tile__badge
+              tap_action:
+                action: call-service
+                service: '[[[ return variables.tap_service ]]]'
+                target:
+                  entity_id: '[[[ return variables.tap_entity ]]]'
+              variables:
+                state_on: '[[[ return variables.state_on ]]]'
+                name_icon: |
+                  [[[
+                    const theEntity = variables.data_fan;
+
+                    if( theEntity != false && theEntity != undefined )
+                    { 
+                      return ( states[theEntity].state == 'on' ) ? '<ha-icon icon="mdi:ceiling-fan"></ha-icon>' : '';
+
+                    } // endif
+
+                    return '';
                   ]]]
             - type: custom:button-card
               template:
