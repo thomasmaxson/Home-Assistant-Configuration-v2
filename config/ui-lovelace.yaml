@@ -2654,12 +2654,10 @@ views:
             ]]]
           data:
             entity_id: light.all_lights
-        state:
-          - value: 'on'
-            styles:
-              icon:
-                - '--state-light-on-color': rgb( var( --yellow-color-rgb ) )
-                - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
+        styles:
+          icon:
+            - '--state-light-on-color': rgb( var( --yellow-color-rgb ) )
+            - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
       - type: custom:button-card
         view_layout:
           grid-area: overflow2
@@ -5804,7 +5802,7 @@ views:
                   use_light_color: true
               - type: custom:mushroom-cover-card
                 entity: cover.blinds_kitchen
-                name: Window
+                name: Window Blinds
                 show_position_control: false
                 show_tilt_position_control: true
           - type: entities
@@ -6116,7 +6114,7 @@ views:
                 show_percentage_control: true
               - type: custom:mushroom-cover-card
                 entity: cover.blinds_bedroom_4
-                name: Window
+                name: Window Blinds
                 show_position_control: false
                 show_tilt_position_control: true
       - type: vertical-stack
@@ -7521,62 +7519,74 @@ button_card_templates:
     styles:
       card:
         - '--ha-card-border-width': var( --tile-card--border-width )
-        - '--ha-card-border-color': |
-            [[[ 
-              return ( variables.state_on )
-                ? 'var( --tile-card--border-color--inverse )'
-                : 'var( --tile-card--border-color )';
-            ]]]
+        - '--ha-card-border-color': var( --tile-card--border-color )
         - '--ha-card-border-radius': var( --tile-card--border-radius )
-        - '--ha-card-background': |
-            [[[ 
-              return ( variables.state_on )
-                ? 'var( --tile-card--background-color--inverse )'
-                : 'var( --tile-card--background-color )';
-            ]]]
+        - '--ha-card-background': var( --tile-card--background-color )
         - '--mdc-ripple-color': var( --tile-card--ripple-color )
         - '-webkit-tap-highlight-color': var( --tile-card--tap-highlight-color )
         - padding: var( --tile-card--padding )
         - font-weight: 500
       name:
-        - '--primary-text-color': |
-            [[[ 
-              return ( variables.state_on )
-                ? 'var( --tile-card--name-color--inverse )'
-                : 'var( --tile-card--name-color-color )';
-            ]]]
+        - '--primary-text-color': var( --tile-card--name-color )
         - color: var( --primary-text-color )
         - opacity: 1
       state:
-        - '--primary-text-color': |
-            [[[ 
-              return ( variables.state_on )
-                ? 'var( --tile-card--state-color--inverse )'
-                : 'var( --tile-card--state-color-color )';
-            ]]]
+        - '--primary-text-color': var( --tile-card--state-color )
         - color: var( --primary-text-color )
         - opacity: 1
       label:
-        - '--primary-text-color': |
-            [[[ 
-              return ( variables.state_on )
-                ? 'var( --tile-card--label-color--inverse )'
-                : 'var( --tile-card--label-color-color )';
-            ]]]
+        - '--primary-text-color': var( --tile-card--label-color )
         - color: var( --primary-text-color )
         - opacity: 1
       icon:
         - '--state-light-on-color': rgb( var( --blue-color-rgb ) )
         - '--state-light-off-color': var( --tile-card--icon-color )
         - '--disabled-text-color': rgb( var( --grey-color-rgb ) )
+        - color: var( --state-light-off-color )
+        - opacity: 1
+  button_theme__on_inverse:
+    styles:
+      card:
+        - '--ha-card-border-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--border-color--inverse )'
+                : 'var( --tile-card--border-color )';
+            ]]]
+        - '--ha-card-background': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--background-color--inverse )'
+                : 'var( --tile-card--background-color )';
+            ]]]
+      name:
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--name-color--inverse )'
+                : 'var( --tile-card--name-color )';
+            ]]]
+      state:
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--state-color--inverse )'
+                : 'var( --tile-card--state-color )';
+            ]]]
+      label:
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.state_on )
+                ? 'var( --tile-card--label-color--inverse )'
+                : 'var( --tile-card--label-color )';
+            ]]]
+      icon:
         - color: |
             [[[ 
               return ( variables.state_on )
                 ? 'var( --state-light-on-color )'
                 : 'var( --state-light-off-color )';
             ]]]
-        - opacity: 1
-  button_theme__on_inverse:
     state:
       - value: 'on'
         styles:
@@ -7620,25 +7630,58 @@ button_card_templates:
       color: var( --primary-text-color )
       border_color: rgba( 225, 225, 255, 0.12 )
       background_color: rgba( var( --rgb-primary-text-color ), 0.05 )
+      is_disabled: false
     show_name: false
     show_label: false
     show_state: false
     styles:
       card:
         - '--ha-card-border-radius': 12px
-        - '--ha-card-border-color': '[[[ return variables.border_color ]]]'
-        - '--ha-card-background': '[[[ return variables.background_color ]]]'
-        - '--primary-text-color': '[[[ return variables.color ]]]'
+        - '--ha-card-border-color': transparent
+        - '--ha-card-background': |
+            [[[ 
+              return ( variables.is_disabled == true )
+                ? 'var( --tile-card-control--background-color--disabled )'
+                : 'var( --tile-card-control--background-color )';
+            ]]]
+        - '--primary-text-color': |
+            [[[ 
+              return ( variables.is_disabled == true )
+                ? 'var( --tile-card-control--icon-color--disabled )'
+                : 'var( --tile-card-control--icon-color )';
+            ]]]
+        - '--bg-color': var( --tile-card-control--background-color )
+        - '--icon-color': var( --tile-card-control--icon-color )
+        - '--bg-color-disabled': var( --tile-card-control--background-color--disabled )
+        - '--icon-color-disabled': var( --tile-card-control--icon-color--disabled )
         - padding: 0
-        - border-width: 1px
+        - border: none
         - border-radius: 12px
         - height: 40px
         - box-shadow: none
+        - cursor: |
+            [[[ 
+              return ( variables.is_disabled == true )
+                ? 'not-allowed'
+                : 'pointer';
+            ]]]
       img_cell:
+        - border-radius: var( --ha-card-border-radius )
         - width: 100%
+        - background-color: |
+            [[[ 
+              return ( variables.is_disabled == true )
+                ? 'var( --bg-color-disabled )'
+                : 'var( --bg-color )';
+            ]]]
       icon:
         - width: 20px
-        - color: '[[[ return variables.color ]]]'
+        - color: |
+            [[[ 
+              return ( variables.is_disabled == true )
+                ? 'var( --icon-color-disabled )'
+                : 'var( --icon-color )';
+            ]]]
   mushroom__control_icon__horizontal:
     template:
       - mushroom__control_icon__vertical
@@ -7655,6 +7698,8 @@ button_card_templates:
   button__icon_name:
     template:
       - button__base
+      - button_theme__default
+      - button_theme__on_inverse
     styles:
       name:
         - font-weight: 700
@@ -7665,6 +7710,7 @@ button_card_templates:
       - button_data_setup
       - button_animation__bounce
       - button_theme__default
+      - button_theme__on_inverse
     layout: icon_name
     show_label: false
     show_state: true
@@ -8421,6 +8467,7 @@ button_card_templates:
       - button_data_setup
       - button_animation__bounce
       - button_theme__default
+      - button_theme__on_inverse
     variables:
       state: |
         [[[ 
@@ -8665,10 +8712,6 @@ button_card_templates:
       action: more-info
     styles:
       card:
-        - padding: 12px
-        - border-color: transparent
-        - border-width: 0
-        - background-color: transparent
         - '--entity--icon-color': |
             [[[
               const state = entity.state;
@@ -8717,6 +8760,10 @@ button_card_templates:
                 ? 'var( --entity--icon-color--battery )'
                 : 'var( --entity--icon-color )';
             ]]]
+        - padding: 12px
+        - border-color: transparent
+        - border-width: 0
+        - background-color: transparent
       grid:
         - grid-template-columns: min-content 1fr
         - grid-auto-rows: min-content
@@ -9208,15 +9255,16 @@ decluttering_templates:
         cards:
           - type: custom:mushroom-template-card
             primary: Blinds
-            secondary: >-
-              {{ states( '[[entity]]' ) | capitalize }}
+            secondary: '{{ states( ''[[entity]]'' ) | capitalize }}'
             icon: >-
-              {{ iif( is_state( '[[entity]]', 'closed' ), 'mdi:blinds-horizontal-closed', 'mdi:blinds-horizontal' ) }}
+              {{ iif( is_state( '[[entity]]', 'closed' ),
+              'mdi:blinds-horizontal-closed', 'mdi:blinds-horizontal' ) }}
             entity: cover.blinds_bedroom_4
             badge_icon: none
             badge_color: transparent
             icon_color: >-
-              {{ iif( is_state( '[[entity]]', 'closed' ), 'var( --rgb-disabled )', 'var( --rgb-state-cover-open )' ) }}
+              {{ iif( is_state( '[[entity]]', 'closed' ), 'var( --rgb-disabled
+              )', 'var( --rgb-state-cover-open )' ) }}
             card_mod:
               style: |
                 ha-card {
@@ -9250,7 +9298,7 @@ decluttering_templates:
                 styles:
                   card:
                     - margin-left: auto
-                    - margin-right: -2px
+                    - margin-right: '-2px'
                     - cursor: |
                         [[[ 
                           return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
@@ -9347,26 +9395,9 @@ decluttering_templates:
               entity: '[[entity]]'
               icon: mdi:blinds-horizontal-closed
               variables:
-                background_color: |
-                  [[[ 
-                    return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                      ? 'rgba( 111, 111, 111, 0.05 )'
-                      : 'rgba( 225, 225, 225, 0.05 )';
-                  ]]]
-                color: |
-                  [[[ 
-                    return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                      ? 'rgba( 255, 255, 255, 0.3 )'
-                      : 'rgb( var( --white-color-rgb ) )';
-                  ]]]
-              styles:
-                card:
-                  - cursor: |
-                      [[[ 
-                        return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                          ? 'not-allowed'
-                          : 'pointer';
-                      ]]]
+                is_disabled: >-
+                  [[[ return ( [ "closed", "opening", "closing" ].indexOf(
+                  states["[[entity]]"].state ) >= 0 ) ? true : false; ]]]
               tap_action:
                 action: call-service
                 haptic: success
@@ -9379,26 +9410,9 @@ decluttering_templates:
               entity: '[[entity]]'
               icon: mdi:blinds-horizontal
               variables:
-                background_color: |
-                  [[[ 
-                    return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                      ? 'rgba( 111, 111, 111, 0.05 )'
-                      : 'rgba( 225, 225, 225, 0.05 )';
-                  ]]]
-                color: |
-                  [[[ 
-                    return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                      ? 'rgba( 255, 255, 255, 0.3 )'
-                      : 'rgb( var( --white-color-rgb ) )';
-                  ]]]
-              styles:
-                card:
-                  - cursor: |
-                      [[[ 
-                        return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                          ? 'not-allowed'
-                          : 'pointer';
-                      ]]]
+                is_disabled: >-
+                  [[[ return ( [ "open", "opening", "closing" ].indexOf(
+                  states["[[entity]]"].state ) >= 0 ) ? true : false; ]]]
               tap_action:
                 action: call-service
                 haptic: success
