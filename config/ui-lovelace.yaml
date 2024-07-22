@@ -391,6 +391,7 @@ views:
         entity: light.all_lights_kitchen
         triggers_update:
           - light.all_lights_kitchen
+          - cover.blinds_kitchen
           - binary_sensor.all_leak_sensors_kitchen
           - input_boolean.reminder_dishwasher_complete
           - input_select.status_dishwasher
@@ -910,9 +911,6 @@ views:
                         show_brightness_control: true
                         show_color_control: true
                         use_light_color: true
-                      - type: custom:mushroom-light-card
-                        name: TV Ambient Lights
-                        entity: light.tv_ambient_lights
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -2915,8 +2913,15 @@ views:
                 cards:
                   - type: entities
                     entities:
+                      - entity: sensor.custom_next_sunrise_time
+                        name: Next Sunrise
+                      - entity: sensor.custom_next_sunset_time
+                        name: Next Sunset
                       - entity: sensor.sunset_automations_status
                         name: Sunset Automations
+                    title: Daily Schedule
+                  - type: entities
+                    entities:
                       - type: conditional
                         conditions:
                           - entity: schedule.waste_take_out_solid
@@ -2961,7 +2966,7 @@ views:
                         row:
                           entity: sensor.days_until_cleaning_day
                           name: House Cleaning
-                    title: Schedule
+                    title: Household Schedule
               - type: vertical-stack
                 cards:
                   - type: entities
@@ -3218,9 +3223,6 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light-backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.tv_ambient_lights' %}
-              --maxson-floorplan--color-light-tv-ambient-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
@@ -3630,16 +3632,6 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
                 ) )
-          - type: state-icon
-            entity: light.tv_ambient_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 42%
-              left: 22.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-tv-ambient-lights ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
       - type: picture-elements
         view_layout:
@@ -3748,9 +3740,6 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light-backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.tv_ambient_lights' %}
-              --maxson-floorplan--color-light-tv-ambient-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
@@ -4148,16 +4137,6 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
                 ) )
-          - type: state-icon
-            entity: light.tv_ambient_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 22.5%
-              left: 59%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-tv-ambient-lights ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
   - layout:
       grid-gap: 0
@@ -5811,7 +5790,7 @@ views:
             entities:
               - type: custom:mushroom-light-card
                 entity: light.living_room_corner_lamp
-                name: Living Room, Corner Lamp
+                name: Corner Lamp
                 collapsible_controls: true
                 show_brightness_control: true
                 show_color_control: true
@@ -5836,7 +5815,7 @@ views:
             entities:
               - type: custom:mushroom-light-card
                 entity: light.dining_room_chandelier
-                name: Dining Room, Chandelier
+                name: Chandelier
                 collapsible_controls: true
                 show_brightness_control: true
                 show_color_control: true
@@ -6175,20 +6154,6 @@ views:
           - type: entities
             title: Outside
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:mushroom-light-card
                 entity: light.garage_exterior
@@ -6203,7 +6168,7 @@ views:
                 show_color_control: true
                 use_light_color: true
               - type: custom:mushroom-light-card
-                entity: light.foyer_entryway_ceiling
+                entity: light.foyer_exterior_entryway
                 name: Front Door Entryway
                 collapsible_controls: true
                 show_brightness_control: true
@@ -6211,6 +6176,20 @@ views:
                 entity: light.backyard_string_lights
                 name: Backyard String Lights
                 collapsible_controls: true
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
       - type: vertical-stack
         cards:
           - type: entities
@@ -6726,20 +6705,6 @@ views:
           - type: entities
             title: Windows Treatments
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:button-card
                 template: entity_card
@@ -6759,12 +6724,34 @@ views:
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
+                name: Blinds, Kitchen
+                entity: cover.blinds_kitchen
+                variables:
+                  data_entity: sensor.blinds_kitchen_battery
+                  data_type: battery
+                  icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
                 name: Blinds, Tom's Office
                 entity: cover.blinds_bedroom_4
                 variables:
                   data_entity: sensor.blinds_bedroom_4_battery
                   data_type: battery
                   icon_type: battery_level
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
           - type: entities
             title: Remotes
             show_header_toggle: false
@@ -7657,6 +7644,7 @@ button_card_templates:
         - padding: 0
         - border: none
         - border-radius: 12px
+        - margin-bottom: 4px
         - height: 40px
         - box-shadow: none
         - cursor: |
@@ -8511,7 +8499,7 @@ button_card_templates:
         - grid-template-columns: 100%
         - grid-auto-rows: min-content
       card:
-        - padding: 15px 20px 7px 20px
+        - padding: 15px 0 7px 0
       name:
         - place-self: center
         - padding-bottom: 6px
@@ -8522,24 +8510,18 @@ button_card_templates:
       img_cell:
         - padding-bottom: 1vw
       icon:
-        - '--state-light-on-color': rgb( var( --blue-color-rgb ) )
+        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
         - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
         - '--disabled-text-color': rgb( var( --grey-color-rgb ) )
         - border-radius: 100%
         - width: 95%
         - max-width: 48px
+        - filter: drop-shadow( 0 5px 2px rgba( 255, 255, 255, 0.15 ) )
         - color: |
             [[[ 
               return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
                 ? 'var( --state-light-on-color )'
                 : 'var( --state-light-off-color )';
-            ]]]
-      entity_picture:
-        - filter: |
-            [[[ 
-              return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
-                ? '' 
-                : 'grayscale( 1 )';
             ]]]
   state_switch_tile__person:
     template:
@@ -8556,6 +8538,14 @@ button_card_templates:
           ? states[variables.entity_alt].attributes.entity_picture
           : variables.entity_picture;
       ]]]
+    styles:
+      entity_picture:
+        - filter: |
+            [[[ 
+              return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
+                ? 'grayscale( 0 )' 
+                : 'grayscale( 1 )';
+            ]]]
   entity_card:
     template:
       - button_data_setup
@@ -9283,28 +9273,9 @@ decluttering_templates:
                 entity: '[[entity]]'
                 icon: mdi:blinds-horizontal-closed
                 variables:
-                  background_color: |
-                    [[[ 
-                      return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                        ? 'rgba( 111, 111, 111, 0.05 )'
-                        : 'rgba( 225, 225, 225, 0.05 )';
-                    ]]]
-                  color: |
-                    [[[ 
-                      return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                        ? 'rgba( 255, 255, 255, 0.3 )'
-                        : 'rgb( var( --white-color-rgb ) )';
-                    ]]]
-                styles:
-                  card:
-                    - margin-left: auto
-                    - margin-right: '-2px'
-                    - cursor: |
-                        [[[ 
-                          return ( [ 'closed', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                            ? 'not-allowed'
-                            : 'pointer';
-                        ]]]
+                  is_disabled: >-
+                    [[[ return ( [ "closed", "opening", "closing" ].indexOf(
+                    states["[[entity]]"].state ) >= 0 ) ? true : false; ]]]
                 tap_action:
                   action: call-service
                   haptic: success
@@ -9317,28 +9288,12 @@ decluttering_templates:
                 entity: '[[entity]]'
                 icon: mdi:blinds-horizontal
                 variables:
-                  background_color: |
-                    [[[ 
-                      return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                        ? 'rgba( 111, 111, 111, 0.05 )'
-                        : 'rgba( 225, 225, 225, 0.05 )';
-                    ]]]
-                  color: |
-                    [[[ 
-                      return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                        ? 'rgba( 255, 255, 255, 0.3 )'
-                        : 'rgb( var( --white-color-rgb ) )';
-                    ]]]
+                  is_disabled: >-
+                    [[[ return ( [ "open", "opening", "closing" ].indexOf(
+                    states["[[entity]]"].state ) >= 0 ) ? true : false; ]]]
                 styles:
                   card:
-                    - margin-left: auto
                     - margin-right: 12px
-                    - cursor: |
-                        [[[ 
-                          return ( [ 'open', 'opening', 'closing' ].indexOf( states['[[entity]]'].state ) >= 0 )
-                            ? 'not-allowed'
-                            : 'pointer';
-                        ]]]
                 tap_action:
                   action: call-service
                   haptic: success
@@ -9387,7 +9342,7 @@ decluttering_templates:
             style: |
               ha-card {
                 border: none;
-                margin-top: -11px;
+                margin-top: -15px;
               }
           cards:
             - type: custom:button-card
