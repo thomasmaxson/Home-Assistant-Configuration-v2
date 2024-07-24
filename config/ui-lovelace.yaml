@@ -8080,6 +8080,9 @@ button_card_templates:
 
                     return output;
                   ]]]
+              # styles:
+              #   name:
+              #     - color: rgb( var( --green-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8102,6 +8105,9 @@ button_card_templates:
 
                     return '';
                   ]]]
+              # styles:
+              #   name:
+              #     - color: rgb( var( --green-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8130,6 +8136,9 @@ button_card_templates:
 
                     return output;
                   ]]]
+              # styles:
+              #   name:
+              #     - color: rgb( var( --blue-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8158,6 +8167,9 @@ button_card_templates:
 
                     return output;
                   ]]]
+              # styles:
+              #   name:
+              #     - color: rgb( var( --blue-color-rgb ) )
       btnAction:
         card:
           type: custom:button-card
