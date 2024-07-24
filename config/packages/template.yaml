@@ -6,60 +6,84 @@
 #
 ################################################################################
 
-sensor:
-  - platform: template
-    sensors:
-      is_week_even:
-        friendly_name: "Is Week Even"
-        value_template: >-
-          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 0 %}
-          {{ iif( ( True == output ), 'on', 'off' ) }}
-        icon_template: >-
+template:
+  - trigger:
+      # Update on Home Assistant startup
+      - platform: homeassistant
+        event: start
+      # Update on Template reload
+      - platform: event
+        event_type: event_template_reloaded
+      # Update every minute
+      - platform: time_pattern
+        hours: "00"
+        minutes: "/01"
+        seconds: "00"
+    sensor:
+      - name: Custom Next Sunset Time
+        unique_id: "custom_next_sunset_time"
+        icon: mdi:weather-sunset-down
+        state: >
+          {{ as_timestamp( state_attr( 'sun.sun', 'next_setting' ) | as_datetime | as_local ) | timestamp_custom( " %I:%M %p" ) | replace( " 0", "" ) }}
+
+      - name: Custom Next Sunrise Time
+        unique_id: "custom_next_sunrise_time"
+        icon: mdi:weather-sunset-up
+        state: >
+          {{ as_timestamp( state_attr( 'sun.sun', 'next_rising' ) | as_datetime | as_local ) | timestamp_custom( " %I:%M %p" ) | replace( " 0", "" ) }}
+
+      - name: "Sunset Automations Status"
+        icon: >-
+          {%- set offset = ( 30 * 60 ) %}
+          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
+          {%- set modified_sunset = ( next_sunset - offset ) | int %}
+          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
+          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
+
+          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+            mdi:clock-alert-outline
+          {%- elif( ts_current > ts_next_sunset ) %}
+            mdi:clock-check-outline
+          {%- else %}
+            mdi:clock-outline
+          {%- endif %}
+        state: >-
+          {%- set offset = ( 30 * 60 ) %}
+          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
+          {%- set modified_sunset = ( next_sunset - offset ) | int %}
+          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
+          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
+
+          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+            Active
+          {%- elif( ts_current > ts_next_sunset ) %}
+            Complete
+          {%- else %}
+            Run at {{ modified_sunset | timestamp_custom( '%I:%M %p' ) }}
+          {%- endif %}
+
+  - sensor:
+      - name: "Is Week Even"
+        icon: >-
           {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 0 %}
           {{ iif( ( True == output ), 'mdi:calendar-check', 'mdi:calendar-remove' ) }}
-
-      is_week_odd:
-        friendly_name: "Is Week Odd"
-        value_template: >-
-          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 1 %}
+        state: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 0 %}
           {{ iif( ( True == output ), 'on', 'off' ) }}
-        icon_template: >-
+
+      - name: "Is Week Odd"
+        icon: >-
           {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 1 %}
           {{ iif( ( True == output ), 'mdi:calendar-check', 'mdi:calendar-remove' ) }}
+        state: >-
+          {%- set output = ( ( ( now().strftime( '%W' ) ) | int ) % 2 ) == 1 %}
+          {{ iif( ( True == output ), 'on', 'off' ) }}
 
-      custom_fire_tablet_battery:
-        # device_class: battery
-        friendly_name: Battery Level
-        unit_of_measurement: "%"
-        value_template: >-
-          {{ states( 'sensor.fire_tablet_battery' ) }}
-        icon_template: >-
-          {%- set battery_level = states( 'sensor.fire_tablet_battery' ) -%}
-          {%- set battery_round = ( battery_level | int(0) / 10 ) | int(0) * 10 -%}
-
-          {%- if battery_level == 0 -%}
-            mdi:battery-alert
-          {%- elif battery_round >= 80 -%}
-            mdi:battery
-          {%- elif battery_round <= 20 -%}
-            mdi:battery-outline
-          {%- else -%}
-            mdi:battery-{{ battery_round }}
-          {%- endif -%}
-
-      # fire_tablet_last_app_start_formatted:
-      #   #device_class: timestamp
-      #   friendly_name: Last App Restart
-      #   icon_template: mdi:clock-outline
-      #   value_template: >
-      #     {% set timestamp = states.sensor.fire_tablet_last_app_start.last_updated %}
-      #     {{ relative_time( timestamp ) }}
-
-      fire_tablet_used_memory:
+      - name: "Fire Tablet Used Memory"
         device_class: data_size
-        icon_template: mdi:memory
         unit_of_measurement: MB
-        value_template: >-
+        icon: mdi:memory
+        state: >-
           {%- set ignore = [ 'unknown', 'unavailable' ] -%}
           {%- set total_memory = states( 'sensor.fire_tablet_total_memory' ) | int( 0 ) -%}
           {%- set free_memory  = states( 'sensor.fire_tablet_free_memory' ) | int( 0 ) -%}
@@ -75,13 +99,29 @@ sensor:
             Unknown
           {%- endif %}
 
+      - name: "Custom Fire Tablet Battery"
+        unit_of_measurement: "%"
+        icon: >-
+          {%- set battery_level = states( 'sensor.fire_tablet_battery' ) -%}
+          {%- set battery_round = ( battery_level | int( 0 ) / 10 ) | int( 0 ) * 10 -%}
+
+          {%- if battery_level == 0 -%}
+            mdi:battery-alert
+          {%- elif battery_round >= 80 -%}
+            mdi:battery
+          {%- elif battery_round <= 20 -%}
+            mdi:battery-outline
+          {%- else -%}
+            mdi:battery-{{ battery_round }}
+          {%- endif -%}
+        state: >-
+          {{ states( 'sensor.fire_tablet_battery' ) }}
+
       # Count lights that are ON
-      total_lights_on:
-        device_class: data_size
-        friendly_name: Total Lights On
-        icon_template: mdi:lightbulb
-        value_template: >-
-          {% set entity = 'light.lights_all' %}
+      - name: "Total Lights On"
+        icon: mdi:lightbulb
+        state: >-
+          {% set entity = 'light.all_lights' %}
           {% set reject = [] %}
           {% set state  = 'on' %}
 
@@ -92,11 +132,9 @@ sensor:
             | list | count }}
 
       # Count INTERIOR Doors that are OPEN (aka ON)
-      total_doors_open:
-        device_class: data_size
-        friendly_name: Total Doors Open
-        icon_template: mdi:door-open
-        value_template: >-
+      - name: "Total Doors Open"
+        icon: mdi:door-open
+        state: >-
           {% set entity = 'binary_sensor.doors_all_interior' %}
           {% set reject = [] %}
           {% set state  = 'on' %}
@@ -107,7 +145,6 @@ sensor:
             | reject( 'in', reject ) 
             | list | count }}
 
-template:
   - trigger:
       # Update on Home Assistant startup
       - platform: homeassistant
@@ -203,17 +240,6 @@ template:
             {%- endif %}
           {%- endif %}
 
-  - trigger:
-      # Update on Home Assistant startup
-      - platform: homeassistant
-        event: start
-      # Update on Template reload
-      - platform: event
-        event_type: event_template_reloaded
-      # Update every XX seconds
-      - platform: time_pattern
-        seconds: /30
-    sensor:
       - name: "Days Until, Waste Day - Bulk"
         icon: mdi:forest
         state: >-
@@ -248,17 +274,6 @@ template:
             {%- endif %}
           {%- endif %}
 
-  - trigger:
-      # Update on Home Assistant startup
-      - platform: homeassistant
-        event: start
-      # Update on Template reload
-      - platform: event
-        event_type: event_template_reloaded
-      # Update every XX seconds
-      - platform: time_pattern
-        seconds: /30
-    sensor:
       - name: "Days Until, Recycle Drop Off"
         icon: mdi:recycle
         state: >-
@@ -293,17 +308,6 @@ template:
             {%- endif %}
           {%- endif %}
 
-  - trigger:
-      # Update on Home Assistant startup
-      - platform: homeassistant
-        event: start
-      # Update on Template reload
-      - platform: event
-        event_type: event_template_reloaded
-      # Update every XX seconds
-      - platform: time_pattern
-        seconds: /30
-    sensor:
       - name: "Days Until, Waste Day - Recycle"
         icon: mdi:recycle
         state: >-
@@ -338,17 +342,6 @@ template:
             {%- endif %}
           {%- endif %}
 
-  - trigger:
-      # Update on Home Assistant startup
-      - platform: homeassistant
-        event: start
-      # Update on Template reload
-      - platform: event
-        event_type: event_template_reloaded
-      # Update every XX seconds
-      - platform: time_pattern
-        seconds: /30
-    sensor:
       - name: "Days Until, Cleaning Day"
         icon: mdi:spray-bottle
         state: >-
@@ -380,47 +373,4 @@ template:
               {{ iif( ( '1' == untilDays ), untilDays + ' day away', untilDays + ' days away' ) }}
             
             {%- endif %}
-          {%- endif %}
-
-  - trigger:
-      # Update on Home Assistant startup
-      - platform: homeassistant
-        event: start
-      # Update on Template reload
-      - platform: event
-        event_type: event_template_reloaded
-      # Update every minute
-      - platform: time_pattern
-        hours: "00"
-        minutes: "/01"
-        seconds: "00"
-    sensor:
-      - name: "Sunset Automations Status"
-        state: >-
-          {%- set offset = ( 30 * 60 ) %}
-          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
-          {%- set modified_sunset = ( next_sunset - offset ) | int %}
-          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
-          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
-
-          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
-            Active
-          {%- elif( ts_current > ts_next_sunset ) %}
-            Complete
-          {%- else %}
-            Run at {{ modified_sunset | timestamp_custom( '%I:%M %p' ) }}
-          {%- endif %}
-        icon: >-
-          {%- set offset = ( 30 * 60 ) %}
-          {%- set next_sunset     = as_timestamp( states.sun.sun.attributes.next_setting ) %}
-          {%- set modified_sunset = ( next_sunset - offset ) | int %}
-          {%- set ts_next_sunset  = modified_sunset | timestamp_custom( '%H%M%S' ) | int %}
-          {%- set ts_current      = as_timestamp( now() ) | timestamp_custom( '%H%M%S' ) | int %}
-
-          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
-          mdi:clock-alert-outline
-          {%- elif( ts_current > ts_next_sunset ) %}
-          mdi:clock-check-outline
-          {%- else %}
-          mdi:clock-outline
           {%- endif %}

@@ -540,11 +540,12 @@ views:
                         entity: sensor.custom_dishwasher_state
                         state_display: |
                           [[[
-                            let stateText = ( entity.state ) ? 'Ready' : entity.state;
+                            let state = states['input_select.status_dishwasher'].state;
+                            let stateText = ( state == 'Idle' ) ? 'Ready' : state;
 
                             if( states['binary_sensor.door_dishwasher'].state == 'on' )
                             { 
-                              stateText += ' &bull; Door Open';
+                              stateText += ' &bull; Open';
 
                             } // endif
 
@@ -1598,7 +1599,7 @@ views:
                     entity: light.all_lights_bedroom_4
                   - type: custom:button-card
                     template: chip_detail__fan
-                    entity: fan.ceiling_fan_bedroom_4
+                    entity: fan.bedroom_4_ceiling_fan
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1701,7 +1702,7 @@ views:
                           use_light_color: true
                       - type: custom:mushroom-light-card
                         name: Ceiling Fan Light
-                        entity: light.ceiling_fan_light_bedroom_4
+                        entity: light.bedroom_4_ceiling_fan_light
                       - type: custom:mushroom-light-card
                         name: TIE Fighter
                         entity: light.bedroom_4_tie_fighter_lamp
@@ -1716,7 +1717,7 @@ views:
                         subtitle: Ceiling Fan
                       - type: custom:mushroom-fan-card
                         name: Ceiling Fan
-                        entity: fan.ceiling_fan_bedroom_4
+                        entity: fan.bedroom_4_ceiling_fan
                         layout: vertical
                         collapsible_controls: false
                         show_percentage_control: true
@@ -1944,6 +1945,9 @@ views:
                         template: laundry_card
                         name: Washing Machine
                         entity: sensor.custom_laundry_washer_machine_state
+                        trigger_update:
+                          - sensor.custom_laundry_washer_machine_state
+                          - sensor.laundry_washer_combined_details
                         tap_action:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
@@ -1959,6 +1963,9 @@ views:
                         template: laundry_card
                         name: Tumble Dryer
                         entity: sensor.custom_laundry_dryer_machine_state
+                        trigger_update:
+                          - sensor.custom_laundry_dryer_machine_state
+                          - sensor.laundry_dryer_combined_details
                         tap_action:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
@@ -3127,111 +3134,138 @@ views:
             }
             ha-card {
               {% set the_entity = 'cover.garage_door' %}
-              --maxson-floorplan--color-cover-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+              --maxson-floorplan--color-cover--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'lock.front_door' %}
-              --maxson-floorplan--color-lock-front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
+              --maxson-floorplan--color-lock--front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
+              --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_1_bedside_lamps' %}
-              --maxson-floorplan--color-light-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_ceiling_light' %}
+              --maxson-floorplan--color-light--closet-hallway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_light_hers' %}
+              --maxson-floorplan--color-light--closet-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_light_his' %}
+              --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
 
               {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
-              --maxson-floorplan--color-light-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.bedroom_3_floor_lamp' %}
+              {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
+              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.blinds_bedroom_4' %}
+              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'fan.bedroom_4_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_4_lights' %}
-              --maxson-floorplan--color-light-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.bedroom_4_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_4_tie_fighter_lamp' %}
-              --maxson-floorplan--color-light-bedroom-4-tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.blinds_kitchen' %}
+              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_ceiling_lights' %}
-              --maxson-floorplan--color-light-kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_coffee_bar' %}
               {% set the_color = states.light.kitchen_cabinet_upper_coffee_bar.attributes.rgb_color %}
-              --maxson-floorplan--color-light-kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_range' %}
               {% set the_color = states.light.kitchen_cabinet_upper_range.attributes.rgb_color %}
-              --maxson-floorplan--color-light-kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
 
               {% set the_entity = 'light.bar_ceiling_light' %}
-              --maxson-floorplan--color-light-bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'fan.bar_ceiling_fan' %}
-              --maxson-floorplan--color-fan-bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+              --maxson-floorplan--color-fan--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
 
               {% set the_entity = 'light.living_room_corner_lamp' %}
-              --maxson-floorplan--color-light-living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.dining_room_chandelier' %}
-              --maxson-floorplan--color-light-dining-room-chandelier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.guest_hallway_light' %}
-              --maxson-floorplan--color-light-guest-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.laundry_ceiling_light' %}
-              --maxson-floorplan--color-light-laundry-ceiling-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.laundry_hallway_light' %}
-              --maxson-floorplan--color-light-laundry-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_hallway_ceiling' %}
-              --maxson-floorplan--color-light-foyer-hallway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_ceiling_ledge' %}
-              --maxson-floorplan--color-light-foyer-ceiling-ledge: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_under_table' %}
-              --maxson-floorplan--color-light-foyer-under-table: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_entryway_ceiling' %}
-              --maxson-floorplan--color-light-foyer-entryway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_exterior_entryway' %}
-              --maxson-floorplan--color-light-foyer-exterior-entryway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_exterior' %}
-              --maxson-floorplan--color-light-garage-exterior: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_ceiling' %}
-              --maxson-floorplan--color-light-garage-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_door_light' %}
-              --maxson-floorplan--color-light-garage-door-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'fan.custom_garage_fan' %}
-              --maxson-floorplan--color-fan-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_ceiling_light' %}
-              --maxson-floorplan--color-light-closet-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_light_hers' %}
-              --maxson-floorplan--color-light-closet-hallway-light-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_light_his' %}
-              --maxson-floorplan--color-light-closet-hallway-light-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.switch_1_bathroom_main_light' %}
-              --maxson-floorplan--color-light-bathroom-main-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.switch_2_bathroom_main_light' %}
-              --maxson-floorplan--color-light-bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.front_yard_accent_lights' %}      
-              --maxson-floorplan--color-light-front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.backyard_string_lights' %}
-              --maxson-floorplan--color-light-backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
-              --maxson-floorplan--color-curtains-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
-              {% set the_entity = 'cover.blinds_bedroom_4' %}
-              --maxson-floorplan--color-blinds-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+              {% set the_entity = 'light.dining_room_chandelier' %}
+              --maxson-floorplan--color-light--dining-room-chandelier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.guest_hallway_light' %}
+              --maxson-floorplan--color-light--guest-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.laundry_ceiling_light' %}
+              --maxson-floorplan--color-light--laundry-ceiling-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.laundry_hallway_light' %}
+              --maxson-floorplan--color-light--laundry-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.foyer_hallway_ceiling' %}
+              --maxson-floorplan--color-light--foyer-hallway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_ceiling_ledge' %}
+              --maxson-floorplan--color-light--foyer-ceiling-ledge: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_under_table' %}
+              --maxson-floorplan--color-light--foyer-under-table: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_entryway_ceiling' %}
+              --maxson-floorplan--color-light--foyer-entryway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_exterior_entryway' %}
+              --maxson-floorplan--color-light--foyer-exterior-entryway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'fan.custom_garage_fan' %}
+              --maxson-floorplan--color-fan--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_exterior' %}
+              --maxson-floorplan--color-light--garage-exterior: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_ceiling' %}
+              --maxson-floorplan--color-light--garage-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_door_light' %}
+              --maxson-floorplan--color-light--garage-door-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              
+
+              {% set the_entity = 'light.switch_1_bathroom_main_light' %}
+              --maxson-floorplan--color-light--bathroom-main-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.switch_2_bathroom_main_light' %}
+              --maxson-floorplan--color-light--bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.front_yard_accent_lights' %}      
+              --maxson-floorplan--color-light--front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.backyard_string_lights' %}
+              --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -3243,7 +3277,7 @@ views:
               top: 30%
               left: 91.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover-garage ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
           - type: state-icon
             entity: lock.front_door
             state_color: false
@@ -3253,17 +3287,7 @@ views:
               top: 60%
               left: 72.75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock-front-door ) )
-          - type: state-icon
-            entity: light.bedroom_1_bedside_lamps
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 15%
-              left: 19%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-1 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
             entity: cover.large_window_curtains_bedroom_1
             state_color: false
@@ -3273,7 +3297,17 @@ views:
               top: 25%
               left: 12%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains-bedroom-1 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+          - type: state-icon
+            entity: light.bedroom_1_bedside_lamps
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 15%
+              left: 19%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
             entity: light.bedroom_2_bedside_lamps
             state_color: false
@@ -3283,17 +3317,59 @@ views:
               top: 79%
               left: 84.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-2 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+          - type: state-icon
+            entity: light.bedroom_3_floor_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 15%
+              left: 58%
+              border-radius: 100%
+              '--paper-item-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
+                ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_4
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 86.5%
+              left: 59.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+          - type: state-icon
+            entity: fan.bedroom_4_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 80%
+              left: 58%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_lights
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 79%
+              top: 72%
               left: 56%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-4 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+          - type: state-icon
+            entity: light.bedroom_4_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 80%
+              left: 54%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_tie_fighter_lamp
             state_color: false
@@ -3305,17 +3381,17 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-light-bedroom-4-tie-fighter-lamp ) )
+                --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
           - type: state-icon
-            entity: cover.blinds_bedroom_4
+            entity: cover.blinds_kitchen
             state_color: false
             tap_action:
               action: toggle
             style:
               top: 86.5%
-              left: 59.5%
+              left: 41.25%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds-bedroom-4 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -3325,7 +3401,7 @@ views:
               top: 79%
               left: 39%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-kitchen-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -3336,8 +3412,8 @@ views:
               left: 47%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-kitchen-upper-coffee )
-                )
+                rgb( var( --maxson-floorplan--color-light--kitchen-upper-coffee
+                ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -3348,7 +3424,7 @@ views:
               left: 34%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-kitchen-upper-range )
+                rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
           - type: state-icon
             entity: light.bar_ceiling_light
@@ -3359,7 +3435,7 @@ views:
               top: 79%
               left: 16.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bar-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
             entity: fan.bar_ceiling_fan
             state_color: false
@@ -3369,7 +3445,7 @@ views:
               top: 79%
               left: 20.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan-bar-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
           - type: state-icon
             entity: light.living_room_corner_lamp
             state_color: false
@@ -3379,7 +3455,9 @@ views:
               top: 42%
               left: 11%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-living-room-corner ) )
+              '--paper-item-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--living-room-corner )
+                )
           - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
@@ -3390,8 +3468,8 @@ views:
               left: 36.5%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-dining-room-chandelier
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--dining-room-chandelier ) )
           - type: state-icon
             entity: light.guest_hallway_light
             state_color: false
@@ -3402,7 +3480,7 @@ views:
               left: 68%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-guest-hallway-light )
+                rgb( var( --maxson-floorplan--color-light--guest-hallway-light )
                 )
           - type: state-icon
             entity: light.laundry_ceiling_light
@@ -3414,7 +3492,7 @@ views:
               left: 61%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-laundry-ceiling-light
+                rgb( var( --maxson-floorplan--color-light--laundry-ceiling-light
                 ) )
           - type: state-icon
             entity: light.laundry_hallway_light
@@ -3426,7 +3504,7 @@ views:
               left: 53.5%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-laundry-hallway-light
+                rgb( var( --maxson-floorplan--color-light--laundry-hallway-light
                 ) )
           - type: state-icon
             entity: light.foyer_hallway_ceiling
@@ -3438,7 +3516,7 @@ views:
               left: 45%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-hallway-ceiling
+                rgb( var( --maxson-floorplan--color-light--foyer-hallway-ceiling
                 ) )
           - type: state-icon
             entity: light.foyer_under_table
@@ -3449,7 +3527,7 @@ views:
               top: 60%
               left: 53%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-foyer-under-table ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
           - type: state-icon
             entity: light.foyer_ceiling_ledge
             state_color: false
@@ -3460,7 +3538,7 @@ views:
               left: 58%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-ceiling-ledge )
+                rgb( var( --maxson-floorplan--color-light--foyer-ceiling-ledge )
                 )
           - type: state-icon
             entity: light.foyer_entryway_ceiling
@@ -3472,8 +3550,8 @@ views:
               left: 68%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-entryway-ceiling
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--foyer-entryway-ceiling ) )
           - type: state-icon
             entity: light.foyer_exterior_entryway
             state_color: false
@@ -3485,7 +3563,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-light-foyer-exterior-entryway ) )
+                --maxson-floorplan--color-light--foyer-exterior-entryway ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -3495,7 +3573,7 @@ views:
               top: 13%
               left: 95%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-exterior ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -3505,7 +3583,7 @@ views:
               top: 49%
               left: 95%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-exterior ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_ceiling
             state_color: false
@@ -3515,7 +3593,7 @@ views:
               top: 30%
               left: 75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
           - type: state-icon
             entity: light.garage_door_light
             state_color: false
@@ -3525,7 +3603,7 @@ views:
               top: 30%
               left: 82%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-door-light ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
           - type: state-icon
             entity: fan.custom_garage_fan
             state_color: false
@@ -3535,7 +3613,7 @@ views:
               top: 18%
               left: 78.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan-garage ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
           - type: state-icon
             entity: light.closet_hallway_ceiling_light
             state_color: false
@@ -3545,9 +3623,7 @@ views:
               top: 25%
               left: 29%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-closet-hallway-light )
-                )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
           - type: state-icon
             entity: light.closet_hallway_light_hers
             state_color: false
@@ -3557,9 +3633,7 @@ views:
               top: 15.5%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light-closet-hallway-light-hers ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
           - type: state-icon
             entity: light.closet_hallway_light_his
             state_color: false
@@ -3569,9 +3643,7 @@ views:
               top: 32.5%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light-closet-hallway-light-his ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
           - type: state-icon
             entity: light.switch_1_bathroom_main_light
             state_color: false
@@ -3582,7 +3654,7 @@ views:
               left: 42%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-bathroom-main-ceiling
+                rgb( var( --maxson-floorplan--color-light--bathroom-main-ceiling
                 ) )
           - type: state-icon
             entity: light.switch_2_bathroom_main_light
@@ -3594,8 +3666,8 @@ views:
               left: 47.75%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-bathroom-main-vanity )
-                )
+                rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
+                ) )
           - type: state-icon
             entity: light.backyard_string_lights
             state_color: false
@@ -3606,8 +3678,8 @@ views:
               left: 5%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-backyard-string-lights
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--backyard-string-lights ) )
           - type: state-icon
             entity: light.front_yard_accent_lights
             state_color: false
@@ -3619,7 +3691,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-light-front-yard-accent-lights ) )
+                --maxson-floorplan--color-light--front-yard-accent-lights ) )
           - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
@@ -3644,111 +3716,138 @@ views:
             }
             ha-card {
               {% set the_entity = 'cover.garage_door' %}
-              --maxson-floorplan--color-cover-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+              --maxson-floorplan--color-cover--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'lock.front_door' %}
-              --maxson-floorplan--color-lock-front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
+              --maxson-floorplan--color-lock--front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
+              --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_1_bedside_lamps' %}
-              --maxson-floorplan--color-light-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_ceiling_light' %}
+              --maxson-floorplan--color-light--closet-hallway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_light_hers' %}
+              --maxson-floorplan--color-light--closet-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.closet_hallway_light_his' %}
+              --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
 
               {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
-              --maxson-floorplan--color-light-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.bedroom_3_floor_lamp' %}
+              {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
+              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.blinds_bedroom_4' %}
+              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'fan.bedroom_4_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_4_lights' %}
-              --maxson-floorplan--color-light-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.bedroom_4_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_4_tie_fighter_lamp' %}
-              --maxson-floorplan--color-light-bedroom-4-tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'cover.blinds_kitchen' %}
+              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_ceiling_lights' %}
-              --maxson-floorplan--color-light-kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_coffee_bar' %}
               {% set the_color = states.light.kitchen_cabinet_upper_coffee_bar.attributes.rgb_color %}
-              --maxson-floorplan--color-light-kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_range' %}
               {% set the_color = states.light.kitchen_cabinet_upper_range.attributes.rgb_color %}
-              --maxson-floorplan--color-light-kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
 
               {% set the_entity = 'light.bar_ceiling_light' %}
-              --maxson-floorplan--color-light-bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'fan.bar_ceiling_fan' %}
-              --maxson-floorplan--color-fan-bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+              --maxson-floorplan--color-fan--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
 
               {% set the_entity = 'light.living_room_corner_lamp' %}
-              --maxson-floorplan--color-light-living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.dining_room_chandelier' %}
-              --maxson-floorplan--color-light-dining-room-chandelier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.guest_hallway_light' %}
-              --maxson-floorplan--color-light-guest-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.laundry_ceiling_light' %}
-              --maxson-floorplan--color-light-laundry-ceiling-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.laundry_hallway_light' %}
-              --maxson-floorplan--color-light-laundry-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_hallway_ceiling' %}
-              --maxson-floorplan--color-light-foyer-hallway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_ceiling_ledge' %}
-              --maxson-floorplan--color-light-foyer-ceiling-ledge: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_under_table' %}
-              --maxson-floorplan--color-light-foyer-under-table: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_entryway_ceiling' %}
-              --maxson-floorplan--color-light-foyer-entryway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.foyer_exterior_entryway' %}
-              --maxson-floorplan--color-light-foyer-exterior-entryway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_exterior' %}
-              --maxson-floorplan--color-light-garage-exterior: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_ceiling' %}
-              --maxson-floorplan--color-light-garage-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.garage_door_light' %}
-              --maxson-floorplan--color-light-garage-door-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'fan.custom_garage_fan' %}
-              --maxson-floorplan--color-fan-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_ceiling_light' %}
-              --maxson-floorplan--color-light-closet-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_light_hers' %}
-              --maxson-floorplan--color-light-closet-hallway-light-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.closet_hallway_light_his' %}
-              --maxson-floorplan--color-light-closet-hallway-light-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.switch_1_bathroom_main_light' %}
-              --maxson-floorplan--color-light-bathroom-main-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.switch_2_bathroom_main_light' %}
-              --maxson-floorplan--color-light-bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.front_yard_accent_lights' %}      
-              --maxson-floorplan--color-light-front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
-
-              {% set the_entity = 'light.backyard_string_lights' %}
-              --maxson-floorplan--color-light-backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
-              --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player--sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
-              --maxson-floorplan--color-curtains-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
-              {% set the_entity = 'cover.blinds_bedroom_4' %}
-              --maxson-floorplan--color-blinds-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+              {% set the_entity = 'light.dining_room_chandelier' %}
+              --maxson-floorplan--color-light--dining-room-chandelier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.guest_hallway_light' %}
+              --maxson-floorplan--color-light--guest-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.laundry_ceiling_light' %}
+              --maxson-floorplan--color-light--laundry-ceiling-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.laundry_hallway_light' %}
+              --maxson-floorplan--color-light--laundry-hallway-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.foyer_hallway_ceiling' %}
+              --maxson-floorplan--color-light--foyer-hallway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_ceiling_ledge' %}
+              --maxson-floorplan--color-light--foyer-ceiling-ledge: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_under_table' %}
+              --maxson-floorplan--color-light--foyer-under-table: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_entryway_ceiling' %}
+              --maxson-floorplan--color-light--foyer-entryway-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.foyer_exterior_entryway' %}
+              --maxson-floorplan--color-light--foyer-exterior-entryway: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'fan.custom_garage_fan' %}
+              --maxson-floorplan--color-fan--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_exterior' %}
+              --maxson-floorplan--color-light--garage-exterior: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_ceiling' %}
+              --maxson-floorplan--color-light--garage-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.garage_door_light' %}
+              --maxson-floorplan--color-light--garage-door-light: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              
+
+              {% set the_entity = 'light.switch_1_bathroom_main_light' %}
+              --maxson-floorplan--color-light--bathroom-main-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.switch_2_bathroom_main_light' %}
+              --maxson-floorplan--color-light--bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'light.front_yard_accent_lights' %}      
+              --maxson-floorplan--color-light--front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.backyard_string_lights' %}
+              --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -3760,7 +3859,7 @@ views:
               top: 92%
               left: 69.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover-garage ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
           - type: state-icon
             entity: lock.front_door
             state_color: false
@@ -3770,7 +3869,7 @@ views:
               top: 72.5%
               left: 39.75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock-front-door ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
             entity: light.bedroom_1_bedside_lamps
             state_color: false
@@ -3780,7 +3879,7 @@ views:
               top: 18%
               left: 84%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-1 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
             entity: cover.large_window_curtains_bedroom_1
             state_color: false
@@ -3790,7 +3889,7 @@ views:
               top: 11.5%
               left: 76%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains-bedroom-1 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
           - type: state-icon
             entity: light.bedroom_2_bedside_lamps
             state_color: false
@@ -3800,17 +3899,19 @@ views:
               top: 83%
               left: 20.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-2 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
           - type: state-icon
-            entity: light.bedroom_4_lights
+            entity: light.bedroom_3_floor_lamp
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 55%
-              left: 21%
+              top: 59%
+              left: 86%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bedroom-4 ) )
+              '--paper-item-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
+                ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -3820,7 +3921,59 @@ views:
               top: 59.5%
               left: 14%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds-bedroom-4 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+          - type: state-icon
+            entity: fan.bedroom_4_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 55.5%
+              left: 24%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_4_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 51%
+              left: 21%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+          - type: state-icon
+            entity: light.bedroom_4_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 55.5%
+              left: 18%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_4_tie_fighter_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 61%
+              left: 21%
+              border-radius: 100%
+              '--paper-item-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
+          - type: state-icon
+            entity: cover.blinds_kitchen
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 41%
+              left: 14%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -3830,7 +3983,7 @@ views:
               top: 39%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-kitchen-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -3841,8 +3994,8 @@ views:
               left: 16.5%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-kitchen-upper-coffee )
-                )
+                rgb( var( --maxson-floorplan--color-light--kitchen-upper-coffee
+                ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -3853,7 +4006,7 @@ views:
               left: 32%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-kitchen-upper-range )
+                rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
           - type: state-icon
             entity: light.bar_ceiling_light
@@ -3864,7 +4017,7 @@ views:
               top: 17%
               left: 29%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-bar-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
             entity: fan.bar_ceiling_fan
             state_color: false
@@ -3874,7 +4027,7 @@ views:
               top: 17%
               left: 19%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan-bar-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
           - type: state-icon
             entity: light.living_room_corner_lamp
             state_color: false
@@ -3884,7 +4037,9 @@ views:
               top: 11.5%
               left: 59%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-living-room-corner ) )
+              '--paper-item-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--living-room-corner )
+                )
           - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
@@ -3895,8 +4050,8 @@ views:
               left: 53%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-dining-room-chandelier
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--dining-room-chandelier ) )
           - type: state-icon
             entity: light.guest_hallway_light
             state_color: false
@@ -3907,7 +4062,7 @@ views:
               left: 27.5%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-guest-hallway-light )
+                rgb( var( --maxson-floorplan--color-light--guest-hallway-light )
                 )
           - type: state-icon
             entity: light.laundry_ceiling_light
@@ -3919,7 +4074,7 @@ views:
               left: 56.26%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-laundry-ceiling-light
+                rgb( var( --maxson-floorplan--color-light--laundry-ceiling-light
                 ) )
           - type: state-icon
             entity: light.laundry_hallway_light
@@ -3931,7 +4086,7 @@ views:
               left: 51%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-laundry-hallway-light
+                rgb( var( --maxson-floorplan--color-light--laundry-hallway-light
                 ) )
           - type: state-icon
             entity: light.foyer_hallway_ceiling
@@ -3943,7 +4098,7 @@ views:
               left: 42%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-hallway-ceiling
+                rgb( var( --maxson-floorplan--color-light--foyer-hallway-ceiling
                 ) )
           - type: state-icon
             entity: light.foyer_ceiling_ledge
@@ -3955,7 +4110,7 @@ views:
               left: 45%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-ceiling-ledge )
+                rgb( var( --maxson-floorplan--color-light--foyer-ceiling-ledge )
                 )
           - type: state-icon
             entity: light.foyer_under_table
@@ -3966,7 +4121,7 @@ views:
               top: 53%
               left: 39%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-foyer-under-table ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
           - type: state-icon
             entity: light.foyer_entryway_ceiling
             state_color: false
@@ -3977,8 +4132,8 @@ views:
               left: 39.75%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-foyer-entryway-ceiling
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--foyer-entryway-ceiling ) )
           - type: state-icon
             entity: light.foyer_exterior_entryway
             state_color: false
@@ -3990,7 +4145,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-light-foyer-exterior-entryway ) )
+                --maxson-floorplan--color-light--foyer-exterior-entryway ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -4000,7 +4155,7 @@ views:
               top: 95%
               left: 87.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-exterior ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -4010,7 +4165,7 @@ views:
               top: 95%
               left: 52%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-exterior ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_ceiling
             state_color: false
@@ -4020,7 +4175,7 @@ views:
               top: 78%
               left: 63%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-ceiling ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
           - type: state-icon
             entity: light.garage_door_light
             state_color: false
@@ -4030,7 +4185,7 @@ views:
               top: 78%
               left: 73%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light-garage-door-light ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
           - type: state-icon
             entity: fan.custom_garage_fan
             state_color: false
@@ -4040,7 +4195,7 @@ views:
               top: 72%
               left: 68%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan-garage ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
           - type: state-icon
             entity: light.closet_hallway_ceiling_light
             state_color: false
@@ -4050,9 +4205,7 @@ views:
               top: 31%
               left: 75%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-closet-hallway-light )
-                )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
           - type: state-icon
             entity: light.closet_hallway_light_hers
             state_color: false
@@ -4062,9 +4215,7 @@ views:
               top: 34%
               left: 86%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light-closet-hallway-light-hers ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
           - type: state-icon
             entity: light.closet_hallway_light_his
             state_color: false
@@ -4074,9 +4225,7 @@ views:
               top: 34%
               left: 66%
               border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light-closet-hallway-light-his ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
           - type: state-icon
             entity: light.switch_1_bathroom_main_light
             state_color: false
@@ -4087,7 +4236,7 @@ views:
               left: 79%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-bathroom-main-ceiling
+                rgb( var( --maxson-floorplan--color-light--bathroom-main-ceiling
                 ) )
           - type: state-icon
             entity: light.switch_2_bathroom_main_light
@@ -4099,8 +4248,8 @@ views:
               left: 75%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-bathroom-main-vanity )
-                )
+                rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
+                ) )
           - type: state-icon
             entity: light.backyard_string_lights
             state_color: false
@@ -4111,8 +4260,8 @@ views:
               left: 46%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light-backyard-string-lights
-                ) )
+                rgb( var(
+                --maxson-floorplan--color-light--backyard-string-lights ) )
           - type: state-icon
             entity: light.front_yard_accent_lights
             state_color: false
@@ -4124,7 +4273,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-light-front-yard-accent-lights ) )
+                --maxson-floorplan--color-light--front-yard-accent-lights ) )
           - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
@@ -4135,7 +4284,7 @@ views:
               left: 59%
               border-radius: 100%
               '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
+                rgb( var( --maxson-floorplan--color-media-player--sony-bravia-tv
                 ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
   - layout:
@@ -5481,8 +5630,6 @@ views:
 
                 #states { padding: 0;}
             entities:
-              - entity: input_boolean.reminder_laundry_complete_washer
-                name: Announce when done via Alexa
               - entity: sensor.laundry_washer_sub_cycle
                 name: Sub-Cycle
               - entity: sensor.laundry_washer_cycle
@@ -5508,6 +5655,13 @@ views:
                 - font-size: 18px
           - type: entities
             show_header_toggle: false
+            entities:
+              - entity: sensor.laundry_dryer_sub_cycle
+                name: Sub-Cycle
+              - entity: sensor.laundry_dryer_cycle
+                name: Cycle
+              - entity: binary_sensor.laundry_dryer_door
+                name: Door Position
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -5520,15 +5674,6 @@ views:
                 }
 
                 #states { padding: 0;}
-            entities:
-              - entity: input_boolean.reminder_laundry_complete_dryer
-                name: Announce when done via Alexa
-              - entity: sensor.laundry_dryer_sub_cycle
-                name: Sub-Cycle
-              - entity: sensor.laundry_dryer_cycle
-                name: Cycle
-              - entity: binary_sensor.laundry_dryer_door
-                name: Door Position
   - title: Lights
     path: page-lights
     theme: casamaxson
@@ -5619,6 +5764,11 @@ views:
 
                 #states { padding: 0;}
             entities:
+              - type: custom:mushroom-cover-card
+                entity: cover.blinds_kitchen
+                name: Window Blinds
+                show_position_control: false
+                show_tilt_position_control: true
               - type: conditional
                 conditions:
                   - condition: state
@@ -5779,11 +5929,6 @@ views:
                   show_brightness_control: true
                   show_color_control: true
                   use_light_color: true
-              - type: custom:mushroom-cover-card
-                entity: cover.blinds_kitchen
-                name: Window Blinds
-                show_position_control: false
-                show_tilt_position_control: true
           - type: entities
             title: Living Room
             show_header_toggle: false
@@ -5853,6 +5998,11 @@ views:
 
                 #states { padding: 0;}
             entities:
+              - type: custom:mushroom-cover-card
+                entity: cover.large_window_curtains_bedroom_1
+                name: Window Curtains
+                show_position_control: true
+                show_tilt_position_control: true
               - type: conditional
                 conditions:
                   - condition: state
@@ -5901,11 +6051,6 @@ views:
                   show_brightness_control: true
                   show_color_control: true
                   use_light_color: true
-              - type: custom:mushroom-cover-card
-                entity: cover.large_window_curtains_bedroom_1
-                name: Window Curtains
-                show_position_control: true
-                show_tilt_position_control: true
               - type: custom:mushroom-light-card
                 entity: light.closet_hallway_ceiling_light
                 name: Hallway
@@ -6030,6 +6175,16 @@ views:
 
                 #states { padding: 0;}
             entities:
+              - type: custom:mushroom-fan-card
+                name: Ceiling Fan
+                entity: fan.bedroom_4_ceiling_fan
+                collapsible_controls: false
+                show_percentage_control: true
+              - type: custom:mushroom-cover-card
+                entity: cover.blinds_bedroom_4
+                name: Window Blinds
+                show_position_control: false
+                show_tilt_position_control: true
               - type: conditional
                 conditions:
                   - condition: state
@@ -6079,23 +6234,13 @@ views:
                   show_color_control: true
                   use_light_color: true
               - type: custom:mushroom-light-card
-                entity: light.ceiling_fan_light_bedroom_4
+                entity: light.bedroom_4_ceiling_fan_light
                 name: Ceiling Fan Light
                 collapsible_controls: true
               - type: custom:mushroom-light-card
                 entity: light.bedroom_4_tie_fighter_lamp
                 name: TIE Fighter Lamp
                 collapsible_controls: true
-              - type: custom:mushroom-fan-card
-                name: Ceiling Fan
-                entity: fan.ceiling_fan_bedroom_4
-                collapsible_controls: false
-                show_percentage_control: true
-              - type: custom:mushroom-cover-card
-                entity: cover.blinds_bedroom_4
-                name: Window Blinds
-                show_position_control: false
-                show_tilt_position_control: true
       - type: vertical-stack
         cards:
           - type: entities
@@ -6854,8 +6999,6 @@ views:
           - type: custom:state-switch
             default: Thomas
             entity: input_select.residents
-            transition: slide-down
-            transition_time: 350
             states:
               Thomas:
                 type: vertical-stack
@@ -8510,7 +8653,7 @@ button_card_templates:
       img_cell:
         - padding-bottom: 1vw
       icon:
-        - '--state-light-on-color': rgb( var( --green-color-rgb ) )
+        - '--state-light-on-color': rgb( var( --blue-color-rgb ) )
         - '--state-light-off-color': rgb( var( --grey-color-rgb ) )
         - '--disabled-text-color': rgb( var( --grey-color-rgb ) )
         - border-radius: 100%
@@ -8519,7 +8662,7 @@ button_card_templates:
         - filter: drop-shadow( 0 5px 2px rgba( 255, 255, 255, 0.15 ) )
         - color: |
             [[[ 
-              return ( [ 'on', 'home', 'Home' ].indexOf( states[variables.entity_alt].state ) >= 0 ) 
+              return ( variables.state_on )
                 ? 'var( --state-light-on-color )'
                 : 'var( --state-light-off-color )';
             ]]]

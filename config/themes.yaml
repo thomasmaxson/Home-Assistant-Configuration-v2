@@ -51,6 +51,25 @@ themes:
     tile-card-badge--size: 18px
     tile-card-badge--padding: 8px
 
+    tile-card-badge--alert--border-color: "rgb( 255, 255, 255 )"
+    tile-card-badge--alert--icon-color: "rgb( 255, 255, 255 )"
+
+    tile-card-badge--info--background-color: "rgb( var( --blue-color-rgb ) )"
+    tile-card-badge--info--border-color: "var( --tile-card-badge--alert--border-color )"
+    tile-card-badge--info--icon-color: "var( --tile-card-badge--alert--icon-color )"
+
+    tile-card-badge--success--background-color: "rgb( var( --green-color-rgb ) )"
+    tile-card-badge--success--border-color: "var( --tile-card-badge--alert--border-color )"
+    tile-card-badge--success--icon-color: "var( --tile-card-badge--alert--icon-color )"
+
+    tile-card-badge--warning--background-color: "rgb( var( --yellow-color-rgb ) )"
+    tile-card-badge--warning--border-color: "var( --tile-card-badge--alert--border-color )"
+    tile-card-badge--warning--icon-color: "var( --tile-card-badge--alert--icon-color )"
+
+    tile-card-badge--danger--background-color: "rgb( var( --red-color-rgb ) )"
+    tile-card-badge--danger--border-color: "var( --tile-card-badge--alert--border-color )"
+    tile-card-badge--danger--icon-color: "var( --tile-card-badge--alert--icon-color )"
+
     # Styles: Button
     entity-card--background-color: "var( --tile-card--background-color )"
     entity-card--border-color: "var( --tile-card--background-color )"
@@ -66,10 +85,11 @@ themes:
     chip-card--label-color: "var( --tile-card--label-color )"
 
     # Styles: Popup
+    popup--border-width: 0
     popup--grid-padding: 0
     popup--grid-margin: 0
-    popup--grid-gap-column: 3%
-    popup--grid-gap-row: 1.5%
+    popup--grid-gap-column: 1.5em
+    popup--grid-gap-row: 1.5em
 
     # Map Sensor Colors
     map-icon--sensor-off: "var( --grey-color-rgb )"
@@ -123,6 +143,11 @@ themes:
         tile-card--state-color: "var( --tile-card--icon-color )"
         tile-card--label-color: "var( --tile-card--icon-color )"
 
+        tile-card-control--background-color: "rgba( 225, 225, 225, 0.05 )"
+        tile-card-control--icon-color: "#e1e1e1"
+        tile-card-control--background-color--disabled: "rgba( 111, 111, 111, 0.2 )"
+        tile-card-control--icon-color--disabled: "rgb( 111, 111, 111 )"
+
         tile-card--background-color--inverse: "rgb( 207, 207, 207 )"
         tile-card--border-color--inverse: "transparent"
         tile-card--ripple-color--inverse: "rgba( 28, 28, 28, 0.3 )"
@@ -150,7 +175,6 @@ themes:
         tile-card-badge--border-color--inverse: "var( --tile-card-btn--border-color--inverse )"
         tile-card-badge--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
 
-        popup--border-width: "var( --tile-border-width )"
         popup--border-color: "rgba( 255, 255, 255, 0.25 )"
         popup--background-color: "var( --tile-card--background-color )"
 
@@ -168,6 +192,11 @@ themes:
         tile-card--name-color: "rgba( 0, 0, 0, 0.7 )"
         tile-card--state-color: "var( --tile-card--icon-color )"
         tile-card--label-color: "var( --tile-card--icon-color )"
+
+        tile-card-control--background-color: "rgba( 33, 33, 33, 0.05 )"
+        tile-card-control--icon-color: "#212121"
+        tile-card-control--background-color--disabled: "rgba( 189, 189, 189, 0.2 )"
+        tile-card-control--icon-color--disabled: "rgb( 189, 189, 189 )"
 
         tile-card--background-color--inverse: "rgb( 255, 255, 255 )"
         tile-card--border-color--inverse: "rgb( 227, 227, 227 )"
@@ -196,7 +225,6 @@ themes:
         tile-card-badge--border-color--inverse: "var( --tile-card--border-color--inverse )"
         tile-card-badge--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
 
-        popup--border-width: "var( --tile-border-width )"
         popup--border-color: "rgba( 0, 0, 0, 0.25 )"
         popup--background-color: "var( --tile-card--background-color )"
 

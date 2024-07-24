@@ -117,3 +117,23 @@
       entity_id:
       - input_boolean.reminder_waste_take_out_recycle
   mode: single
+- id: '1721692858596'
+  alias: Reload Alexa Media Player after HA starts
+  description: Reload of one device is enough to start integration
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - alias: Reload Alexa Media Player integration - Kitchen
+    service: homeassistant.reload_config_entry
+    data: {}
+    enabled: true
+    target:
+      entity_id: media_player.echo_kitchen
+  mode: single

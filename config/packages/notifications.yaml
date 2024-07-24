@@ -94,8 +94,14 @@ template:
 
               {%- if ( is_take_out_recycle ) -%}
                 {{ [ 
-                  'Tomorrow is the big day, recycling day! '
+                  'Tomorrow is the big day, recycling day!'
                 ] | random }}
 
               {%- endif -%}
+            {%- endif -%}
+
+          dishwasher_complete: |
+            {%- if is_state( 'input_select.status_dishwasher', 'Complete' ) -%}
+              {{ 'Your dishes are clean and are ready to be put away.' }}
+
             {%- endif -%}
