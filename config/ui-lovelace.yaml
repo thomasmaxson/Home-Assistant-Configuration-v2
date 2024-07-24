@@ -1838,8 +1838,8 @@ views:
           - binary_sensor.door_laundry
           - sensor.custom_laundry_washer_machine_state
           - sensor.custom_laundry_dryer_machine_state
-          - sensor.reminder_laundry_complete_washer
-          - sensor.reminder_laundry_complete_dryer
+          - input_boolean.reminder_laundry_complete_washer
+          - input_boolean.reminder_laundry_complete_dryer
         variables:
           path: '#details-laundry-room'
           icon_on: mdi:tshirt-crew
@@ -1925,7 +1925,7 @@ views:
               - chips:
                   - type: custom:button-card
                     template: chip_detail__door
-                    entity: binary_sensor.door_laundry_room
+                    entity: binary_sensor.door_laundry
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_laundry_room
@@ -4787,13 +4787,13 @@ views:
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_living_room' %}
-              --maxson-floorplan--color-presence-living: {% if( states( 'binary_sensor.presence_living_room' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_garage' %}
-              --maxson-floorplan--color-presence-garage: {% if( states( 'binary_sensor.presence_garage' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
-              --maxson-floorplan--color-motion-laundry-room: {% if( states( 'binary_sensor.motion_laundry' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -5099,13 +5099,13 @@ views:
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_living_room' %}
-              --maxson-floorplan--color-presence-living: {% if( states( 'binary_sensor.presence_living_room' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_garage' %}
-              --maxson-floorplan--color-presence-garage: {% if( states( 'binary_sensor.presence_garage' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
-              --maxson-floorplan--color-motion-laundry-room: {% if( states( 'binary_sensor.motion_laundry' ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
             }
         elements:
           - type: state-icon
