@@ -5,8 +5,8 @@ views:
     title: Home
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 1vw
-      grid-column-gap: 2vw
+      grid-row-gap: 1.125vw
+      grid-column-gap: 2.25vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
       grid-template-areas: |
@@ -17,70 +17,114 @@ views:
         ".  zoneSbar   tileLaund   tileGar    tileOut    tileMisc   ."
         ".  zoneSbar   modalLaund  modalGar   modalOut   modalMisc  ."
         ".  zoneSbar   overflow1   overflow2  overflow3  overflow4  ."
-        ".  modalSbar  .           .          modalSys   modalConf  ."
+        ".  modalSbar  modalSys    modalSys   modalConf  modalConf  ."
       mediaquery:
-        '(max-width: 576px)':
+        '(max-width: 768px)':
           margin: 2vw 1vw 0 1vw
-          grid-row-gap: 2.25vw
-          grid-column-gap: 4.5vw
+          grid-row-gap: 15px
+          grid-column-gap: 30px
           grid-auto-rows: min-content
-          grid-template-columns: 0 repeat( 2, 43.5% ) 0
+          grid-template-columns: 0 repeat( 2, minmax( 100px, 1fr ) ) 0
           grid-template-areas: |
-            ".  zoneSbar   zoneSbar     ."
-            ".  modalSbar  modalSbar    ."
-            ".  tileFoyer  tileKit      ."
-            ".  modalFoyer modalKit     ."
-            ".  tileLivR   tileDinR     ."
-            ".  modalLivR  modalDinR    ."
-            ".  tileBdr1   tileBdr2     ."
-            ".  modalBdr1  modalBdr2    ."
-            ".  tileBdr3   tileBdr4     ."
-            ".  modalBdr3  modalBdr4    ."
-            ".  tileLaund  tileGar      ."
-            ".  popLaund   modalGar     ."
-            ".  tileOut    tileMisc     ."
-            ".  modalOut   modalMisc    ."
-            ".  overflow1  overflow2    ."
-            ".  overflow3  overflow4    ."
-            ".  modalSys   modalConf    ."
+            ".  zoneSbar    zoneSbar   ."
+            ".  modalSbar   modalSbar  ."
+            ".  tileFoyer   tileKit    ."
+            ".  modalFoyer  modalKit   ."
+            ".  tileLivR    tileDinR   ."
+            ".  modalLivR   modalDinR  ."
+            ".  tileBdr1    tileBdr2   ."
+            ".  modalBdr1   modalBdr2  ."
+            ".  tileBdr3    tileBdr4   ."
+            ".  modalBdr3   modalBdr4  ."
+            ".  tileLaund   tileGar    ."
+            ".  modalLaund  modalGar   ."
+            ".  tileOut     tileMisc   ."
+            ".  modalOut    modalMisc  ."
+            ".  overflow1   overflow2  ."
+            ".  overflow3   overflow4  ."
+            ".  modalSys    modalConf  ."
         '(max-width: 992px)':
+          grid-row-gap: 1.5vw
+          grid-column-gap: 3vw
+          grid-auto-rows: min-content
+          grid-template-columns: 1vw repeat( 6, 1fr ) 1vw
+          grid-template-areas: >
+            ".  zoneSbar    zoneSbar    zoneSbar   zoneSbar   zoneSbar   
+            zoneSbar    ."
+
+            ".  modalSbar   modalSbar   modalSbar  modalSbar  modalSbar  
+            modalSbar   ."
+
+            ".  tileFoyer   tileFoyer   tileKit    tileKit    tileLivR   
+            tileLivR    ."
+
+            ".  modalFoyer  modalFoyer  modalKit   modalKit   modalLivR  
+            modalLivR   ."
+
+            ".  tileDinR    tileDinR    tileBdr1   tileBdr1   tileBdr2   
+            tileBdr2    ."
+
+            ".  modalDinR   modalDinR   modalBdr1  modalBdr1  modalBdr2  
+            modalBdr2   ."
+
+            ".  tileBdr3    tileBdr3    tileBdr4   tileBdr4   tileLaund  
+            tileLaund   ."
+
+            ".  modalBdr3   modalBdr3   modalBdr4  modalBdr4  modalLaund 
+            modalLaund  ."
+
+            ".  tileGar     tileGar     tileOut    tileOut    tileMisc   
+            tileMisc    ."
+
+            ".  modalGar    modalGar    modalOut   modalOut   modalMisc  
+            modalMisc   ."
+
+            ".  overflow1   overflow1   overflow1  overflow2  overflow2  
+            overflow2   ."
+
+            ".  overflow3   overflow3   overflow3  overflow4  overflow4  
+            overflow4   ."
+
+            ".  modalConf   modalConf   modalConf  modalSys   modalSys   
+            modalSys    ."
+        '(max-width: 1200px)':
           grid-row-gap: 1.25vw
           grid-column-gap: 2.5vw
           grid-auto-rows: min-content
-          grid-template-columns: 1vw repeat( 3, 1fr ) 1vw
-          grid-template-areas: |
-            ".  zoneSbar    zoneSbar   zoneSbar     ."
-            ".  modalSbar   .          .            ."
-            ".  tileFoyer   tileKit    tileLivR     ."
-            ".  modalFoyer  modalKit   modalLivR    ."
-            ".  tileDinR    tileBdr1   tileBdr2     ."
-            ".  modalDinR   modalBdr1  modalBdr2    ."
-            ".  tileBdr3    tileBdr4   tileLaund    ."
-            ".  modalBdr3   modalBdr4  modalLaund   ."
-            ".  tileGar     tileOut    tileMisc     ."
-            ".  modalFar    modalOut   modalMisc    ."
-            ".  overflow1   overflow2  overflow3    ."
-            ".  .           overflow4  .            ."
-            ".  .           .          modalSys     ."
-            ".  modalConf   .          .            ."
-        '(max-width: 1200px)':
-          grid-row-gap: 1vw
-          grid-column-gap: 2vw
-          grid-auto-rows: min-content
-          grid-template-columns: 0 30% repeat( 3, 1fr ) 0
-          grid-template-areas: |
-            ".  zoneSbar   tileFoyer    tileKit      tileLivR    ."
-            ".  zoneSbar   modalFoyer   modalKit     modalLivR   ."
-            ".  zoneSbar   tileDinR     tileBdr1     tileBdr2    ."
-            ".  zoneSbar   modalDinR    modalBdr1    modalBdr2   ."
-            ".  zoneSbar   tileBdr3     tileBdr4     tileLaund   ."
-            ".  zoneSbar   modalBdr3    modalBdr4    modalLaund  ."
-            ".  zoneSbar   tileGar      tileOut      tileMisc    ."
-            ".  zoneSbar   modalFar     modalOut     modalMisc   ."
-            ".  zoneSbar   overflow1    overflow2    overflow3   ."
-            ".  zoneSbar   overflow4    .            .           ."
-            ".  modalSbar  .            .            modalSys    ."
-            ".  .          modalConf    .            .           ."
+          grid-template-columns: 0 30% repeat( 6, 1fr ) 0
+          grid-template-areas: >
+            ".  zoneSbar   tileFoyer    tileFoyer    tileKit      tileKit     
+            tileLivR     tileLivR    ."
+
+            ".  zoneSbar   modalFoyer   modalFoyer   modalKit     modalKit    
+            modalLivR    modalLivR   ."
+
+            ".  zoneSbar   tileDinR     tileDinR     tileBdr1     tileBdr1    
+            tileBdr2     tileBdr2    ."
+
+            ".  zoneSbar   modalDinR    modalDinR    modalBdr1    modalBdr1   
+            modalBdr2    modalBdr2   ."
+
+            ".  zoneSbar   tileBdr3     tileBdr3     tileBdr4     tileBdr4    
+            tileLaund    tileLaund   ."
+
+            ".  zoneSbar   modalBdr3    modalBdr3    modalBdr4    modalBdr4   
+            modalLaund   modalLaund  ."
+
+            ".  zoneSbar   tileGar      tileGar      tileOut      tileOut     
+            tileMisc     tileMisc    ."
+
+            ".  zoneSbar   modalFar     modalFar     modalOut     modalOut    
+            modalMisc    modalMisc   ."
+
+            ".  zoneSbar   overflow1    overflow1    overflow1    overflow2   
+            overflow2    overflow2   ."
+
+            ".  zoneSbar   overflow3    overflow3    overflow3    overflow4   
+            overflow4    overflow4   ."
+
+            ".  modalSbar  modalConf    modalConf    modalConf    modalSys    
+            modalSys     modalSys    ."
     icon: ''
     cards:
       - type: custom:button-card
@@ -1258,8 +1302,6 @@ views:
           data_lightOn: light.bedroom_2_bedside_lamps
           data_temperature: sensor.temperature_bedroom_2
       - type: vertical-stack
-        view_layout:
-          grid-area: modalBdr2
         cards:
           - type: custom:bubble-card
             card_type: pop-up
@@ -1294,6 +1336,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_bedroom_2
+                  - type: custom:button-card
+                    template: chip_detail__fan
+                    entity: fan.bedroom_2_ceiling_fan_ceiling_fan
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1394,6 +1439,24 @@ views:
                           show_brightness_control: true
                           show_color_control: true
                           use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: Ceiling Fan Light
+                        entity: light.bedroom_2_ceiling_fan_light
+          - type: custom:decluttering-card
+            template: room_popup__grid_2_columns
+            variables:
+              - cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Ceiling Fan
+                      - type: custom:mushroom-fan-card
+                        name: Ceiling Fan
+                        entity: fan.bedroom_2_ceiling_fan
+                        layout: vertical
+                        collapsible_controls: false
+                        show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1415,6 +1478,8 @@ views:
                             label: Automations
                           - entity: input_boolean.automation_bedroom_2_door_open_close
                             name: Toggle lights when door opens/closes
+        view_layout:
+          grid-area: modalBdr2
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr3
@@ -2667,7 +2732,7 @@ views:
         view_layout:
           grid-area: overflow2
         template: button__icon_name
-        name: Devices
+        name: Status
         icon: mdi:devices
         tap_action:
           action: navigate
@@ -3156,13 +3221,25 @@ views:
               --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
+              {% set the_entity = 'fan.bedroom_2_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
               {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
               --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
+              {% set the_entity = 'light.bedroom_2_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'fan.bedroom_3_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_3_floor_lamp' %}
               {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
               --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.bedroom_3_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
               {% set the_entity = 'cover.blinds_bedroom_4' %}
@@ -3309,15 +3386,45 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
+            entity: fan.bedroom_2_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 76%
+              left: 86.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
+          - type: state-icon
             entity: light.bedroom_2_bedside_lamps
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 79%
+              top: 85%
               left: 84.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+          - type: state-icon
+            entity: light.bedroom_2_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 76%
+              left: 82.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+          - type: state-icon
+            entity: fan.bedroom_3_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 25%
+              left: 60%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_floor_lamp
             state_color: false
@@ -3330,6 +3437,16 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
+          - type: state-icon
+            entity: light.bedroom_3_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 25%
+              left: 56%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -3738,13 +3855,25 @@ views:
               --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
+              {% set the_entity = 'fan.bedroom_2_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
+
               {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
               --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
+              {% set the_entity = 'light.bedroom_2_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+
+              {% set the_entity = 'fan.bedroom_3_ceiling_fan' %}
+              --maxson-floorplan--color-fan--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_3_floor_lamp' %}
               {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
               --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.bedroom_3_ceiling_fan_light' %}
+              --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
               {% set the_entity = 'cover.blinds_bedroom_4' %}
@@ -3891,15 +4020,45 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
           - type: state-icon
+            entity: fan.bedroom_2_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 87%
+              left: 24%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
+          - type: state-icon
             entity: light.bedroom_2_bedside_lamps
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 83%
-              left: 20.5%
+              top: 81%
+              left: 15%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+          - type: state-icon
+            entity: light.bedroom_2_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 87%
+              left: 18%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+          - type: state-icon
+            entity: fan.bedroom_3_ceiling_fan
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 58%
+              left: 73%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_floor_lamp
             state_color: false
@@ -3912,6 +4071,16 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
+          - type: state-icon
+            entity: light.bedroom_3_ceiling_fan_light
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 58%
+              left: 78%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -5978,6 +6147,34 @@ views:
                 }
 
                 #states { padding: 0;}
+          - type: entities
+            title: Bar
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
+              - type: custom:mushroom-fan-card
+                entity: fan.bar_ceiling_fan
+                name: Ceiling Fan
+                collapsible_controls: true
+                show_percentage_control: true
+              - type: custom:mushroom-light-card
+                entity: light.bar_ceiling_light
+                name: Ceiling Fan Light
+                collapsible_controls: true
+                show_brightness_control: true
       - type: vertical-stack
         cards:
           - type: entities
@@ -6067,6 +6264,32 @@ views:
                 collapsible_controls: true
                 show_brightness_control: true
           - type: entities
+            title: Main Bathroom
+            show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.switch_1_bathroom_main_light
+                name: Ceiling
+                collapsible_controls: true
+              - type: custom:mushroom-light-card
+                entity: light.switch_2_bathroom_main_light
+                name: Vanity
+                collapsible_controls: true
+          - type: entities
             title: Guest Bedroom
             show_header_toggle: false
             card_mod:
@@ -6084,6 +6307,11 @@ views:
 
                 #states { padding: 0;}
             entities:
+              - type: custom:mushroom-fan-card
+                name: Ceiling Fan
+                entity: fan.bedroom_2_ceiling_fan
+                collapsible_controls: false
+                show_percentage_control: true
               - type: conditional
                 conditions:
                   - condition: state
@@ -6132,6 +6360,12 @@ views:
                   show_brightness_control: true
                   show_color_control: true
                   use_light_color: true
+              - type: custom:mushroom-light-card
+                entity: light.bedroom_2_ceiling_fan_light
+                name: Ceiling Fan Light
+                collapsible_controls: true
+      - type: vertical-stack
+        cards:
           - type: entities
             title: Jess' Office
             show_header_toggle: false
@@ -6244,6 +6478,34 @@ views:
       - type: vertical-stack
         cards:
           - type: entities
+            title: Hallways
+            show_header_toggle: false
+            entities:
+              - type: custom:mushroom-light-card
+                entity: light.guest_hallway_light
+                name: Guest Hallway
+                collapsible_controls: true
+                show_brightness_control: true
+              - type: custom:mushroom-light-card
+                entity: light.laundry_hallway_light
+                name: Laundry Hallway
+                collapsible_controls: true
+                show_brightness_control: true
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
+          - type: entities
             title: Laundry Room
             show_header_toggle: false
             entities:
@@ -6335,90 +6597,6 @@ views:
                 }
 
                 #states { padding: 0;}
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Bar
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                entity: fan.bar_ceiling_fan
-                name: Ceiling Fan
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-light-card
-                entity: light.bar_ceiling_light
-                name: Ceiling Fan Light
-                collapsible_controls: true
-                show_brightness_control: true
-          - type: entities
-            title: Hallways
-            show_header_toggle: false
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.guest_hallway_light
-                name: Guest Hallway
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.laundry_hallway_light
-                name: Laundry Hallway
-                collapsible_controls: true
-                show_brightness_control: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-          - type: entities
-            title: Main Bathroom
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.switch_1_bathroom_main_light
-                name: Ceiling
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.switch_2_bathroom_main_light
-                name: Vanity
-                collapsible_controls: true
   - title: Devices
     path: page-devices
     layout:
@@ -8080,9 +8258,6 @@ button_card_templates:
 
                     return output;
                   ]]]
-              # styles:
-              #   name:
-              #     - color: rgb( var( --green-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8105,9 +8280,6 @@ button_card_templates:
 
                     return '';
                   ]]]
-              # styles:
-              #   name:
-              #     - color: rgb( var( --green-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8136,9 +8308,6 @@ button_card_templates:
 
                     return output;
                   ]]]
-              # styles:
-              #   name:
-              #     - color: rgb( var( --blue-color-rgb ) )
             - type: custom:button-card
               template:
                 - room_tile__badge
@@ -8167,9 +8336,6 @@ button_card_templates:
 
                     return output;
                   ]]]
-              # styles:
-              #   name:
-              #     - color: rgb( var( --blue-color-rgb ) )
       btnAction:
         card:
           type: custom:button-card
