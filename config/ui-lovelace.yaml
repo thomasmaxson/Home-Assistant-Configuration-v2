@@ -1124,10 +1124,10 @@ views:
           grid-area: tileBdr1
         template: room_tile
         name: Main Bedroom
-        entity: light.all_lights_bedroom_1
+        entity: light.bedroom_1_lights_all
         triggers_update:
           - cover.large_window_curtains_bedroom_1
-          - light.all_lights_bedroom_1
+          - light.bedroom_1_lights_all
           - binary_sensor.door_bedroom_1
         variables:
           path: '#details-bedroom-1'
@@ -1171,7 +1171,7 @@ views:
                     entity: binary_sensor.door_bedroom_1
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_bedroom_1
+                    entity: light.bedroom_1_lights_all
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1334,9 +1334,9 @@ views:
           grid-area: tileBdr2
         template: room_tile
         name: Guest Bedroom
-        entity: light.all_lights_bedroom_2
+        entity: light.bedroom_2_lights_all
         triggers_update:
-          - light.all_lights_bedroom_2
+          - light.bedroom_2_lights_all
           - binary_sensor.door_bedroom_2
         variables:
           path: '#details-bedroom-2'
@@ -1379,7 +1379,7 @@ views:
                     entity: binary_sensor.door_bedroom_2
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_bedroom_2
+                    entity: light.bedroom_2_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_2
@@ -1529,9 +1529,9 @@ views:
           grid-area: tileBdr3
         template: room_tile
         name: Jess' Office
-        entity: light.all_lights_bedroom_3
+        entity: light.bedroom_3_lights_all
         triggers_update:
-          - light.all_lights_bedroom_3
+          - light.bedroom_3_lights_all
           - binary_sensor.door_bedroom_3
         variables:
           path: '#details-bedroom-3'
@@ -1574,7 +1574,7 @@ views:
                     entity: binary_sensor.door_bedroom_3
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_bedroom_3
+                    entity: light.bedroom_3_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_3
@@ -1679,10 +1679,10 @@ views:
           grid-area: tileBdr4
         template: room_tile
         name: Tom's Office
-        entity: light.all_lights_bedroom_4
+        entity: light.bedroom_4_lights_all
         triggers_update:
           - cover.blinds_bedroom_4
-          - light.all_lights_bedroom_4
+          - light.bedroom_4_lights_all
           - binary_sensor.door_bedroom_4
         variables:
           path: '#details-bedroom-4'
@@ -1726,7 +1726,7 @@ views:
                     entity: binary_sensor.door_bedroom_4
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_bedroom_4
+                    entity: light.bedroom_4_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_4
