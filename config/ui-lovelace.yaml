@@ -3327,7 +3327,7 @@ views:
 
               {% set the_entity = 'light.bedroom_3_floor_lamp' %}
               {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
-              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_3' %}
               --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -3357,11 +3357,11 @@ views:
 
               {% set the_entity = 'light.kitchen_cabinet_upper_coffee_bar' %}
               {% set the_color = states.light.kitchen_cabinet_upper_coffee_bar.attributes.rgb_color %}
-              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_range' %}
               {% set the_color = states.light.kitchen_cabinet_upper_range.attributes.rgb_color %}
-              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
               {% set the_entity = 'light.ceiling_fan_bar' %}
@@ -3961,7 +3961,7 @@ views:
 
               {% set the_entity = 'light.bedroom_3_floor_lamp' %}
               {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
-              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_3' %}
               --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -3991,11 +3991,11 @@ views:
 
               {% set the_entity = 'light.kitchen_cabinet_upper_coffee_bar' %}
               {% set the_color = states.light.kitchen_cabinet_upper_coffee_bar.attributes.rgb_color %}
-              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-coffee: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_cabinet_upper_range' %}
               {% set the_color = states.light.kitchen_cabinet_upper_range.attributes.rgb_color %}
-              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} rgb( {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+              --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
               {% set the_entity = 'light.ceiling_fan_bar' %}
