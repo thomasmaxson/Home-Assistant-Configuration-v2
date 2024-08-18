@@ -6,7 +6,7 @@ views:
     container_margins: false
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 1.125vw
+      grid-row-gap: 1.875vw
       grid-column-gap: 2.25vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
@@ -9491,6 +9491,7 @@ decluttering_templates:
           card_mod:
             style: |
               ha-card {
+                --spacing: 0;
                 --icon-symbol-size: 32px;
                 padding: 0 !important;
                 border: none;
@@ -9752,6 +9753,7 @@ decluttering_templates:
               ha-card {
                 --ha-card-background: transparent;
                 --ha-card-border-color: transparent;
+                --spacing: 10px 10px 10px 10px;
                 padding-top: 4px !important;
               }
           tap_action:
