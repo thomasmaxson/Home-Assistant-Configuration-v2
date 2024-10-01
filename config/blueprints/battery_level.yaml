@@ -1,0 +1,157 @@
+blueprint:
+  domain: automation
+  name: Battery Low Level Detection
+  description: >-
+    Regularly test all sensors with 'battery' device-class for crossing a certain battery level threshold and if so execute an action.
+  input:
+    threshold:
+      name: Battery warning level threshold
+      description:
+        Battery sensors below threshold are assumed to be low-battery (as
+        well as binary battery sensors with value 'on').
+      default: 20
+      selector:
+        number:
+          min: 5.0
+          max: 100.0
+          unit_of_measurement: "%"
+          mode: slider
+          step: 5.0
+    time:
+      name: Time to run detection on
+      description: "Detection is run at configured time"
+      default: "18:00:00"
+      selector:
+        time: {}
+    weekday:
+      name: Weekday(s) to run detection on
+      description: "Detection is run at configured time on the selected weekday(s)"
+      default:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        - sat
+        - sun
+      selector:
+        select:
+          custom_value: false
+          mode: dropdown
+          multiple: true
+          options:
+            - label: Monday
+              value: mon
+            - label: Tuesday
+              value: tue
+            - label: Wednesday
+              value: wed
+            - label: Thursday
+              value: thu
+            - label: Friday
+              value: fri
+            - label: Saturday
+              value: sat
+            - label: Sunday
+              value: sun
+    exclude:
+      name: Excluded sensors (optional)
+      description: Battery sensors (e.g. smartphone) to exclude from detection.
+      default: []
+      selector:
+        entity:
+          device_class: battery
+          multiple: true
+    bullet:
+      name: Bullet point icon
+      description: "Bullet point icon to list detected battery sensors"
+      default: "⦿"
+      selector:
+        text:
+    message:
+      name: Detection message
+      description: |
+        Detection message shown for a detected low battery sensor.
+        The message can be freely formatted and supports the following placeholders:
+
+        [% bullet %] - is replaced with the choosen bullet point icon
+        [% sensor %] - is replaced with the name of the sensor
+        [% state %]  - is replaced with the battery state in percent ('0' for binary sensors)
+        [% area %]   - is replaced by the area (Unknown if sensor has no area)
+      default: "[% bullet %] [% sensor %] ([% state %]%) in area [% area %]"
+      selector:
+        text:
+    order:
+      name: Sorting of messages
+      description: |
+        Sorting of messages is posible by the following criteria:
+
+        Alphabetical   - sort alphabetical by battery sensor name
+        Battery charge - sort by battery charge
+        Area           - sort by area
+      default: "name"
+      selector:
+        select:
+          custom_value: false
+          mode: dropdown
+          multiple: false
+          options:
+            - label: Alphabetical
+              value: name
+            - label: Battery charge
+              value: state
+            - label: Area
+              value: area
+    actions:
+      name: Actions
+      description:
+        Notifications or similar to be run. {{sensors}} is replaced with
+        the names of sensors being low on battery and {{threshold}} is replaced with the threshold warning value.
+      selector:
+        action: {}
+variables:
+  weekday: !input weekday
+  threshold: !input threshold
+  exclude: !input exclude
+  bullet: !input bullet
+  message: !input message
+  order: !input order
+  sensors: "{% set result = namespace(sensors=[]) %}
+    {% for sensor in states.sensor
+    | rejectattr('entity_id', 'in', exclude)
+    | rejectattr('attributes.device_class', 'undefined')
+    | selectattr('attributes.device_class', '==', 'battery') %}
+    {% if 0 <= sensor.state | int(-1) < threshold | int %}
+    {% set area_name = area_name(sensor.entity_id) %} {% if area_name == None %} {% set area_name = 'Unknown' %} {% endif %}
+    {% set result.sensors = result.sensors + [dict(name = sensor.name, state = sensor.state | int, area = area_name)]  %}
+    {% endif %}
+    {% endfor %}
+    {% for sensor in states.binary_sensor
+    | rejectattr('entity_id', 'in', exclude)
+    | rejectattr('attributes.device_class', 'undefined')
+    | selectattr('attributes.device_class', '==', 'battery')
+    | selectattr('state', '==', 'on') %}
+    {% set area_name = area_name(sensor.entity_id) %} {% if area_name == None %} {% set area_name = 'Unknown' %} {% endif %}
+    {% set result.sensors = result.sensors + [dict(name = sensor.name, state = 0 | int, area = area_name)] %}
+    {% endfor %}
+    {% set sensors = result.sensors | sort(attribute=order) %}
+    {% set ns = namespace(sensors ='') %}
+    {% for sensor in sensors  %}
+    {% set ns.sensors  = ns.sensors + (message
+    | replace('[% bullet %]', bullet)
+    | replace('[% sensor %]', sensor.name)
+    | replace('[% state %]', sensor.state)
+    | replace('[% area %]', sensor.area) ~ '\n') %}
+    {% endfor %}
+    {{ns.sensors}}"
+trigger:
+  - platform: time
+    at: !input time
+condition:
+  condition: and
+  conditions:
+    - "{{ sensors | length >= 1 }}"
+    - condition: time
+      weekday: !input weekday
+action: !input actions
+mode: single

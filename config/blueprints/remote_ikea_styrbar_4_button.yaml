@@ -1,0 +1,258 @@
+# This blueprint uses an IKEA STYRBAR Remote Control connected through ZHA
+#
+# | Button      | Duration    | Action              |
+# | ----------- | ----------- | ------------------- |
+# | Dim-Up      | Short Press | Turn on             |
+# | Dim-Up      | Long Press  | Increase brightness |
+# | Dim-Down    | Short Press | Turn off            |
+# | Dim-Down    | Long Press  | Decrease brightness |
+# | Left Arrow  | Short Press | Custom action       |
+# | Left Arrow  | Long Press  | Custom action       |
+# | Right Arrow | Short Press | Custom action       |
+# | Right Arrow | Long Press  | Custom action       |
+
+blueprint:
+  name: IKEA STYRBAR Remote control
+  description: Control devices with your IKEA STYRBAR 4 button remote.
+  domain: automation
+  input:
+    remote:
+      name: IKEA STYRBAR Remote
+      description: Select the remote control you wish to use
+      selector:
+        device:
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: Remote Control N2
+
+    light:
+      name: Light
+      description: Select the light entity you wish to control
+      selector:
+        entity:
+          domain: light
+
+    force_brightness:
+      name: Force turn on brightness
+      description: Force the brightness to the a level, when the "on" button on is pressed
+      default: false
+      selector:
+        boolean: null
+
+    brightness:
+      name: Brightness
+      description: Brightness of the light(s) when turning on
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: "%"
+      default: 50
+
+    brightness_step:
+      name: Brightness Step
+      description: Value to increase/decrease brightness
+      selector:
+        number:
+          min: 10
+          max: 100
+          step: 5.0
+          unit_of_measurement: "%"
+          mode: slider
+      default: 20
+
+    repeat_duration:
+      name: Repeat Duration
+      description: The speed in which to update the light when the button is held.
+      selector:
+        number:
+          min: 100
+          max: 1000
+          step: 100
+          unit_of_measurement: milliseconds
+          mode: slider
+      default: 500
+
+    button_left_short:
+      name: Left Button - Short Press
+      description: The action to perform on Short Press of the Left Button
+      default: []
+      selector:
+        action: null
+
+    button_left_long:
+      name: Left Button - Long Press
+      description: '
+        The action to perform on Long Press of the Left Button.
+        Use with care, before the long press event, the "on" event gets triggered.'
+      default: []
+      selector:
+        action: null
+
+    button_right_short:
+      name: Right Button - Short Press
+      description: The action to perform on Short Press of the Right Button
+      default: []
+      selector:
+        action: null
+
+    button_right_long:
+      name: Right Button - Long Press
+      description: '
+        The action to perform on Long Press of the Right Button.
+        Use with care, before the long press event, the "on" event gets triggered.'
+      default: []
+      selector:
+        action: null
+
+    auto_mode:
+      name: Automation Mode
+      description: Mode that automation runs in.
+      default: restart
+      selector:
+        select:
+          options:
+            - single
+            - restart
+            - queued
+            - parallel
+          custom_value: false
+          multiple: false
+          sort: false
+
+    mode_max:
+      name: Mode Max
+      description: "
+        Maximum number of runs that can be executed or queued at a time.
+        Ignored by Single and Restart Modes."
+      default: 10
+      selector:
+        number:
+          min: 1.0
+          max: 15.0
+          step: 1.0
+          mode: slider
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  var_light: !input light
+  var_repeat: !input repeat_duration
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+
+action:
+  - choose:
+      # Short-Press on the dim-up button
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "on" }}'
+          - condition: state
+            entity_id: !input light
+            state: "off"
+        sequence:
+          sequence:
+            - if:
+                - condition: template
+                  value_template: "{{ force_brightness }}"
+              then:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input light
+                  data:
+                    transition: "{{ ( var_repeat / 1000 ) | float }}"
+                    brightness_pct: !input brightness
+              else:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input light
+
+      # Long-Press on the dim-up button
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "move_with_on_off" }}'
+          - condition: state
+            entity_id: !input light
+            state: "on"
+        sequence:
+          - repeat:
+              while: []
+              sequence:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input light
+                  data:
+                    brightness_step_pct: 10
+                    transition: "{{ ( var_repeat / 1000 ) | float }}"
+                - delay:
+                    milliseconds: !input repeat_duration
+
+      # Short-Press on the dim-down button
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "off" }}'
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: !input light
+            data:
+              transition: "{{ ( var_repeat / 1000 ) | float }}"
+
+      # Long-Press on the dim-down button
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "move" }}'
+        sequence:
+          - repeat:
+              while: []
+              sequence:
+                - action: light.turn_on
+                  target:
+                    entity_id: !input light
+                  data:
+                    brightness_step_pct: -10
+                    transition: "{{ ( var_repeat / 1000 ) | float }}"
+                - delay:
+                    milliseconds: !input repeat_duration
+
+      # Short-Press on the left button
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "press" }}'
+          - condition: template
+            value_template: "{{ trigger.event.data.args == [257,13,0] }}"
+        sequence: !input button_left_short
+
+      # Long-Press on the left button.
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "hold" }}'
+          - condition: template
+            value_template: "{{ trigger.event.data.args == [3329,0] }}"
+        sequence: !input button_left_long
+
+      # Short-Press on the right button.
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "press" }}'
+          - condition: template
+            value_template: "{{ trigger.event.data.args == [256,13,0] }}"
+        sequence: !input button_right_short
+
+      # Long-Press on the right button.
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.command == "hold" }}'
+          - condition: template
+            value_template: "{{ trigger.event.data.args == [3328,0] }}"
+        sequence: !input button_left_long
+
+    # Any other event will cancel the repeat loops.
+    default: []

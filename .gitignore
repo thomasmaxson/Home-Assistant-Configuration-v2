@@ -7,7 +7,6 @@
 /config/.google.token
 
 # ignore various directories
-/config/blueprints/
 /config/custom_components/
 /config/deps/
 /config/hacs

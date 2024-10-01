@@ -1,0 +1,89 @@
+blueprint:
+  name: Aqara Wireless Mini Switch
+  description: Control devices with your Aqara Wireless Mini Switch.
+  domain: automation
+  input:
+    remote:
+      name: Aqara Wireless Mini Switch
+      description: Aqara Mini Switch remote used to trigger actions
+      selector:
+        device:
+          integration: zha
+          manufacturer: LUMI
+          model: lumi.remote.b1acn01
+    single_press_action:
+      name: Button Short Press
+      description: The action to perform on short press of the button.
+      default: []
+      selector:
+        action:
+    double_press_action:
+      name: Button Double Press
+      description: The action to perform on double press of the button.
+      default: []
+      selector:
+        action:
+    long_press_action:
+      name: Button Long Press
+      description: The action to perform on long press of the button.
+      default: []
+      selector:
+        action:
+    release_action:
+      name: Button Release
+      description: The action to perform on release of the button.
+      default: []
+      selector:
+        action:
+    auto_mode:
+      name: Automation Mode
+      description: Mode that automation runs in (single, restart, queued, parallel).
+      default: single
+      selector:
+        select:
+          options:
+            - single
+            - restart
+            - queued
+            - parallel
+          custom_value: false
+          multiple: false
+          sort: false
+    mode_max:
+      name: Mode Max (ignored by Single and Restart Modes).
+      description: Maximum number of runs that can be executed or queued at a time.
+      default: 10
+      selector:
+        number:
+          min: 1.0
+          max: 15.0
+          step: 1.0
+          mode: slider
+
+mode: !input auto_mode
+max: !input mode_max
+max_exceeded: silent
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+
+  - choose:
+      - conditions:
+          - "{{ command == 'single' }}"
+        sequence: !input single_press_action
+      - conditions:
+          - "{{ command == 'double' }}"
+        sequence: !input double_press_action
+      - conditions:
+          - "{{ command == 'hold' }}"
+        sequence: !input long_press_action
+      - conditions:
+          - "{{ command == 'release' }}"
+        sequence: !input release_action
