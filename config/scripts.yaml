@@ -1,1 +1,662 @@
-{}
+select_resident_tab:
+  alias: Select Resident Tab
+  sequence:
+    - action: input_select.select_option
+      target: {}
+      data:
+        option: Tom
+    - action: browser_mod.navigate
+      target: {}
+      data:
+        path: "#Tom"
+  description: From the resident dashboard page, select value and show resident content
+  icon: mdi:account-group
+amazon_echo_announcement:
+  alias: Announce via Amazon Echo Devices
+  fields:
+    message:
+      selector:
+        text:
+      name: Message
+      description: The message that you want to be announced on each device.
+      example: This is a test.
+      required: true
+  sequence:
+    - variables:
+        echo_kitchen_volume:
+          "{{ state_attr( 'media_player.echo_kitchen', 'volume_level'
+          ) }}"
+        echo_dining_room_volume:
+          "{{ state_attr( 'media_player.echo_dot_dining_room',
+          'volume_level' ) }}"
+        echo_bathroom_1_volume:
+          "{{ state_attr( 'media_player.echo_pop_main_bathroom',
+          'volume_level' ) }}"
+        echo_bedroom_1_volume:
+          "{{ state_attr( 'media_player.echo_dot_bedroom_1',
+          'volume_level' ) }}"
+        echo_bedroom_2_volume:
+          "{{ state_attr( 'media_player.echo_dot_bedroom_2',
+          'volume_level' ) }}"
+        echo_bedroom_3_volume:
+          "{{ state_attr( 'media_player.echo_dot_bedroom_3',
+          'volume_level' ) }}"
+        echo_bedroom_4_volume:
+          "{{ state_attr( 'media_player.echo_dot_bedroom_4',
+          'volume_level' ) }}"
+      alias: Store Variables
+    - if:
+        - alias: Ensure Household Announcements are Allowed
+          condition: state
+          entity_id: input_boolean.household_notify
+          state: "on"
+      then:
+        - parallel:
+            - alias: Amazon Echo, Kitchen
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_kitchen
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.5
+                  target:
+                    entity_id: media_player.echo_kitchen
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_kitchen
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_kitchen_volume }}"
+                  target:
+                    entity_id: media_player.echo_kitchen
+            - alias: Amazon Echo, Dining Room
+              if:
+                - alias: Ensure Dining Room Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_dining_room
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_dot_dining_room
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_dot_dining_room
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_dining_room_volume }}"
+                  target:
+                    entity_id: media_player.echo_dot_dining_room
+            - alias: Amazon Echo, Main Bathroom
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_bathroom_1
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_pop_main_bathroom
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_pop_main_bathroom
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_bathroom_1_volume }}"
+                  target:
+                    entity_id: media_player.echo_pop_main_bathroom
+            - alias: Amazon Echo, Bedroom 1
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_bedroom_1
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_1
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_dot_bedroom_1
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_bedroom_1_volume }}"
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_1
+            - alias: Amazon Echo, Bedroom 2
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_bedroom_2
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_2
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_dot_bedroom_2
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_bedroom_2_volume }}"
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_2
+            - alias: Amazon Echo, Bedroom 3
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_bedroom_3
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_3
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_dot_bedroom_3
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_bedroom_3_volume }}"
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_3
+            - alias: Amazon Echo, Bedroom 4
+              if:
+                - alias: Ensure Kitchen Announcements are Allowed
+                  condition: state
+                  entity_id: input_boolean.household_notify_bedroom_4
+                  state: "on"
+              then:
+                - alias: Set Volume for Announcement
+                  action: media_player.volume_set
+                  data:
+                    volume_level: 0.3
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_4
+                - alias: Announce the Message
+                  action: notify.alexa_media_echo_dot_bedroom_4
+                  data:
+                    data:
+                      type: announce
+                    message: "{{ message }}"
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 8
+                    milliseconds: 0
+                - alias: Reset Volume on Device
+                  action: media_player.volume_set
+                  data:
+                    volume_level: "{{ echo_bedroom_4_volume }}"
+                  target:
+                    entity_id: media_player.echo_dot_bedroom_4
+  description: ""
+  icon: mdi:speaker-wireless
+push_notification_to_ios_devices:
+  alias: Push Notification to iOS Devices
+  sequence:
+    - variables:
+        passed_title: "{{ title }}"
+        passed_subtitle: "{{ subtitle }}"
+        passed_message: "{{ message }}"
+        passed_link: "{{ notification_link }}"
+        passed_actions: "{{ notification_actions }}"
+    - condition: state
+      entity_id: input_boolean.app_notify
+      state: "on"
+    - parallel:
+        - alias: General Notifications, Thomas
+          if:
+            - condition: or
+              conditions:
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_door_exterior'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity_door_exterior
+                      state: "on"
+                  alias: Activity (Exterior Door) Notifications
+                - alias: Activity (Interior Door) Notifications
+                  condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_door_interior'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity_door_interior
+                      state: "on"
+                    - condition: or
+                      conditions:
+                        - condition: state
+                          entity_id: input_boolean.guests_home
+                          state: "on"
+                        - condition: not
+                          conditions:
+                            - condition: state
+                              entity_id: person.thomas
+                              state: home
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_location'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_activity_person_location
+                      state: "on"
+                  alias: Activity (Location) Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_schedule' else
+                        false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_schedule
+                      state: "on"
+                  alias: Schedule Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_info' else false
+                        }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_info
+                      state: "on"
+                  alias: Informational Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_warning' else
+                        false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_tom_alert_warning
+                      state: "on"
+                  alias: Warning Notifications
+          then:
+            - action: notify.mobile_app_toms_iphone
+              metadata: {}
+              data:
+                title:
+                  "{{ passed_title if passed_title != '' else 'Home Assistant'
+                  }}"
+                message: "{{ passed_message if passed_message != '' else message }}"
+                data:
+                  subtitle:
+                    "{{ passed_subtitle if passed_subtitle != '' else subtitle
+                    }}"
+                  clickAction:
+                    "{{ passed_link if passed_link != '' else '/lovelace/home'
+                    }}"
+                  actions: "{{ passed_actions if passed_actions != '' else '' }}"
+                  push:
+                    interruption-level: "{{ interruption_level }}"
+        - alias: Critical Notifications, Thomas
+          if:
+            - alias: Critical Notifications
+              condition: and
+              conditions:
+                - condition: template
+                  value_template:
+                    "{{ true if notification_type == 'type_critical' else
+                    false }}"
+                - condition: state
+                  entity_id: input_boolean.app_notify_tom_alert_critical
+                  state: "on"
+          then:
+            - action: notify.mobile_app_toms_iphone
+              metadata: {}
+              data:
+                title:
+                  "{{ passed_title if passed_title != '' else 'Home Assistant'
+                  }}"
+                message: "{{ passed_message if passed_message != '' else message }}"
+                data:
+                  subtitle:
+                    "{{ passed_subtitle if passed_subtitle != '' else subtitle
+                    }}"
+                  clickAction:
+                    "{{ passed_link if passed_link != '' else '/lovelace/home'
+                    }}"
+                  actions: "{{ passed_actions if passed_actions != '' else '' }}"
+                  push:
+                    interruption-level: "{{ interruption_level }}"
+                    sound:
+                      name: Update.caf
+                      critical: 1
+                      volume: 1
+        - alias: General Notifications, Jessica
+          if:
+            - condition: or
+              conditions:
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_door_exterior'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity_door_exterior
+                      state: "on"
+                  alias: Activity (Exterior Door) Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_door_interior'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity_door_interior
+                      state: "on"
+                    - condition: or
+                      conditions:
+                        - condition: state
+                          entity_id: input_boolean.guests_home
+                          state: "on"
+                        - condition: not
+                          conditions:
+                            - condition: state
+                              entity_id: person.thomas
+                              state: home
+                  alias: Activity (Interior Door) Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_activity_location'
+                        else false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity
+                      state: "on"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_activity_person_location
+                      state: "on"
+                  alias: Activity (Location) Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_schedule' else
+                        false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_schedule
+                      state: "on"
+                  alias: Schedule Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_info' else false
+                        }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_info
+                      state: "on"
+                  alias: Informational Notifications
+                - condition: and
+                  conditions:
+                    - condition: template
+                      value_template:
+                        "{{ true if notification_type == 'type_warning' else
+                        false }}"
+                    - condition: state
+                      entity_id: input_boolean.snooze_notify_household_activity
+                      state: "off"
+                    - condition: state
+                      entity_id: input_boolean.app_notify_jess_alert_warning
+                      state: "on"
+                  alias: Warning Notifications
+          then:
+            - action: notify.mobile_app_jess_iphone
+              metadata: {}
+              data:
+                title:
+                  "{{ passed_title if passed_title != '' else 'Home Assistant'
+                  }}"
+                message: "{{ passed_message if passed_message != '' else message }}"
+                data:
+                  subtitle:
+                    "{{ passed_subtitle if passed_subtitle != '' else subtitle
+                    }}"
+                  clickAction:
+                    "{{ passed_link if passed_link != '' else '/lovelace/home'
+                    }}"
+                  actions: "{{ passed_actions if passed_actions != '' else '' }}"
+                  push:
+                    interruption-level: "{{ interruption_level }}"
+        - alias: Critical Notifications, Jessica
+          if:
+            - alias: Critical Notifications
+              condition: and
+              conditions:
+                - condition: template
+                  value_template:
+                    "{{ true if notification_type == 'type_critical' else
+                    false }}"
+                - condition: state
+                  entity_id: input_boolean.app_notify_jess_alert_critical
+                  state: "on"
+          then:
+            - action: notify.mobile_app_jess_iphone
+              metadata: {}
+              data:
+                title:
+                  "{{ passed_title if passed_title != '' else 'Home Assistant'
+                  }}"
+                message: "{{ passed_message if passed_message != '' else message }}"
+                data:
+                  subtitle:
+                    "{{ passed_subtitle if passed_subtitle != '' else subtitle
+                    }}"
+                  clickAction:
+                    "{{ passed_link if passed_link != '' else '/lovelace/home'
+                    }}"
+                  actions: "{{ passed_actions if passed_actions != '' else '' }}"
+                  push:
+                    interruption-level: "{{ interruption_level }}"
+                    sound:
+                      name: Update.caf
+                      critical: 1
+                      volume: 1
+  fields:
+    notification_type:
+      selector:
+        select:
+          options:
+            - label: Activity, Exterior Door
+              value: type_activity_door_exterior
+            - label: Activity, Interior Door
+              value: type_activity_door_interior
+            - label: Activity, Location
+              value: type_activity_location
+            - label: Schedule
+              value: type_schedule
+            - label: Info
+              value: type_info
+            - label: Warning
+              value: type_warning
+            - label: Critical
+              value: type_critical
+      name: Notification Type
+      description:
+        The type of notification message. Helps with filtered notification
+        permissions.
+      required: true
+      default: type_info
+      example: Activity, Door
+    interruption_level:
+      name: Interruption Level
+      description: Type of notification interuption to perform on the device.
+      required: true
+      default: active
+      selector:
+        select:
+          options:
+            - label: Silent (Quiet notifications without waking screen)
+              value: passive
+            - label: Default
+              value: active
+            - label: Important (Overrides Focus)
+              value: time-sensitive
+            - label: Critical (Overrides Focus and mute settings)
+              value: critical
+    title:
+      name: Title
+      description: The title of the notification.
+      required: false
+      example: Home Assistant
+      selector:
+        text:
+    subtitle:
+      name: Subtitle
+      description: The subtitle of the notification.
+      required: false
+      selector:
+        text:
+    message:
+      name: Message
+      description: The content of the notification.
+      example: This is a test.
+      required: true
+      selector:
+        text:
+    notification_link:
+      name: Link
+      description: Link to navigate to upon clicking the notification. (i.e. - /lovelace/home)
+      selector:
+        text:
+    notification_actions:
+      name: Actions
+      description: Actionable items for notification.
+      required: false
+      selector:
+        object: {}
+  description: ""
+  icon: mdi:speaker-wireless
+  mode: queued
+  max: 10
