@@ -1,5 +1,5 @@
 # This blueprint uses an IKEA TRÅDFRI 5 Button Remote Control connected through ZHA
-# 
+#
 # | Button      | Duration    | Action              |
 # | ----------- | ----------- | ------------------- |
 # | Power       | Short Press | Toggle the light    |
@@ -16,6 +16,9 @@
 blueprint:
   name: IKEA TRÅDFRI, 5 Button
   description: Control devices with your IKEA TRÅDFRI 5 button remote.
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
   domain: automation
   input:
     remote:
@@ -23,145 +26,171 @@ blueprint:
       description: Select the IKEA TRÅDFRI remote to trigger your automations.
       selector:
         device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: TRADFRI remote control
-
-    light:
-      name: Light
-      description: Select the light entity you wish to control
-      selector:
-        entity:
-          domain: light
-
-    force_brightness:
-      name: Force turn on brightness
-      description: Force the brightness to the a level, when the "on" button on is pressed
-      default: false
-      selector:
-        boolean: null
-
-    brightness:
-      name: Brightness
-      description: Brightness of the light(s) when turning on
-      selector:
-        number:
-          min: 0.0
-          max: 100.0
-          mode: slider
-          step: 1.0
-          unit_of_measurement: "%"
-      default: 50
-
-    brightness_step:
-      name: Brightness Step
-      description: Value to increase/decrease brightness
-      selector:
-        number:
-          min: 10
-          max: 100
-          step: 5.0
-          unit_of_measurement: "%"
-          mode: slider
-      default: 20
-
-    repeat_duration:
-      name: Repeat Duration
-      description: The speed in which to update the light when the button is held.
-      selector:
-        number:
-          min: 100
-          max: 1000
-          step: 100
-          unit_of_measurement: milliseconds
-          mode: slider
-      default: 500
-
-    button_power_long:
-      name: Power Button - Long Press
-      description: The action to perform on Long Press of the Power Button
-      default: []
-      selector:
-        action: null
-
-    button_left_short:
-      name: Left Button - Short Press
-      description: The action to perform on Short Press of the Left Button
-      default: []
-      selector:
-        action: null
-
-    button_left_long:
-      name: Left Button - Long Press
-      description: '
-        The action to perform on Long Press of the Left Button.
-        Use with care, before the long press event, the "on" event gets triggered.'
-      default: []
-      selector:
-        action: null
-
-    button_right_short:
-      name: Right Button - Short Press
-      description: The action to perform on Short Press of the Right Button
-      default: []
-      selector:
-        action: null
-
-    button_right_long:
-      name: Right Button - Long Press
-      description: '
-        The action to perform on Long Press of the Right Button.
-        Use with care, before the long press event, the "on" event gets triggered.'
-      default: []
-      selector:
-        action: null
-
-    auto_mode:
-      name: Automation Mode
-      description: Mode that automation runs in.
-      default: restart
-      selector:
-        select:
-          options:
-            - single
-            - restart
-            - queued
-            - parallel
-          custom_value: false
+          filter:
+            - integration: zha
+              manufacturer: IKEA of Sweden
+              model: TRADFRI remote control
           multiple: false
 
-    mode_max:
-      name: Mode Max
-      description: "
-        Maximum number of runs that can be executed or queued at a time.
-        Ignored by Single and Restart Modes."
-      default: 10
-      selector:
-        number:
-          min: 1.0
-          max: 15.0
-          step: 1.0
-          mode: slider
+    remote_light:
+      name: Light Configuration
+      icon: mdi:lightbulb-on
+      collapsed: false
+      input:
+        light:
+          name: Light
+          description: Select the light entity you wish to control.
+          default: "light.undefined"
+          selector:
+            entity:
+              filter:
+                domain: light
 
-mode: restart
+        force_brightness:
+          name: Force turn on brightness
+          description: Force the brightness to the a level, when the "on" button on is pressed.
+          default: false
+          selector:
+            boolean: null
+
+        brightness:
+          name: Brightness
+          description: Brightness of the light(s) when turning on.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0.0
+              max: 100.0
+              step: 1.0
+          default: 50
+
+        brightness_step:
+          name: Brightness Step
+          description: Value to increase/decrease brightness.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 10
+              max: 100
+              step: 5.0
+          default: 20
+
+        repeat_duration:
+          name: Repeat Duration
+          description: The speed in which to update the light when the button is held.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: milliseconds
+              min: 100
+              max: 1000
+              step: 100
+          default: 500
+
+    remote_actions:
+      name: Button Actions
+      icon: mdi:hand-pointing-up
+      collapsed: false
+      input:
+        button_power_long:
+          name: Power Button - Long Press
+          description: The action to perform on Long Press of the Power Button
+          default: []
+          selector:
+            action: null
+
+        button_left_short:
+          name: Left Button - Short Press
+          description: The action to perform on Short Press of the Left Button
+          default: []
+          selector:
+            action: null
+
+        button_left_long:
+          name: Left Button - Long Press
+          description: '
+            The action to perform on Long Press of the Left Button.
+            Use with care, before the long press event, the "on" event gets triggered.'
+          default: []
+          selector:
+            action: null
+
+        button_right_short:
+          name: Right Button - Short Press
+          description: The action to perform on Short Press of the Right Button
+          default: []
+          selector:
+            action: null
+
+        button_right_long:
+          name: Right Button - Long Press
+          description: '
+            The action to perform on Long Press of the Right Button.
+            Use with care, before the long press event, the "on" event gets triggered.'
+          default: []
+          selector:
+            action: null
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            Ignored by Single and Restart Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
 max_exceeded: silent
 
 variables:
   var_light: !input light
   var_repeat: !input repeat_duration
 
-trigger:
-  - platform: event
+triggers:
+  - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
 
-action:
+conditions:
+  - condition: template
+    value_template: "{{ light_bulbs != 'light.undefined' }}"
+
+actions:
   - choose:
       # Short-Press on the power button (ON)
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "toggle" }}'
+            value_template: "{{ trigger.event.data.command == 'toggle' }}"
+
           - condition: state
             entity_id: !input light
             state: "off"
@@ -185,7 +214,7 @@ action:
       # Short-Press on the power button (OFF)
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "toggle" }}'
+            value_template: "{{ trigger.event.data.command == 'toggle' }}"
           - condition: state
             entity_id: !input light
             state: "on"
@@ -197,13 +226,13 @@ action:
       # Long-Press on the power button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "move_to_level_with_on_off" }}'
+            value_template: "{{ trigger.event.data.command == 'move_to_level_with_on_off' }}"
         sequence: !input button_power_long
 
       # Short-Press on the dim-up button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "step_with_on_off" }}'
+            value_template: "{{ trigger.event.data.command == 'step_with_on_off' }}"
         sequence:
           - action: light.turn_on
             target:
@@ -215,7 +244,7 @@ action:
       # Long-Press on the dim-up button.
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "move_with_on_off" }}'
+            value_template: "{{ trigger.event.data.command == 'move_with_on_off' }}"
         sequence:
           - repeat:
               while: []
@@ -232,7 +261,7 @@ action:
       # Short-Press on the dim-down button.
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "step" }}'
+            value_template: "{{ trigger.event.data.command == 'step' }}"
         sequence:
           - action: light.turn_on
             target:
@@ -244,7 +273,7 @@ action:
       # Long-Press on the dim-down button.
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "move" }}'
+            value_template: "{{ trigger.event.data.command == 'move' }}"
         sequence:
           - repeat:
               while: []
@@ -261,7 +290,7 @@ action:
       # Short-Press on the left button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
+            value_template: "{{ trigger.event.data.command == 'press' }}"
           - condition: template
             value_template: "{{ trigger.event.data.args == [257,13,0] }}"
         sequence: !input button_left_short
@@ -269,7 +298,7 @@ action:
       # Long-Press on the left button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "hold" }}'
+            value_template: "{{ trigger.event.data.command == 'hold' }}"
           - condition: template
             value_template: "{{ trigger.event.data.args == [3329,0] }}"
         sequence: !input button_left_long
@@ -277,7 +306,7 @@ action:
       # Short-Press on the right button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
+            value_template: "{{ trigger.event.data.command == 'press' }}"
           - condition: template
             value_template: "{{ trigger.event.data.args == [256,13,0] }}"
         sequence: !input button_right_short
@@ -285,7 +314,7 @@ action:
       # Long-Press on the right button
       - conditions:
           - condition: template
-            value_template: '{{ trigger.event.data.command == "hold" }}'
+            value_template: "{{ trigger.event.data.command == 'hold' }}"
           - condition: template
             value_template: "{{ trigger.event.data.args == [3328,0] }}"
         sequence: !input button_left_long

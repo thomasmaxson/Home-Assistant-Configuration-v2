@@ -29,6 +29,8 @@ views:
           grid-template-areas: |
             ".  zoneSbar    zoneSbar   ."
             ".  modalSbar   modalSbar  ."
+            ".  overflow1   overflow2  ."
+            ".  .           .   ."
             ".  tileFoyer   tileKit    ."
             ".  modalFoyer  modalKit   ."
             ".  tileLivR    tileDinR   ."
@@ -41,7 +43,6 @@ views:
             ".  modalLaund  modalGar   ."
             ".  tileOut     tileMisc   ."
             ".  modalOut    modalMisc  ."
-            ".  overflow1   overflow2  ."
             ".  overflow3   overflow4  ."
             ".  modalSys    modalConf  ."
         '(max-width: 992px)':
@@ -235,10 +236,10 @@ views:
           grid-area: tileFoyer
         template: room_tile
         name: Foyer
-        entity: light.all_lights_foyer
+        entity: light.foyer_group_lights_all
         triggers_update:
           - lock.front_door
-          - light.all_lights_foyer
+          - light.foyer_group_lights_all
           - binary_sensor.all_leak_sensors_foyer
           - binary_sensor.door_front_primary
           - binary_sensor.door_front_secondary
@@ -327,9 +328,26 @@ views:
                   - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_front_primary
+                    name: Primary
+                    show_state: true
+                    variables:
+                      text_state_on: Door
+                      text_state_off: Door
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_front_secondary
+                    name: Secondary
+                    show_state: true
+                    variables:
+                      text_state_on: Door
+                      text_state_off: Door
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_foyer
+                    entity: light.foyer_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__leak
                     entity: binary_sensor.all_leak_sensors_foyer
@@ -450,7 +468,7 @@ views:
                             name: Air Conditioner
                             entity: binary_sensor.leak_air_conditioner
                             variables:
-                              data_entity: sensor.leak_battery_air_conditioner
+                              data_entity: sensor.leak_air_conditioner_battery
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -461,13 +479,13 @@ views:
                     variables:
                       - entities:
                           - type: section
-                            label: Group Lights
+                            label: Lights Configuration
                           - entity: input_boolean.sync_foyer_lights
                             name: Sync Ceiling Lights
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_foyer_door_open_close
-                            name: Turn on entryway light when door opens at night
+                          - entity: input_boolean.foyer_automation_door_night_lights
+                            name: Turn on lights when door opens at night
             title-card-clickable: true
         view_layout:
           grid-area: modalFoyer
@@ -495,7 +513,7 @@ views:
             [[[ 
               let badgeEntities = [
                 states['binary_sensor.leak_sink_kitchen'],
-                states['binary_sensor.leak_dish_washer']
+                states['binary_sensor.leak_dishwasher']
               ];
 
               for( var i = 0; i < badgeEntities.length; i++ )
@@ -562,6 +580,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_kitchen
+                  - type: custom:button-card
+                    template: chip_detail__blind
+                    entity: cover.blinds_kitchen
                   - type: custom:button-card
                     template: chip_detail__leak
                     entity: binary_sensor.all_leak_sensors_kitchen
@@ -854,13 +875,13 @@ views:
                             name: Sink
                             entity: binary_sensor.leak_sink_kitchen
                             variables:
-                              data_entity: sensor.leak_battery_sink_kitchen
+                              data_entity: sensor.leak_sink_kitchen_battery
                           - type: custom:button-card
                             template: entity_card__leak
                             name: Dish Washer
-                            entity: binary_sensor.leak_dish_washer
+                            entity: binary_sensor.leak_dishwasher
                             variables:
-                              data_entity: sensor.leak_battery_dish_washer
+                              data_entity: sensor.leak_dishwasher_battery
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -871,9 +892,12 @@ views:
                     variables:
                       - entities:
                           - type: section
-                            label: Group Lights
+                            label: Lights Configuration
                           - entity: input_boolean.sync_kitchen_ceiling_lights
                             name: Ceiling Lights
+                          - entity: >-
+                              switch.circadian_lighting_kitchen_ceiling_lights_circadian
+                            name: Ceiling Lights Adaptive Color
                           - entity: input_boolean.sync_cabinet_above_lights
                             name: Cabinet Up Lights
                           - type: section
@@ -887,9 +911,9 @@ views:
           grid-area: tileLivR
         template: room_tile
         name: Living Room
-        entity: light.all_lights_living_room
+        entity: light.living_room_group_lights_all
         triggers_update:
-          - light.all_lights_living_room
+          - light.living_room_group_lights_all
           - binary_sensor.door_living
         variables:
           path: '#details-living-room'
@@ -939,9 +963,24 @@ views:
                   - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_living
+                    name: Sliding
+                    show_state: true
+                    variables:
+                      text_state_on: Door
+                      text_state_off: Door
+                  - type: custom:button-card
+                    template: chip_detail__occupancy
+                    entity: binary_sensor.presence_living_room
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_living_room
+                    entity: light.living_room_group_lights_all
+                  - type: custom:button-card
+                    template: chip_detail__fan
+                    entity: fan.ceiling_fan_bar
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -994,12 +1033,34 @@ views:
                 variables:
                   - cards:
                       - type: custom:mushroom-light-card
-                        name: Ceiling
+                        name: Corner Lamp
                         entity: light.living_room_corner_lamp
                         collapsible_controls: true
                         show_brightness_control: true
                         show_color_control: true
                         use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: Ceiling Fan Light
+                        entity: light.ceiling_fan_bar
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
+                      - type: vertical-stack
+                        cards:
+                          - type: custom:mushroom-title-card
+                            title: ''
+                            subtitle: Ceiling Fan
+                          - type: custom:mushroom-fan-card
+                            name: Ceiling Fan
+                            entity: fan.ceiling_fan_bar
+                            layout: vertical
+                            collapsible_controls: false
+                            show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1010,16 +1071,19 @@ views:
                     variables:
                       - entities:
                           - type: section
+                            label: Lights Configuration
+                          - entity: >-
+                              switch.circadian_lighting_light_corner_lamp_circadian
+                            name: Corner Lamp Adaptive Color
+                          - type: section
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_kitchen
                             name: Allow Annoucements
                           - type: section
                             label: Automations
                           - entity: >-
-                              input_boolean.automation_living_room_door_open_close
-                            name: >-
-                              Turn on exterior string light when door opens at
-                              night
+                              input_boolean.living_room_automation_door_night_lights
+                            name: Turn on lights when door opens at night
         view_layout:
           grid-area: modalLivR
       - type: custom:button-card
@@ -1124,10 +1188,10 @@ views:
           grid-area: tileBdr1
         template: room_tile
         name: Main Bedroom
-        entity: light.bedroom_1_lights_all
+        entity: light.bedroom_1_group_lights_all
         triggers_update:
           - cover.large_window_curtains_bedroom_1
-          - light.bedroom_1_lights_all
+          - light.bedroom_1_group_lights_all
           - binary_sensor.door_bedroom_1
         variables:
           path: '#details-bedroom-1'
@@ -1135,7 +1199,7 @@ views:
           icon_off: mdi:bed-king-outline
           data_curtains: cover.large_window_curtains_bedroom_1
           data_door: binary_sensor.door_bedroom_1
-          data_lightOn: light.bedroom_1_bedside_lamps
+          data_lightOn: light.bedroom_1_group_occupancy_lights
           data_temperature: sensor.temperature_bedroom_1
       - type: vertical-stack
         cards:
@@ -1169,12 +1233,19 @@ views:
                   - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_bedroom_1
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.bedroom_1_lights_all
+                    entity: light.bedroom_1_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__curtain
+                    entity: cover.large_window_curtains_bedroom_1
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1230,15 +1301,15 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state: 'on'
                         card:
                           type: custom:mushroom-light-card
                           name: Bedside Lamps
-                          entity: light.bedroom_1_bedside_lamps
+                          entity: light.bedroom_1_group_occupancy_lights
                           collapsible_controls: true
                           show_brightness_control: true
                           show_color_control: true
@@ -1246,10 +1317,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
@@ -1262,10 +1333,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_1_bedside_lamps
+                            entity: input_boolean.bedroom_1_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
@@ -1279,11 +1350,6 @@ views:
                         name: Ceiling Fan Light
                         entity: light.ceiling_fan_bedroom_1
                       - type: custom:mushroom-light-card
-                        entity: light.closet_hallway_ceiling_light
-                        name: Hallway
-                        collapsible_controls: true
-                        show_brightness_control: true
-                      - type: custom:mushroom-light-card
                         entity: light.closet_hallway_light_hers
                         name: Jess' Closet
                         collapsible_controls: true
@@ -1291,6 +1357,11 @@ views:
                       - type: custom:mushroom-light-card
                         entity: light.closet_hallway_light_his
                         name: Tom's Closet
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_ceiling_light
+                        name: Hallway
                         collapsible_controls: true
                         show_brightness_control: true
           - type: custom:decluttering-card
@@ -1314,7 +1385,7 @@ views:
                         title: ''
                         subtitle: Window
                       - type: custom:mushroom-cover-card
-                        layout: horizontal
+                        layout: vertical
                         name: Curtains
                         entity: cover.large_window_curtains_bedroom_1
                         collapsible_controls: true
@@ -1329,18 +1400,25 @@ views:
                     variables:
                       - entities:
                           - type: section
-                            label: Group Lights
-                          - entity: input_boolean.sync_bedroom_1_bedside_lamps
-                            name: Sync bedside lamps
+                            label: Lights Configuration
+                          - entity: input_boolean.bedroom_1_sync_lights
+                            name: Sync Bedside Lamps
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_hers_circadian
+                            name: Her Bedside Lamp Adaptive Color
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_his_circadian
+                            name: His Bedside Lamp Adaptive Color
                           - type: section
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_bedroom_1
                             name: Allow Annoucements
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_bedroom_1_door_open_close
-                            name: Toggle lights when door opens/closes
-                          - entity: input_boolean.automation_closet_doors_open_close
+                          - entity: input_boolean.bedroom_1_automation_allow_occupancy
+                            name: Allow Occupancy Automations
+                          - entity: >-
+                              input_boolean.bedroom_1_closet_automation_allow_doors
                             name: Toggle closet light when door opens/closes
                           - entity: input_boolean.closet_automatic_turn_off
                             name: Automatically turn off closet lights
@@ -1351,9 +1429,9 @@ views:
           grid-area: tileBdr2
         template: room_tile
         name: Guest Bedroom
-        entity: light.bedroom_2_lights_all
+        entity: light.bedroom_2_group_lights_all
         triggers_update:
-          - light.bedroom_2_lights_all
+          - light.bedroom_2_group_lights_all
           - binary_sensor.door_bedroom_2
         variables:
           path: '#details-bedroom-2'
@@ -1394,9 +1472,13 @@ views:
                   - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_bedroom_2
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.bedroom_2_lights_all
+                    entity: light.bedroom_2_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_2
@@ -1528,17 +1610,23 @@ views:
                     variables:
                       - entities:
                           - type: section
-                            label: Group Lights
-                          - entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            label: Lights Configuration
+                          - entity: input_boolean.bedroom_2_sync_lights
                             name: Sync Bedside Lamps
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_left_circadian
+                            name: Left Bedside Lamp Adaptive Color
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_right_circadian
+                            name: Right Bedside Lamp Adaptive Color
                           - type: section
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_bedroom_2
                             name: Allow Annoucements
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_bedroom_2_door_open_close
-                            name: Toggle lights when door opens/closes
+                          - entity: input_boolean.bedroom_2_automation_allow_occupancy
+                            name: Allow Room Occupancy Automations
         view_layout:
           grid-area: modalBdr2
       - type: custom:button-card
@@ -1546,9 +1634,9 @@ views:
           grid-area: tileBdr3
         template: room_tile
         name: Jess' Office
-        entity: light.bedroom_3_lights_all
+        entity: light.bedroom_3_group_lights_all
         triggers_update:
-          - light.bedroom_3_lights_all
+          - light.bedroom_3_group_lights_all
           - binary_sensor.door_bedroom_3
         variables:
           path: '#details-bedroom-3'
@@ -1590,8 +1678,15 @@ views:
                     template: chip_detail__door
                     entity: binary_sensor.door_bedroom_3
                   - type: custom:button-card
+                    template: chip_detail__occupancy
+                    entity: binary_sensor.presence_bedroom_3
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                  - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.bedroom_3_lights_all
+                    entity: light.bedroom_3_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_3
@@ -1687,8 +1782,8 @@ views:
                             name: Allow Annoucements
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_bedroom_3_door_open_close
-                            name: Toggle lights when door opens/closes
+                          - entity: input_boolean.bedroom_3_automation_allow_occupancy
+                            name: Allow Room Occupancy Automations
         view_layout:
           grid-area: modalBdr3
       - type: custom:button-card
@@ -1696,10 +1791,10 @@ views:
           grid-area: tileBdr4
         template: room_tile
         name: Tom's Office
-        entity: light.bedroom_4_lights_all
+        entity: light.bedroom_4_group_lights_all
         triggers_update:
           - cover.blinds_bedroom_4
-          - light.bedroom_4_lights_all
+          - light.bedroom_4_group_lights_all
           - binary_sensor.door_bedroom_4
         variables:
           path: '#details-bedroom-4'
@@ -1707,7 +1802,7 @@ views:
           icon_off: mdi:desk-lamp
           data_blinds: cover.blinds_bedroom_4
           data_door: binary_sensor.door_bedroom_4
-          data_lightOn: light.bedroom_4_lights
+          data_lightOn: light.bedroom_4_group_occupancy_lights
           data_temperature: sensor.temperature_bedroom_4
       - type: vertical-stack
         cards:
@@ -1742,11 +1837,21 @@ views:
                     template: chip_detail__door
                     entity: binary_sensor.door_bedroom_4
                   - type: custom:button-card
+                    template: chip_detail__occupancy
+                    entity: binary_sensor.presence_bedroom_4
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                  - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.bedroom_4_lights_all
+                    entity: light.bedroom_4_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_4
+                  - type: custom:button-card
+                    template: chip_detail__blind
+                    entity: cover.blinds_bedroom_4
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1802,15 +1907,15 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state: 'on'
                         card:
                           type: custom:mushroom-light-card
-                          name: Room Lights
-                          entity: light.bedroom_4_lights
+                          name: Primary Lights
+                          entity: light.bedroom_4_group_occupancy_lights
                           collapsible_controls: true
                           show_brightness_control: true
                           show_color_control: true
@@ -1818,10 +1923,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
@@ -1834,10 +1939,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_4_lights
+                            entity: input_boolean.bedroom_4_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
@@ -1851,7 +1956,7 @@ views:
                         name: Ceiling Fan Light
                         entity: light.ceiling_fan_bedroom_4
                       - type: custom:mushroom-light-card
-                        name: TIE Fighter
+                        name: TIE Fighter Lamp
                         entity: light.bedroom_4_tie_fighter_lamp
           - type: custom:decluttering-card
             template: room_popup__grid_2_columns
@@ -1960,17 +2065,33 @@ views:
                     variables:
                       - entities:
                           - type: section
-                            label: Group Lights
-                          - entity: input_boolean.sync_bedroom_4_lights
+                            label: Lights Configuration
+                          - entity: input_boolean.bedroom_4_sync_lights
                             name: Sync room lights
+                          - entity: >-
+                              switch.circadian_lighting_light_desk_lamp_circadian
+                            name: Desk Lamp Adaptive Color
+                          - entity: >-
+                              switch.circadian_lighting_lightstrip_baseboard_circadian
+                            name: Lightstrip Adaptive Color
                           - type: section
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_bedroom_4
                             name: Allow Annoucements
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_bedroom_4_door_open_close
-                            name: Toggle lights when door opens/closes
+                          - entity: input_boolean.bedroom_4_automation_allow_occupancy
+                            name: Allow Occupancy Automations
+                          - type: conditional
+                            conditions:
+                              - condition: state
+                                entity: >-
+                                  timer.bedroom_4_automation_last_motion_idle_reset
+                                state: active
+                            row:
+                              entity: >-
+                                timer.bedroom_4_automation_last_motion_idle_reset
+                              name: 'Occupancy Idle In:'
         view_layout:
           grid-area: modalBdr4
       - type: custom:button-card
@@ -1978,9 +2099,9 @@ views:
           grid-area: tileLaund
         template: room_tile
         name: Laundry Room
-        entity: light.all_lights_laundry_room
+        entity: light.laundry_room_group_lights_all
         trigger_update:
-          - light.all_lights_laundry_room
+          - light.laundry_room_group_lights_all
           - binary_sensor.door_laundry
           - sensor.custom_laundry_washer_machine_state
           - sensor.custom_laundry_dryer_machine_state
@@ -1992,7 +2113,7 @@ views:
           icon_off: mdi:tshirt-crew-outline
           data_door: binary_sensor.door_laundry
           data_lightOn: light.laundry_ceiling_light
-          data_temperature: sensor.motion_temperature_laundry_room
+          data_temperature: sensor.motion_laundry_room_temperature
           badge_danger: |
             [[[
               let badgeIcon = '';
@@ -2070,11 +2191,21 @@ views:
             variables:
               - chips:
                   - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.motion_laundry_room_temperature
+                  - type: custom:button-card
                     template: chip_detail__door
                     entity: binary_sensor.door_laundry
                   - type: custom:button-card
+                    template: chip_detail__occupancy
+                    entity: binary_sensor.motion_laundry_room
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                  - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_laundry_room
+                    entity: light.laundry_room_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__leak
                     entity: binary_sensor.all_leak_sensors_laundry_room
@@ -2154,7 +2285,7 @@ views:
                             name: Washing Machine
                             entity: binary_sensor.leak_washing_machine
                             variables:
-                              data_entity: sensor.leak_battery_washing_machine
+                              data_entity: sensor.leak_washing_machine_battery
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -2167,8 +2298,8 @@ views:
                           - type: section
                             label: Automations
                           - entity: >-
-                              input_boolean.automation_laundry_room_door_open_close
-                            name: Toggle lights when door opens/closes
+                              input_boolean.laundry_room_automation_allow_occupancy
+                            name: Allow Occupancy Automations
         view_layout:
           grid-area: modalLaund
       - type: custom:button-card
@@ -2176,11 +2307,11 @@ views:
           grid-area: tileGar
         template: room_tile
         name: Garage
-        entity: light.all_lights_garage
+        entity: light.garage_group_lights_all
         trigger_update:
           - cover.garage_door
-          - light.all_lights_garage
-          - binary_sensor.door_garage
+          - light.garage_group_lights_all
+          - binary_sensor.door_garage_interior
         double_tap_action:
           action: call-service
           service: |
@@ -2193,7 +2324,7 @@ views:
           path: '#details-garage'
           icon_on: mdi:car
           icon_off: mdi:car-outline
-          data_door: binary_sensor.door_garage
+          data_door: binary_sensor.door_garage_interior
           data_lightOn: light.garage_ceiling
           data_temperature: sensor.temperature_garage
           badge_danger: |
@@ -2261,10 +2392,17 @@ views:
                     entity: sensor.temperature_garage
                   - type: custom:button-card
                     template: chip_detail__door
-                    entity: binary_sensor.door_garage
+                    entity: binary_sensor.door_garage_interior
+                  - type: custom:button-card
+                    template: chip_detail__occupancy
+                    entity: binary_sensor.presence_garage
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
                   - type: custom:button-card
                     template: chip_detail__light
-                    entity: light.all_lights_garage
+                    entity: light.garage_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.custom_garage_fan
@@ -2330,8 +2468,8 @@ views:
                       - entities:
                           - type: section
                             label: Automations
-                          - entity: input_boolean.automation_garage_door_open_close
-                            name: Toggle lights when door opens/closes
+                          - entity: input_boolean.garage_automation_allow_occupancy
+                            name: Allow Occupancy Automations
         view_layout:
           grid-area: modalGar
       - type: custom:button-card
@@ -2604,7 +2742,7 @@ views:
                                 name: Wine Cooler
                                 entity: binary_sensor.leak_wine_cooler
                                 variables:
-                                  data_entity: sensor.leak_battery_wine_cooler
+                                  data_entity: sensor.leak_wine_cooler_battery
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2658,19 +2796,19 @@ views:
                                 name: Left Sink
                                 entity: binary_sensor.leak_sink_bathroom_main_hers
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_main_hers
+                                  data_entity: sensor.leak_sink_bathroom_main_hers_battery
                               - type: custom:button-card
                                 template: entity_card__leak
                                 name: Right Sink
                                 entity: binary_sensor.leak_sink_bathroom_main_his
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_main_his
+                                  data_entity: sensor.leak_sink_bathroom_main_his_battery
                               - type: custom:button-card
                                 template: entity_card__leak
                                 name: Toilet
                                 entity: binary_sensor.leak_toilet_bathroom_main
                                 variables:
-                                  data_entity: sensor.leak_battery_toilet_bathroom_main
+                                  data_entity: sensor.leak_toilet_bathroom_main_battery
               - type: custom:decluttering-card
                 template: room_popup__expander
                 variables:
@@ -2706,13 +2844,13 @@ views:
                                 name: Sink
                                 entity: binary_sensor.leak_sink_bathroom_guest
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_guest
+                                  data_entity: sensor.leak_sink_bathroom_guest_battery
                               - type: custom:button-card
                                 template: entity_card__leak
                                 name: Toilet
                                 entity: binary_sensor.leak_toilet_bathroom_guest
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_guest
+                                  data_entity: sensor.leak_sink_bathroom_guest_battery
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2735,13 +2873,13 @@ views:
                                 name: Sink
                                 entity: binary_sensor.leak_sink_bathroom_half
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_half
+                                  data_entity: sensor.leak_sink_bathroom_half_battery
                               - type: custom:button-card
                                 template: entity_card__leak
                                 name: Toilet
                                 entity: binary_sensor.leak_toilet_bathroom_half
                                 variables:
-                                  data_entity: sensor.leak_battery_sink_bathroom_half
+                                  data_entity: sensor.leak_sink_bathroom_half_battery
         view_layout:
           grid-area: modalMisc
       - type: custom:button-card
@@ -3015,7 +3153,7 @@ views:
                       - entity: number.fire_tablet_screen_brightness
                         name: Brightness
                       - entity: light.tablet_plug
-                        name: Charger
+                        name: Charging
                       - type: divider
                       - entity: sensor.fire_tablet_battery
                         name: Battery Level
@@ -3145,23 +3283,23 @@ views:
                         #states > div:nth-child( 5 ) { padding-left: 45px
                         !important;}          
                     entities:
-                      - entity: input_boolean.automation_foyer_door_open_close
+                      - entity: input_boolean.foyer_automation_door_night_lights
                         name: Main Entry (Primary and Secondary)
-                      - entity: input_boolean.automation_garage_door_open_close
+                      - entity: input_boolean.garage_automation_allow_occupancy
                         name: Garage (Interior)
-                      - entity: input_boolean.automation_living_room_door_open_close
+                      - entity: input_boolean.living_room_automation_door_night_lights
                         name: Sliding Glass Door
-                      - entity: input_boolean.automation_bedroom_1_door_open_close
+                      - entity: input_boolean.bedroom_1_automation_allow_occupancy
                         name: Main Bedroom
-                      - entity: input_boolean.automation_closet_doors_open_close
+                      - entity: input_boolean.bedroom_1_closet_automation_allow_doors
                         name: Auto-Shutoff Closet Lights
-                      - entity: input_boolean.automation_bedroom_2_door_open_close
+                      - entity: input_boolean.bedroom_2_automation_allow_occupancy
                         name: Guest Bedroom
-                      - entity: input_boolean.automation_bedroom_3_door_open_close
+                      - entity: input_boolean.bedroom_3_automation_allow_occupancy
                         name: Jess' Office
-                      - entity: input_boolean.automation_bedroom_4_door_open_close
+                      - entity: input_boolean.bedroom_4_automation_allow_occupancy
                         name: Tom's Office
-                      - entity: input_boolean.automation_laundry_room_door_open_close
+                      - entity: input_boolean.laundry_room_automation_allow_occupancy
                         name: Laundry Room
               - type: vertical-stack
                 cards:
@@ -3323,7 +3461,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
           - type: state-icon
-            entity: light.bedroom_1_bedside_lamps
+            entity: light.bedroom_1_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -3343,7 +3481,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
-            entity: light.bedroom_2_bedside_lamps
+            entity: light.bedroom_2_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -3415,7 +3553,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
-            entity: light.bedroom_4_lights
+            entity: light.bedroom_4_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -3794,6 +3932,8 @@ views:
         card_mod:
           style: |
             ha-card {
+              --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
+
               {% set the_entity = 'cover.garage_door' %}
               --maxson-floorplan--color-cover--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
@@ -3807,7 +3947,7 @@ views:
               {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
               --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_1_bedside_lamps' %}
+              {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_1' %}
@@ -3826,7 +3966,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_2' %}
               --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
+              {% set the_entity = 'light.bedroom_2_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_2' %}
@@ -3850,7 +3990,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_4' %}
               --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_4_lights' %}
+              {% set the_entity = 'light.bedroom_4_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_4' %}
@@ -3955,6 +4095,8 @@ views:
         card_mod:
           style: |
             ha-card {
+              --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
+
               {% set the_entity = 'cover.garage_door' %}
               --maxson-floorplan--color-cover--garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
@@ -3968,7 +4110,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_1' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_1_bedside_lamps' %}
+              {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_1' %}
@@ -3987,7 +4129,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_2' %}
               --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_2_bedside_lamps' %}
+              {% set the_entity = 'light.bedroom_2_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_2' %}
@@ -3997,7 +4139,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_3' %}
               --maxson-floorplan--color-fan--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_3_floor_lamp' %}
+              {% set the_entity = 'light.bedroom_3_group_occupancy_lights' %}
               {% set the_color = states.light.bedroom_3_floor_lamp.attributes.rgb_color %}
               --maxson-floorplan--color-light--bedroom-3--floor-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
@@ -4011,7 +4153,7 @@ views:
               {% set the_entity = 'fan.ceiling_fan_bedroom_4' %}
               --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'light.bedroom_4_lights' %}
+              {% set the_entity = 'light.bedroom_4_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bedroom_4' %}
@@ -4139,7 +4281,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
-            entity: light.bedroom_1_bedside_lamps
+            entity: light.bedroom_1_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -4179,7 +4321,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
-            entity: light.bedroom_2_bedside_lamps
+            entity: light.bedroom_2_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -4251,7 +4393,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
-            entity: light.bedroom_4_lights
+            entity: light.bedroom_4_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
@@ -4619,6 +4761,697 @@ views:
         '(max-width: 992px)':
           grid-auto-rows: auto
           grid-template-columns: 2.5% 95% 2.5%
+    theme: casamaxson
+    title: Status
+    path: map-status
+    type: custom:grid-layout
+    cards:
+      - type: picture-elements
+        view_layout:
+          grid-area: row1
+        card_mod:
+          style: |
+            ha-card {
+              --maxson-floorplan--color-temperature-text: var( --black-color-rgb );
+
+              {% set the_entity = 'binary_sensor.door_bedroom_1' %}
+              --maxson-floorplan--color-door-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_2' %}
+              --maxson-floorplan--color-door-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_3' %}
+              --maxson-floorplan--color-door-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_4' %}
+              --maxson-floorplan--color-door-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_front_primary' %}
+              --maxson-floorplan--color-door-front-primary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_front_secondary' %}
+              --maxson-floorplan--color-door-front-secondary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_garage_interior' %}
+              --maxson-floorplan--color-door-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_living' %}
+              --maxson-floorplan--color-door-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_laundry' %}
+              --maxson-floorplan--color-door-laundry: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_closet_hallway_hers' %}
+              --maxson-floorplan--color-door-closet-hallway-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
+              --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
+              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_bedroom_4' %}
+              --maxson-floorplan--color-presence-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_living_room' %}
+              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_garage' %}
+              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.motion_laundry_room' %}
+              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+            }
+        elements:
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_1
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 37%
+              left: 27.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 72.5%
+              left: 74.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 35%
+              left: 53.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 68%
+              left: 60.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
+          - type: state-icon
+            entity: binary_sensor.door_front_primary
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 58%
+              left: 73%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
+          - type: state-icon
+            entity: binary_sensor.door_front_secondary
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 63%
+              left: 73%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
+          - type: state-icon
+            entity: binary_sensor.door_living
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 50%
+              left: 5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: state-icon
+            entity: binary_sensor.door_laundry
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44%
+              left: 56%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
+          - type: state-icon
+            entity: binary_sensor.door_garage_interior
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44%
+              left: 65%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
+          - type: state-icon
+            entity: binary_sensor.door_closet_hallway_hers
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 21%
+              left: 34%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
+          - type: state-icon
+            entity: binary_sensor.door_closet_hallway_his
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 28.5%
+              left: 34%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: state-label
+            entity: sensor.temperature_attic_humidity
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 35%
+              left: 95%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_1
+            tap_action:
+              action: more-info
+            style:
+              top: 25%
+              left: 20%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 80%
+              left: 84%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 20%
+              left: 58.5%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 76%
+              left: 56.5%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 64%
+              left: 19%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_garage
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 27%
+              left: 79.5%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_attic
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 27%
+              left: 95%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_foyer
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 60%
+              left: 65%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_refrigerator
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 72%
+              left: 44%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_freezer
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 75%
+              left: 44%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_wine_cooler_top
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 84%
+              left: 12%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_wine_cooler_bottom
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 87%
+              left: 12%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-icon
+            entity: binary_sensor.presence_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 27%
+              left: 58.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
+          - type: state-icon
+            entity: binary_sensor.presence_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 82.5%
+              left: 56.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-4 ) )
+          - type: state-icon
+            entity: binary_sensor.presence_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 50%
+              left: 20%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
+          - type: state-icon
+            entity: binary_sensor.presence_garage
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 35%
+              left: 79.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
+          - type: state-icon
+            entity: binary_sensor.motion_laundry_room
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 44%
+              left: 61.75%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+        image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
+        visibility:
+          - condition: screen
+            media_query: '(min-width: 768px)'
+      - type: picture-elements
+        view_layout:
+          grid-area: row2
+        card_mod:
+          style: |
+            ha-card {
+              --maxson-floorplan--color-temperature-text: var( --black-color-rgb );
+
+              {% set the_entity = 'binary_sensor.door_bedroom_1' %}
+              --maxson-floorplan--color-door-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_2' %}
+              --maxson-floorplan--color-door-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_3' %}
+              --maxson-floorplan--color-door-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_bedroom_4' %}
+              --maxson-floorplan--color-door-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_front_primary' %}
+              --maxson-floorplan--color-door-front-primary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_front_secondary' %}
+              --maxson-floorplan--color-door-front-secondary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_garage_interior' %}
+              --maxson-floorplan--color-door-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_living' %}
+              --maxson-floorplan--color-door-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_laundry' %}
+              --maxson-floorplan--color-door-laundry: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_closet_hallway_hers' %}
+              --maxson-floorplan--color-door-closet-hallway-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
+              --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_bedroom_4' %}
+              --maxson-floorplan--color-presence-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
+              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_living_room' %}
+              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.presence_garage' %}
+              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'binary_sensor.motion_laundry_room' %}
+              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+            }
+        elements:
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_1
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 27.5%
+              left: 62.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 74.5%
+              left: 27.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 53.5%
+              left: 64%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
+          - type: state-icon
+            entity: binary_sensor.door_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 61%
+              left: 33%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
+          - type: state-icon
+            entity: binary_sensor.door_front_primary
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 72.5%
+              left: 42%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
+          - type: state-icon
+            entity: binary_sensor.door_front_secondary
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 72.5%
+              left: 37%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
+          - type: state-icon
+            entity: binary_sensor.door_living
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 6%
+              left: 49%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: state-icon
+            entity: binary_sensor.door_laundry
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 55.5%
+              left: 56%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
+          - type: state-icon
+            entity: binary_sensor.door_garage_interior
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 65.5%
+              left: 56%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
+          - type: state-icon
+            entity: binary_sensor.door_closet_hallway_hers
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 34%
+              left: 79%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
+          - type: state-icon
+            entity: binary_sensor.door_closet_hallway_his
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 34%
+              left: 71%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: state-label
+            entity: sensor.temperature_attic_humidity
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 91.5%
+              left: 75%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_1
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 19%
+              left: 76.5%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 84%
+              left: 21%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 55%
+              left: 77%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 53%
+              left: 21%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 13%
+              left: 49%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_garage
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 73%
+              left: 69%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_attic
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 91.5%
+              left: 65%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_foyer
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 65%
+              left: 40%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_refrigerator
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44%
+              left: 21%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_freezer
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44%
+              left: 33%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_wine_cooler_top
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 11%
+              left: 17%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_wine_cooler_bottom
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 14%
+              left: 17%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-icon
+            entity: binary_sensor.presence_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 60%
+              left: 77%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
+          - type: state-icon
+            entity: binary_sensor.presence_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 58%
+              left: 21%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-4 ) )
+          - type: state-icon
+            entity: binary_sensor.presence_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 21%
+              left: 49%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
+          - type: state-icon
+            entity: binary_sensor.presence_garage
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 78%
+              left: 69%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
+          - type: state-icon
+            entity: binary_sensor.motion_laundry_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 58%
+              left: 53.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+        image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
+        visibility:
+          - condition: screen
+            media_query: '(min-width: 0px) and (max-width: 767px)'
+  - layout:
+      grid-gap: 0
+      grid-auto-rows: auto
+      grid-template-columns: 5% 1fr 5%
+      grid-template-areas: |
+        ".  row1  ."
+        ".  row2  ."
+      mediaquery:
+        '(max-width: 992px)':
+          grid-auto-rows: auto
+          grid-template-columns: 2.5% 95% 2.5%
     type: custom:grid-layout
     title: Water
     path: map-water
@@ -4633,8 +5466,8 @@ views:
               {% set the_entity = 'binary_sensor.leak_air_conditioner' %}
               --maxson-floorplan--color-leak-air-conditioner: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.leak_dish_washer' %}
-              --maxson-floorplan--color-leak-dish-washer: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.leak_dishwasher' %}
+              --maxson-floorplan--color-leak-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.leak_sink_bathroom_guest' %}
               --maxson-floorplan--color-leak-sink-guest-bathroom: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
@@ -4687,7 +5520,7 @@ views:
               border-radius: 100%
               '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-air-conditioner ) )
           - type: state-icon
-            entity: binary_sensor.leak_dish_washer
+            entity: binary_sensor.leak_dishwasher
             state_color: false
             tap_action:
               action: more-info
@@ -4695,7 +5528,7 @@ views:
               top: 79.75%
               left: 33.5%
               border-radius: 100%
-              '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-dish-washer ) )
+              '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-dishwasher ) )
           - type: state-icon
             entity: binary_sensor.leak_sink_bathroom_guest
             state_color: false
@@ -4843,8 +5676,8 @@ views:
               {% set the_entity = 'binary_sensor.leak_air_conditioner' %}
               --maxson-floorplan--color-leak-air-conditioner: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.leak_dish_washer' %}
-              --maxson-floorplan--color-leak-dish-washer: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.leak_dishwasher' %}
+              --maxson-floorplan--color-leak-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.leak_sink_bathroom_guest' %}
               --maxson-floorplan--color-leak-sink-guest-bathroom: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
@@ -4897,7 +5730,7 @@ views:
               border-radius: 100%
               '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-air-conditioner ) )
           - type: state-icon
-            entity: binary_sensor.leak_dish_washer
+            entity: binary_sensor.leak_dishwasher
             state_color: false
             tap_action:
               action: more-info
@@ -4905,7 +5738,7 @@ views:
               top: 33.5%
               left: 20%
               border-radius: 100%
-              '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-dish-washer ) )
+              '--icon-primary-color': rgb( var( --maxson-floorplan--color-leak-dishwasher ) )
           - type: state-icon
             entity: binary_sensor.leak_sink_bathroom_guest
             state_color: false
@@ -5044,697 +5877,6 @@ views:
         visibility:
           - condition: screen
             media_query: '(min-width: 0px) and (max-width: 767px)'
-  - layout:
-      grid-gap: 0
-      grid-auto-rows: auto
-      grid-template-columns: 5% 1fr 5%
-      grid-template-areas: |
-        ".  row1  ."
-        ".  row2  ."
-      mediaquery:
-        '(max-width: 992px)':
-          grid-auto-rows: auto
-          grid-template-columns: 2.5% 95% 2.5%
-    theme: casamaxson
-    title: Other
-    path: map-other
-    type: custom:grid-layout
-    cards:
-      - type: picture-elements
-        view_layout:
-          grid-area: row1
-        card_mod:
-          style: |
-            ha-card {
-              --maxson-floorplan--color-temperature-text: var( --black-color-rgb );
-
-              {% set the_entity = 'binary_sensor.door_bedroom_1' %}
-              --maxson-floorplan--color-door-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_2' %}
-              --maxson-floorplan--color-door-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_3' %}
-              --maxson-floorplan--color-door-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_4' %}
-              --maxson-floorplan--color-door-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_front_primary' %}
-              --maxson-floorplan--color-door-front-primary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_front_secondary' %}
-              --maxson-floorplan--color-door-front-secondary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_garage' %}
-              --maxson-floorplan--color-door-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_living' %}
-              --maxson-floorplan--color-door-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_laundry' %}
-              --maxson-floorplan--color-door-laundry: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_closet_hallway_hers' %}
-              --maxson-floorplan--color-door-closet-hallway-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
-              --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_bedroom_2' %}
-              --maxson-floorplan--color-presence-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
-              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_living_room' %}
-              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_garage' %}
-              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.motion_laundry_room' %}
-              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-            }
-        elements:
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_1
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 37%
-              left: 27.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 72.5%
-              left: 74.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 35%
-              left: 53.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_4
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 68%
-              left: 60.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
-          - type: state-icon
-            entity: binary_sensor.door_front_primary
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 58%
-              left: 73%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
-          - type: state-icon
-            entity: binary_sensor.door_front_secondary
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 63%
-              left: 73%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
-          - type: state-icon
-            entity: binary_sensor.door_living
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 50%
-              left: 5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
-          - type: state-icon
-            entity: binary_sensor.door_laundry
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 44%
-              left: 56%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
-          - type: state-icon
-            entity: binary_sensor.door_garage
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 44%
-              left: 65%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_hers
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 21%
-              left: 34%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_his
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 28.5%
-              left: 34%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
-          - type: state-label
-            entity: sensor.temperature_humidity_attic
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 35%
-              left: 95%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_1
-            tap_action:
-              action: more-info
-            style:
-              top: 25%
-              left: 20%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 75%
-              left: 84%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 20%
-              left: 58.5%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_4
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 80%
-              left: 56.5%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_living_room
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 64%
-              left: 19%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_garage
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 27%
-              left: 79.5%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_attic
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 27%
-              left: 95%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_foyer
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 60%
-              left: 65%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_refrigerator
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 72%
-              left: 44%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_freezer
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 75%
-              left: 44%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_top
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 84%
-              left: 12%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_bottom
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 87%
-              left: 12%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-icon
-            entity: binary_sensor.presence_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 82%
-              left: 84%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-2 ) )
-          - type: state-icon
-            entity: binary_sensor.presence_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 27%
-              left: 58.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
-          - type: state-icon
-            entity: binary_sensor.presence_living_room
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 50%
-              left: 20%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
-          - type: state-icon
-            entity: binary_sensor.presence_garage
-            tap_action:
-              action: more-info
-            state_color: false
-            style:
-              top: 35%
-              left: 79.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
-          - type: state-icon
-            entity: binary_sensor.motion_laundry_room
-            tap_action:
-              action: more-info
-            state_color: false
-            style:
-              top: 44%
-              left: 61.75%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
-        image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
-        visibility:
-          - condition: screen
-            media_query: '(min-width: 768px)'
-      - type: picture-elements
-        view_layout:
-          grid-area: row2
-        card_mod:
-          style: |
-            ha-card {
-              --maxson-floorplan--color-temperature-text: var( --black-color-rgb );
-
-              {% set the_entity = 'binary_sensor.door_bedroom_1' %}
-              --maxson-floorplan--color-door-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_2' %}
-              --maxson-floorplan--color-door-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_3' %}
-              --maxson-floorplan--color-door-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_bedroom_4' %}
-              --maxson-floorplan--color-door-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_front_primary' %}
-              --maxson-floorplan--color-door-front-primary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_front_secondary' %}
-              --maxson-floorplan--color-door-front-secondary: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_garage' %}
-              --maxson-floorplan--color-door-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_living' %}
-              --maxson-floorplan--color-door-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_laundry' %}
-              --maxson-floorplan--color-door-laundry: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_closet_hallway_hers' %}
-              --maxson-floorplan--color-door-closet-hallway-hers: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
-              --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_bedroom_2' %}
-              --maxson-floorplan--color-presence-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
-              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_living_room' %}
-              --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.presence_garage' %}
-              --maxson-floorplan--color-presence-garage: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-
-              {% set the_entity = 'binary_sensor.motion_laundry_room' %}
-              --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
-            }
-        elements:
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_1
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 27.5%
-              left: 62.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 74.5%
-              left: 27.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 53.5%
-              left: 64%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
-          - type: state-icon
-            entity: binary_sensor.door_bedroom_4
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 61%
-              left: 33%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
-          - type: state-icon
-            entity: binary_sensor.door_front_primary
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 72.5%
-              left: 42%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
-          - type: state-icon
-            entity: binary_sensor.door_front_secondary
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 72.5%
-              left: 37%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
-          - type: state-icon
-            entity: binary_sensor.door_living
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 6%
-              left: 49%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
-          - type: state-icon
-            entity: binary_sensor.door_laundry
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 55.5%
-              left: 56%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
-          - type: state-icon
-            entity: binary_sensor.door_garage
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 65.5%
-              left: 56%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_hers
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 34%
-              left: 79%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_his
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 34%
-              left: 71%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
-          - type: state-label
-            entity: sensor.temperature_humidity_attic
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 91.5%
-              left: 75%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_1
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 19%
-              left: 76.5%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 82%
-              left: 21%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 55%
-              left: 77%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_bedroom_4
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 56%
-              left: 21%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_living_room
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 13%
-              left: 49%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_garage
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 73%
-              left: 69%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_attic
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 91.5%
-              left: 65%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_foyer
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 65%
-              left: 40%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_refrigerator
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 44%
-              left: 21%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_freezer
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 44%
-              left: 33%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_top
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 11%
-              left: 17%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_bottom
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 14%
-              left: 17%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-icon
-            entity: binary_sensor.presence_bedroom_2
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 86%
-              left: 21%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-2 ) )
-          - type: state-icon
-            entity: binary_sensor.presence_bedroom_3
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 60%
-              left: 77%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
-          - type: state-icon
-            entity: binary_sensor.presence_living_room
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 21%
-              left: 49%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
-          - type: state-icon
-            entity: binary_sensor.presence_garage
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 78%
-              left: 69%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
-          - type: state-icon
-            entity: binary_sensor.motion_laundry_room
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 58%
-              left: 53.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
-        image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
-        visibility:
-          - condition: screen
-            media_query: '(min-width: 0px) and (max-width: 767px)'
   - title: Security
     path: page-security
     theme: casamaxson
@@ -5793,7 +5935,7 @@ views:
                   entity_alt: input_boolean.enable_exterior_camera_recording
                   select_value: Exterior
                   text_state_on: Recording
-                  text_state_off: Stopped
+                  text_state_off: Paused
               - type: custom:button-card
                 template: state_switch_tile
                 entity: input_select.camera_types
@@ -5806,7 +5948,7 @@ views:
                   entity_alt: input_boolean.enable_interior_camera_recording
                   select_value: Interior
                   text_state_on: Recording
-                  text_state_off: Stopped
+                  text_state_off: Paused
               - type: custom:button-card
                 template: state_switch_tile
                 entity: input_select.camera_types
@@ -5816,7 +5958,7 @@ views:
                   entity_alt: input_boolean.enable_motion_camera_recording
                   select_value: Motion
                   text_state_on: Recording
-                  text_state_off: Stopped
+                  text_state_off: Paused
           - type: custom:state-switch
             default: camera-exterior
             entity: input_select.camera_types
@@ -5841,10 +5983,10 @@ views:
                       - entity: camera.ext_front_yard_southeast
                         name: Front Yard, Southeast
                         secondary_info: none
-                      - entity: camera.ext_side_yard_northeast
-                        name: Side Yard, North
-                      - entity: camera.ext_side_yard_southeast
-                        name: Side Yard, South
+                      - entity: camera.ext_side_yard_north_east
+                        name: Side Yard, North (facing east)
+                      - entity: camera.ext_side_yard_south_east
+                        name: Side Yard, South (facing east)
                     card_mod:
                       style: |
                         ha-card.type-entities { 
@@ -5869,7 +6011,7 @@ views:
                       - entity: camera.int_kitchen
                         secondary_info: none
                         name: Kitchen
-                      - entity: camera.int_foyer
+                      - entity: camera.int_foyer_entry
                         secondary_info: none
                         name: Foyer Entryway
                       - entity: camera.int_living_room
@@ -5895,6 +6037,10 @@ views:
                     entities:
                       - entity: camera.int_bdr1
                         name: Main Bedroom
+                      - entity: camera.int_bdr3
+                        name: Office, Jess
+                      - entity: camera.int_bdr4
+                        name: Office, Tom
                     card_mod:
                       style: |
                         ha-card.type-entities { 
@@ -6398,15 +6544,15 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state: 'on'
                 row:
                   type: custom:mushroom-light-card
                   name: Bedside Lamps
-                  entity: light.bedroom_1_bedside_lamps
+                  entity: light.bedroom_1_group_occupancy_lights
                   collapsible_controls: true
                   show_brightness_control: true
                   show_color_control: true
@@ -6414,10 +6560,10 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state: 'off'
                 row:
                   type: custom:mushroom-light-card
@@ -6430,10 +6576,10 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_1_bedside_lamps
+                    entity: input_boolean.bedroom_1_sync_lights
                     state: 'off'
                 row:
                   type: custom:mushroom-light-card
@@ -6620,15 +6766,15 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state: 'on'
                 row:
                   type: custom:mushroom-light-card
                   name: Office Lights
-                  entity: light.bedroom_4_lights
+                  entity: light.bedroom_4_group_occupancy_lights
                   collapsible_controls: true
                   show_brightness_control: true
                   show_color_control: true
@@ -6636,10 +6782,10 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state: 'off'
                 row:
                   type: custom:mushroom-light-card
@@ -6652,10 +6798,10 @@ views:
               - type: conditional
                 conditions:
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state_not: unavailable
                   - condition: state
-                    entity: input_boolean.sync_bedroom_4_lights
+                    entity: input_boolean.bedroom_4_sync_lights
                     state: 'off'
                 row:
                   type: custom:mushroom-light-card
@@ -6807,7 +6953,7 @@ views:
                 entity: binary_sensor.door_front_primary
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_front_primary
+                  data_entity: sensor.door_front_primary_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6815,15 +6961,15 @@ views:
                 entity: binary_sensor.door_front_secondary
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_front_secondary
+                  data_entity: sensor.door_front_secondary_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
                 name: Garage Door (Interior)
-                entity: binary_sensor.door_garage
+                entity: binary_sensor.door_garage_interior
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_garage
+                  data_entity: sensor.door_garage_interior_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6831,7 +6977,7 @@ views:
                 entity: binary_sensor.door_living
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_living
+                  data_entity: sensor.door_living_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6839,7 +6985,7 @@ views:
                 entity: binary_sensor.door_bedroom_1
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_bedroom_1
+                  data_entity: sensor.door_bedroom_1_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6847,7 +6993,7 @@ views:
                 entity: binary_sensor.door_bedroom_2
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_bedroom_2
+                  data_entity: sensor.door_bedroom_2_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6855,7 +7001,7 @@ views:
                 entity: binary_sensor.door_bedroom_3
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_bedroom_3
+                  data_entity: sensor.door_bedroom_3_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6863,7 +7009,7 @@ views:
                 entity: binary_sensor.door_bedroom_4
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_bedroom_4
+                  data_entity: sensor.door_bedroom_4_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6871,7 +7017,7 @@ views:
                 entity: binary_sensor.door_laundry
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_laundry
+                  data_entity: sensor.door_laundry_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6879,7 +7025,7 @@ views:
                 entity: binary_sensor.door_closet_hallway_hers
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_closet_hallway_hers
+                  data_entity: sensor.door_closet_hallway_hers_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6887,7 +7033,7 @@ views:
                 entity: binary_sensor.door_closet_hallway_his
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_closet_hallway_his
+                  data_entity: sensor.door_closet_hallway_his_battery
                   data_type: battery
               - type: custom:button-card
                 template: entity_card
@@ -6895,7 +7041,7 @@ views:
                 entity: binary_sensor.door_dishwasher
                 variables:
                   icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_battery_closet_hallway_his
+                  data_entity: sensor.door_closet_hallway_his_battery
                   data_type: battery
             card_mod:
               style: |
@@ -6931,14 +7077,14 @@ views:
             entities:
               - type: custom:button-card
                 template: entity_card
-                name: Guest Bedroom
-                entity: binary_sensor.presence_bedroom_2
+                name: Jess' Office
+                entity: binary_sensor.presence_bedroom_3
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
                 template: entity_card
-                name: Jess' Office
-                entity: binary_sensor.presence_bedroom_3
+                name: Tom's Office
+                entity: binary_sensor.presence_bedroom_4
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
@@ -6976,7 +7122,7 @@ views:
                 name: Laundry Room
                 entity: binary_sensor.motion_laundry_room
                 variables:
-                  data_entity: sensor.motion_battery_laundry_room
+                  data_entity: sensor.motion_laundry_room_battery
                   data_type: battery
                   icon_on_color: var( --green-color-rgb )
       - type: vertical-stack
@@ -6991,16 +7137,16 @@ views:
                 entity: binary_sensor.leak_air_conditioner
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_air_conditioner
+                  data_entity: sensor.leak_air_conditioner_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: Dish Washer
-                entity: binary_sensor.leak_dish_washer
+                entity: binary_sensor.leak_dishwasher
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_dish_washer
+                  data_entity: sensor.leak_dishwasher_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7009,7 +7155,7 @@ views:
                 entity: binary_sensor.leak_sink_bathroom_guest
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_sink_bathroom_guest
+                  data_entity: sensor.leak_sink_bathroom_guest_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7018,7 +7164,7 @@ views:
                 entity: binary_sensor.leak_sink_bathroom_half
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_sink_bathroom_half
+                  data_entity: sensor.leak_sink_bathroom_half_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7027,7 +7173,7 @@ views:
                 entity: binary_sensor.leak_sink_bathroom_main_hers
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_sink_bathroom_main_hers
+                  data_entity: sensor.leak_sink_bathroom_main_hers_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7036,7 +7182,7 @@ views:
                 entity: binary_sensor.leak_sink_bathroom_main_his
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_sink_bathroom_main_his
+                  data_entity: sensor.leak_sink_bathroom_main_his_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7045,7 +7191,7 @@ views:
                 entity: binary_sensor.leak_sink_kitchen
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_sink_kitchen
+                  data_entity: sensor.leak_sink_kitchen_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7054,7 +7200,7 @@ views:
                 entity: binary_sensor.leak_toilet_bathroom_guest
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_toilet_bathroom_guest
+                  data_entity: sensor.leak_toilet_bathroom_guest_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7063,7 +7209,7 @@ views:
                 entity: binary_sensor.leak_toilet_bathroom_half
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_toilet_bathroom_half
+                  data_entity: sensor.leak_toilet_bathroom_half_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7072,7 +7218,7 @@ views:
                 entity: binary_sensor.leak_toilet_bathroom_main
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_toilet_bathroom_main
+                  data_entity: sensor.leak_toilet_bathroom_main_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7081,7 +7227,7 @@ views:
                 entity: binary_sensor.leak_washing_machine
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_washing_machine
+                  data_entity: sensor.leak_washing_machine_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7090,7 +7236,7 @@ views:
                 entity: binary_sensor.leak_wine_cooler
                 variables:
                   icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_battery_wine_cooler
+                  data_entity: sensor.leak_wine_cooler_battery
                   data_type: battery
                   icon_type: battery_level
             card_mod:
@@ -7200,7 +7346,7 @@ views:
                 name: Attic
                 entity: sensor.temperature_attic
                 variables:
-                  data_entity: sensor.temperature_battery_attic
+                  data_entity: sensor.temperature_attic_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7208,7 +7354,7 @@ views:
                 name: Garage
                 entity: sensor.temperature_garage
                 variables:
-                  data_entity: sensor.temperature_battery_garage
+                  data_entity: sensor.temperature_garage_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -7298,41 +7444,41 @@ views:
               - type: custom:button-card
                 template: entity_card
                 name: For Garage Door
-                entity: sensor.remote_battery_kitchen_for_garage_door
+                entity: sensor.remote_kitchen_for_garage_door_battery
                 variables:
-                  data_entity: sensor.remote_battery_kitchen_for_garage_door
+                  data_entity: sensor.remote_kitchen_for_garage_door_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: For Garage Fan
-                entity: sensor.remote_battery_garage_for_garage_fan
+                entity: sensor.remote_garage_for_garage_fan_battery
                 variables:
-                  data_entity: sensor.remote_battery_garage_for_garage_fan
+                  data_entity: sensor.remote_garage_for_garage_fan_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: For Living Room Lights
-                entity: sensor.remote_battery_living_room_for_living_room
+                entity: sensor.remote_living_room_for_living_room_lights_battery
                 variables:
-                  data_entity: sensor.remote_battery_living_room_for_living_room
+                  data_entity: sensor.remote_living_room_for_living_room_lights_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: For Main Bedroom Lights
-                entity: sensor.remote_battery_bedroom_1_for_bedroom_1
+                entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
                 variables:
-                  data_entity: sensor.remote_battery_bedroom_1_for_bedroom_1
+                  data_entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: For Tom's Office Lights
-                entity: sensor.remote_battery_bedroom_4_for_bedroom_4
+                entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
                 variables:
-                  data_entity: sensor.remote_battery_bedroom_4_for_bedroom_4
+                  data_entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
                   data_type: battery
                   icon_type: battery_level
   - title: Residents
@@ -7418,24 +7564,6 @@ views:
                   - type: custom:decluttering-card
                     template: room_popup__expander
                     variables:
-                      - title: Daily Reminders
-                      - cards:
-                          - type: custom:decluttering-card
-                            template: room_popup__entities
-                            variables:
-                              - entities:
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_morning_complete_thomas
-                                    name: Morning Medication Taken
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_afternoon_complete_thomas
-                                    name: Afternoon Medication Taken
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_evening_complete_thomas
-                                    name: Evening Medication Taken
-                  - type: custom:decluttering-card
-                    template: room_popup__expander
-                    variables:
                       - title: Notification Settings
                       - cards:
                           - type: entities
@@ -7461,7 +7589,8 @@ views:
                                 #states > div:nth-child( 3 ), 
                                 #states > div:nth-child( 4 ), 
                                 #states > div:nth-child( 7 ), 
-                                #states > div:nth-child( 8 ) { 
+                                #states > div:nth-child( 8 ), 
+                                #states > div:nth-child( 9 ) { 
                                   padding-left: var( --list-indent-size ) !important;
                                 }
 
@@ -7513,8 +7642,24 @@ views:
                                     state_not: unavailable
                                 row:
                                   entity: >-
-                                    input_boolean.app_notify_tom_alert_activity_door
-                                  name: Door Status
+                                    input_boolean.app_notify_tom_alert_activity_door_exterior
+                                  name: Exterior Door Status
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_tom
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_tom
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_tom_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_tom_alert_activity_door_interior
+                                  name: Interior Door Status
                               - type: conditional
                                 conditions:
                                   - entity: input_boolean.app_notify_tom
@@ -7587,24 +7732,6 @@ views:
                   - type: custom:decluttering-card
                     template: room_popup__expander
                     variables:
-                      - title: Daily Reminders
-                      - cards:
-                          - type: custom:decluttering-card
-                            template: room_popup__entities
-                            variables:
-                              - entities:
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_morning_complete_jessica
-                                    name: Morning Medication Taken
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_afternoon_complete_jessica
-                                    name: Afternoon Medication Taken
-                                  - entity: >-
-                                      input_boolean.reminder_medicine_evening_complete_jessica
-                                    name: Evening Medication Taken
-                  - type: custom:decluttering-card
-                    template: room_popup__expander
-                    variables:
                       - title: Notification Settings
                       - cards:
                           - type: entities
@@ -7630,7 +7757,8 @@ views:
                                 #states > div:nth-child( 3 ), 
                                 #states > div:nth-child( 4 ), 
                                 #states > div:nth-child( 7 ), 
-                                #states > div:nth-child( 8 ) { 
+                                #states > div:nth-child( 8 ), 
+                                #states > div:nth-child( 9 ) { 
                                   padding-left: var( --list-indent-size ) !important;
                                 }
 
@@ -7682,8 +7810,24 @@ views:
                                     state_not: unavailable
                                 row:
                                   entity: >-
-                                    input_boolean.app_notify_jess_alert_activity_door
-                                  name: Door Status
+                                    input_boolean.app_notify_jess_alert_activity_door_exterior
+                                  name: Exterior Door Status
+                              - type: conditional
+                                conditions:
+                                  - entity: input_boolean.app_notify_jess
+                                    state: 'on'
+                                  - entity: input_boolean.app_notify_jess
+                                    state_not: unavailable
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state: 'on'
+                                  - entity: >-
+                                      input_boolean.app_notify_jess_alert_activity
+                                    state_not: unavailable
+                                row:
+                                  entity: >-
+                                    input_boolean.app_notify_jess_alert_activity_door_interior
+                                  name: Interior Door Status
                               - type: conditional
                                 conditions:
                                   - entity: input_boolean.app_notify_jess
@@ -7751,18 +7895,6 @@ views:
             title: Notification Reminders
             show_header_toggle: false
             entities:
-              - entity: input_boolean.reminder_waste_take_out_solid
-                name: Waste Bin Take Out
-                icon: mdi:trash-can
-              - entity: input_boolean.reminder_waste_bring_in_solid
-                name: Waste Bin Bring In
-                icon: mdi:trash-can
-              - entity: input_boolean.reminder_waste_take_out_recycle
-                name: Recycling Reminder
-                icon: mdi:recycle
-              - entity: input_boolean.reminder_waste_bring_in_recycle
-                name: Recycling Dropoff
-                icon: mdi:recycle
               - entity: input_boolean.reminder_dishwasher_complete
                 name: Dishwasher Complete
                 icon: mdi:dishwasher
@@ -7772,6 +7904,18 @@ views:
               - entity: input_boolean.reminder_laundry_complete_dryer
                 name: Tumble Dryer Complete
                 icon: mdi:tumble-dryer
+              - entity: input_boolean.reminder_waste_take_out_recycle
+                name: Recycling Reminder
+                icon: mdi:recycle
+              - entity: input_boolean.reminder_waste_bring_in_recycle
+                name: Recycling Dropoff
+                icon: mdi:recycle
+              - entity: input_boolean.reminder_waste_take_out_solid
+                name: Waste Bin Take Out
+                icon: mdi:trash-can
+              - entity: input_boolean.reminder_waste_bring_in_solid
+                name: Waste Bin Bring In
+                icon: mdi:trash-can
       - type: vertical-stack
         cards:
           - type: entities
@@ -7902,6 +8046,7 @@ button_card_templates:
           const active_states = [ 
             'on', 
             'open', 
+            'opening', 
             'home', 
             'playing', 
             'paused', 
@@ -8802,7 +8947,7 @@ button_card_templates:
     show_name: true
     show_state: |
       [[[ 
-        return ( variables.text_state_on == '' && variables.text_state_off == '' )
+        return ( variables.text_state_on != '' && variables.text_state_off != '' )
           ? true
           : false
       ]]]
@@ -8883,6 +9028,49 @@ button_card_templates:
       action: more-info
     hold_action:
       action: more-info
+  chip_detail__blind:
+    template:
+      - chip__room_detail
+    variables:
+      all_off_hide: false
+      icon_color_on: rgba( var( --purple-color-rgb ) )
+      icon_state_on: mdi:blinds-horizontal
+      icon_state_off: mdi:blinds-horizontal-closed
+      text_state_on: Open
+      text_state_off: Closed
+    name: Blinds
+    tap_action:
+      action: call-service
+      haptic: success
+      service: cover.set_cover_tilt_position
+      service_data:
+        entity_id: '[[[ return variables.entity_id; ]]]'
+        tilt_position: |
+          [[[ 
+            return ( variables.state_on ) ? 100 : 50;
+          ]]]
+  chip_detail__curtain:
+    template:
+      - chip__room_detail
+    variables:
+      all_off_hide: false
+      icon_color_on: rgba( var( --purple-color-rgb ) )
+      icon_state_on: mdi:curtains
+      icon_state_off: mdi:curtains-closed
+      text_state_on: Open
+      text_state_off: Closed
+    name: Curtains
+    tap_action:
+      action: call-service
+      haptic: success
+      service: |
+        [[[ 
+          return ( variables.state_on )
+            ? 'cover.close_cover' 
+            : 'cover.open_cover';
+        ]]]
+      service_data:
+        entity_id: '[[[ return variables.entity_id; ]]]'
   chip_detail__door:
     template:
       - chip__room_detail
@@ -8891,15 +9079,16 @@ button_card_templates:
       icon_state_on: mdi:door-open
       icon_state_off: mdi:door-closed
       icon_color_on: rgba( var( --green-color-rgb ) )
-      text_state_on: Open
-      text_state_off: Closed
+      text_state_on: ''
+      text_state_off: ''
     name: Door
+    show_state: false
   chip_detail__fan:
     template:
       - chip__room_detail
     variables:
-      all_off_hide: true
-      icon_color_on: rgba( var( --green-color-rgb ) )
+      all_off_hide: false
+      icon_color_on: rgba( var( --blue-color-rgb ) )
       icon_state_on: mdi:fan
       icon_state_off: mdi:fan-off
       text_state_on: '[[[ return `${variables.state_on_count} On`; ]]]'
@@ -8907,20 +9096,25 @@ button_card_templates:
     name: Fans
     tap_action:
       action: call-service
-      service: fan.turn_off
+      service: |
+        [[[ 
+          return ( variables.state_on )
+            ? 'fan.turn_off' 
+            : 'fan.turn_on';
+        ]]]
       data:
         entity_id: '[[[ return variables.entity_id; ]]]'
   chip_detail__leak:
     template:
       - chip__room_detail
     variables:
-      all_off_hide: true
+      all_off_hide: false
       icon_color_on: rgba( var( --red-color-rgb ) )
       icon_state_on: mdi:water-alert
       icon_state_off: mdi:water-off
       text_state_on: Detected
-      text_state_off: All off
-    name: Water
+      text_state_off: None
+    name: Leak
   chip_detail__light:
     template:
       - chip__room_detail
@@ -8934,17 +9128,23 @@ button_card_templates:
     name: Lights
     tap_action:
       action: toggle
-  chip_detail__presense:
+  chip_detail__occupancy:
     template:
       - chip__room_detail
     variables:
       all_off_hide: false
       icon_state_on: mdi:motion-sensor
       icon_state_off: mdi:motion-sensor-off
-      icon_color_on: rgba( var( --blue-color-rgb ) )
-      text_state_on: Active
-      text_state_off: Inactive
-    name: Occupancy
+      icon_color_on: rgba( var( --green-color-rgb ) )
+      text_state_on: ''
+      text_state_off: ''
+    name: |
+      [[[ 
+        return ( variables.state_on )
+          ? 'Occupied' 
+          : 'Not Occupied';
+      ]]]
+    show_state: false
   chip_detail__temperature:
     template:
       - chip__room_detail

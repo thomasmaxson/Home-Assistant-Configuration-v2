@@ -1,115 +1,113 @@
 blueprint:
   name: Adaptive Lighting
   description: "Dim and adjust color temperature of lights progressively throughout the evening. This is indexed to the midpoint between sunset and sunrise and fit to a sin function, so the midpoint will be minimum brightness and midpoint +12hr will be maximum brightness. The midpoint can be offset by a fixed amount if lights are too dim or bright at the desired time."
+  author: Thomas Maxson
   # source_url: https://gist.github.com/haberda/f17694969a6de15d75267667b7c955ac
   domain: automation
   input:
     light:
       name: Light(s)
-      description: The light(s) to control
+      description: "The light(s) to control"
       selector:
         entity:
+          filter:
+            domain: light
           multiple: true
-          domain: light
+
     min_brightness:
       name: Minimum Brightness
-      description: Minimum brightness of the light(s)
+      description: "Minimum brightness of the light(s)"
       default: 1
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "%"
           min: 0.0
           max: 100.0
-          mode: slider
           step: 1.0
-          unit_of_measurement: "%"
+
     max_brightness:
       name: Maximum Brightness
-      description: Maximum brightness of the light(s)
+      description: "Maximum brightness of the light(s)"
       default: 100
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "%"
           min: 0.0
           max: 100.0
-          mode: slider
           step: 1.0
-          unit_of_measurement: "%"
+
     min_temperature:
       name: Minimum Temperature
-      description: Minimum temperature of the light(s) (Kelvin)
+      description: "Minimum temperature of the light(s) (Kelvin)"
       default: 2200
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "K"
           min: 1800
           max: 6000
-          mode: slider
           step: 100.0
-          unit_of_measurement: "K"
+
     max_temperature:
       name: Maximum Temperature
-      description: Maximum temperature of the light(s) (Kelvin)
+      description: "Maximum temperature of the light(s) (Kelvin)"
       default: 5000
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "K"
           min: 1800
           max: 6000
-          mode: slider
           step: 100.0
-          unit_of_measurement: "K"
+
     threshold_brightness:
       name: Brightness change threshold
-      description: Threshold value, above which the lights will not be adjusted (+ or -). This is the residual value between the current brightness level and the level it would adjust to.
+      description: "Threshold value, above which the lights will not be adjusted (+ or -). This is the residual value between the current brightness level and the level it would adjust to."
       default: 10
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "%"
           min: 0.0
           max: 100.0
-          mode: slider
           step: 1.0
-          unit_of_measurement: "%"
+
     transition:
       name: Transition
       description: Transition time (s)
       default: 0
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "seconds"
           min: 0.0
           max: 30.0
-          mode: slider
           step: 1.0
-          unit_of_measurement: "s"
+
     midnight_offset:
       name: Offset middle of the night
-      description: Offset from middle of the night (e.g. dimmest lights). Positive for brighter evening and dimmer morning. Negative for dimmer evening and brighter morning.
+      description: "Offset from middle of the night (e.g. dimmest lights). Positive for brighter evening and dimmer morning. Negative for dimmer evening and brighter morning."
       default: 0
       selector:
         number:
+          mode: slider
+          unit_of_measurement: "min"
           min: -120.0
           max: 120.0
           step: 1.0
-          unit_of_measurement: min
-          mode: slider
+
     light_on_adjust:
       name: Adjust lights when they are turned on
       description: "If true adjusts a light immediately when it is turned on."
       default: true
       selector:
         boolean:
-    entity_off_adjust:
-      name: Adjust lights when disable entity is turned off
-      description: "If true adjusts a light immediately when the disable entity is turned off."
-      default: true
-      selector:
-        boolean:
-    disable_entity:
-      name: Disable entity
-      description: Binary sensor or input boolean that when on disables the updating of lights.
-      selector:
-        entity:
-          multiple: true
-          domain: boolean
+
     event_fired:
       name: Event
-      description: The name of the event that will force an update.
+      description: "The name of the event that will force an update."
       default: "periodic_lights"
 
 mode: parallel
@@ -124,7 +122,6 @@ variables:
   max_temperature: !input "max_temperature"
   midnight_offset: !input "midnight_offset"
   light_on_adjust: !input light_on_adjust
-  entity_off_adjust: !input entity_off_adjust
   pct: >
     {% if ( states( 'sun.sun' ) == 'below_horizon' ) %}
       {% set sunset = as_timestamp( states.sun.sun.attributes.next_setting ) | float - 86400 %}
@@ -134,9 +131,9 @@ variables:
       {% set sunrise = as_timestamp( states.sun.sun.attributes.next_rising ) | float %}
     {% endif %}
     {% set midpoint = ( sunset | float + sunrise | float ) / 2 + ( midnight_offset | float * 60 ) | float %}
-    {{ sin( ( ( as_timestamp( now() ) | float - midpoint) / 86400 ) * pi ) | abs }}
-  brightness_percent: "{{ ( min_brightness|int + ( max_brightness | int - min_brightness | int ) * pct ) | int }}"
-  kelvin_temperature: "{{ ( min_temperature|int + ( max_temperature | int - min_temperature | int ) * pct ) | int }}"
+    {{ sin( ( ( as_timestamp( now() ) | float - midpoint ) / 86400 ) * pi ) | abs }}
+  brightness_percent: "{{ ( min_brightness | int + ( max_brightness | int - min_brightness | int ) * pct ) | int }}"
+  kelvin_temperature: "{{ ( min_temperature | int + ( max_temperature | int - min_temperature | int ) * pct ) | int }}"
   on_lights: >
     {{ expand( light_list ) | selectattr( 'state', 'eq', 'on' )
       | map(attribute='entity_id')  | list }}
@@ -144,28 +141,24 @@ variables:
     {{ expand( on_lights ) | selectattr( 'attributes.brightness', 'ge', ( ( brightness_percent - threshold_brightness ) * 2.55 ) ) 
       | selectattr( 'attributes.brightness', 'le', ( ( brightness_percent + threshold_brightness ) * 2.55 ) ) 
       | map( attribute = 'entity_id' ) | list }}
-trigger:
-  - platform: time_pattern
-    minutes: "/5"
+
+triggers:
+  - trigger: time_pattern
     id: "time_change"
-  - platform: state
+    minutes: "/5"
+  - trigger: state
+    id: "light_on"
     entity_id: !input "light"
     to: "on"
-    id: "light_on"
-  - platform: state
-    entity_id: !input disable_entity
-    to: "off"
-    id: "disable_off"
-  - platform: event
-    event_type: !input event_fired
+  - trigger: event
     id: "event_fired"
-condition:
-  - condition: state
-    entity_id: !input disable_entity
-    state: "off"
+    event_type: !input event_fired
+
+conditions:
   - condition: template
-    value_template: "{{ on_lights|length > 0 }}"
-action:
+    value_template: "{{ on_lights | length > 0 }}"
+
+actions:
   - delay:
       hours: 0
       minutes: 0
@@ -179,13 +172,11 @@ action:
               - and:
                   - condition: trigger
                     id: "disable_off"
-                  - condition: template
-                    value_template: "{{ entity_off_adjust }}"
         sequence:
           - action: light.turn_on
             data:
               entity_id: "{{ on_lights }}"
-              brightness_pct: "{{ brightness_percent|int }}"
+              # brightness_pct: "{{ brightness_percent|int }}"
               kelvin: "{{ kelvin_temperature|int }}"
               transition: !input transition
       - conditions:
@@ -197,7 +188,7 @@ action:
           - action: light.turn_on
             data:
               entity_id: "{{ trigger.entity_id }}"
-              brightness_pct: "{{ brightness_percent|int }}"
+              # brightness_pct: "{{ brightness_percent|int }}"
               kelvin: "{{ kelvin_temperature|int }}"
     default:
       - condition: template
@@ -205,6 +196,6 @@ action:
       - action: light.turn_on
         data:
           entity_id: "{{ compliant_lights }}"
-          brightness_pct: "{{ brightness_percent|int }}"
+          # brightness_pct: "{{ brightness_percent|int }}"
           kelvin: "{{ kelvin_temperature|int }}"
           transition: !input transition

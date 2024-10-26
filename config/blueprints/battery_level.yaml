@@ -1,45 +1,49 @@
 blueprint:
   domain: automation
   name: Battery Low Level Detection
-  description: >-
-    Regularly test all sensors with 'battery' device-class for crossing a certain battery level threshold and if so execute an action.
+  description: "Regularly test all sensors with 'battery' device-class for crossing a certain battery level threshold and if so execute an action."
+  author: Thomas Maxson
   input:
     threshold:
       name: Battery warning level threshold
-      description:
+      description: >
         Battery sensors below threshold are assumed to be low-battery (as
         well as binary battery sensors with value 'on').
       default: 20
       selector:
         number:
-          min: 5.0
-          max: 100.0
-          unit_of_measurement: "%"
           mode: slider
+          unit_of_measurement: "%"
+          min: 0
+          max: 100.0
           step: 5.0
+
     time:
       name: Time to run detection on
       description: "Detection is run at configured time"
       default: "18:00:00"
       selector:
         time: {}
+
     weekday:
       name: Weekday(s) to run detection on
       description: "Detection is run at configured time on the selected weekday(s)"
       default:
+        - sun
         - mon
         - tue
         - wed
         - thu
         - fri
         - sat
-        - sun
       selector:
         select:
           custom_value: false
           mode: dropdown
           multiple: true
           options:
+            - label: Sunday
+              value: sun
             - label: Monday
               value: mon
             - label: Tuesday
@@ -52,22 +56,24 @@ blueprint:
               value: fri
             - label: Saturday
               value: sat
-            - label: Sunday
-              value: sun
+
     exclude:
-      name: Excluded sensors (optional)
-      description: Battery sensors (e.g. smartphone) to exclude from detection.
+      name: Excluded sensors
+      description: "Battery sensors to exclude from detection."
       default: []
       selector:
         entity:
-          device_class: battery
+          filter:
+            device_class: battery
           multiple: true
+
     bullet:
       name: Bullet point icon
       description: "Bullet point icon to list detected battery sensors"
       default: "⦿"
       selector:
         text:
+
     message:
       name: Detection message
       description: |
@@ -81,6 +87,7 @@ blueprint:
       default: "[% bullet %] [% sensor %] ([% state %]%) in area [% area %]"
       selector:
         text:
+
     order:
       name: Sorting of messages
       description: |
@@ -98,17 +105,17 @@ blueprint:
           options:
             - label: Alphabetical
               value: name
-            - label: Battery charge
+            - label: Battery Level
               value: state
             - label: Area
               value: area
+
     actions:
       name: Actions
-      description:
-        Notifications or similar to be run. {{sensors}} is replaced with
-        the names of sensors being low on battery and {{threshold}} is replaced with the threshold warning value.
+      description: "Notifications or similar to be run. {{sensors}} is replaced with the names of sensors being low on battery and {{threshold}} is replaced with the threshold warning value."
       selector:
         action: {}
+
 variables:
   weekday: !input weekday
   threshold: !input threshold
@@ -144,14 +151,18 @@ variables:
     | replace('[% area %]', sensor.area) ~ '\n') %}
     {% endfor %}
     {{ns.sensors}}"
-trigger:
-  - platform: time
+
+triggers:
+  - trigger: time
     at: !input time
-condition:
+
+conditions:
   condition: and
   conditions:
     - "{{ sensors | length >= 1 }}"
     - condition: time
       weekday: !input weekday
-action: !input actions
+
+actions: !input actions
+
 mode: single

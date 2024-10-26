@@ -101,7 +101,7 @@ template:
             {%- endif -%}
 
           dishwasher_complete: |
-            {%- if is_state( 'input_select.status_dishwasher', 'Complete' ) -%}
+            {%- if is_state( 'input_boolean.reminder_dishwasher_complete', 'on' ) -%}
               {{ 'Your dishes are clean and are ready to be put away.' }}
 
             {%- endif -%}

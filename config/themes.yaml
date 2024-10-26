@@ -25,8 +25,10 @@ themes:
     blue-color-rgb: "61, 90, 254"
     purple-color-hex: "#661FFF"
     purple-color-rgb: "102, 31, 255"
-    grey-color-hex: "#BBBBBB"
-    grey-color-rgb: "187, 187, 187"
+    # grey-color-hex: "#BBBBBB"
+    # grey-color-rgb: "187, 187, 187"
+    grey-color-hex: "#999999"
+    grey-color-rgb: "153, 153, 153"
 
     dark-grey-color: "#606060"
     black-color-hex: "#000000"
@@ -90,18 +92,19 @@ themes:
     popup--grid-margin: 0
     popup--grid-gap-column: 1.5em
     popup--grid-gap-row: 1.5em
+    popup--card-stacks: 0 var( --popup--grid-gap-column ) var( --popup--grid-gap-row )
 
     # Map Sensor Colors
     map-icon--sensor-off: "var( --grey-color-rgb )"
     map-icon--sensor-on: "var( --green-color-rgb )"
-    map-icon--sensor-unavail: "var( --purple-color-rgb )"
+    map-icon--sensor-unavail: "var( --red-color-rgb )"
 
     map-icon--sensor-cover-off: "var( --map-icon--sensor-off )"
     map-icon--sensor-cover-on: "var( --map-icon--sensor-on )"
     map-icon--sensor-cover-unavail: "var( --map-icon--sensor-unavail )"
 
     map-icon--sensor-door-off: "var( --map-icon--sensor-off )"
-    map-icon--sensor-door-on: "var( --red-color-rgb )"
+    map-icon--sensor-door-on: "var( --map-icon--sensor-on )"
     map-icon--sensor-door-unavail: "var( --map-icon--sensor-unavail )"
 
     map-icon--sensor-fan-off: "var( --map-icon--sensor-off )"

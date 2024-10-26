@@ -2,17 +2,15 @@ substitutions:
   name: upsy-desky-76db20
   friendly_name: Desk, Bedroom 4
 packages:
-  tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@v3.0.0
+  tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@v4.0.0
 esphome:
   name: ${name}
   name_add_mac_suffix: false
   friendly_name: ${friendly_name}
+
 api:
   encryption:
-    key: !secret upsy_desk_api_key
-
-ota:
-  - platform: esphome
+    key: KCu8adhdFQd1FvpD7EO5YFovZzbxggZ40jxR8h87pfs=
 
 wifi:
   ssid: !secret wifi_ssid

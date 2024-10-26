@@ -47,3 +47,60 @@ frontend: !include themes.yaml
 # ----------------------------------------
 
 delete:
+
+#
+# CUSTOM: Circadian Lighting
+# ----------------------------------------
+
+circadian_lighting:
+  min_colortemp: 3000
+  max_colortemp: 5500
+
+switch:
+  - platform: circadian_lighting
+    name: Kitchen Ceiling Lights Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.kitchen_ceiling_lights
+
+  - platform: circadian_lighting
+    name: Light, Corner Lamp Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.living_room_corner_lamp
+
+  - platform: circadian_lighting
+    name: Bedside Lamp, Hers Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_1_lamp_hers
+
+  - platform: circadian_lighting
+    name: Bedside Lamp, His Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_1_lamp_his
+
+  - platform: circadian_lighting
+    name: Bedside Lamp, Left Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_2_lamp_left
+
+  - platform: circadian_lighting
+    name: Bedside Lamp, Right Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_2_lamp_right
+
+  - platform: circadian_lighting
+    name: Light, Desk Lamp Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_4_desk_lamp
+
+  - platform: circadian_lighting
+    name: Lightstrip, Baseboard Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_4_lightstrip

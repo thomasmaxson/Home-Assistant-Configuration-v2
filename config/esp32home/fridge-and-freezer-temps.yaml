@@ -1,6 +1,15 @@
-esphome:
-  name: "fridge-and-freezer-temps"
+substitutions:
+  name: esphome-web-c932a4
   friendly_name: Refrigerator and Freezer Temperatures
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  min_version: 2024.6.0
+  name_add_mac_suffix: false
+  project:
+    name: esphome.web
+    version: dev
 
 esp32:
   board: esp32dev
@@ -18,12 +27,14 @@ sensor:
   - platform: dallas_temp
     address: 0x373ce104573b9028
     name: "Refrigerator Temperature"
+    update_interval: 60s
     filters:
         - offset: -3
   #- platform: dallas
   - platform: dallas_temp
     address: 0x563ce1045708c728
     name: "Freezer Temperature"
+    update_interval: 60s
     filters:
         - offset: -3
 
@@ -32,22 +43,30 @@ logger:
 
 # Enable Home Assistant API
 api:
-  encryption:
-    key: !secret fridge_freezer_temperature_api_key
 
-# Over The Air Updates
+# Allow Over-The-Air updates
 ota:
-  - platform: esphome
-    password: !secret fridge_freezer_temperature_ota_password
+- platform: esphome
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
 
 wifi:
-  ssid: !secret wifi_iot_ssid
-  password: !secret wifi_iot_password
+  # Set up a wifi access point
+  ap: {}
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Fridge-Temps Fallback Hotspot"
-    password: !secret fridge_freezer_temperature_hotspot_password
-
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
 captive_portal:
-    
+
+dashboard_import:
+  package_import_url: github://esphome/example-configs/esphome-web/esp32.yaml@main
+  import_full_config: true
+
+# Sets up Bluetooth LE (Only on ESP32) to allow the user
+# to provision wifi credentials to the device.
+esp32_improv:
+  authorizer: none
+
+# To have a "next url" for improv serial
+web_server:
