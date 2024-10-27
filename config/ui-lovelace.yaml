@@ -1679,7 +1679,7 @@ views:
                     entity: binary_sensor.door_bedroom_3
                   - type: custom:button-card
                     template: chip_detail__occupancy
-                    entity: binary_sensor.presence_bedroom_3
+                    entity: binary_sensor.bedroom_4_group_all_occupancy
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
@@ -1838,7 +1838,7 @@ views:
                     entity: binary_sensor.door_bedroom_4
                   - type: custom:button-card
                     template: chip_detail__occupancy
-                    entity: binary_sensor.presence_bedroom_4
+                    entity: binary_sensor.bedroom_4_group_all_occupancy
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
@@ -4807,11 +4807,11 @@ views:
               {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
-              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.bedroom_3_group_all_occupancy' %}
+              --maxson-floorplan--color-occupancy-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.presence_bedroom_4' %}
-              --maxson-floorplan--color-presence-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.bedroom_4_group_all_occupancy' %}
+              --maxson-floorplan--color-occupancy-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_living_room' %}
               --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
@@ -5050,7 +5050,7 @@ views:
               left: 12%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-icon
-            entity: binary_sensor.presence_bedroom_3
+            entity: binary_sensor.bedroom_3_group_all_occupancy
             state_color: false
             tap_action:
               action: more-info
@@ -5058,9 +5058,9 @@ views:
               top: 27%
               left: 58.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
-            entity: binary_sensor.presence_bedroom_4
+            entity: binary_sensor.bedroom_4_group_all_occupancy
             state_color: false
             tap_action:
               action: more-info
@@ -5068,7 +5068,7 @@ views:
               top: 82.5%
               left: 56.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-4 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.presence_living_room
             state_color: false
@@ -5144,11 +5144,11 @@ views:
               {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.presence_bedroom_4' %}
-              --maxson-floorplan--color-presence-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.bedroom_3_group_all_occupancy' %}
+              --maxson-floorplan--color-occupancy-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'binary_sensor.presence_bedroom_3' %}
-              --maxson-floorplan--color-presence-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              {% set the_entity = 'binary_sensor.bedroom_4_group_all_occupancy' %}
+              --maxson-floorplan--color-occupancy-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'binary_sensor.presence_living_room' %}
               --maxson-floorplan--color-presence-living: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
@@ -5388,7 +5388,7 @@ views:
               left: 17%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-icon
-            entity: binary_sensor.presence_bedroom_3
+            entity: binary_sensor.bedroom_3_group_all_occupancy
             state_color: false
             tap_action:
               action: more-info
@@ -5396,9 +5396,9 @@ views:
               top: 60%
               left: 77%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-3 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
-            entity: binary_sensor.presence_bedroom_4
+            entity: binary_sensor.bedroom_4_group_all_occupancy
             state_color: false
             tap_action:
               action: more-info
@@ -5406,7 +5406,7 @@ views:
               top: 58%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-bedroom-4 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.presence_living_room
             state_color: false
@@ -7078,13 +7078,13 @@ views:
               - type: custom:button-card
                 template: entity_card
                 name: Jess' Office
-                entity: binary_sensor.presence_bedroom_3
+                entity: binary_sensor.bedroom_3_group_all_occupancy
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
                 template: entity_card
                 name: Tom's Office
-                entity: binary_sensor.presence_bedroom_4
+                entity: binary_sensor.bedroom_4_group_all_occupancy
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
