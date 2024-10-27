@@ -1537,15 +1537,15 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state: 'on'
                         card:
                           type: custom:mushroom-light-card
                           name: Bedside Lamps
-                          entity: light.bedroom_2_bedside_lamps
+                          entity: light.bedroom_2_group_occupancy_lights
                           collapsible_controls: true
                           show_brightness_control: true
                           show_color_control: true
@@ -1553,10 +1553,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
@@ -1569,10 +1569,10 @@ views:
                       - type: conditional
                         conditions:
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state_not: unavailable
                           - condition: state
-                            entity: input_boolean.sync_bedroom_2_bedside_lamps
+                            entity: input_boolean.bedroom_2_sync_lights
                             state: 'off'
                         card:
                           type: custom:mushroom-light-card
