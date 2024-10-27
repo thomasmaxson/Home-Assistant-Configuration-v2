@@ -2,8 +2,8 @@
   alias: 'Set Default: Theme on Load'
   description: ''
   triggers:
-  - event: start
-    trigger: homeassistant
+    - trigger: homeassistant
+      event: start
   conditions: []
   actions:
   - data:
@@ -14,8 +14,8 @@
   alias: Remove Snapshots, Older than 7 Days
   description: ''
   triggers:
-  - at: 02:30:00
-    trigger: time
+    - trigger: time
+      at: 02:30:00
   conditions: []
   actions:
   - data:
@@ -27,8 +27,8 @@
   alias: Reload Alexa Media Player after HA starts
   description: Reload of one device is enough to start integration
   triggers:
-  - event: start
-    trigger: homeassistant
+    - trigger: homeassistant
+      event: start
   conditions: []
   actions:
   - delay:
@@ -47,22 +47,22 @@
   alias: 3) Run at Bedtime
   description: ''
   triggers:
-  - event: sunset
+  - trigger: sun
+    event: sunset
     offset: 04:00:00
-    trigger: sun
-  - at: '22:15:00'
-    trigger: time
-  - at: 00:00:00
-    trigger: time
-  - at: 01:30:00
-    trigger: time
-  - at: 03:00:00
-    trigger: time
-  - at: 04:30:00
-    trigger: time
-  - entity_id:
+  - trigger: time
+    at: '22:15:00'
+  - trigger: time
+    at: 00:00:00
+  - trigger: time
+    at: 01:30:00
+  - trigger: time
+    at: 03:00:00
+  - trigger: time
+    at: 04:30:00
+  - trigger: state
+    entity_id:
     - input_button.trigger_bedtime_automations_run
-    trigger: state
   conditions:
   - condition: state
     entity_id: input_boolean.bedtime_automations_run
@@ -102,12 +102,12 @@
   alias: 2) Run at Sunset
   description: ''
   triggers:
-  - event: sunset
+  - trigger: sun
+    event: sunset
     offset: -00:30:00
-    trigger: sun
-  - entity_id:
+  - trigger: state
+    entity_id:
     - input_button.trigger_sunset_automations_run
-    trigger: state
   conditions:
   - condition: state
     entity_id: input_boolean.sunset_automations_run
@@ -219,17 +219,17 @@
   alias: 4) Run at Midnight
   description: ''
   triggers:
-  - at: 00:00:00
-    trigger: time
-  - at: 01:30:00
-    trigger: time
-  - at: 03:00:00
-    trigger: time
-  - at: 04:30:00
-    trigger: time
-  - entity_id:
+  - trigger: time
+    at: 00:00:00
+  - trigger: time
+    at: 01:30:00
+  - trigger: time
+    at: 03:00:00
+  - trigger: time
+    at: 04:30:00
+  - trigger: state
+    entity_id:
     - input_button.trigger_midnight_automations_run
-    trigger: state
   conditions:
   - condition: state
     entity_id: input_boolean.midnight_automations_run
@@ -260,10 +260,10 @@
   alias: Manage Johan Tablet Charging Cycle
   description: ''
   triggers:
-  - minutes: '00'
-    trigger: time_pattern
-  - minutes: '30'
-    trigger: time_pattern
+  - trigger: time_pattern
+    minutes: '00'
+  - trigger: time_pattern
+    minutes: '30'
   conditions: []
   actions:
   - choose:
@@ -292,26 +292,27 @@
     alias: Manage Tablet Charging State
   mode: single
 - id: '1726535060323'
-  alias: Living Room Sliding Door
+  alias: Living Room
   description: ''
   triggers:
-  - entity_id:
+  - trigger: state
+    entity_id:
     - binary_sensor.door_living
     from: 'off'
     to: 'on'
     id: Door Did OPEN
-    trigger: state
     for:
       hours: 0
       minutes: 0
       seconds: 0
-  - entity_id:
+  - trigger: state
+    entity_id:
     - binary_sensor.door_living
     from: 'on'
     to: 'off'
     id: Door Did CLOSE
-    trigger: state
-  - entity_id:
+  - trigger: state
+    entity_id:
     - binary_sensor.door_living
     to: 'off'
     id: Door Has Been CLOSED
@@ -319,7 +320,6 @@
       hours: 0
       minutes: 20
       seconds: 0
-    trigger: state
   conditions: []
   actions:
   - alias: Door OPENS, CLOSES, or has been CLOSED
@@ -1393,14 +1393,14 @@
 - id: '1726964420291'
   alias: Bedroom 2, Ceiling Light (Lutron Pico, Paddle)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: d2694481a3b250b9ed95e4645eb6e40b
     domain: lutron_caseta
     type: press
     subtype: Button 0
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: d2694481a3b250b9ed95e4645eb6e40b
     domain: lutron_caseta
     type: press
@@ -1435,32 +1435,32 @@
 - id: '1726964608307'
   alias: Bedroom 2, Ceiling Fan (Lutron Pico, 3 Button)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: a27d9dc278719e77bd1086e297be14fa
     domain: lutron_caseta
     type: press
     subtype: 'on'
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: a27d9dc278719e77bd1086e297be14fa
     domain: lutron_caseta
     type: press
     subtype: 'off'
     id: Button Press OFF
-  - platform: device
+  - trigger: device
     device_id: a27d9dc278719e77bd1086e297be14fa
     domain: lutron_caseta
     type: press
     subtype: stop
     id: Button Press STOP
-  - platform: device
+  - trigger: device
     device_id: a27d9dc278719e77bd1086e297be14fa
     domain: lutron_caseta
     type: press
     subtype: raise
     id: Button Press RAISE
-  - platform: device
+  - trigger: device
     device_id: a27d9dc278719e77bd1086e297be14fa
     domain: lutron_caseta
     type: press
@@ -1526,32 +1526,32 @@
 - id: '1726964888976'
   alias: Bedroom 4, Ceiling Fan (Lutron Pico, 3 Button)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: 547912e5c1b5de70af4e7159db0b75cb
     domain: lutron_caseta
     type: press
     subtype: 'on'
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: 547912e5c1b5de70af4e7159db0b75cb
     domain: lutron_caseta
     type: press
     subtype: 'off'
     id: Button Press OFF
-  - platform: device
+  - trigger: device
     device_id: 547912e5c1b5de70af4e7159db0b75cb
     domain: lutron_caseta
     type: press
     subtype: stop
     id: Button Press STOP
-  - platform: device
+  - trigger: device
     device_id: 547912e5c1b5de70af4e7159db0b75cb
     domain: lutron_caseta
     type: press
     subtype: raise
     id: Button Press RAISE
-  - platform: device
+  - trigger: device
     device_id: 547912e5c1b5de70af4e7159db0b75cb
     domain: lutron_caseta
     type: press
@@ -1660,14 +1660,14 @@
 - id: '1726965701513'
   alias: Bedroom 4, Ceiling Light (Lutron Pico, Paddle)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: 687b4e1b0875cd0e443f232fe5767e1d
     domain: lutron_caseta
     type: press
     subtype: Button 0
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: 687b4e1b0875cd0e443f232fe5767e1d
     domain: lutron_caseta
     type: press
@@ -1702,32 +1702,32 @@
 - id: '1726966111543'
   alias: Bedroom 3, Fan Ceiling (Lutron Pico, 3 Button)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
     domain: lutron_caseta
     type: press
     subtype: 'on'
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
     domain: lutron_caseta
     type: press
     subtype: 'off'
     id: Button Press OFF
-  - platform: device
+  - trigger: device
     device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
     domain: lutron_caseta
     type: press
     subtype: stop
     id: Button Press STOP
-  - platform: device
+  - trigger: device
     device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
     domain: lutron_caseta
     type: press
     subtype: raise
     id: Button Press RAISE
-  - platform: device
+  - trigger: device
     device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
     domain: lutron_caseta
     type: press
@@ -1793,14 +1793,14 @@
 - id: '1726966251327'
   alias: Bedroom 3, Light Ceiling (Lutron Pico, Paddle)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: afe69d52a42055addce27abac118675a
     domain: lutron_caseta
     type: press
     subtype: Button 0
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: afe69d52a42055addce27abac118675a
     domain: lutron_caseta
     type: press
@@ -1835,32 +1835,32 @@
 - id: '1726966400827'
   alias: Living Room, Light Primary (Lutron Pico, 3 Button)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: 52953df2b0850134e6d998ac302e9f8b
     domain: lutron_caseta
     type: press
     subtype: 'on'
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: 52953df2b0850134e6d998ac302e9f8b
     domain: lutron_caseta
     type: press
     subtype: 'off'
     id: Button Press OFF
-  - platform: device
+  - trigger: device
     device_id: 52953df2b0850134e6d998ac302e9f8b
     domain: lutron_caseta
     type: press
     subtype: stop
     id: Button Press STOP
-  - platform: device
+  - trigger: device
     device_id: 52953df2b0850134e6d998ac302e9f8b
     domain: lutron_caseta
     type: press
     subtype: raise
     id: Button Press RAISE
-  - platform: device
+  - trigger: device
     device_id: 52953df2b0850134e6d998ac302e9f8b
     domain: lutron_caseta
     type: press
@@ -2020,14 +2020,14 @@
 - id: '1726966930016'
   alias: Bedroom 1, Light Ceiling (Lutron Pico, Paddle)
   description: ''
-  trigger:
-  - platform: device
+  triggers:
+  - trigger: device
     device_id: da8f06c90863b596980eda95dd6754ae
     domain: lutron_caseta
     type: press
     subtype: Button 0
     id: Button Press ON
-  - platform: device
+  - trigger: device
     device_id: da8f06c90863b596980eda95dd6754ae
     domain: lutron_caseta
     type: press
@@ -2890,7 +2890,10 @@
     to: 'off'
     id: Door Did CLOSE
     trigger: state
-  conditions: []
+  conditions:
+  - condition: state
+    entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+    state: 'on'
   actions:
   - alias: Room Activity Actions
     choose:
@@ -2985,7 +2988,10 @@
     to: 'off'
     id: Door Did CLOSE
     trigger: state
-  conditions: []
+  conditions:
+  - condition: state
+    entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+    state: 'on'
   actions:
   - alias: Room Activity Actions
     choose:
@@ -4480,6 +4486,9 @@
     - conditions:
       - condition: and
         conditions:
+        - condition: state
+          entity_id: person.thomas
+          state: home
         - condition: trigger
           id:
           - On 00:00 of every hour
@@ -4620,150 +4629,6 @@
         icon: sfsymbols:xmark
         destructive: true
   mode: single
-- id: '1728970189150'
-  alias: Bedroom 4 (Tom's Office) - Room Occupancy
-  description: ''
-  use_blueprint:
-    path: maxson/room_management_via_occupancy.yaml
-    input:
-      sensor_door: binary_sensor.door_bedroom_4
-      sensor_presence: binary_sensor.presence_bedroom_4
-      enable_action_now:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            message: Tom's Office door has been opened
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            notification_actions:
-            - action: SNOOZE_HOUSEHOLD_ACTIVITY
-              title: Snooze
-              icon: sfsymbols:xmark
-              destructive: true
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_4_group_occupancy_lights
-      disable_action_now:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            message: Tom's Office door has been closed
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            notification_actions:
-            - action: SNOOZE_HOUSEHOLD_ACTIVITY
-              title: Snooze
-              icon: sfsymbols:xmark
-              destructive: true
-        - action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_4_group_lights_all
-      enable_action_wait_duration: 30
-      enable_action_wait:
-      - action: fan.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      disable_action_wait_duration: 300
-      disable_action_wait:
-      - action: fan.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      allow_automation: input_boolean.bedroom_4_automation_allow_occupancy
-      idle_timer: timer.bedroom_4_automation_last_motion_idle_reset
-- id: '1729535820181'
-  alias: Bedroom 3 (Jess' Office) - Room Occupancy
-  description: ''
-  use_blueprint:
-    path: maxson/room_management_via_occupancy.yaml
-    input:
-      sensor_door: binary_sensor.door_bedroom_3
-      sensor_presence: binary_sensor.presence_bedroom_3
-      enable_action_now:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            message: Tom's Office door has been opened
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            notification_actions:
-            - action: SNOOZE_HOUSEHOLD_ACTIVITY
-              title: Snooze
-              icon: sfsymbols:xmark
-              destructive: true
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_3_group_occupancy_lights
-      disable_action_now:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            message: Tom's Office door has been closed
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            notification_actions:
-            - action: SNOOZE_HOUSEHOLD_ACTIVITY
-              title: Snooze
-              icon: sfsymbols:xmark
-              destructive: true
-        - action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_3_group_lights_all
-      enable_action_wait_duration: 30
-      enable_action_wait:
-      - if:
-        - condition: time
-          after: 05:00:00
-          before: '15:59:59'
-        then:
-        - parallel:
-          - action: fan.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id: fan.ceiling_fan_bedroom_3
-      disable_action_wait_duration: 300
-      disable_action_wait:
-      - if:
-        - condition: time
-          after: '16:00:00'
-          before: '23:59:59'
-        then:
-        - parallel:
-          - action: fan.turn_off
-            metadata: {}
-            data: {}
-            target:
-              entity_id: fan.ceiling_fan_bedroom_3
-      allow_automation: input_boolean.bedroom_3_automation_allow_occupancy
-      idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
 - id: '1729641293123'
   alias: Bedroom 4 (Tom's Office) - Blinds Open/Close
   description: ''
@@ -4788,7 +4653,10 @@
       hours: 0
       minutes: 1
       seconds: 0
-  conditions: []
+  conditions:
+  - condition: state
+    entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+    state: 'on'
   actions:
   - choose:
     - conditions:
@@ -4928,3 +4796,177 @@
       alias: When His Closet Door is CLOSED or left OPEN
   mode: queued
   max: 10
+- id: '1730055755910'
+  alias: Bedroom 4 (Tom's Office) - Room Occupancy
+  description: ''
+  use_blueprint:
+    path: maxson/room_management_via_occupancy.yaml
+    input:
+      sensor_door: binary_sensor.door_bedroom_4
+      sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
+      enable_door_action:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - thomas
+          - jessica
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: Tom's Office door has been opened
+          notification_actions:
+            notification_actions:
+            - action: SNOOZE_HOUSEHOLD_ACTIVITY
+              title: Snooze
+              icon: sfsymbols:xmark
+              destructive: true
+      disable_door_action:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - thomas
+          - jessica
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: Tom's Office door has been Closed
+          notification_actions:
+            notification_actions:
+            - action: SNOOZE_HOUSEHOLD_ACTIVITY
+              title: Snooze
+              icon: sfsymbols:xmark
+              destructive: true
+      enable_occupancy_action_now:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.bedroom_4_group_occupancy_lights
+      disable_occupancy_action_now:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.bedroom_4_group_lights_all
+      enable_action_wait_duration: 30
+      enable_occupancy_action_wait:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: fan.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: fan.ceiling_fan_bedroom_4
+      disable_action_wait_duration: 300
+      disable_occupancy_action_wait:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: fan.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: fan.ceiling_fan_bedroom_4
+      idle_timer: timer.bedroom_4_automation_last_motion_idle_reset
+- id: '1730055951025'
+  alias: Bedroom 3 (Jess' Office) - Room Occupancy
+  description: ''
+  use_blueprint:
+    path: maxson/room_management_via_occupancy.yaml
+    input:
+      sensor_door: binary_sensor.door_bedroom_3
+      sensor_occupancy: binary_sensor.bedroom_3_group_all_occupancy
+      enable_door_action:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - thomas
+          - jessica
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: Jess' Office door has been opened
+          notification_actions:
+            notification_actions:
+            - action: SNOOZE_HOUSEHOLD_ACTIVITY
+              title: Snooze
+              icon: sfsymbols:xmark
+              destructive: true
+      disable_door_action:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - thomas
+          - jessica
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: Jess' Office door has been Closed
+          notification_actions:
+            notification_actions:
+            - action: SNOOZE_HOUSEHOLD_ACTIVITY
+              title: Snooze
+              icon: sfsymbols:xmark
+              destructive: true
+      enable_occupancy_action_now:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.bedroom_3_group_occupancy_lights
+      disable_occupancy_action_now:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.bedroom_3_group_lights_all
+      enable_action_wait_duration: 30
+      enable_occupancy_action_wait:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: fan.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: fan.ceiling_fan_bedroom_3
+      disable_action_wait_duration: 300
+      disable_occupancy_action_wait:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: fan.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: fan.ceiling_fan_bedroom_3
+      idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
