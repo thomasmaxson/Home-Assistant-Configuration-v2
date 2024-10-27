@@ -11,6 +11,7 @@ blueprint:
   name: IKEA TRÅDFRI, 2 Button
   description: Control devices with your IKEA TRÅDFRI 2 button remote.
   author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674
   homeassistant:
     min_version: 2024.6.0
   domain: automation
