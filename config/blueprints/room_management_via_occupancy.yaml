@@ -168,6 +168,14 @@ triggers:
     from: "off"
     to: "on"
 
+  # When motion is DETECTED - DELAYED
+  - trigger: state
+    id: event_wait_motion_detect
+    entity_id: !input sensor_occupancy
+    from: "on"
+    to: "off"
+    for: !input enable_action_wait_duration
+
   # When motion is CLEARED - IMMEDIATE
   - trigger: state
     id: event_now_motion_clear
