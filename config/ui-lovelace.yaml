@@ -1679,7 +1679,7 @@ views:
                     entity: binary_sensor.door_bedroom_3
                   - type: custom:button-card
                     template: chip_detail__occupancy
-                    entity: binary_sensor.bedroom_4_group_all_occupancy
+                    entity: binary_sensor.bedroom_3_group_all_occupancy
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
