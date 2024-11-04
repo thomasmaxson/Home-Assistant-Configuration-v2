@@ -5970,22 +5970,20 @@ views:
                     title: Exterior Cameras
                     show_header_toggle: false
                     entities:
-                      - entity: camera.ext_doorbell
+                      - entity: camera.ext_doorbell_high
                         secondary_info: none
                         name: Main Entry Doorbell
-                      - entity: camera.ext_backyard_northeast
+                      - entity: camera.ext_backyard_northeast_high
                         name: Backyard, Northeast
-                      - entity: camera.ext_backyard_southeast
+                      - entity: camera.ext_backyard_southeast_high
                         name: Backyard, Southeast
-                      - entity: camera.ext_front_yard_northeast
-                        secondary_info: none
+                      - entity: camera.ext_front_yard_northeast_high
                         name: Front Yard, Northeast
-                      - entity: camera.ext_front_yard_southeast
+                      - entity: camera.ext_front_yard_southeast_high
                         name: Front Yard, Southeast
-                        secondary_info: none
-                      - entity: camera.ext_side_yard_north_east
+                      - entity: camera.ext_side_yard_north_east_high
                         name: Side Yard, North (facing east)
-                      - entity: camera.ext_side_yard_south_east
+                      - entity: camera.ext_side_yard_south_east_high
                         name: Side Yard, South (facing east)
                     card_mod:
                       style: |
@@ -6006,15 +6004,15 @@ views:
                     title: Interior Cameras
                     show_header_toggle: false
                     entities:
-                      - entity: camera.int_dining_room
+                      - entity: camera.int_dining_room_high
                         name: Dining Room
-                      - entity: camera.int_kitchen
+                      - entity: camera.int_kitchen_high
                         secondary_info: none
                         name: Kitchen
-                      - entity: camera.int_foyer_entry
+                      - entity: camera.int_foyer_entry_high
                         secondary_info: none
                         name: Foyer Entryway
-                      - entity: camera.int_living_room
+                      - entity: camera.int_living_room_high
                         secondary_info: none
                         name: Living Room
                     card_mod:
@@ -6035,11 +6033,11 @@ views:
                     title: Private Interior Cameras
                     show_header_toggle: false
                     entities:
-                      - entity: camera.int_bdr1
+                      - entity: camera.int_bdr1_high
                         name: Main Bedroom
-                      - entity: camera.int_bdr3
+                      - entity: camera.int_bdr3_high
                         name: Office, Jess
-                      - entity: camera.int_bdr4
+                      - entity: camera.int_bdr4_high
                         name: Office, Tom
                     card_mod:
                       style: |
@@ -6062,7 +6060,7 @@ views:
                     title: Motion Only Cameras
                     show_header_toggle: false
                     entities:
-                      - entity: camera.ext_garage
+                      - entity: camera.ext_garage_high
                         name: Garage
                     card_mod:
                       style: |
