@@ -3536,7 +3536,15 @@ views:
             entity: cover.blinds_bedroom_4
             state_color: false
             tap_action:
-              action: toggle
+              action: call-service
+              haptic: success
+              service: cover.set_cover_tilt_position
+              service_data:
+                entity_id: cover.blinds_bedroom_4
+                tilt_position: >
+                  {{ iif( ( ( state_attr( 'cover.blinds_bedroom_4',
+                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
+                  }}
             style:
               top: 86.5%
               left: 59.5%
@@ -3588,7 +3596,15 @@ views:
             entity: cover.blinds_kitchen
             state_color: false
             tap_action:
-              action: toggle
+              action: call-service
+              haptic: success
+              service: cover.set_cover_tilt_position
+              service_data:
+                entity_id: cover.blinds_kitchen
+                tilt_position: >
+                  {{ iif( ( ( state_attr( 'cover.blinds_kitchen',
+                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
+                  }}
             style:
               top: 86.5%
               left: 41.25%
@@ -4376,7 +4392,15 @@ views:
             entity: cover.blinds_bedroom_4
             state_color: false
             tap_action:
-              action: toggle
+              action: call-service
+              haptic: success
+              service: cover.set_cover_tilt_position
+              service_data:
+                entity_id: cover.blinds_bedroom_4
+                tilt_position: >
+                  {{ iif( ( ( state_attr( 'cover.blinds_bedroom_4',
+                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
+                  }}
             style:
               top: 59.5%
               left: 14%
@@ -4428,7 +4452,15 @@ views:
             entity: cover.blinds_kitchen
             state_color: false
             tap_action:
-              action: toggle
+              action: call-service
+              haptic: success
+              service: cover.set_cover_tilt_position
+              service_data:
+                entity_id: cover.blinds_kitchen
+                tilt_position: >
+                  {{ iif( ( ( state_attr( 'cover.blinds_kitchen',
+                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
+                  }}
             style:
               top: 41%
               left: 14%
