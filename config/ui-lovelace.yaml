@@ -7123,6 +7123,14 @@ views:
                   data_entity: sensor.motion_laundry_room_battery
                   data_type: battery
                   icon_on_color: var( --green-color-rgb )
+              - type: custom:button-card
+                template: entity_card
+                name: Tom's Office
+                entity: binary_sensor.motion_bedroom_4
+                variables:
+                  data_entity: sensor.motion_bedroom_4_battery
+                  data_type: battery
+                  icon_on_color: var( --green-color-rgb )
       - type: vertical-stack
         cards:
           - type: entities
