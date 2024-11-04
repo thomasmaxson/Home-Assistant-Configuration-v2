@@ -1,9 +1,9 @@
 blueprint:
   name: Manage Area State via Sensors
   description: >-
-    Manage occupancy state via multiple sensors. Control what happens when:
-      - A door opens or closes
-      - Occupancy is detected or is clear
+    Manage occupancy state via multiple sensors.
+    - Control what happens when a door opens or occupancy is detected.
+    - Control what happens when a door closes or occupancy is cleared.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/635084f3a7f8e1877542c210b39c6ed5
   homeassistant:
