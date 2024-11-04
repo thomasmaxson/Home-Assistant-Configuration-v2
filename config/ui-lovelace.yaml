@@ -9299,7 +9299,7 @@ button_card_templates:
           { 
             const dataEntity = variables.data_entity;
 
-            if( dataEntity != 'default' && dataEntity != undefined ) 
+            if( dataEntity != 'default' && dataEntity != undefined && dataEntity != NaN ) 
             { 
               const dataState = ( variables.data_entity_attr !== null ) 
                 ? states[dataEntity].attributes[variables.data_entity_attr]
