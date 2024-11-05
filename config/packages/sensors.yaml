@@ -12,40 +12,44 @@ sensor:
       custom_door_closet_hallway_hers:
         friendly_name: "Jess' Closet Door"
         icon_template: >-
-          {%- if is_state( 'binary_sensor.door_closet_hallway_hers', 'on' ) -%}
+          {%- set door_state = states('binary_sensor.door_closet_hallway_hers') %}
+          {%- if door_state == 'on' %}
             mdi:door-sliding-open
-          {%- elif is_state( 'binary_sensor.door_closet_hallway_hers', 'off' ) -%}
+          {%- elif door_state == 'off' %}
             mdi:door-sliding
-          {%- else -%}
+          {%- else %}
             mdi:cloud-question
-          {%- endif -%}
+          {%- endif %}
         value_template: >-
-          {%- if is_state( 'binary_sensor.door_closet_hallway_hers', 'on' ) -%}
+          {%- set door_state = states('binary_sensor.door_closet_hallway_hers') %}
+          {%- if door_state == 'on' %}
             open
-          {%- elif is_state( 'binary_sensor.door_closet_hallway_hers', 'off' ) -%}
+          {%- elif door_state == 'off' %}
             closed
-          {%- else -%}
+          {%- else %}
             unavailable
-          {%- endif -%}
+          {%- endif %}
 
       custom_door_closet_hallway_his:
         friendly_name: "Tom's Closet Door"
         icon_template: >-
-          {%- if is_state( 'binary_sensor.door_closet_hallway_his', 'on' ) -%}
+          {%- set door_state = states('binary_sensor.door_closet_hallway_his') %}
+          {%- if door_state == 'on' %}
             mdi:door-sliding-open
-          {%- elif is_state( 'binary_sensor.door_closet_hallway_his', 'off' ) -%}
+          {%- elif door_state == 'off' %}
             mdi:door-sliding
-          {%- else -%}
+          {%- else %}
             mdi:cloud-question
-          {%- endif -%}
+          {%- endif %}
         value_template: >-
-          {%- if is_state( 'binary_sensor.door_closet_hallway_his', 'on' ) -%}
+          {%- set door_state = states('binary_sensor.door_closet_hallway_his') %}
+          {%- if door_state == 'on' %}
             open
-          {%- elif is_state( 'binary_sensor.door_closet_hallway_his', 'off' ) -%}
+          {%- elif door_state == 'off' %}
             closed
-          {%- else -%}
+          {%- else %}
             unavailable
-          {%- endif -%}
+          {%- endif %}
 
       custom_laundry_dryer_machine_state:
         friendly_name: "Tumble Dryer Status"
@@ -108,25 +112,13 @@ sensor:
           {%- set value_off = [ 'Off', 'Idle', 'Complete' ] -%}
           {%- set state = states( 'input_select.status_dishwasher' ) %}
 
-          {%- if state in value_on -%}
-            mdi:dishwasher
-          {%- elif state in value_off -%}
-            mdi:dishwasher
-          {%- else -%}
-            mdi:cloud-question
-          {%- endif -%}
+          {{ 'mdi:dishwasher' if state in value_on else 'mdi:dishwasher' if state in value_off else 'mdi:cloud-question' }}
         value_template: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
           {%- set value_off = [ 'Off', 'Idle', 'Complete' ] -%}
           {%- set state = states( 'input_select.status_dishwasher' ) %}
 
-          {%- if state in value_on -%}
-            on
-          {%- elif state in value_off -%}
-            off
-          {%- else -%}
-            unavailable
-          {%- endif -%}
+          {{ 'on' if state in value_on else 'off' if state in value_off else 'unavailable' }}
 
 fan:
   - platform: template
@@ -134,10 +126,11 @@ fan:
       custom_garage_fan:
         friendly_name: "Garage Fan"
         turn_on:
-          service: light.turn_on
-          entity_id: light.garage_fan
+          action: light.turn_on
+          target:
+            entity_id: light.garage_fan
         turn_off:
-          service: light.turn_off
-          entity_id: light.garage_fan
-        value_template: >-
-          {{ states( 'light.garage_fan' ) }}
+          action: light.turn_off
+          target:
+            entity_id: light.garage_fan
+        value_template: "{{ is_state('light.garage_fan', 'on') }}"
