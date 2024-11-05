@@ -257,322 +257,164 @@ amazon_echo_announcement:
             entity_id: media_player.echo_dot_bedroom_4
   description: ''
   icon: mdi:speaker-wireless
+  mode: queued
+  max: 10
 push_notification_to_ios_devices:
   alias: Push Notification to iOS Devices
   variables:
-    passed_title: '{{ title | default( ''Home Assistant'' ) }}'
-    passed_subtitle: '{{ subtitle | default( false ) }}'
-    passed_message: '{{ message | default( false ) }}'
-    passed_link: '{{ notification_link | default( ''/lovelace/home'' ) }}'
-    passed_actions: '{{ notification_actions | default( ''none'' ) }}'
+    passed_title: '{{ title | default(''Home Assistant'') }}'
+    passed_subtitle: '{{ subtitle | default(false) }}'
+    passed_message: '{{ message | default(false) }}'
+    passed_link: '{{ notification_link | default(''/lovelace/home'') }}'
+    passed_actions: '{{ notification_actions | default(''none'') }}'
   sequence:
   - condition: state
     entity_id: input_boolean.app_notify
     state: 'on'
-  - alias: Maybe Send to THOMAS
-    if:
-    - alias: Can send to Thomas
-      condition: and
-      conditions:
-      - condition: template
-        value_template: '{{ send_to | list | length > 0 }}'
-      - condition: template
-        value_template: '{{ ''thomas'' in send_to }}'
-    then:
-    - alias: Critical Notifications, Thomas
-      if:
-      - alias: Critical Notifications
-        condition: and
-        conditions:
-        - condition: template
-          value_template: '{{ true if notification_type == ''type_critical'' else
-            false }}'
-        - condition: state
-          entity_id: input_boolean.app_notify_tom_alert_critical
-          state: 'on'
-      then:
-      - action: notify.mobile_app_toms_iphone
-        metadata: {}
-        data:
-          title: '{{ passed_title }}'
-          message: '{{ passed_message }}'
-          data:
-            channel: '{{ notification_type }}'
-            subtitle: '{{ passed_subtitle }}'
-            subject: '{{ passed_subtitle }}'
-            url: '{{ passed_link }}'
-            clickAction: '{{ passed_link }}'
-            sticky: 'false'
-            actions: '{{ passed_actions }}'
-            push:
-              interruption-level: '{{ interruption_level }}'
-              sound:
-                name: Update.caf
-                critical: 1
-                volume: 1
-    - alias: General Notifications, Thomas
-      if:
-      - condition: or
-        conditions:
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_door_exterior''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity_door_exterior
-            state: 'on'
-          alias: Activity (Exterior Door) Notifications
-        - alias: Activity (Interior Door) Notifications
-          condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_door_interior''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity_door_interior
-            state: 'on'
-          - condition: or
+  - repeat:
+      for_each: '{{ send_to }}'
+      sequence:
+      - variables:
+          notify_service:
+            jess: notify.mobile_app_jess_iphone
+            tom: notify.mobile_app_tom_iphone
+          notify_flags:
+            jess:
+              allow: input_boolean.app_notify_jess
+              activity: input_boolean.app_notify_jess_alert_activity
+              activity_door_ext: input_boolean.app_notify_jess_alert_activity_door_exterior
+              activity_door_int: input_boolean.app_notify_jess_alert_activity_door_interior
+              activity_location: input_boolean.app_notify_jess_alert_activity_person_location
+              schedule: input_boolean.app_notify_jess_alert_schedule
+              info: input_boolean.app_notify_jess_alert_info
+              warning: input_boolean.app_notify_jess_alert_warning
+              critical: input_boolean.app_notify_jess_alert_critical
+            tom:
+              allow: input_boolean.app_notify_tom
+              activity: input_boolean.app_notify_tom_alert_activity
+              activity_door_ext: input_boolean.app_notify_tom_alert_activity_door_exterior
+              activity_door_int: input_boolean.app_notify_tom_alert_activity_door_interior
+              activity_location: input_boolean.app_notify_tom_alert_activity_person_location
+              schedule: input_boolean.app_notify_tom_alert_schedule
+              info: input_boolean.app_notify_tom_alert_info
+              warning: input_boolean.app_notify_tom_alert_warning
+              critical: input_boolean.app_notify_tom_alert_critical
+      - choose:
+        - conditions:
+          - condition: and
+            conditions:
+            - condition: template
+              value_template: '{{ notification_type == ''type_critical'' }}'
+            - condition: template
+              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''allow''
+                ], ''on'' ) }}'
+            - condition: template
+              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''critical''
+                ], ''on'' ) }}'
+          sequence:
+          - action: '{{ notify_service[ repeat.item ] }}'
+            metadata: {}
+            data:
+              title: '{{ passed_title }}'
+              message: '{{ passed_message }}'
+              data:
+                channel: '{{ notification_type }}'
+                subtitle: '{{ passed_subtitle }}'
+                subject: '{{ passed_subtitle }}'
+                url: '{{ passed_link }}'
+                clickAction: '{{ passed_link }}'
+                sticky: 'false'
+                actions: '{{ passed_actions }}'
+                push:
+                  interruption-level: '{{ interruption_level }}'
+                  sound:
+                    name: Update.caf
+                    critical: 1
+                    volume: 1
+        - conditions:
+          - condition: and
             conditions:
             - condition: state
-              entity_id: input_boolean.guests_home
-              state: 'on'
-            - condition: not
+              entity_id: input_boolean.snooze_notify_household_activity
+              state: 'off'
+            - condition: template
+              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''allow''
+                ], ''on'' ) }}'
+            - condition: or
               conditions:
-              - condition: state
-                entity_id: person.thomas
-                state: home
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_location''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_activity_person_location
-            state: 'on'
-          alias: Activity (Location) Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_schedule'' else
-              false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_schedule
-            state: 'on'
-          alias: Schedule Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_info'' else false
-              }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_info
-            state: 'on'
-          alias: Informational Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_warning'' else
-              false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_tom_alert_warning
-            state: 'on'
-          alias: Warning Notifications
-      then:
-      - action: notify.mobile_app_toms_iphone
-        metadata: {}
-        data:
-          title: '{{ passed_title }}'
-          message: '{{ passed_message }}'
-          data:
-            channel: '{{ notification_type }}'
-            subtitle: '{{ passed_subtitle }}'
-            subject: '{{ passed_subtitle }}'
-            url: '{{ passed_link }}'
-            clickAction: '{{ passed_link }}'
-            sticky: 'false'
-            actions: '{{ passed_actions }}'
-            push:
-              interruption-level: '{{ interruption_level }}'
-  - alias: Maybe Send to JESSICA
-    if:
-    - alias: Can send to Jessica
-      condition: and
-      conditions:
-      - condition: template
-        value_template: '{{ send_to | list | length > 0 }}'
-      - condition: template
-        value_template: '{{ ''jessica'' in send_to }}'
-    then:
-    - alias: Critical Notifications, Jessica
-      if:
-      - alias: Critical Notifications
-        condition: and
-        conditions:
-        - condition: template
-          value_template: '{{ true if notification_type == ''type_critical'' else
-            false }}'
-        - condition: state
-          entity_id: input_boolean.app_notify_jess_alert_critical
-          state: 'on'
-      then:
-      - action: notify.mobile_app_jess_iphone
-        metadata: {}
-        data:
-          title: '{{ passed_title }}'
-          message: '{{ passed_message }}'
-          data:
-            channel: '{{ notification_type }}'
-            subtitle: '{{ passed_subtitle }}'
-            subject: '{{ passed_subtitle }}'
-            url: '{{ passed_link }}'
-            clickAction: '{{ passed_link }}'
-            sticky: 'false'
-            actions: '{{ passed_actions }}'
-            push:
-              interruption-level: '{{ interruption_level }}'
-              sound:
-                name: Update.caf
-                critical: 1
-                volume: 1
-    - alias: General Notifications, Jessica
-      if:
-      - condition: or
-        conditions:
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_door_exterior''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity_door_exterior
-            state: 'on'
-          alias: Activity (Exterior Door) Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_door_interior''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity_door_interior
-            state: 'on'
-          - condition: or
-            conditions:
-            - condition: state
-              entity_id: input_boolean.guests_home
-              state: 'on'
-            - condition: not
-              conditions:
-              - condition: state
-                entity_id: person.thomas
-                state: home
-          alias: Activity (Interior Door) Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_activity_location''
-              else false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_activity_person_location
-            state: 'on'
-          alias: Activity (Location) Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_schedule'' else
-              false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_schedule
-            state: 'on'
-          alias: Schedule Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_info'' else false
-              }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_info
-            state: 'on'
-          alias: Informational Notifications
-        - condition: and
-          conditions:
-          - condition: template
-            value_template: '{{ true if notification_type == ''type_warning'' else
-              false }}'
-          - condition: state
-            entity_id: input_boolean.snooze_notify_household_activity
-            state: 'off'
-          - condition: state
-            entity_id: input_boolean.app_notify_jess_alert_warning
-            state: 'on'
-          alias: Warning Notifications
-      then:
-      - action: notify.mobile_app_jess_iphone
-        metadata: {}
-        data:
-          title: '{{ passed_title }}'
-          message: '{{ passed_message }}'
-          data:
-            channel: '{{ notification_type }}'
-            subtitle: '{{ passed_subtitle }}'
-            subject: '{{ passed_subtitle }}'
-            url: '{{ passed_link }}'
-            clickAction: '{{ passed_link }}'
-            sticky: 'false'
-            actions: '{{ passed_actions }}'
-            push:
-              interruption-level: '{{ interruption_level }}'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_door_exterior''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door_ext''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Exterior Doors'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_door_interior''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door_int''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Interior Doors'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_location''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_location''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Location'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_schedule'' }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''schedule''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Schedule'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_info'' }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''info''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Info'
+              - condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_warning'' }}'
+                - condition: template
+                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''warning''
+                    ], ''on'' ) }}'
+                alias: 'Activity Type: Warning'
+          sequence:
+          - action: '{{ notify_service[ repeat.item ] }}'
+            metadata: {}
+            data:
+              title: '{{ passed_title }}'
+              message: '{{ passed_message }}'
+              data:
+                channel: '{{ notification_type }}'
+                subtitle: '{{ passed_subtitle }}'
+                subject: '{{ passed_subtitle }}'
+                url: '{{ passed_link }}'
+                clickAction: '{{ passed_link }}'
+                sticky: 'false'
+                actions: '{{ passed_actions }}'
+                push:
+                  interruption-level: '{{ interruption_level }}'
   fields:
     send_to:
       selector:
@@ -584,7 +426,7 @@ push_notification_to_ios_devices:
           - label: Thomas
             value: thomas
       name: Send To
-      description: Who should the the notification be sent to.
+      description: Who should the notification be sent to.
       required: true
       default: all
       example: All
@@ -616,7 +458,7 @@ push_notification_to_ios_devices:
       example: Activity, Door
     interruption_level:
       name: Interruption Level
-      description: Type of notification interuption to perform on the device.
+      description: Type of notification interruption to perform on the device.
       required: true
       default: active
       selector:
