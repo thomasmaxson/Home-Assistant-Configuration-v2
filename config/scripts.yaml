@@ -268,37 +268,36 @@ push_notification_to_ios_devices:
     passed_link: '{{ notification_link | default(''/lovelace/home'') }}'
     passed_actions: '{{ notification_actions | default(''none'') }}'
   sequence:
+  - variables:
+      helper:
+        jessica:
+          device: notify.mobile_app_jess_iphone
+          allow: input_boolean.app_notify_jess
+          activity: input_boolean.app_notify_jess_alert_activity
+          activity_door_ext: input_boolean.app_notify_jess_alert_activity_door_exterior
+          activity_door_int: input_boolean.app_notify_jess_alert_activity_door_interior
+          activity_location: input_boolean.app_notify_jess_alert_activity_person_location
+          schedule: input_boolean.app_notify_jess_alert_schedule
+          info: input_boolean.app_notify_jess_alert_info
+          warning: input_boolean.app_notify_jess_alert_warning
+          critical: input_boolean.app_notify_jess_alert_critical
+        thomas:
+          device: notify.mobile_app_tom_iphone
+          allow: input_boolean.app_notify_tom
+          activity: input_boolean.app_notify_tom_alert_activity
+          activity_door_ext: input_boolean.app_notify_tom_alert_activity_door_exterior
+          activity_door_int: input_boolean.app_notify_tom_alert_activity_door_interior
+          activity_location: input_boolean.app_notify_tom_alert_activity_person_location
+          schedule: input_boolean.app_notify_tom_alert_schedule
+          info: input_boolean.app_notify_tom_alert_info
+          warning: input_boolean.app_notify_tom_alert_warning
+          critical: input_boolean.app_notify_tom_alert_critical
   - condition: state
     entity_id: input_boolean.app_notify
     state: 'on'
   - repeat:
       for_each: '{{ send_to }}'
       sequence:
-      - variables:
-          notify_service:
-            jess: notify.mobile_app_jess_iphone
-            tom: notify.mobile_app_tom_iphone
-          notify_flags:
-            jess:
-              allow: input_boolean.app_notify_jess
-              activity: input_boolean.app_notify_jess_alert_activity
-              activity_door_ext: input_boolean.app_notify_jess_alert_activity_door_exterior
-              activity_door_int: input_boolean.app_notify_jess_alert_activity_door_interior
-              activity_location: input_boolean.app_notify_jess_alert_activity_person_location
-              schedule: input_boolean.app_notify_jess_alert_schedule
-              info: input_boolean.app_notify_jess_alert_info
-              warning: input_boolean.app_notify_jess_alert_warning
-              critical: input_boolean.app_notify_jess_alert_critical
-            tom:
-              allow: input_boolean.app_notify_tom
-              activity: input_boolean.app_notify_tom_alert_activity
-              activity_door_ext: input_boolean.app_notify_tom_alert_activity_door_exterior
-              activity_door_int: input_boolean.app_notify_tom_alert_activity_door_interior
-              activity_location: input_boolean.app_notify_tom_alert_activity_person_location
-              schedule: input_boolean.app_notify_tom_alert_schedule
-              info: input_boolean.app_notify_tom_alert_info
-              warning: input_boolean.app_notify_tom_alert_warning
-              critical: input_boolean.app_notify_tom_alert_critical
       - choose:
         - conditions:
           - condition: and
@@ -306,13 +305,13 @@ push_notification_to_ios_devices:
             - condition: template
               value_template: '{{ notification_type == ''type_critical'' }}'
             - condition: template
-              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''allow''
-                ], ''on'' ) }}'
+              value_template: '{{ is_state( helper[ repeat.item ][ ''allow'' ], ''on''
+                ) }}'
             - condition: template
-              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''critical''
-                ], ''on'' ) }}'
+              value_template: '{{ is_state( helper[ repeat.item ][ ''critical'' ],
+                ''on'' ) }}'
           sequence:
-          - action: '{{ notify_service[ repeat.item ] }}'
+          - action: '{{ helper[ repeat.item ][ ''device'' ] }}'
             metadata: {}
             data:
               title: '{{ passed_title }}'
@@ -338,8 +337,8 @@ push_notification_to_ios_devices:
               entity_id: input_boolean.snooze_notify_household_activity
               state: 'off'
             - condition: template
-              value_template: '{{ is_state( notify_flags[ repeat.item ][ ''allow''
-                ], ''on'' ) }}'
+              value_template: '{{ is_state( helper[ repeat.item ][ ''allow'' ], ''on''
+                ) }}'
             - condition: or
               conditions:
               - condition: and
@@ -348,10 +347,10 @@ push_notification_to_ios_devices:
                   value_template: '{{ notification_type == ''type_activity_door_exterior''
                     }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
                     ], ''on'' ) }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door_ext''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_door_ext''
                     ], ''on'' ) }}'
                 alias: 'Activity Type: Exterior Doors'
               - condition: and
@@ -360,10 +359,10 @@ push_notification_to_ios_devices:
                   value_template: '{{ notification_type == ''type_activity_door_interior''
                     }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
                     ], ''on'' ) }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_door_int''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_door_int''
                     ], ''on'' ) }}'
                 alias: 'Activity Type: Interior Doors'
               - condition: and
@@ -372,7 +371,10 @@ push_notification_to_ios_devices:
                   value_template: '{{ notification_type == ''type_activity_location''
                     }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''activity_location''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_location''
                     ], ''on'' ) }}'
                 alias: 'Activity Type: Location'
               - condition: and
@@ -380,7 +382,7 @@ push_notification_to_ios_devices:
                 - condition: template
                   value_template: '{{ notification_type == ''type_schedule'' }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''schedule''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''schedule''
                     ], ''on'' ) }}'
                 alias: 'Activity Type: Schedule'
               - condition: and
@@ -388,19 +390,19 @@ push_notification_to_ios_devices:
                 - condition: template
                   value_template: '{{ notification_type == ''type_info'' }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''info''
-                    ], ''on'' ) }}'
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''info'' ],
+                    ''on'' ) }}'
                 alias: 'Activity Type: Info'
               - condition: and
                 conditions:
                 - condition: template
                   value_template: '{{ notification_type == ''type_warning'' }}'
                 - condition: template
-                  value_template: '{{ is_state( notify_flags[ repeat.item ][ ''warning''
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''warning''
                     ], ''on'' ) }}'
                 alias: 'Activity Type: Warning'
           sequence:
-          - action: '{{ notify_service[ repeat.item ] }}'
+          - action: '{{ helper[ repeat.item ][ ''device'' ] }}'
             metadata: {}
             data:
               title: '{{ passed_title }}'
