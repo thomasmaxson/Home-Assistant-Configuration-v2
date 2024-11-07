@@ -1,0 +1,109 @@
+blueprint:
+  name: Sonoff Wireless Switch
+  description: Control devices with your Sonoff Wireless Switch.
+  author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/1caba2eb5bd9bb0bb1aed157b5bfb15c
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: Sonoff Wireless Switch
+      description: "Sonoff Wireless Switch remote used to trigger actions."
+      selector:
+        device:
+          filter:
+            - integration: zha
+              manufacturer: eWeLink
+              model: WB01
+
+    remote_actions:
+      name: Button Actions
+      icon: mdi:hand-pointing-up
+      collapsed: false
+      input:
+        single_press_action:
+          name: Button Short Press
+          description: "The action to perform on short press of the button."
+          default: []
+          selector:
+            action:
+
+        double_press_action:
+          name: Button Double Press
+          description: "The action to perform on double press of the button."
+          default: []
+          selector:
+            action:
+
+        long_press_action:
+          name: Button Long Press
+          description: "The action to perform on long press of the button."
+          default: []
+          selector:
+            action:
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: "Mode that the automation runs in."
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Max Number of Runs
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            (ignored by Single and Restart Modes)
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+triggers:
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+
+actions:
+  - variables:
+      command: '{{ trigger.event.data.command }}'
+      cluster_id: '{{ trigger.event.data.cluster_id }}'
+      endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+  - choose:
+      - conditions:
+          - '{{ command == "toggle" }}'
+          - '{{ cluster_id == 6 }}'
+          - '{{ endpoint_id == 1 }}'
+        sequence: !input single_press_action
+      - conditions:
+          - '{{ command == "on" }}'
+          - '{{ cluster_id == 6 }}'
+          - '{{ endpoint_id == 1 }}'
+        sequence: !input double_press_action
+      - conditions:
+          - '{{ command == "off" }}'
+          - '{{ cluster_id == 6 }}'
+          - '{{ endpoint_id == 1 }}'
+        sequence: !input long_press_action
