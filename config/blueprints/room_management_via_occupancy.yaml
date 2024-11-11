@@ -2,7 +2,9 @@ blueprint:
   name: Manage Area State via Sensors
   description: >-
     Manage occupancy state via multiple sensors.
+
     - Control what happens when a door opens or occupancy is detected.
+
     - Control what happens when a door closes or occupancy is cleared.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/635084f3a7f8e1877542c210b39c6ed5
@@ -222,6 +224,22 @@ actions:
                 value_template: "{{ disable_door_action | length > 0 }}"
             then: !input disable_door_action
 
+      # Actions to perform if DOOR OPENED, and MOTION DETECTED
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: event_wait_door_open
+              - condition: state
+                entity_id: !input sensor_occupancy
+                state: "on"
+        sequence:
+          # If configured, RUN delayed enable ACTIONS
+          - if:
+              - condition: template
+                value_template: "{{ disable_occupancy_action_wait | length > 0 }}"
+            then: !input disable_occupancy_action_wait
+
       # Actions to perform if DOOR OPENED, and MOTION CLEAR
       - conditions:
           - condition: and
@@ -233,10 +251,10 @@ actions:
                 state: "off"
         sequence:
           # If configured, RUN immediate enable ACTIONS
-          - if:
-              - condition: template
-                value_template: "{{ enable_occupancy_action_now | length > 0 }}"
-            then: !input enable_occupancy_action_now
+          # - if:
+          #     - condition: template
+          #       value_template: "{{ enable_occupancy_action_now | length > 0 }}"
+          #   then: !input enable_occupancy_action_now
           # If configured, manage idle TIMER
           - if:
               - condition: template
