@@ -1985,11 +1985,7 @@ views:
           - type: vertical-stack
             cards:
               - type: custom:mushroom-template-card
-                primary: >-
-                  {% set height = states( 'sensor.desk_bedroom_4_desk_height' )
-                  %} {% set unit = states( 'select.desk_bedroom_4_height_units'
-                  ) %} Desk Height{% if height != 'unknown' and unit !=
-                  'unknown' %} ({{height}} {{unit}}){% endif %}
+                primary: Desk Height
                 card_mod:
                   style: |
                     ha-card {
@@ -3117,10 +3113,10 @@ views:
                       - entity: sensor.processor_use_percent
                         name: CPU Usage
                       - type: divider
-                      - entity: sensor.mariadb_database_size
+                      - entity: sensor.home_assistant_v2_db_size
                         name: Database Size
                       - entity: sensor.home_assistant_log_size
-                        name: Home Assistant Log Size
+                        name: Log Size
                   - type: entities
                     title: Last Restart
                     show_header_toggle: false
@@ -3538,13 +3534,9 @@ views:
             tap_action:
               action: call-service
               haptic: success
-              service: cover.set_cover_tilt_position
-              service_data:
+              service: cover.toggle_cover_tilt
+              target:
                 entity_id: cover.blinds_bedroom_4
-                tilt_position: >
-                  {{ iif( ( ( state_attr( 'cover.blinds_bedroom_4',
-                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
-                  }}
             style:
               top: 86.5%
               left: 59.5%
@@ -3598,13 +3590,9 @@ views:
             tap_action:
               action: call-service
               haptic: success
-              service: cover.set_cover_tilt_position
-              service_data:
+              service: cover.toggle_cover_tilt
+              target:
                 entity_id: cover.blinds_kitchen
-                tilt_position: >
-                  {{ iif( ( ( state_attr( 'cover.blinds_kitchen',
-                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
-                  }}
             style:
               top: 86.5%
               left: 41.25%
@@ -4394,13 +4382,9 @@ views:
             tap_action:
               action: call-service
               haptic: success
-              service: cover.set_cover_tilt_position
-              service_data:
+              service: cover.toggle_cover_tilt
+              target:
                 entity_id: cover.blinds_bedroom_4
-                tilt_position: >
-                  {{ iif( ( ( state_attr( 'cover.blinds_bedroom_4',
-                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
-                  }}
             style:
               top: 59.5%
               left: 14%
@@ -4454,13 +4438,9 @@ views:
             tap_action:
               action: call-service
               haptic: success
-              service: cover.set_cover_tilt_position
-              service_data:
+              service: cover.toggle_cover_tilt
+              target:
                 entity_id: cover.blinds_kitchen
-                tilt_position: >
-                  {{ iif( ( ( state_attr( 'cover.blinds_kitchen',
-                  'current_tilt_position' ) | int | round ) == 100 ), 50, 100 )
-                  }}
             style:
               top: 41%
               left: 14%
@@ -5954,6 +5934,34 @@ views:
                       action: more-info
       - type: vertical-stack
         cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: Camera Settings
+                show_header_toggle: false
+                card_mod:
+                  style: |
+                    ha-card.type-entities { 
+                      --ha-card-border-color: transparent;
+                      --ha-card-border-width: 0;
+                      --ha-card-border-radius: 0;
+                      --ha-card-background: transparent;
+                      padding-right: 0;
+                      padding-left: 0;
+                    }
+
+                    #states { padding: 0;}
+                entities:
+                  - entity: input_boolean.enable_exterior_camera_recording
+                    name: Record Exterior Cameras
+                  - entity: input_boolean.enable_interior_camera_recording
+                    name: Record Interior Cameras
+                  - entity: input_boolean.enable_motion_camera_recording
+                    name: Record Motion Cameras
+                  - entity: input_boolean.camera_int_privacy_mode
+                    name: Disable Private Interior Cameras
+      - type: vertical-stack
+        cards:
           - type: custom:mushroom-title-card
             title: Cameras
           - type: horizontal-stack
@@ -6106,34 +6114,6 @@ views:
                         }
 
                         #states { padding: 0;}
-      - type: vertical-stack
-        cards:
-          - type: vertical-stack
-            cards:
-              - type: entities
-                title: Camera Settings
-                show_header_toggle: false
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.enable_exterior_camera_recording
-                    name: Record Exterior Cameras
-                  - entity: input_boolean.enable_interior_camera_recording
-                    name: Record Interior Cameras
-                  - entity: input_boolean.enable_motion_camera_recording
-                    name: Record Motion Cameras
-                  - entity: input_boolean.camera_int_privacy_mode
-                    name: Disable Private Interior Cameras
     layout: {}
   - title: Laundry Details
     path: page-laundry
@@ -9697,16 +9677,7 @@ button_card_templates:
         - height: auto;
         - aspect-ratio: 1
         - padding: 0
-        - color: |
-            [[[ 
-              const currentHeight = parseFloat( states[variables.entity_height].state, 10 );
-              const aboveMin = currentHeight > variables.height_min;
-              const belowMax = currentHeight <= variables.height_max;
-
-              return ( aboveMin && belowMax ) 
-                ? 'var( --blue-color )'
-                : 'var( --grey-color )';
-            ]]]
+        - color: var( --grey-color )
       name:
         - margin-bottom: 5px
     tap_action:
