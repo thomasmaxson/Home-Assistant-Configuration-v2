@@ -832,51 +832,64 @@
   alias: Resident Enters/Leaves Home or Neighborhood
   description: ''
   triggers:
-  - entity_id: person.thomas
-    zone: zone.regency_lakes
+  - trigger: zone
+    entity_id: person.jessica
+    zone: zone.home
     event: leave
-    id: THOMAS Leaves Neighborhood
-    trigger: zone
-  - entity_id: person.jessica
-    zone: zone.regency_lakes
-    event: leave
-    id: JESSICA Leaves Neighborhood
-    trigger: zone
-  - entity_id: person.thomas
-    zone: zone.regency_lakes
-    event: enter
-    id: THOMAS Enters Neighborhood
-    trigger: zone
-  - entity_id: person.jessica
-    zone: zone.regency_lakes
-    event: enter
-    id: JESSICA Enters Neighborhood
-    trigger: zone
-  - entity_id: person.thomas
+    id: Home LEFT by Jessica
+  - trigger: zone
+    entity_id: person.jessica
     zone: zone.home
     event: enter
-    id: THOMAS Enters Home
-    trigger: zone
-  - entity_id: person.jessica
+    id: Home ENTERED by Jessica
+  - trigger: zone
+    entity_id: person.jessica
+    zone: zone.regency_lakes
+    event: enter
+    id: Regency Lakes ENTERED by Jessica
+  - trigger: zone
+    entity_id: person.thomas
+    zone: zone.home
+    event: leave
+    id: Home LEFT by Thomas
+  - trigger: zone
+    entity_id: person.thomas
     zone: zone.home
     event: enter
-    id: JESSICA Enter Home
-    trigger: zone
+    id: Home ENTERED by Thomas
+  - trigger: zone
+    entity_id: person.thomas
+    zone: zone.regency_lakes
+    event: enter
+    id: Regency Lakes ENTERED by Thomas
   conditions: []
   actions:
   - choose:
     - conditions:
-      - condition: trigger
-        id:
-        - Tom Leaves Neighborhood
-      - condition: not
+      - condition: or
         conditions:
-        - condition: state
-          entity_id: person.jessica
-          state: home
-        - condition: state
-          entity_id: person.jessica
-          state: Regency Lakes
+        - alias: Thomas LEAVES
+          condition: and
+          conditions:
+          - condition: trigger
+            id:
+            - Home LEFT by Thomas
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: person.jessica
+              state: home
+        - alias: Jessica LEAVES
+          condition: and
+          conditions:
+          - condition: trigger
+            id:
+            - Home LEFT by Jessica
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: person.thomas
+              state: home
       sequence:
       - action: input_boolean.turn_on
         metadata: {}
@@ -889,43 +902,34 @@
         data: {}
         target:
           entity_id: input_boolean.camera_int_privacy_mode
+      alias: Person LEAVES
     - conditions:
-      - condition: trigger
-        id:
-        - Jessica Leaves Neighborhood
-      - condition: not
+      - condition: or
         conditions:
-        - condition: state
-          entity_id: person.thomas
-          state: home
-        - condition: state
-          entity_id: person.thomas
-          state: Regency Lakes
-      sequence:
-      - action: input_boolean.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-      - action: input_boolean.turn_off
-        data: {}
-        target:
-          entity_id: input_boolean.camera_int_privacy_mode
-    - conditions:
-      - condition: trigger
-        id:
-        - Tom Enters Neighborhood
-        - Tom Enters Home
-      - condition: not
-        conditions:
-        - condition: state
-          entity_id: person.jessica
-          state: home
-        - condition: state
-          entity_id: person.jessica
-          state: Regency Lakes
+        - condition: and
+          conditions:
+          - condition: trigger
+            id:
+            - Home ENTERED by Jessica
+            - Regency Lakes ENTERED by Jessica
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: person.thomas
+              state: home
+          alias: Jessica ENTERS
+        - alias: Thomas ENTERS
+          condition: and
+          conditions:
+          - condition: trigger
+            id:
+            - Home ENTERED by Thomas
+            - Regency Lakes ENTERED by Thomas
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: person.jessica
+              state: home
       sequence:
       - action: input_boolean.turn_off
         target:
@@ -938,31 +942,7 @@
           entity_id:
           - input_boolean.camera_int_privacy_mode
         data: {}
-    - conditions:
-      - condition: trigger
-        id:
-        - Jessica Enters Neighborhood
-        - Jessica Enter Home
-      - condition: not
-        conditions:
-        - condition: state
-          entity_id: person.thomas
-          state: home
-        - condition: state
-          entity_id: person.thomas
-          state: Regency Lakes
-      sequence:
-      - action: input_boolean.turn_off
-        target:
-          entity_id:
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-        data: {}
-      - action: input_boolean.turn_on
-        target:
-          entity_id:
-          - input_boolean.camera_int_privacy_mode
-        data: {}
+      alias: Person ENTERS
   mode: single
 - id: '1726566073863'
   alias: Garage Door Opens/Closes
