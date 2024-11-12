@@ -3210,19 +3210,17 @@ views:
                 cards:
                   - type: entities
                     show_header_toggle: false
+                    entities:
+                      - entity: sensor.time_next_sunrise
+                        name: Next Sunrise
+                      - entity: sensor.time_next_sunset
+                        name: Next Sunset
+                    title: Daily Schedule
                     card_mod:
                       style: |
                         ha-card.type-entities { 
                           margin: var( --popup--card-stacks );
                         }
-                    entities:
-                      - entity: sensor.custom_next_sunrise_time
-                        name: Next Sunrise
-                      - entity: sensor.custom_next_sunset_time
-                        name: Next Sunset
-                      - entity: sensor.sunset_automations_status
-                        name: Sunset Automations
-                    title: Daily Schedule
                   - type: entities
                     show_header_toggle: false
                     card_mod:
@@ -7981,6 +7979,8 @@ views:
                     template: room_popup__entities
                     variables:
                       - entities:
+                          - entity: sensor.sunrise_automations_status
+                            name: Run at
                           - entity: input_boolean.sunrise_automations_run
                             name: Enable
                           - type: conditional
@@ -8017,6 +8017,8 @@ views:
                     template: room_popup__entities
                     variables:
                       - entities:
+                          - entity: sensor.sunset_automations_status
+                            name: Run at
                           - entity: input_boolean.sunset_automations_run
                             name: Enable
                           - type: conditional
@@ -8026,8 +8028,6 @@ views:
                             row:
                               entity: input_button.trigger_sunset_automations_run
                               name: Trigger
-                          - entity: sensor.sunset_automations_status
-                            name: Sunset Automations
                           - entity: input_boolean.sunset_automations_active
                             name: Active
           - type: custom:decluttering-card
