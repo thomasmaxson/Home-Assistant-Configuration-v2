@@ -3982,6 +3982,7 @@
       entity_id:
       - input_boolean.reminder_toothbrush_complete_jessica
       - input_boolean.reminder_toothbrush_complete_thomas
+      - input_boolean.reminder_medicine_complete_gouda
       - input_boolean.reminder_waste_take_out_bulk
       - input_boolean.reminder_waste_bring_in_recycle
       - input_boolean.reminder_waste_take_out_recycle
