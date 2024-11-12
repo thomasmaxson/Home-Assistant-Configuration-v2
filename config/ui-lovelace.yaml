@@ -6998,6 +6998,8 @@ views:
                 name: Living Room Door
                 entity: binary_sensor.door_living
                 variables:
+                  icon_on: mdi:door-sliding-open
+                  icon_off: mdi:door-sliding
                   icon_on_color: var( --green-color-rgb )
                   data_entity: sensor.door_living_battery
                   data_type: battery
@@ -7046,6 +7048,8 @@ views:
                 name: Jess' Closet Door
                 entity: binary_sensor.door_closet_hallway_hers
                 variables:
+                  icon_on: mdi:door-sliding-open
+                  icon_off: mdi:door-sliding
                   icon_on_color: var( --green-color-rgb )
                   data_entity: sensor.door_closet_hallway_hers_battery
                   data_type: battery
@@ -7054,6 +7058,8 @@ views:
                 name: Tom's Closet Door
                 entity: binary_sensor.door_closet_hallway_his
                 variables:
+                  icon_on: mdi:door-sliding-open
+                  icon_off: mdi:door-sliding
                   icon_on_color: var( --green-color-rgb )
                   data_entity: sensor.door_closet_hallway_his_battery
                   data_type: battery
