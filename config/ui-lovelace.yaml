@@ -2648,7 +2648,7 @@ views:
             hash: '#details-other'
             show_header: false
             margin: 7px
-            width_desktop: 540px
+            width_desktop: 60%
             width_mobile: 100%
             bg_color: var( --popup--background-color )
             bg_opacity: '90'
@@ -2663,219 +2663,231 @@ views:
             variables:
               - icon: mdi:lightbulb-multiple
               - title: Other
-          - type: vertical-stack
+          - type: custom:layout-card
+            layout_type: custom:masonry-layout
             cards:
-              - type: custom:mushroom-title-card
-                title: Bar
-                subtitle: Lights
-              - type: custom:decluttering-card
-                template: room_popup__grid_2_columns
-                variables:
-                  - cards:
-                      - type: custom:mushroom-light-card
-                        name: Ceiling Fan Light
-                        entity: light.ceiling_fan_bar
-                        collapsible_controls: true
-                        show_brightness_control: true
-              - type: custom:decluttering-card
-                template: room_popup__grid_2_columns
-                variables:
-                  - cards:
-                      - type: vertical-stack
-                        cards:
-                          - type: custom:mushroom-title-card
-                            title: ''
-                            subtitle: Ceiling Fan
-                          - type: custom:mushroom-fan-card
-                            name: Ceiling Fan
-                            entity: fan.ceiling_fan_bar
-                            layout: vertical
-                            collapsible_controls: false
-                            show_percentage_control: true
-              - type: custom:mushroom-title-card
-                title: ''
-                subtitle: Devices
-              - type: custom:decluttering-card
-                template: room_popup__grid_2_columns
-                variables:
-                  - cards:
-                      - type: custom:mini-graph-card
-                        name: Wine Fridge (Top)
-                        show:
-                          icon: false
-                        animate: true
-                        line_color: var(--primary-color)
-                        decimals: 0
-                        tap_action:
-                          action: none
-                        entities:
-                          - sensor.temperature_wine_cooler_top
-                      - type: custom:mini-graph-card
-                        name: Wine Fridge (Bottom)
-                        show:
-                          icon: false
-                        animate: true
-                        line_color: var(--primary-color)
-                        decimals: 0
-                        tap_action:
-                          action: none
-                        entities:
-                          - sensor.temperature_wine_cooler_bottom
-              - type: custom:decluttering-card
-                template: room_popup__expander
-                variables:
-                  - title: Show More
-                  - cards:
+              - type: vertical-stack
+                cards:
+                  - type: vertical-stack
+                    cards:
                       - type: custom:mushroom-title-card
-                        title: ''
-                        subtitle: Leak Detection
+                        title: Bar
+                        subtitle: Lights
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
                           - cards:
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Wine Cooler
-                                entity: binary_sensor.leak_wine_cooler
-                                variables:
-                                  data_entity: sensor.leak_wine_cooler_battery
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: Hallways
-                subtitle: Lights
-              - type: custom:decluttering-card
-                template: room_popup__grid_2_columns
-                variables:
-                  - cards:
-                      - type: custom:mushroom-light-card
-                        name: Guest Hallway
-                        entity: light.guest_hallway_light
-                        collapsible_controls: true
-                        show_brightness_control: true
-                      - type: custom:mushroom-light-card
-                        name: Laundry Hallway
-                        entity: light.laundry_hallway_light
-                        collapsible_controls: true
-                        show_brightness_control: true
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: Main Bathroom
-                subtitle: Lights
-              - type: custom:decluttering-card
-                template: room_popup__grid_2_columns
-                variables:
-                  - cards:
-                      - type: custom:mushroom-light-card
-                        name: Ceiling
-                        entity: light.switch_1_bathroom_main_light
-                        collapsible_controls: true
-                      - type: custom:mushroom-light-card
-                        name: Vanity
-                        entity: light.switch_2_bathroom_main_light
-                        collapsible_controls: true
-              - type: custom:decluttering-card
-                template: room_popup__expander
-                variables:
-                  - title: Show More
-                  - cards:
-                      - type: custom:mushroom-title-card
-                        title: ''
-                        subtitle: Leak Detection
+                              - type: custom:mushroom-light-card
+                                name: Ceiling Fan Light
+                                entity: light.ceiling_fan_bar
+                                collapsible_controls: true
+                                show_brightness_control: true
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
                           - cards:
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Left Sink
-                                entity: binary_sensor.leak_sink_bathroom_main_hers
-                                variables:
-                                  data_entity: sensor.leak_sink_bathroom_main_hers_battery
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Right Sink
-                                entity: binary_sensor.leak_sink_bathroom_main_his
-                                variables:
-                                  data_entity: sensor.leak_sink_bathroom_main_his_battery
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Toilet
-                                entity: binary_sensor.leak_toilet_bathroom_main
-                                variables:
-                                  data_entity: sensor.leak_toilet_bathroom_main_battery
-              - type: custom:decluttering-card
-                template: room_popup__expander
-                variables:
-                  - title: Room Settings
-                  - cards:
-                      - type: custom:decluttering-card
-                        template: room_popup__entities
-                        variables:
-                          - entities:
-                              - type: section
-                                label: Voice Assistant
-                              - entity: input_boolean.household_notify_bathroom_1
-                                name: Allow Annoucements
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: Guest Bathroom
-                subtitle: ''
-              - type: custom:decluttering-card
-                template: room_popup__expander
-                variables:
-                  - title: Show More
-                  - cards:
+                              - type: vertical-stack
+                                cards:
+                                  - type: custom:mushroom-title-card
+                                    title: ''
+                                    subtitle: Ceiling Fan
+                                  - type: custom:mushroom-fan-card
+                                    name: Ceiling Fan
+                                    entity: fan.ceiling_fan_bar
+                                    layout: vertical
+                                    collapsible_controls: false
+                                    show_percentage_control: true
                       - type: custom:mushroom-title-card
                         title: ''
-                        subtitle: Leak Detection
+                        subtitle: Devices
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
                           - cards:
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Sink
-                                entity: binary_sensor.leak_sink_bathroom_guest
+                              - type: custom:mini-graph-card
+                                name: Wine Fridge (Top)
+                                show:
+                                  icon: false
+                                animate: true
+                                line_color: var(--primary-color)
+                                decimals: 0
+                                tap_action:
+                                  action: none
+                                entities:
+                                  - sensor.temperature_wine_cooler_top
+                              - type: custom:mini-graph-card
+                                name: Wine Fridge (Bottom)
+                                show:
+                                  icon: false
+                                animate: true
+                                line_color: var(--primary-color)
+                                decimals: 0
+                                tap_action:
+                                  action: none
+                                entities:
+                                  - sensor.temperature_wine_cooler_bottom
+                      - type: custom:decluttering-card
+                        template: room_popup__expander
+                        variables:
+                          - title: Show More
+                          - cards:
+                              - type: custom:mushroom-title-card
+                                title: ''
+                                subtitle: Leak Detection
+                              - type: custom:decluttering-card
+                                template: room_popup__grid_2_columns
                                 variables:
-                                  data_entity: sensor.leak_sink_bathroom_guest_battery
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Toilet
-                                entity: binary_sensor.leak_toilet_bathroom_guest
-                                variables:
-                                  data_entity: sensor.leak_sink_bathroom_guest_battery
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-title-card
-                title: Half Bathroom
-                subtitle: ''
-              - type: custom:decluttering-card
-                template: room_popup__expander
-                variables:
-                  - title: Show More
-                  - cards:
+                                  - cards:
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Wine Cooler
+                                        entity: binary_sensor.leak_wine_cooler
+                                        variables:
+                                          data_entity: sensor.leak_wine_cooler_battery
+                  - type: vertical-stack
+                    cards:
                       - type: custom:mushroom-title-card
-                        title: ''
-                        subtitle: Leak Detection
+                        title: Hallways
+                        subtitle: Lights
                       - type: custom:decluttering-card
                         template: room_popup__grid_2_columns
                         variables:
                           - cards:
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Sink
-                                entity: binary_sensor.leak_sink_bathroom_half
+                              - type: custom:mushroom-light-card
+                                name: Guest Hallway
+                                entity: light.guest_hallway_light
+                                collapsible_controls: true
+                                show_brightness_control: true
+                              - type: custom:mushroom-light-card
+                                name: Laundry Hallway
+                                entity: light.laundry_hallway_light
+                                collapsible_controls: true
+                                show_brightness_control: true
+              - type: vertical-stack
+                cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: Main Bathroom
+                        subtitle: Lights
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_2_columns
+                        variables:
+                          - cards:
+                              - type: custom:mushroom-light-card
+                                name: Ceiling
+                                entity: light.switch_1_bathroom_main_light
+                                collapsible_controls: true
+                              - type: custom:mushroom-light-card
+                                name: Vanity
+                                entity: light.switch_2_bathroom_main_light
+                                collapsible_controls: true
+                      - type: custom:decluttering-card
+                        template: room_popup__expander
+                        variables:
+                          - title: Show More
+                          - cards:
+                              - type: custom:mushroom-title-card
+                                title: ''
+                                subtitle: Leak Detection
+                              - type: custom:decluttering-card
+                                template: room_popup__grid_2_columns
                                 variables:
-                                  data_entity: sensor.leak_sink_bathroom_half_battery
-                              - type: custom:button-card
-                                template: entity_card__leak
-                                name: Toilet
-                                entity: binary_sensor.leak_toilet_bathroom_half
+                                  - cards:
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Left Sink
+                                        entity: >-
+                                          binary_sensor.leak_sink_bathroom_main_hers
+                                        variables:
+                                          data_entity: >-
+                                            sensor.leak_sink_bathroom_main_hers_battery
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Right Sink
+                                        entity: >-
+                                          binary_sensor.leak_sink_bathroom_main_his
+                                        variables:
+                                          data_entity: >-
+                                            sensor.leak_sink_bathroom_main_his_battery
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Toilet
+                                        entity: binary_sensor.leak_toilet_bathroom_main
+                                        variables:
+                                          data_entity: sensor.leak_toilet_bathroom_main_battery
+                      - type: custom:decluttering-card
+                        template: room_popup__expander
+                        variables:
+                          - title: Room Settings
+                          - cards:
+                              - type: custom:decluttering-card
+                                template: room_popup__entities
                                 variables:
-                                  data_entity: sensor.leak_sink_bathroom_half_battery
+                                  - entities:
+                                      - type: section
+                                        label: Voice Assistant
+                                      - entity: >-
+                                          input_boolean.household_notify_bathroom_1
+                                        name: Allow Annoucements
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: Guest Bathroom
+                        subtitle: ''
+                      - type: custom:decluttering-card
+                        template: room_popup__expander
+                        variables:
+                          - title: Show More
+                          - cards:
+                              - type: custom:mushroom-title-card
+                                title: ''
+                                subtitle: Leak Detection
+                              - type: custom:decluttering-card
+                                template: room_popup__grid_2_columns
+                                variables:
+                                  - cards:
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Sink
+                                        entity: binary_sensor.leak_sink_bathroom_guest
+                                        variables:
+                                          data_entity: sensor.leak_sink_bathroom_guest_battery
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Toilet
+                                        entity: binary_sensor.leak_toilet_bathroom_guest
+                                        variables:
+                                          data_entity: sensor.leak_sink_bathroom_guest_battery
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: Half Bathroom
+                        subtitle: ''
+                      - type: custom:decluttering-card
+                        template: room_popup__expander
+                        variables:
+                          - title: Show More
+                          - cards:
+                              - type: custom:mushroom-title-card
+                                title: ''
+                                subtitle: Leak Detection
+                              - type: custom:decluttering-card
+                                template: room_popup__grid_2_columns
+                                variables:
+                                  - cards:
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Sink
+                                        entity: binary_sensor.leak_sink_bathroom_half
+                                        variables:
+                                          data_entity: sensor.leak_sink_bathroom_half_battery
+                                      - type: custom:button-card
+                                        template: entity_card__leak
+                                        name: Toilet
+                                        entity: binary_sensor.leak_toilet_bathroom_half
+                                        variables:
+                                          data_entity: sensor.leak_sink_bathroom_half_battery
         view_layout:
           grid-area: modalMisc
       - type: custom:button-card
