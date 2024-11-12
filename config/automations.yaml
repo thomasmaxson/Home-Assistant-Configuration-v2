@@ -1235,22 +1235,6 @@
       - light.backyard_string_lights
       - light.foyer_under_table
       - light.cabinet_upper_lights
-  - alias: If Allowed Run Automations
-    if:
-    - condition: and
-      conditions:
-      - condition: state
-        entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        state: 'on'
-      - condition: state
-        entity_id: binary_sensor.door_bedroom_4
-        state: 'on'
-    then:
-    - action: cover.open_cover_tilt
-      target:
-        entity_id:
-        - cover.blinds_bedroom_4
-      data: {}
   - alias: If Residents or Guests are HOME
     if:
     - condition: or
@@ -1268,6 +1252,22 @@
         entity_id:
         - cover.blinds_kitchen
       data: {}
+    - alias: OPEN Bedroom 4 Blinds
+      if:
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        - condition: state
+          entity_id: binary_sensor.door_bedroom_4
+          state: 'on'
+      then:
+      - action: cover.open_cover_tilt
+        target:
+          entity_id:
+          - cover.blinds_bedroom_4
+        data: {}
   mode: queued
   max: 10
 - id: '1726962604115'
