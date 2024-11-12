@@ -9,48 +9,6 @@
 sensor:
   - platform: template
     sensors:
-      custom_door_closet_hallway_hers:
-        friendly_name: "Jess' Closet Door"
-        icon_template: >-
-          {%- set door_state = states('binary_sensor.door_closet_hallway_hers') %}
-          {%- if door_state == 'on' %}
-            mdi:door-sliding-open
-          {%- elif door_state == 'off' %}
-            mdi:door-sliding
-          {%- else %}
-            mdi:cloud-question
-          {%- endif %}
-        value_template: >-
-          {%- set door_state = states('binary_sensor.door_closet_hallway_hers') %}
-          {%- if door_state == 'on' %}
-            open
-          {%- elif door_state == 'off' %}
-            closed
-          {%- else %}
-            unavailable
-          {%- endif %}
-
-      custom_door_closet_hallway_his:
-        friendly_name: "Tom's Closet Door"
-        icon_template: >-
-          {%- set door_state = states('binary_sensor.door_closet_hallway_his') %}
-          {%- if door_state == 'on' %}
-            mdi:door-sliding-open
-          {%- elif door_state == 'off' %}
-            mdi:door-sliding
-          {%- else %}
-            mdi:cloud-question
-          {%- endif %}
-        value_template: >-
-          {%- set door_state = states('binary_sensor.door_closet_hallway_his') %}
-          {%- if door_state == 'on' %}
-            open
-          {%- elif door_state == 'off' %}
-            closed
-          {%- else %}
-            unavailable
-          {%- endif %}
-
       custom_laundry_dryer_machine_state:
         friendly_name: "Tumble Dryer Status"
         icon_template: >-
