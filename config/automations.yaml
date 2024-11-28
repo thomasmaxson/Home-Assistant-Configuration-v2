@@ -1849,8 +1849,8 @@
     type: press
     subtype: lower
     id: Button Press LOWER
-  condition: []
-  action:
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
@@ -1859,7 +1859,8 @@
       sequence:
       - action: light.turn_on
         metadata: {}
-        data: {}
+        data:
+          brightness_pct: 40
         target:
           entity_id: light.living_room_corner_lamp
       alias: Do Turn ON
@@ -2140,6 +2141,8 @@
       light: light.living_room_corner_lamp
       brightness_step: 10
       auto_mode: queued
+      brightness: 40
+      force_brightness: true
 - id: '1727117139279'
   alias: Garage, Wall Fan (IKEA TRADRI, 2 Button)
   description: ''
