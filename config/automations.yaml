@@ -195,8 +195,8 @@
         - action: light.turn_on
           metadata: {}
           data:
-            transition: 60
-            brightness_pct: 100
+            transition: 300
+            brightness_pct: 40
           target:
             entity_id: light.living_room_corner_lamp
     - alias: If Guests are VISITING

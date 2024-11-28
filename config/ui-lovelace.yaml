@@ -6033,6 +6033,8 @@ views:
                         name: Front Yard, Southeast
                       - entity: camera.ext_side_yard_north_east_high
                         name: Side Yard, North (facing east)
+                      - entity: camera.ext_side_yard_north_west_high
+                        name: Side Yard, North (facing west)
                       - entity: camera.ext_side_yard_south_east_high
                         name: Side Yard, South (facing east)
                     card_mod:
