@@ -653,6 +653,7 @@
           - select.ext_front_yard_northeast_recording_mode
           - select.camera_ext_front_yard_southeast_recording_mode
           - select.camera_ext_side_yard_north_east_recording_mode
+          - select.camera_ext_side_yard_north_west_recording_mode
           - select.camera_ext_side_yard_south_east_recording_mode
       alias: Recording ENABLE
     - conditions:
@@ -672,6 +673,7 @@
           - select.ext_front_yard_northeast_recording_mode
           - select.camera_ext_front_yard_southeast_recording_mode
           - select.camera_ext_side_yard_north_east_recording_mode
+          - select.camera_ext_side_yard_north_west_recording_mode
           - select.camera_ext_side_yard_south_east_recording_mode
       alias: Recording DISABLE
   mode: single
