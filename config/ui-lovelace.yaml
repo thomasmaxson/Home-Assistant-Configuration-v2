@@ -6711,6 +6711,10 @@ views:
                   show_color_control: true
                   use_light_color: true
               - type: custom:mushroom-light-card
+                entity: light.bedroom_2_group_occupancy_lights
+                name: Bedside Lamps
+                collapsible_controls: true
+              - type: custom:mushroom-light-card
                 entity: light.ceiling_fan_bedroom_2
                 name: Ceiling Fan Light
                 collapsible_controls: true
