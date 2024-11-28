@@ -337,7 +337,7 @@
           - thomas
           notification_type: type_activity_door_exterior
           interruption_level: active
-          message: The Living Room sliding door has been opened
+          message: The Living Room sliding door was opened.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -373,7 +373,7 @@
           - thomas
           notification_type: type_activity_door_exterior
           interruption_level: active
-          message: The Living Room sliding door has been closed
+          message: The Living Room sliding door was closed.
           notification_actions:
           - action: LIGHTS_OFF_BACKYARD
             title: Turn Off Lights
@@ -468,7 +468,7 @@
           - thomas
           notification_type: type_activity_door_exterior
           interruption_level: active
-          message: The Interior Garage Door was opened
+          message: The Garage interior door was opened.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -500,7 +500,7 @@
           - thomas
           notification_type: type_activity_door_exterior
           interruption_level: active
-          message: The Interior Garage Door was closed
+          message: The Garage interior door was closed.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -576,7 +576,7 @@
               - thomas
               notification_type: type_warning
               interruption_level: active
-              message: Oops! The Garage door was left open
+              message: Oops! The Garage door was left open.
               notification_actions:
               - action: CLOSE_GARAGE_DOOR
                 title: Close Garage Door
@@ -598,7 +598,7 @@
           - thomas
           notification_type: type_warning
           interruption_level: active
-          message: The Garage Fan was left on
+          message: The Garage fan was left on.
           notification_actions:
           - action: FAN_OFF_GARAGE
             title: Turn Off
@@ -1082,7 +1082,7 @@
           - thomas
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: The Laundry Room door has been opened
+          message: The Laundry Room door was opened.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -1152,7 +1152,7 @@
           - thomas
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: The Laundry Room door has been closed
+          message: The Laundry Room door was closed.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -2227,7 +2227,7 @@
       sequence:
       - metadata: {}
         data:
-          message: Warning. The garage GFCI outlet might need to be reset.
+          message: Warning. The garage GFCI outlet needs to be reset.
         action: script.amazon_echo_announcement
       - delay:
           hours: 1
@@ -2336,12 +2336,12 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the foyer in the bottom of the air
-              conditioner intake
+            message: Water has been detected in the Foyer in the bottom of the air
+              conditioner intake.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the foyer in the bottom of
+            message: Warning! Water has been detected in the Foyer in the bottom of
               the air conditioner intake.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2349,7 +2349,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the foyer in the bottom of the air
+            message: Water has been detected in the Foyer in the bottom of the air
               conditioner intake.
     - conditions:
       - condition: trigger
@@ -2366,12 +2366,12 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the laundry room under the washing
-              machine
+            message: Water has been detected in the Laundry Room under the washing
+              machine.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the laundry room under the
+            message: Warning! Water has been detected in the Laundry Room under the
               washing machine.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2379,7 +2379,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the laundry room under the washing
+            message: Water has been detected in the Laundry Room under the washing
               machine.
     - conditions:
       - condition: trigger
@@ -2396,18 +2396,18 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected under the kitchen sink
+            message: Water has been detected under the Kitchen sink.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected under the kitchen sink.
+            message: Warning! Water has been detected under the Kitchen sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
           action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected under the kitchen sink.
+            message: Water has been detected under the Kitchen sink.
     - conditions:
       - condition: trigger
         id:
@@ -2423,11 +2423,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the main bathroom under his sink
+            message: Water has been detected in the Main Bathroom under his sink.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the main bathroom under his
+            message: Warning! Water has been detected in the Main Bathroom under his
               sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2435,7 +2435,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the main bathroom under his sink.
+            message: Water has been detected in the Main Bathroom under his sink.
     - conditions:
       - condition: trigger
         id:
@@ -2451,11 +2451,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the main bathroom under her sink
+            message: Water has been detected in the Main Bathroom under her sink.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the main bathroom under her
+            message: Warning! Water has been detected in the Main Bathroom under her
               sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2463,7 +2463,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the main bathroom under her sink.
+            message: Water has been detected in the Main Bathroom under her sink.
     - conditions:
       - condition: trigger
         id:
@@ -2479,11 +2479,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the main bathroom behind the toilet
+            message: Water has been detected in the Main Bathroom behind the toilet.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the main bathroom behind
+            message: Warning! Water has been detected in the Main Bathroom behind
               the toilet.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2491,7 +2491,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the main bathroom behind the toilet.
+            message: Water has been detected in the Main Bathroom behind the toilet.
     - conditions:
       - condition: trigger
         id:
@@ -2507,11 +2507,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the guest bathroom under the sink
+            message: Water has been detected in the Guest Bathroom under the sink.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the guest bathroom under
+            message: Warning! Water has been detected in the Guest Bathroom under
               the sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2519,7 +2519,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the guest bathroom under the sink.
+            message: Water has been detected in the Guest Bathroom under the sink.
     - conditions:
       - condition: trigger
         id:
@@ -2535,11 +2535,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the guest bathroom behind the toilet
+            message: Water has been detected in the Guest Bathroom behind the toilet.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the guest bathroom behind
+            message: Warning! Water has been detected in the Guest Bathroom behind
               the toilet.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2547,7 +2547,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the guest bathroom behind the toilet.
+            message: Water has been detected in the Guest Bathroom behind the toilet.
     - conditions:
       - condition: trigger
         id:
@@ -2563,18 +2563,18 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the half bath under the sink
+            message: Water has been detected in the Half Bathroom under the sink.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the half bath under the sink.
+            message: Warning! Water has been detected in the Half Bathroom under the sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
           action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the half bath under the sink.
+            message: Water has been detected in the Half Bathroom under the sink.
     - conditions:
       - condition: trigger
         id:
@@ -2590,11 +2590,11 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected in the half bath behind the toilet
+            message: Water has been detected in the Half Bathroom behind the toilet.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the half bath behind the
+            message: Warning! Water has been detected in the Half Bathroom behind the
               toilet.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
@@ -2602,7 +2602,7 @@
           metadata: {}
           data:
             title: Warning
-            message: Water has been detected in the half bath behind the toilet.
+            message: Water has been detected in the Half Bathroom behind the toilet.
     - conditions:
       - condition: trigger
         id:
@@ -2618,7 +2618,7 @@
             notification_type: type_critical
             interruption_level: critical
             subtitle: Warning
-            message: Water has been detected under the wine cooler
+            message: Water has been detected under the wine cooler.
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
@@ -2696,7 +2696,7 @@
           - jessica
           - thomas
           notification_type: type_activity_door_exterior
-          message: The Primary Front door has been opened
+          message: The primary front door was opened.
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
@@ -2731,7 +2731,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Primary Front door has been closed
+          message: The primary front door was closed.
           notification_type: type_activity_door_exterior
           interruption_level: active
           notification_actions:
@@ -2772,7 +2772,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Secondary Front Door has been opened
+          message: The secondary front door was opened.
           notification_type: type_activity_door_exterior
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
@@ -2791,7 +2791,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Secondary Front Door has been closed
+          message: The secondary front door was closed.
           notification_type: type_activity_door_exterior
           notification_actions:
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
@@ -2828,7 +2828,7 @@
           notification_type: type_warning
           interruption_level: active
           subtitle: Warning
-          message: The Front Door was left unlocked
+          message: The front door is unlocked.
           notification_actions:
           - action: LOCK_FRONT_DOOR
             title: Lock Front Door
@@ -2875,7 +2875,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Guest Bedroom door has been opened
+          message: The Guest Bedroom door was opened.
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
@@ -2906,7 +2906,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Guest Bedroom door has been closed
+          message: The Guest Bedroom door was closed.
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
@@ -2964,7 +2964,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Main Bedroom door has been opened
+          message: The Main Bedroom door was opened.
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
@@ -2995,7 +2995,7 @@
           send_to:
           - jessica
           - thomas
-          message: The Main Bedroom door has been closed
+          message: The Main Bedroom door was closed.
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
@@ -3079,20 +3079,20 @@
             subtitle: Warning
             interruption_level: critical
             notification_type: type_critical
-            message: In the kitchen, the refrigerator is at {{ trigger.to_state.state
+            message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed
+              temperature allowed.
         - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
-            message: Warning! In the kitchen, the refrigerator is at {{ trigger.to_state.state
+            message: Warning! In the Kitchen, the refrigerator is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
         - action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: In the kitchen, the refrigerator is at {{ trigger.to_state.state
+            message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
     - conditions:
@@ -3110,20 +3110,20 @@
             subtitle: Warning
             interruption_level: critical
             notification_type: type_critical
-            message: In the kitchen, the freezer is at {{ trigger.to_state.state |
+            message: In the Kitchen, the freezer is at {{ trigger.to_state.state |
               round }}°, which is above the {{ trigger.above | round }}° maximum temperature
-              allowed
+              allowed.
         - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
-            message: Warning! In the kitchen, the freezer is at {{ trigger.to_state.state
+            message: Warning! In the Kitchen, the freezer is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
         - action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: In the kitchen, the freezer is at {{ trigger.to_state.state |
+            message: In the Kitchen, the freezer is at {{ trigger.to_state.state |
               round }}°, which is above the {{ trigger.above | round }}° maximum temperature
               allowed.
     - conditions:
@@ -3141,20 +3141,20 @@
             subtitle: Warning
             interruption_level: critical
             notification_type: type_critical
-            message: In the bar, the top wine cooler is at {{ trigger.to_state.state
+            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed
+              temperature allowed.
         - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
-            message: Warning! In the bar, the top wine cooler is at {{ trigger.to_state.state
+            message: Warning! In the Bar, the top wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
         - action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: In the bar, the top wine cooler is at {{ trigger.to_state.state
+            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
     - conditions:
@@ -3172,20 +3172,20 @@
             subtitle: Warning
             interruption_level: critical
             notification_type: type_critical
-            message: In the bar, the bottom wine cooler is at {{ trigger.to_state.state
+            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed
+              temperature allowed.
         - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
-            message: Warning! In the bar, the bottom wine cooler is at {{ trigger.to_state.state
+            message: Warning! In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
         - action: persistent_notification.create
           metadata: {}
           data:
             title: Warning
-            message: In the bar, the bottom wine cooler is at {{ trigger.to_state.state
+            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
   mode: queued
@@ -3381,7 +3381,7 @@
     - conditions:
       - condition: trigger
         id:
-        - Event, COMPLETE_WASTE_BRING_IN
+        - Event, COMPLETE_RECYCLE_BRING_IN
       sequence:
       - action: input_boolean.turn_off
         data: {}
@@ -3585,7 +3585,7 @@
           notification_type: type_warning
           interruption_level: time-sensitive
           subtitle: Reminder
-          message: Don't forget to take the garbage out to the curb
+          message: Take the garbage out to the curb.
           notification_actions:
           - action: COMPLETE_WASTE_TAKE_OUT
             title: Done
@@ -3640,7 +3640,7 @@
           notification_type: type_warning
           interruption_level: time-sensitive
           subtitle: Reminder
-          message: Don't forget to bring in the garbage cans
+          message: Bring in the garbage cans.
           notification_actions:
           - action: COMPLETE_WASTE_BRING_IN
             title: Done
@@ -3722,7 +3722,7 @@
           notification_type: type_warning
           interruption_level: time-sensitive
           subtitle: Reminder
-          message: Don't forget to take the recycling out to the curb
+          message: Take the recycling out to the curb.
           notification_actions:
           - action: COMPLETE_RECYCLE_TAKE_OUT
             title: Done
@@ -3778,7 +3778,7 @@
           notification_type: type_warning
           interruption_level: time-sensitive
           subtitle: Reminder
-          message: Don't forget to take the recycling to the drop-off center
+          message: Take the recycling to the drop-off center.
           notification_actions:
           - action: COMPLETE_RECYCLE_BRING_IN
             title: Done
@@ -3826,7 +3826,7 @@
           message: 'Replace the following batteries soon: {{sensors}}'
       threshold: 35
       time: '12:00:00'
-      message: '[% bullet %] [% sensor %] ([% state %]%) '
+      message: '[% bullet %] [% sensor %] ([% state %]%)'
 - id: '1727609900602'
   alias: Dishwasher
   description: ''
@@ -4169,7 +4169,7 @@
       notification_type: type_warning
       interruption_level: active
       subtitle: Warning
-      message: An error occurred while running Google Drive backups
+      message: An error occurred while running Google Drive backups.
   - action: persistent_notification.create
     metadata: {}
     data:
@@ -4462,7 +4462,7 @@
           - thomas
           notification_type: type_schedule
           interruption_level: time-sensitive
-          message: Don't forget to brush your teeth
+          message: Don't forget to brush your teeth.
           subtitle: Reminder
           notification_link: /lovelace/page-residents
           notification_actions:
@@ -4525,7 +4525,7 @@
           - jessica
           notification_type: type_schedule
           interruption_level: time-sensitive
-          message: Don't forget to brush your teeth
+          message: Don't forget to brush your teeth.
           subtitle: Reminder
           notification_link: /lovelace/page-residents
           notification_actions:
@@ -4567,7 +4567,7 @@
       - jessica
       notification_type: type_schedule
       interruption_level: time-sensitive
-      message: Don't forget to give Gouda her medication
+      message: Don't forget to give Gouda her medicine.
       subtitle: Reminder
       notification_link: /lovelace/page-residents
       notification_actions:
@@ -4762,7 +4762,7 @@
           - jessica
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: Tom's Office door has been opened
+          message: Tom's Office door was opened.
           notification_actions:
             notification_actions:
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
@@ -4787,7 +4787,7 @@
           - jessica
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: Tom's Office door has been closed
+          message: Tom's Office door was closed.
           notification_actions:
             notification_actions:
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
@@ -4857,7 +4857,7 @@
           - jessica
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: Jess' Office door has been opened
+          message: Jess' Office door was opened.
           notification_actions:
             notification_actions:
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
@@ -4882,7 +4882,7 @@
           - jessica
           notification_type: type_activity_door_interior
           interruption_level: active
-          message: Jess' Office door has been closed
+          message: Jess' Office door was closed.
           notification_actions:
             notification_actions:
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
