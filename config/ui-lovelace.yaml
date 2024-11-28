@@ -6540,18 +6540,6 @@ views:
           - type: entities
             title: Main Bedroom
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
@@ -6629,6 +6617,18 @@ views:
                 name: Tom's Closet
                 collapsible_controls: true
                 show_brightness_control: true
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
           - type: entities
             title: Main Bathroom
             show_header_toggle: false
@@ -6656,18 +6656,6 @@ views:
           - type: entities
             title: Guest Bedroom
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
@@ -6726,6 +6714,18 @@ views:
                 entity: light.ceiling_fan_bedroom_2
                 name: Ceiling Fan Light
                 collapsible_controls: true
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
       - type: vertical-stack
         cards:
           - type: entities
