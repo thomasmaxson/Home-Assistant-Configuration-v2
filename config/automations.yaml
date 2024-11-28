@@ -339,6 +339,10 @@
           interruption_level: active
           message: The Living Room sliding door was opened.
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -378,7 +382,10 @@
           - action: LIGHTS_OFF_BACKYARD
             title: Turn Off Lights
             icon: sfsymbols:light.ribbon
-            destructive: false
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
