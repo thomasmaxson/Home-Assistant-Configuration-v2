@@ -4559,6 +4559,9 @@
   - condition: and
     conditions:
     - condition: state
+      entity_id: input_boolean.status_dog_gouda
+      state: 'on'
+    - condition: state
       entity_id: schedule.reminder_medicine_gouda
       state: 'on'
     - condition: state
