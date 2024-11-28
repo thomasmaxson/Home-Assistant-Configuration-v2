@@ -3371,7 +3371,7 @@
     - conditions:
       - condition: trigger
         id:
-        - Event, COMPLETE_WASTE_BRING_IN
+        - Event, COMPLETE_RECYCLE_BRING_IN
       sequence:
       - action: input_boolean.turn_off
         data: {}
@@ -3390,7 +3390,7 @@
     - conditions:
       - condition: trigger
         id:
-        - Event, COMPLETE_RECYCLE_BRING_IN
+        - Event, COMPLETE_WASTE_BRING_IN
       sequence:
       - action: input_boolean.turn_off
         data: {}
