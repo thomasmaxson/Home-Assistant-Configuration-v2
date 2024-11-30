@@ -3643,6 +3643,16 @@ views:
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
           - type: state-icon
+            entity: light.christmas_tree
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 76%
+              left: 11%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
+          - type: state-icon
             entity: light.ceiling_fan_bar
             state_color: false
             tap_action:
@@ -4029,6 +4039,9 @@ views:
               --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
+              {% set the_entity = 'light.christmas_tree' %}
+              --maxson-floorplan--color-light--christmas-tree: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
               {% set the_entity = 'light.ceiling_fan_bar' %}
               --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
@@ -4103,6 +4116,14 @@ views:
         visibility:
           - condition: screen
             media_query: '(min-width: 768px)'
+          - condition: and
+            conditions:
+              - condition: state
+                entity: light.christmas_tree
+                state_not: unavailable
+              - condition: state
+                entity: light.christmas_tree
+                state_not: unknown
       - type: picture-elements
         view_layout:
           grid-area: row2
@@ -4191,6 +4212,9 @@ views:
               {% set the_color = states.light.kitchen_cabinet_upper_range.attributes.rgb_color %}
               --maxson-floorplan--color-light--kitchen-upper-range: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} {{ the_color[0] }}, {{ the_color[1] }}, {{ the_color[2] }} {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
+
+              {% set the_entity = 'light.christmas_tree' %}
+              --maxson-floorplan--color-light--christmas-tree: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.ceiling_fan_bar' %}
               --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4490,6 +4514,16 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
+          - type: state-icon
+            entity: light.christmas_tree
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 11.5%
+              left: 24%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
           - type: state-icon
             entity: light.ceiling_fan_bar
             state_color: false
@@ -5949,6 +5983,15 @@ views:
               - type: entities
                 title: Camera Settings
                 show_header_toggle: false
+                entities:
+                  - entity: input_boolean.enable_exterior_camera_recording
+                    name: Record Exterior Cameras
+                  - entity: input_boolean.enable_motion_camera_recording
+                    name: Record Motion Cameras
+                  - entity: input_boolean.enable_interior_camera_recording
+                    name: Record Interior Cameras
+                  - entity: input_boolean.camera_int_privacy_mode
+                    name: Disable Private Interior Cameras
                 card_mod:
                   style: |
                     ha-card.type-entities { 
@@ -5961,15 +6004,6 @@ views:
                     }
 
                     #states { padding: 0;}
-                entities:
-                  - entity: input_boolean.enable_exterior_camera_recording
-                    name: Record Exterior Cameras
-                  - entity: input_boolean.enable_interior_camera_recording
-                    name: Record Interior Cameras
-                  - entity: input_boolean.enable_motion_camera_recording
-                    name: Record Motion Cameras
-                  - entity: input_boolean.camera_int_privacy_mode
-                    name: Disable Private Interior Cameras
       - type: vertical-stack
         cards:
           - type: custom:mushroom-title-card
@@ -6221,6 +6255,17 @@ views:
     cards:
       - type: vertical-stack
         cards:
+          - type: conditional
+            conditions:
+              - entity: light.christmas_tree
+                state_not: unavailable
+              - entity: light.christmas_tree
+                state_not: unknown
+            card:
+              type: custom:mushroom-light-card
+              entity: light.christmas_tree
+              name: Christmas Tree
+              collapsible_controls: true
           - type: entities
             title: Foyer
             show_header_toggle: false
