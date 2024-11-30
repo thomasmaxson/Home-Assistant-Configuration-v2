@@ -199,6 +199,26 @@
             brightness_pct: 40
           target:
             entity_id: light.living_room_corner_lamp
+      - if:
+        - condition: and
+          conditions:
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: light.christmas_tree
+              state: unavailable
+          - condition: not
+            conditions:
+            - condition: state
+              entity_id: light.christmas_tree
+              state: unknown
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.christmas_tree
+        alias: Christmas Tree Turn ON
     - alias: If Guests are VISITING
       if:
       - condition: state
@@ -254,6 +274,26 @@
         entity_id:
         - light.garage_ceiling
         - light.garage_door_light
+  - if:
+    - condition: and
+      conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: light.christmas_tree
+          state: unavailable
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: light.christmas_tree
+          state: unknown
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.christmas_tree
+    alias: Christmas Tree Turn OFF
   mode: queued
   max: 10
 - id: '1726492043983'
