@@ -2593,7 +2593,8 @@
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the Half Bathroom under the sink.
+            message: Warning! Water has been detected in the Half Bathroom under the
+              sink.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
           action: persistent_notification.create
@@ -2620,8 +2621,8 @@
         - action: script.amazon_echo_announcement
           metadata: {}
           data:
-            message: Warning! Water has been detected in the Half Bathroom behind the
-              toilet.
+            message: Warning! Water has been detected in the Half Bathroom behind
+              the toilet.
           alias: Send Notification to Alexa
         - alias: Create Persistent Notification
           action: persistent_notification.create
