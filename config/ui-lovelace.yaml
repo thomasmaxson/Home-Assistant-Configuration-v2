@@ -1097,7 +1097,7 @@ views:
           icon: mdi:silverware-variant
           data_door: false
           data_lightOn: light.dining_room_chandelier
-          data_temperature: sensor.temperature_living_room
+          data_temperature: sensor.temperature_dining_room
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -1126,7 +1126,7 @@ views:
               - chips:
                   - type: custom:button-card
                     template: chip_detail__temperature
-                    entity: sensor.temperature_living_room
+                    entity: sensor.temperature_dining_room
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_dining_room
@@ -5043,6 +5043,24 @@ views:
               left: 19%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
+            entity: sensor.temperature_dining_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 49%
+              left: 36%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_main_bathroom
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 23%
+              left: 45%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
             entity: sensor.temperature_garage
             state_color: false
             tap_action:
@@ -5379,6 +5397,24 @@ views:
             style:
               top: 13%
               left: 49%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_dining_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 37%
+              left: 54%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_main_bathroom
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44%
+              left: 77.5%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_garage
