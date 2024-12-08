@@ -5095,4 +5095,21 @@
     data: {}
     target:
       entity_id: scene.before_doorbell_press
+  mode: restart
+- id: '1733502747120'
+  alias: Doorbell Fingerprint Reader
+  description: ''
+  triggers:
+  - trigger: webhook
+    allowed_methods:
+    - POST
+    local_only: false
+    webhook_id: -Zxu9cLLq7RYsaa30McPUeveU
+  conditions: []
+  actions:
+  - action: lock.unlock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.front_door
   mode: single
