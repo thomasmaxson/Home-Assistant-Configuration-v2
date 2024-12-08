@@ -4637,7 +4637,7 @@
       - jessica
       notification_type: type_schedule
       interruption_level: time-sensitive
-      message: Don't forget to give Gouda her medicine.
+      message: Give Gouda her medicine.
       subtitle: Reminder
       notification_link: /lovelace/page-residents
       notification_actions:
