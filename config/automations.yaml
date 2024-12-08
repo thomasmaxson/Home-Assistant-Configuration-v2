@@ -5073,25 +5073,23 @@
   - action: light.turn_on
     metadata: {}
     data:
-      color_name: red
       flash: long
     target:
       entity_id:
       - light.kitchen_cabinet_upper_coffee_bar
       - light.kitchen_cabinet_upper_range
       - light.foyer_ceiling_ledge
-      - light.bedroom_1_lamp_hers
-      - light.bedroom_1_lamp_his
       - light.bedroom_4_lightstrip
   - delay:
       hours: 0
       minutes: 0
-      seconds: 16
+      seconds: 4
       milliseconds: 0
   - action: scene.turn_on
     metadata: {}
     target:
       entity_id: scene.before_doorbell_press
+    data: {}
   - action: scene.delete
     metadata: {}
     data: {}
