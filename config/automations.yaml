@@ -5112,3 +5112,18 @@
     target:
       entity_id: lock.front_door
   mode: single
+- id: '1733743526425'
+  alias: Doorbell Pressed, Flash Lights
+  description: ''
+  use_blueprint:
+    path: maxson/flash_lights.yaml
+    input:
+      entities_list:
+      - light.foyer_ceiling_ledge
+      - light.foyer_under_table
+      - light.kitchen_cabinet_upper_range
+      - light.kitchen_cabinet_upper_coffee_bar
+      trigger_entities:
+      - binary_sensor.camera_ext_doorbell_doorbell
+      disable_automation:
+      - input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
