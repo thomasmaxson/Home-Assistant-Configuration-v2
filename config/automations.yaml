@@ -2807,11 +2807,11 @@
             icon: sfsymbols:clock
       alias: When Primary Door is CLOSED
     - conditions:
-      - condition: trigger
-        id:
-        - Primary Door Has Been CLOSED
-      sequence:
-      - if:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - Primary Door Has Been CLOSED
         - condition: state
           entity_id: input_boolean.foyer_automation_door_night_lights
           state: 'on'
@@ -2821,12 +2821,11 @@
         - condition: state
           entity_id: input_boolean.sunset_automations_active
           state: 'off'
-        then:
-        - action: light.turn_off
-          data: {}
-          target:
-            entity_id: light.foyer_exterior_entryway
-        alias: If Allowed Run Automations
+      sequence:
+      - action: light.turn_off
+        data: {}
+        target:
+          entity_id: light.foyer_exterior_entryway
       alias: When Primary Door Has Been CLOSED
     - conditions:
       - condition: trigger
