@@ -486,6 +486,9 @@ views:
                             label: Automations
                           - entity: input_boolean.foyer_automation_door_night_lights
                             name: Turn on lights when door opens at night
+                          - entity: >-
+                              input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
+                            name: Toggle lights when doorbell is pressed
             title-card-clickable: true
         view_layout:
           grid-area: modalFoyer
@@ -4885,8 +4888,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 37%
-              left: 27.5%
+              top: 28%
+              left: 20%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
           - type: state-icon
@@ -4895,8 +4898,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 72.5%
-              left: 74.5%
+              top: 83%
+              left: 84.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
           - type: state-icon
@@ -4905,8 +4908,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 35%
-              left: 53.5%
+              top: 27.5%
+              left: 55%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
           - type: state-icon
@@ -4915,8 +4918,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 68%
-              left: 60.5%
+              top: 82.5%
+              left: 53%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
           - type: state-icon
@@ -4956,7 +4959,7 @@ views:
               action: more-info
             style:
               top: 44%
-              left: 56%
+              left: 58%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
           - type: state-icon
@@ -4965,8 +4968,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 44%
-              left: 65%
+              top: 35%
+              left: 76%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
           - type: state-icon
@@ -4975,7 +4978,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 21%
+              top: 16%
               left: 34%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
@@ -4985,7 +4988,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 28.5%
+              top: 33%
               left: 34%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
@@ -5003,7 +5006,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 25%
+              top: 20%
               left: 20%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5012,8 +5015,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 80%
-              left: 84%
+              top: 75%
+              left: 85%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_bedroom_3
@@ -5030,7 +5033,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 76%
+              top: 75%
               left: 56.5%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5039,7 +5042,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 64%
+              top: 49%
               left: 19%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5129,8 +5132,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 27%
-              left: 58.5%
+              top: 27.5%
+              left: 62%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
@@ -5140,7 +5143,7 @@ views:
               action: more-info
             style:
               top: 82.5%
-              left: 56.5%
+              left: 60%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
@@ -5149,8 +5152,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 50%
-              left: 20%
+              top: 57%
+              left: 18.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
           - type: state-icon
@@ -5160,7 +5163,7 @@ views:
             state_color: false
             style:
               top: 35%
-              left: 79.5%
+              left: 83%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
           - type: state-icon
@@ -5170,7 +5173,7 @@ views:
             state_color: false
             style:
               top: 44%
-              left: 61.75%
+              left: 64%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
@@ -5240,8 +5243,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 27.5%
-              left: 62.5%
+              top: 21%
+              left: 76.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
           - type: state-icon
@@ -5250,8 +5253,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 74.5%
-              left: 27.5%
+              top: 86%
+              left: 21%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
           - type: state-icon
@@ -5260,8 +5263,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 53.5%
-              left: 64%
+              top: 60%
+              left: 73%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
           - type: state-icon
@@ -5270,8 +5273,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 61%
-              left: 33%
+              top: 58%
+              left: 17%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
           - type: state-icon
@@ -5310,7 +5313,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 55.5%
+              top: 58%
               left: 56%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
@@ -5320,8 +5323,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 65.5%
-              left: 56%
+              top: 78%
+              left: 65%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
           - type: state-icon
@@ -5331,7 +5334,7 @@ views:
               action: more-info
             style:
               top: 34%
-              left: 79%
+              left: 84%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
           - type: state-icon
@@ -5341,7 +5344,7 @@ views:
               action: more-info
             style:
               top: 34%
-              left: 71%
+              left: 67%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
           - type: state-label
@@ -5359,7 +5362,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 19%
+              top: 17%
               left: 76.5%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5368,7 +5371,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 84%
+              top: 82.5%
               left: 21%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5377,7 +5380,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 55%
+              top: 56%
               left: 77%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5386,7 +5389,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 53%
+              top: 54%
               left: 21%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5395,7 +5398,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 13%
+              top: 16%
               left: 49%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5486,7 +5489,7 @@ views:
               action: more-info
             style:
               top: 60%
-              left: 77%
+              left: 80%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
@@ -5496,7 +5499,7 @@ views:
               action: more-info
             style:
               top: 58%
-              left: 21%
+              left: 24%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
@@ -5516,7 +5519,7 @@ views:
               action: more-info
             style:
               top: 78%
-              left: 69%
+              left: 72%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
           - type: state-icon
@@ -5525,8 +5528,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 58%
-              left: 53.5%
+              top: 63%
+              left: 56%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
@@ -6091,8 +6094,9 @@ views:
                     show_header_toggle: false
                     entities:
                       - entity: camera.ext_doorbell_high
-                        secondary_info: none
                         name: Main Entry Doorbell
+                      - entity: camera.ext_doorbell_package_high
+                        name: Main Entry Doorbell Pacakges
                       - entity: camera.ext_backyard_northeast_high
                         name: Backyard, Northeast
                       - entity: camera.ext_backyard_southeast_high
