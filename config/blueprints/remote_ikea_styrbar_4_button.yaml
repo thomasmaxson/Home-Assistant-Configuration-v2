@@ -20,6 +20,33 @@ blueprint:
     min_version: 2024.6.0
   domain: automation
   input:
+    # https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/sonoff_snzb01/sonoff_snzb01.yaml
+    # integration:
+    #   name: Integration
+    #   description: Integration used for connecting the remote with Home Assistant.
+    #   selector:
+    #     select:
+    #       options:
+    #         - deCONZ
+    #         - ZHA
+    #         - Zigbee2MQTT
+
+    # remote_device:
+    #   name: Remote Device (deCONZ, ZHA)
+    #   description: The remote device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA.
+    #   default: ''
+    #   selector:
+    #     device:
+
+    # remote_entity:
+    #   name: Remote Entity (Zigbee2MQTT)
+    #   description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
+    #   default: ''
+    #   selector:
+    #     entity:
+    #       filter:
+    #         - domain: sensor
+
     remote:
       name: IKEA STYRBAR Remote
       description: Select the remote control you wish to use.
@@ -164,6 +191,7 @@ max_exceeded: silent
 variables:
   var_light: !input light
   var_repeat: !input repeat_duration
+  var_force_brightness: !input force_brightness
 
 triggers:
   - trigger: event
@@ -188,7 +216,7 @@ action:
           sequence:
             - if:
                 - condition: template
-                  value_template: "{{ force_brightness }}"
+                  value_template: "{{ var_force_brightness }}"
               then:
                 - action: light.turn_on
                   target:
