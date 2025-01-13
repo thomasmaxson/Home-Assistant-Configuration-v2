@@ -7194,6 +7194,12 @@ views:
             entities:
               - type: custom:button-card
                 template: entity_card
+                name: Living Room
+                entity: binary_sensor.presence_living_room
+                variables:
+                  icon_on_color: var( --green-color-rgb )
+              - type: custom:button-card
+                template: entity_card
                 name: Jess' Office
                 entity: binary_sensor.bedroom_3_group_all_occupancy
                 variables:
@@ -7202,12 +7208,6 @@ views:
                 template: entity_card
                 name: Tom's Office
                 entity: binary_sensor.bedroom_4_group_all_occupancy
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Living Room
-                entity: binary_sensor.presence_living_room
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
@@ -7240,6 +7240,14 @@ views:
                 entity: binary_sensor.motion_laundry_room
                 variables:
                   data_entity: sensor.motion_laundry_room_battery
+                  data_type: battery
+                  icon_on_color: var( --green-color-rgb )
+              - type: custom:button-card
+                template: entity_card
+                name: Jess' Office
+                entity: binary_sensor.motion_bedroom_3
+                variables:
+                  data_entity: sensor.motion_bedroom_3_battery
                   data_type: battery
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
