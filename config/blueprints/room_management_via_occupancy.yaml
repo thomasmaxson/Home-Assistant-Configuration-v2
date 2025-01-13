@@ -237,8 +237,8 @@ actions:
           # If configured, RUN delayed enable ACTIONS
           - if:
               - condition: template
-                value_template: "{{ disable_occupancy_action_wait | length > 0 }}"
-            then: !input disable_occupancy_action_wait
+                value_template: "{{ enable_occupancy_action_wait | length > 0 }}"
+            then: !input enable_occupancy_action_wait
 
       # Actions to perform if DOOR OPENED, and MOTION CLEAR
       - conditions:
