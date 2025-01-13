@@ -123,6 +123,7 @@ max_exceeded: silent
 variables:
   var_light: !input light
   var_repeat: !input repeat_duration
+  var_force_brightness: !input force_brightness
 
 triggers:
   - trigger: event
@@ -147,7 +148,7 @@ actions:
           sequence:
             - if:
                 - condition: template
-                  value_template: "{{ force_brightness }}"
+                  value_template: "{{ var_force_brightness }}"
               then:
                 - action: light.turn_on
                   target:
