@@ -5035,54 +5035,6 @@
           data: {}
           target:
             entity_id: light.foyer_under_table
-- id: '1731430653955'
-  alias: Doorbell Pressed, Flash House Lights
-  description: ''
-  triggers:
-  - trigger: state
-    entity_id:
-    - binary_sensor.camera_ext_doorbell_doorbell
-    from: 'off'
-    to: 'on'
-  conditions: []
-  actions:
-  - action: scene.create
-    metadata: {}
-    data:
-      scene_id: before_doorbell_press
-      snapshot_entities:
-      - light.kitchen_cabinet_upper_coffee_bar
-      - light.kitchen_cabinet_upper_range
-      - light.foyer_ceiling_ledge
-      - light.bedroom_1_lamp_hers
-      - light.bedroom_1_lamp_his
-      - light.bedroom_4_lightstrip
-  - action: light.turn_on
-    metadata: {}
-    data:
-      flash: long
-    target:
-      entity_id:
-      - light.kitchen_cabinet_upper_coffee_bar
-      - light.kitchen_cabinet_upper_range
-      - light.foyer_ceiling_ledge
-      - light.bedroom_4_lightstrip
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 4
-      milliseconds: 0
-  - action: scene.turn_on
-    metadata: {}
-    target:
-      entity_id: scene.before_doorbell_press
-    data: {}
-  - action: scene.delete
-    metadata: {}
-    data: {}
-    target:
-      entity_id: scene.before_doorbell_press
-  mode: restart
 - id: '1733502747120'
   alias: Doorbell Fingerprint Reader
   description: ''
