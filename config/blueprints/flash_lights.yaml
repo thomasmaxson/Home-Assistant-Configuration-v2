@@ -1,0 +1,133 @@
+blueprint:
+  name: Flash lights
+  description: Flash lights (or a switch) when a trigger (binary-sensor) changes.
+  author: Thomas Maxson
+  domain: automation
+  homeassistant:
+    min_version: 2023.3.0
+  input:
+    trigger_entities:
+      name: Trigger
+      description: >
+        The lights/switches will "flash" if any of these entities change its state.
+        Try to avoid a big number of lights or groups as it can take long to change the state on all the entities.
+      default: []
+      selector:
+        entity:
+          multiple: true
+          filter:
+            domain:
+              - input_boolean
+              - binary_sensor
+              - sensor
+              - switch
+
+    entities_list:
+      name: Lights and switches to flash
+      default: false
+      selector:
+        entity:
+          multiple: true
+          filter:
+            domain:
+              - light
+              - switch
+
+    flash_count:
+      name: Number of flashes
+      default: 3
+      selector:
+        number:
+          min: 0
+          max: 25
+          unit_of_measurement: flashes
+
+    flash_duration:
+      name: Flash speed
+      description: >
+        The time (in milliseconds) the entities will stay on each state (on or off).
+        Try to increase this time if you are using too many lights or if you have long transition time for the lights.
+      default: 1000
+      selector:
+        number:
+          min: 1000
+          max: 5000
+          step: 500
+          unit_of_measurement: milliseconds
+
+    disable_automation:
+      name: Disable Automation (optional)
+      description: >
+        You can select one or more entities to disable this automation.
+      default: []
+      selector:
+        entity:
+          multiple: true
+          filter:
+            domain:
+              - input_boolean
+              - binary_sensor
+              - switch
+
+mode: single
+
+trigger_variables:
+  input_disable_automation: !input disable_automation
+  input_disable_automation_selected: >-
+    {% if input_disable_automation %}
+      true
+    {% else %}
+      false
+    {% endif %}
+
+triggers:
+  - trigger: state
+    entity_id: !input trigger_entities
+    to: "off"
+    from: "on"
+  - trigger: state
+    entity_id: !input trigger_entities
+    to: "on"
+    from: "off"
+
+condition:
+  - condition: or
+    conditions:
+      - condition: template
+        value_template: >-
+          {{ ( input_disable_automation_selected == true ) }}
+      - condition: state
+        entity_id: !input disable_automation
+        state: "on"
+
+variables:
+  repeat_count: !input flash_count
+
+action:
+  - action: scene.create
+    metadata: {}
+    data:
+      scene_id: before_doorbell_press
+      snapshot_entities: !input entities_list
+  - repeat:
+      count: "{{ repeat_count *2 }}"
+      sequence:
+        - action: homeassistant.toggle
+          data: {}
+          target:
+            entity_id: !input entities_list
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 0
+            milliseconds: !input flash_duration
+  - action: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.before_doorbell_press
+    data: {}
+  - action: scene.delete
+    metadata: {}
+    data: {}
+    target:
+      entity_id: scene.before_doorbell_press
