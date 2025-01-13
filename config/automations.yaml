@@ -855,38 +855,26 @@
         id:
         - Privacy ENABLED
       sequence:
-      - parallel:
-        - action: switch.turn_on
-          target:
-            entity_id:
-            - switch.camera_int_bdr1_privacy_mode
-            - switch.camera_int_bdr3_privacy_mode
-            - switch.camera_int_bdr4_privacy_mode
-          data: {}
-        - action: input_boolean.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: input_boolean.enable_interior_camera_recording
+      - action: switch.turn_on
+        target:
+          entity_id:
+          - switch.camera_int_bdr1_privacy_mode
+          - switch.camera_int_bdr3_privacy_mode
+          - switch.camera_int_bdr4_privacy_mode
+        data: {}
       alias: Recording ENABLE
     - conditions:
       - condition: trigger
         id:
         - Privacy DISABLED
       sequence:
-      - parallel:
-        - action: switch.turn_off
-          target:
-            entity_id:
-            - switch.camera_int_bdr1_privacy_mode
-            - switch.camera_int_bdr3_privacy_mode
-            - switch.camera_int_bdr4_privacy_mode
-          data: {}
-        - action: input_boolean.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: input_boolean.enable_interior_camera_recording
+      - action: switch.turn_off
+        target:
+          entity_id:
+          - switch.camera_int_bdr1_privacy_mode
+          - switch.camera_int_bdr3_privacy_mode
+          - switch.camera_int_bdr4_privacy_mode
+        data: {}
       alias: Recording DISABLE
   mode: single
 - id: '1726537916764'
