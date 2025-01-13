@@ -14,17 +14,6 @@ homeassistant:
   latitude: !secret homeassistant_latitude
   longitude: !secret homeassistant_longitude
 
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: !secret homeassistant_elevation
-
-  # metric for Metric, imperial for Imperial
-  unit_system: imperial
-
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: America/New_York
-
-  country: US
-
   # Custom specific entities
   packages: !include_dir_named packages
 
