@@ -24,19 +24,19 @@ amazon_echo_announcement:
   sequence:
   - variables:
       echo_kitchen_volume: '{{ state_attr( ''media_player.echo_kitchen'', ''volume_level''
-        ) }}'
+        ) | float }}'
       echo_dining_room_volume: '{{ state_attr( ''media_player.echo_dot_dining_room'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
       echo_bathroom_1_volume: '{{ state_attr( ''media_player.echo_pop_main_bathroom'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
       echo_bedroom_1_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_1'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
       echo_bedroom_2_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_2'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
       echo_bedroom_3_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_3'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
       echo_bedroom_4_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_4'',
-        ''volume_level'' ) }}'
+        ''volume_level'' ) | float }}'
     alias: Store Variables
   - if:
     - alias: Ensure Household Announcements are Allowed
