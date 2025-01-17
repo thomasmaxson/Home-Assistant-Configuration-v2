@@ -77,6 +77,7 @@
     target:
       entity_id:
       - cover.blinds_kitchen
+      - cover.blinds_bedroom_2
       - cover.blinds_bedroom_4
     data:
       tilt_position: 100
@@ -124,6 +125,7 @@
     target:
       entity_id:
       - cover.blinds_kitchen
+      - cover.blinds_bedroom_2
     data:
       tilt_position: 100
   - alias: Fade IN Exterior
@@ -1281,7 +1283,7 @@
         - light.foyer_ceiling_ledge
         - light.foyer_under_table
         - light.cabinet_upper_lights
-    - alias: If Residents or Guests are HOME
+    - alias: If Residents are HOME or Guests are HOME
       if:
       - condition: or
         conditions:
@@ -1314,6 +1316,23 @@
             entity_id:
             - cover.blinds_bedroom_4
           data: {}
+    - alias: If Residents are HOME and Guests are NOT HOME
+      if:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: group.residents
+          state: home
+        - condition: state
+          entity_id: input_boolean.guests_home
+          state: 'off'
+        alias: If Residents are HOME or Guests are NOT HOME
+      then:
+      - alias: Blinds OPEN
+        action: cover.open_cover_tilt
+        data: {}
+        target:
+          entity_id: cover.blinds_bedroom_2
     - alias: Flag ACTIVATE
       action: input_boolean.turn_on
       data: {}
