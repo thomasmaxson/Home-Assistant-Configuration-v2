@@ -1,0 +1,181 @@
+# This blueprint uses an Lutron Pico Paddle Remote Control
+#
+# | Button | Duration     | Action        |
+# | ------ | ------------ | ------------- |
+# | On     | Short Press  | Custom action |
+# | On     | Long Press   | Custom action |
+# | Off    | Short Press  | Custom action |
+# | Off    | Long Press   | Custom action |
+
+blueprint:
+  name: Lutron Pico, Paddle
+  description: Control devices with your Lutron Pico paddle.
+  author: Thomas Maxson
+  # source_url: https://gist.github.com/thomasmaxson/7327b309459d38d8a36ee3bb18ce6b9e
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: Lutron Pico remote control
+      description: Select the Lutron Pico remote to trigger your automations.
+      selector:
+        device:
+          filter:
+            - integration: lutron_caseta
+              manufacturer: Lutron Electronics Co., Inc
+              model: PJ2-1P-GXX (PaddleSwitchPico)
+          multiple: false
+
+    actions_single_press:
+      name: Single Tap
+      icon: mdi:gesture-tap
+      collapsed: false
+      input:
+        button_on_single:
+          name: Tap On Button
+          description: Action(s) to perform on single tap of the on button
+          default: []
+          selector:
+            action: {}
+        button_off_single:
+          name: Tap Off Button
+          description: Action(s) to perform on single tap of the off button
+          default: []
+          selector:
+            action: {}
+
+    actions_hold_press:
+      name: Press and Hold
+      icon: mdi:gesture-tap-hold
+      collapsed: true
+      input:
+        button_on_hold:
+          name: Hold On Button
+          description: Action(s) to perform on hold of the on button
+          default: []
+          selector:
+            action: {}
+        button_off_hold:
+          name: Hold Off Button
+          description: Action(s) to perform on hold of the off button
+          default: []
+          selector:
+            action: {}
+        duration_hold:
+          name: Hold Delay
+          description: Duration used for the hold detection
+          default: 500
+          selector:
+            number:
+              min: 500
+              max: 4000
+              unit_of_measurement: milliseconds
+              step: 500
+              mode: slider
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            Ignored by Single and Restart Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+triggers:
+  - trigger: device
+    device_id: !input remote
+    domain: lutron_caseta
+    type: press
+    subtype: Button 0
+    id: on_pressed
+  - trigger: device
+    device_id: !input remote
+    domain: lutron_caseta
+    type: press
+    subtype: Button 2
+    id: off_pressed
+
+conditions:
+  - condition: template
+    value_template: "{{ remote != 'remote.undefined' }}"
+
+actions:
+  - variables:
+      var_duration_hold: !input duration_hold
+      remote: "{{ trigger.event.data.device_id }}"
+  - choose:
+      # Button Press (ON)
+      - conditions:
+          - condition: trigger
+            id: on_pressed
+        sequence:
+          - wait_for_trigger:
+              - trigger: device
+                device_id: !input remote
+                domain: lutron_caseta
+                type: release
+                subtype: Button 0
+            timeout:
+              hours: 0
+              minutes: 0
+              seconds: 0
+              milliseconds: "{{ var_duration_hold | float }}"
+            continue_on_timeout: true
+          - if:
+              - condition: template
+                value_template: "{{ wait.trigger == none }}"
+            then: !input button_on_hold
+            else: !input button_on_single
+
+      # Button Press (OFF)
+      - conditions:
+          - condition: trigger
+            id: off_pressed
+        sequence:
+          - wait_for_trigger:
+              - trigger: device
+                device_id: !input remote
+                domain: lutron_caseta
+                type: release
+                subtype: Button 2
+            timeout:
+              hours: 0
+              minutes: 0
+              seconds: 0
+              milliseconds: "{{ var_duration_hold | float }}"
+            continue_on_timeout: true
+          - if:
+              - condition: template
+                value_template: "{{ wait.trigger == none }}"
+            then: !input button_off_hold
+            else: !input button_off_single
