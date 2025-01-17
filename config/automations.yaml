@@ -1321,815 +1321,9 @@
         entity_id: input_boolean.sunrise_automations_run
   mode: queued
   max: 10
-- id: '1726962604115'
-  alias: Bedroom 2, Primary Lights (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - device_id: 1043e20fa58cfb8c3ee51209b5ce0fc2
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-    trigger: device
-  - device_id: 1043e20fa58cfb8c3ee51209b5ce0fc2
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-    trigger: device
-  - device_id: 1043e20fa58cfb8c3ee51209b5ce0fc2
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-    trigger: device
-  - device_id: 1043e20fa58cfb8c3ee51209b5ce0fc2
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-    trigger: device
-  - device_id: 1043e20fa58cfb8c3ee51209b5ce0fc2
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-    trigger: device
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: light.toggle
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: 10
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: -10
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726964420291'
-  alias: Bedroom 2, Ceiling Light (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: d2694481a3b250b9ed95e4645eb6e40b
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-  - trigger: device
-    device_id: d2694481a3b250b9ed95e4645eb6e40b
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_2
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_2
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
-- id: '1726964608307'
-  alias: Bedroom 2, Ceiling Fan (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: a27d9dc278719e77bd1086e297be14fa
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-  - trigger: device
-    device_id: a27d9dc278719e77bd1086e297be14fa
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-  - trigger: device
-    device_id: a27d9dc278719e77bd1086e297be14fa
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-  - trigger: device
-    device_id: a27d9dc278719e77bd1086e297be14fa
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-  - trigger: device
-    device_id: a27d9dc278719e77bd1086e297be14fa
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: fan.turn_on
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
-        data: {}
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: fan.turn_off
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
-        data: {}
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: fan.toggle
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
-        data: {}
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: fan.increase_speed
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
-        data:
-          percentage_step: 34
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: fan.decrease_speed
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
-        data:
-          percentage_step: 34
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726964888976'
-  alias: Bedroom 4, Ceiling Fan (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: 547912e5c1b5de70af4e7159db0b75cb
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-  - trigger: device
-    device_id: 547912e5c1b5de70af4e7159db0b75cb
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-  - trigger: device
-    device_id: 547912e5c1b5de70af4e7159db0b75cb
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-  - trigger: device
-    device_id: 547912e5c1b5de70af4e7159db0b75cb
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-  - trigger: device
-    device_id: 547912e5c1b5de70af4e7159db0b75cb
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: fan.turn_on
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: fan.turn_off
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: fan.toggle
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: fan.increase_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: fan.decrease_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726965327841'
-  alias: Bedroom 4, Primary Lights (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - device_id: b3de283035b788f368ee8333e37de457
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-    trigger: device
-  - device_id: b3de283035b788f368ee8333e37de457
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-    trigger: device
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_pct: 40
-        target:
-          entity_id: light.bedroom_4_group_occupancy_lights
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.bedroom_4_group_occupancy_lights
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
-- id: '1726965701513'
-  alias: Bedroom 4, Ceiling Light (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: 687b4e1b0875cd0e443f232fe5767e1d
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-  - trigger: device
-    device_id: 687b4e1b0875cd0e443f232fe5767e1d
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
-- id: '1726966111543'
-  alias: Bedroom 3, Fan Ceiling (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-  - trigger: device
-    device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-  - trigger: device
-    device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-  - trigger: device
-    device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-  - trigger: device
-    device_id: c86536d4eb18d6eaf1ddb6d7e63bb379
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: fan.turn_on
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: fan.turn_off
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: fan.toggle
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: fan.increase_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: fan.decrease_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726966251327'
-  alias: Bedroom 3, Light Ceiling (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: afe69d52a42055addce27abac118675a
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-  - trigger: device
-    device_id: afe69d52a42055addce27abac118675a
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_3
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_3
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
-- id: '1726966400827'
-  alias: Living Room, Light Primary (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: 52953df2b0850134e6d998ac302e9f8b
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-  - trigger: device
-    device_id: 52953df2b0850134e6d998ac302e9f8b
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-  - trigger: device
-    device_id: 52953df2b0850134e6d998ac302e9f8b
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-  - trigger: device
-    device_id: 52953df2b0850134e6d998ac302e9f8b
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-  - trigger: device
-    device_id: 52953df2b0850134e6d998ac302e9f8b
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_pct: 40
-        target:
-          entity_id: light.living_room_corner_lamp
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.living_room_corner_lamp
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: light.toggle
-        data: {}
-        target:
-          entity_id: light.living_room_corner_lamp
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: 10
-        target:
-          entity_id: light.living_room_corner_lamp
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: -10
-        target:
-          entity_id: light.living_room_corner_lamp
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726966806865'
-  alias: Bedroom 1, Ceiling Fan (Lutron Pico, 3 Button)
-  description: ''
-  triggers:
-  - device_id: 42cf4e5eb7543eaffd4a0a285cefd6a9
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-    id: Button Press ON
-    trigger: device
-  - device_id: 42cf4e5eb7543eaffd4a0a285cefd6a9
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-    id: Button Press OFF
-    trigger: device
-  - device_id: 42cf4e5eb7543eaffd4a0a285cefd6a9
-    domain: lutron_caseta
-    type: press
-    subtype: stop
-    id: Button Press STOP
-    trigger: device
-  - device_id: 42cf4e5eb7543eaffd4a0a285cefd6a9
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-    id: Button Press RAISE
-    trigger: device
-  - device_id: 42cf4e5eb7543eaffd4a0a285cefd6a9
-    domain: lutron_caseta
-    type: press
-    subtype: lower
-    id: Button Press LOWER
-    trigger: device
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: fan.turn_on
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: fan.turn_off
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      alias: Do Turn OFF
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press STOP
-      sequence:
-      - action: fan.toggle
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      alias: Do STOP
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press RAISE
-      sequence:
-      - action: fan.increase_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      alias: Do RAISE
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press LOWER
-      sequence:
-      - action: fan.decrease_speed
-        data:
-          percentage_step: 34
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      alias: Do LOWER
-  mode: queued
-  max: 10
-- id: '1726966930016'
-  alias: Bedroom 1, Light Ceiling (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - trigger: device
-    device_id: da8f06c90863b596980eda95dd6754ae
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-  - trigger: device
-    device_id: da8f06c90863b596980eda95dd6754ae
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_1
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_1
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
-- id: '1726966978729'
-  alias: Bedroom 1, Light Primary (Lutron Pico, Paddle)
-  description: ''
-  triggers:
-  - device_id: a7fd95bd8b97ebc8067e659bb3aa7009
-    domain: lutron_caseta
-    type: press
-    subtype: Button 0
-    id: Button Press ON
-    trigger: device
-  - device_id: a7fd95bd8b97ebc8067e659bb3aa7009
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
-    id: Button Press OFF
-    trigger: device
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press ON
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_1_group_occupancy_lights
-      alias: Do Turn ON
-    - conditions:
-      - condition: trigger
-        id:
-        - Button Press OFF
-      sequence:
-      - action: light.turn_off
-        data: {}
-        target:
-          entity_id: light.bedroom_1_group_occupancy_lights
-      alias: Do Turn OFF
-  mode: queued
-  max: 10
 - id: '1727015013289'
   alias: Garage, Cover Door (Aqara Mini Switch)
-  description: ''
+  description: Control garage door via a Aqara Mini Switch remote.
   use_blueprint:
     path: maxson/remote_aqara_mini_switch.yaml
     input:
@@ -2153,8 +1347,9 @@
           entity_id: cover.blinds_kitchen
         data: {}
 - id: '1727113582845'
-  alias: Bedroom 1, Bedside Lamps (IKEA STYRBAR, 4 Button)
-  description: ''
+  alias: Bedroom 1, Lights - Primary
+  description: Control primary lights in the main bedroom via a IKEA STRYBAR 4 button
+    remote.
   use_blueprint:
     path: maxson/remote_ikea_styrbar_4_button.yaml
     input:
@@ -2164,8 +1359,9 @@
       auto_mode: queued
       force_brightness: false
 - id: '1727115559199'
-  alias: Bedroom 4, Office Lights (IKEA TRADFRI, 5 Button)
-  description: ''
+  alias: Bedroom 4, Lights - Primary
+  description: Control primary lights in Tom's office via a IKEA TRADFRI 5 button
+    remote.
   use_blueprint:
     path: maxson/remote_ikea_tradfri_5_button.yaml
     input:
@@ -2174,8 +1370,9 @@
       brightness_step: 10
       config_mode: single
 - id: '1727117077347'
-  alias: Living Room, Corner Lamp (IKEA TRADRI, 2 Button)
-  description: ''
+  alias: Living Room, Lights - Primary
+  description: Control primary lights in the living room via a IKEA TRADFRI 2 button
+    remote.
   use_blueprint:
     path: maxson/remote_ikea_tradfri_2_button.yaml
     input:
@@ -2186,8 +1383,8 @@
       brightness: 40
       force_brightness: true
 - id: '1727117139279'
-  alias: Garage, Wall Fan (IKEA TRADRI, 2 Button)
-  description: ''
+  alias: Garage Wall Fan
+  description: Control the fan in the garage via a IKEA TRADFRI 2 button remote.
   use_blueprint:
     path: maxson/remote_ikea_tradfri_2_button.yaml
     input:
@@ -3851,6 +3048,7 @@
       exclude:
       - sensor.vibration_battery_kitchen_island
       - sensor.blinds_kitchen_battery
+      - sensor.blinds_bedroom_2_battery
       - sensor.blinds_bedroom_4_battery
       - sensor.bedroom_1_large_window_left_battery
       - sensor.bedroom_1_large_window_right_battery
@@ -4173,23 +3371,17 @@
                 seconds: 0
       alias: CLEAR Original Duration, Maybe Send Notification
     - conditions:
-      - condition: trigger
-        id:
-        - Dryer Door did OPEN
-      - condition: or
+      - condition: and
         conditions:
+        - condition: trigger
+          id:
+          - Dryer Door did OPEN
         - condition: state
-          entity_id: sensor.laundry_dryer_machine_state
-          state: 'Off'
+          entity_id: sensor.custom_laundry_dryer_machine_state
+          state: 'off'
         - condition: state
-          entity_id: sensor.laundry_dryer_machine_state
-          state: Standby
-        - condition: state
-          entity_id: sensor.laundry_dryer_machine_state
-          state: Finished
-      - condition: state
-        entity_id: input_boolean.reminder_laundry_complete_dryer
-        state: 'on'
+          entity_id: input_boolean.reminder_laundry_complete_dryer
+          state: 'on'
       sequence:
       - action: input_boolean.turn_off
         metadata: {}
@@ -4393,23 +3585,17 @@
                 seconds: 0
       alias: CLEAR Original Duration, Maybe Send Notification
     - conditions:
-      - condition: trigger
-        id:
-        - Washer Door did OPEN
-      - condition: or
+      - condition: and
         conditions:
+        - condition: trigger
+          id:
+          - Washer Door did OPEN
         - condition: state
-          entity_id: sensor.laundry_washer_machine_state
-          state: 'Off'
+          entity_id: sensor.custom_laundry_dryer_machine_state
+          state: 'off'
         - condition: state
-          entity_id: sensor.laundry_washer_machine_state
-          state: Standby
-        - condition: state
-          entity_id: sensor.laundry_washer_machine_state
-          state: Finished
-      - condition: state
-        entity_id: input_boolean.reminder_laundry_complete_washer
-        state: 'on'
+          entity_id: input_boolean.reminder_laundry_complete_washer
+          state: 'on'
       sequence:
       - action: input_boolean.turn_off
         metadata: {}
@@ -4994,7 +4180,7 @@
       idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
 - id: '1730985202477'
   alias: Foyer, Lights (Sonoff Wireless)
-  description: ''
+  description: Control primary lights in the foyer via a Sonoff Wireless remote.
   use_blueprint:
     path: maxson/remote_sonoff_wireless_switch.yaml
     input:
@@ -5067,3 +4253,842 @@
       - binary_sensor.camera_ext_doorbell_doorbell
       disable_automation:
       - input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
+- id: '1737039379849'
+  alias: Bedroom 4, Fan
+  description: Control the ceiling fan in Tom's office via the Lutron 3BRL fan remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: 547912e5c1b5de70af4e7159db0b75cb
+      button_on_single:
+      - action: fan.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_4
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_4
+      button_preset_single:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_4
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_4
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are disabled.
+              data:
+                type: announce
+        else:
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_4
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_4
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are active.
+              data:
+                type: announce
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: 'off'
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: high
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+      button_lower_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: high
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_4
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: 'off'
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+      button_on_double:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_4
+      button_off_double:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_4
+- id: '1737052831738'
+  alias: Bedroom 3, Fan
+  description: Control the ceiling fan in Jess' office via the Lutron 3BRL fan remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: c86536d4eb18d6eaf1ddb6d7e63bb379
+      button_on_single:
+      - action: fan.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_3
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_3
+      button_preset_single:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_3
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_3
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are disabled.
+              data:
+                type: announce
+        else:
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_3
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_3
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are active.
+              data:
+                type: announce
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: 'off'
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: high
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+      button_lower_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: high
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_3
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: 'off'
+            target:
+              entity_id: fan.ceiling_fan_bedroom_3
+      button_on_double:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_3
+      button_off_double:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_3
+- id: '1737055241030'
+  alias: Bedroom 2, Fan
+  description: Control the ceiling fan in the guest bedroom via the Lutron 3BRL fan
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: a27d9dc278719e77bd1086e297be14fa
+      button_on_single:
+      - action: fan.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_2
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_2
+      button_preset_single:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_2
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_2
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are disabled.
+              data:
+                type: announce
+        else:
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_2
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_2
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are active.
+              data:
+                type: announce
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: 'off'
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: high
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+      button_lower_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: high
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_2
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: 'off'
+            target:
+              entity_id: fan.ceiling_fan_bedroom_2
+      button_on_double:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_2
+      button_off_double:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_2
+- id: '1737055349278'
+  alias: Bedroom 1, Fan
+  description: Control the ceiling fan in the main bedroom via the Lutron 3BRL fan
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: 42cf4e5eb7543eaffd4a0a285cefd6a9
+      button_on_single:
+      - action: fan.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_1
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.ceiling_fan_bedroom_1
+      button_preset_single:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_1
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_1
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are disabled.
+              data:
+                type: announce
+        else:
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+        - if:
+          - condition: state
+            entity_id: input_boolean.household_notify_bedroom_1
+            state: 'on'
+          then:
+          - action: notify.alexa_media_echo_dot_bedroom_1
+            metadata: {}
+            data:
+              message: Occupancy automations for this room are active.
+              data:
+                type: announce
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: 'off'
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: high
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+      button_lower_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: high
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: medium
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: medium
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: low
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+        - conditions:
+          - condition: state
+            entity_id: fan.ceiling_fan_bedroom_1
+            attribute: preset_mode
+            state: low
+          sequence:
+          - action: fan.set_preset_mode
+            metadata: {}
+            data:
+              preset_mode: 'off'
+            target:
+              entity_id: fan.ceiling_fan_bedroom_1
+      button_on_double:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_1
+      button_off_double:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_1
+- id: '1737055934253'
+  alias: Bedroom 2, Lights - Primary
+  description: Control the primary lights in the guest bedroom via the Lutron 3BRL
+    light remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: 1043e20fa58cfb8c3ee51209b5ce0fc2
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_preset_single:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_raise_single:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: 10
+        target:
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_lower_single:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: -10
+        target:
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_on_hold:
+      - action: cover.open_cover_tilt
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.blinds_bedroom_2
+      button_off_hold:
+      - action: cover.set_cover_tilt_position
+        metadata: {}
+        data:
+          tilt_position: 100
+        target:
+          entity_id: cover.blinds_bedroom_2
+- id: '1737059608005'
+  alias: Bedroom 4, Light - Ceiling Fan
+  description: Control the ceiling fan light in Tom's office via a Lutron paddle remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: 687b4e1b0875cd0e443f232fe5767e1d
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_4
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_4
+- id: '1737061838951'
+  alias: Bedroom 3, Light - Ceiling Fan
+  description: Control the ceiling fan light in the Jess' office via a Lutron paddle
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: afe69d52a42055addce27abac118675a
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_3
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_3
+- id: '1737061883401'
+  alias: Bedroom 2, Light - Ceiling Fan
+  description: Control the ceiling fan light in the guest bedroom via a Lutron paddle
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: d2694481a3b250b9ed95e4645eb6e40b
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_2
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_2
+- id: '1737061982300'
+  alias: Bedroom 1, Light - Ceiling Fan
+  description: Control the ceiling fan light in the main bedroom via a Lutron paddle
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: da8f06c90863b596980eda95dd6754ae
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_1
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.ceiling_fan_bedroom_1
+- id: '1737062260641'
+  alias: Bedroom 4, Light - Primary
+  description: Control primary lights in Tom's office via a Lutron paddle remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: b3de283035b788f368ee8333e37de457
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_4_group_occupancy_lights
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_4_group_occupancy_lights
+      button_on_hold:
+      - action: cover.open_cover_tilt
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.blinds_bedroom_4
+      button_off_hold:
+      - action: cover.set_cover_tilt_position
+        metadata: {}
+        data:
+          tilt_position: 100
+        target:
+          entity_id: cover.blinds_bedroom_4
+- id: '1737121078064'
+  alias: Bedroom 1, Lights - Primary
+  description: Control primary lights in the main bedroom via a Lutron paddle remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: a7fd95bd8b97ebc8067e659bb3aa7009
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_1_group_occupancy_lights
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.bedroom_1_group_occupancy_lights
+      button_on_hold:
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.large_window_curtains_bedroom_1
+      button_off_hold:
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.large_window_curtains_bedroom_1
+- id: '1737126794238'
+  alias: Living Room, Lights - Primary
+  description: Control the primary lights in the living room via the Lutron 3BRL light
+    remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: 52953df2b0850134e6d998ac302e9f8b
+      button_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.living_room_corner_lamp
+      button_raise_single:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: 10
+        target:
+          entity_id: light.living_room_corner_lamp
+      button_preset_single:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.living_room_corner_lamp
+      button_lower_single:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: -10
+        target:
+          entity_id: light.living_room_corner_lamp
+      button_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.living_room_corner_lamp
+      button_on_double:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.dining_room_chandelier
+      button_preset_double:
+      - action: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.dining_room_chandelier
+      button_off_double:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.dining_room_chandelier
