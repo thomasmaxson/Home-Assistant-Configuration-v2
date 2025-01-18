@@ -1440,6 +1440,7 @@ views:
           path: '#details-bedroom-2'
           icon_on: mdi:bed
           icon_off: mdi:bed-outline
+          data_blinds: cover.blinds_bedroom_2
           data_door: binary_sensor.door_bedroom_2
           data_lightOn: light.bedroom_2_bedside_lamps
           data_temperature: sensor.temperature_bedroom_2
@@ -1485,6 +1486,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.ceiling_fan_bedroom_2
+                  - type: custom:button-card
+                    template: chip_detail__blind
+                    entity: cover.blinds_bedroom_2
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
