@@ -1,17 +1,23 @@
 substitutions:
   name: upsy-desky-76db20
   friendly_name: Desk, Bedroom 4
-packages:
-  tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@v4.0.0
+
 esphome:
   name: ${name}
-  name_add_mac_suffix: false
   friendly_name: ${friendly_name}
+  name_add_mac_suffix: true
+
+packages:
+  tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@latest
 
 api:
   encryption:
-    key: KCu8adhdFQd1FvpD7EO5YFovZzbxggZ40jxR8h87pfs=
+    key: !secret upsy_desk_api_key
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  ssid: !secret wifi_main_ssid
+  password: !secret wifi_main_password
+  manual_ip:
+    static_ip: 192.168.10.154
+    gateway: 192.168.10.1
+    subnet: 255.255.255.0
