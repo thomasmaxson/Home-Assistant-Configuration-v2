@@ -1,0 +1,44 @@
+substitutions:
+  name: btproxy-bedroom-4
+  friendly_name: Bluetooth Proxy, Bedroom 4
+  
+esphome:
+  name: ${name}
+  name_add_mac_suffix: true
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+packages:
+  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic/esp32-generic.yaml@main
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "i2U+zc99sMJGI+MqScsODESTM6rgAyVffWBJ50fWB8o="
+
+ota:
+  - platform: esphome
+    password: "6cc5af1f8bc0c887498109efa17beb2d"
+
+wifi:
+  ssid: !secret wifi_main_ssid
+  password: !secret wifi_main_password
+  manual_ip:
+    static_ip: 192.168.10.103
+    gateway: !secret ip_gateway
+    subnet: !secret subnet
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bluetooth-Proxy-Bedroom-4"
+    password: "3gjsflCyUYxH"
+
+captive_portal:
+    
