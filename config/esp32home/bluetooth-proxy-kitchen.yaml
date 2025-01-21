@@ -1,0 +1,39 @@
+esphome:
+  name: btproxy-kitchen
+  friendly_name: Bluetooth Proxy, Kitchen
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+packages:
+  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic/esp32-generic.yaml@main
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "X/gmSp67NjHzc2s4Caf/+k2G3t7DqMxB3QXh112oZds="
+
+ota:
+  - platform: esphome
+    password: "5b6f87234ead3d0beb6849db33ce7efe"
+
+wifi:
+  ssid: !secret wifi_main_ssid
+  password: !secret wifi_main_password
+  manual_ip:
+    static_ip: 192.168.10.214
+    gateway: 192.168.10.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bluetooth-Proxy-Kitchen"
+    password: "qbkD6sm066fz"
+
+captive_portal:
+    

@@ -1,0 +1,61 @@
+substitutions:
+  name: btproxy-bedroom-2
+  friendly_name: Bluetooth Proxy, Bedroom 2
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: true
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret bedroom_2_btproxy_api_key
+
+ota:
+  - platform: esphome
+    password: !secret bedroom_2_btproxy_ota_pwd
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret bedroom_2_btproxy_ip_address
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bluetooth-Proxy-Bedroom-2"
+    password: !secret bedroom_2_btproxy_ap_pwd
+
+captive_portal:
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    # We currently use the defaults to ensure Bluetooth
+    # can co-exist with WiFi In the future we may be able to
+    # enable the built-in coexistence logic in ESP-IDF
+    active: true
+
+bluetooth_proxy:
+  active: true
+
+button:
+  - platform: factory_reset
+    name: Restart with Factory Default Settings
+    id: resetf
+
+  - platform: safe_mode
+    name: Safe Mode Boot
+    entity_category: diagnostic

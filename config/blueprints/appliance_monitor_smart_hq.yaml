@@ -1,0 +1,231 @@
+blueprint:
+  name: GE Smart HQ Appliance
+  description: Manage your GE SmartHQ enabled appliance.
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    appliance_details:
+      name: Appliance Details
+      icon: mdi:state-machine
+      collapsed: false
+      input:
+        appliance_state:
+          name: Appliance State
+          description: "The current state of the appliance"
+          selector:
+            entity:
+              filter:
+                - integration: ge_home
+              multiple: false
+
+        appliance_door:
+          name: Appliance Door Sensor
+          description: "The current state of the appliance door"
+          selector:
+            entity:
+              filter:
+                - integration: ge_home
+              multiple: false
+
+    custom_fields:
+      name: Custom Fields
+      icon: mdi:dots-vertical
+      collapsed: false
+      input:
+        appliance_complete_flag:
+          name: Completed Flag
+          description: "Flag to set when appliance has completed its cycle"
+          selector:
+            entity:
+              filter:
+                domain: input_boolean
+              multiple: false
+
+    appliance_actions_start:
+      name: Start Actions
+      icon: mdi:contain-start
+      collapsed: true
+      input:
+        action_single_start:
+          name: Single Action(s)
+          description: "Action(s) to run once when the appliance starts."
+          default: []
+          selector:
+            action:
+
+    appliance_actions_finish:
+      name: Finished Actions
+      icon: mdi:contain-end
+      collapsed: true
+      input:
+        action_single_finish:
+          name: Single Action(s)
+          description: "Action(s) to run once when the appliance finishes."
+          default: []
+          selector:
+            action:
+
+        action_repeat_finish:
+          name: Repeatable Action(s)
+          description: "Action(s) to repeat when the appliance finishes."
+          default: []
+          selector:
+            action:
+
+        duration_repeat_finish:
+          name: Repeat Duration
+          description: Duration to wait until repeatable action is repeated
+          default: 10
+          selector:
+            number:
+              min: 1
+              max: 60
+              unit_of_measurement: minutes
+              step: 1
+              mode: slider
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: "Mode that the automation runs in."
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Max Number of Runs
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            (ignored by Single and Restart Modes)
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "Standby"
+    id: State switched to Standby
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "Run"
+    id: State switched to Run
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "on"
+    id: State switched to On
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "Paused"
+    id: State switched to Paused
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "Finished"
+    id: State switched to Finished
+  - trigger: state
+    entity_id:
+      - !input appliance_state
+    to: "off"
+    id: State turned Off
+  - trigger: state
+    entity_id:
+      - !input appliance_door
+    to: "on"
+    id: Door is Open
+
+actions:
+  - choose:
+      # Appliance State is "Run"
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - State switched to Run
+              - condition: trigger
+                id:
+                  - State switched to On
+        sequence:
+          - choose: []
+            default: !input action_single_start
+
+      # Appliance State is "Finished"
+      - conditions:
+          - condition: trigger
+            id:
+              - State switched to Finished
+        sequence:
+          - action: input_boolean.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: !input appliance_complete_flag
+          - choose: []
+            default: !input action_single_finish
+          - repeat:
+              while:
+                - condition: state
+                  entity_id: !input appliance_complete_flag
+                  state: "on"
+              sequence:
+                - choose: []
+                  default: !input action_repeat_finish
+                - delay:
+                    hours: 0
+                    minutes: !input duration_repeat_finish
+                    seconds: 0
+
+      # Turn Off Complete Flag
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - Door is Open
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input appliance_state
+                    state: "off"
+                  - condition: state
+                    entity_id: !input appliance_state
+                    state: "Standby"
+                  - condition: state
+                    entity_id: !input appliance_state
+                    state: "Finished"
+              - condition: state
+                entity_id: !input appliance_complete_flag
+                state: "on"
+        sequence:
+          - action: input_boolean.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: !input appliance_complete_flag
