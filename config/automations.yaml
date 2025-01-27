@@ -1341,7 +1341,7 @@
   mode: queued
   max: 10
 - id: '1727015013289'
-  alias: Garage, Cover Door (Aqara Mini Switch)
+  alias: Garage, Door - Exterior
   description: Control garage door via a Aqara Mini Switch remote.
   use_blueprint:
     path: maxson/remote_aqara_mini_switch.yaml
@@ -1366,7 +1366,7 @@
           entity_id: cover.blinds_kitchen
         data: {}
 - id: '1727113582845'
-  alias: Bedroom 1, Lights - Primary
+  alias: Bedroom 1, Light - Primary
   description: Control primary lights in the main bedroom via a IKEA STRYBAR 4 button
     remote.
   use_blueprint:
@@ -1378,7 +1378,7 @@
       auto_mode: queued
       force_brightness: false
 - id: '1727115559199'
-  alias: Bedroom 4, Lights - Primary
+  alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a IKEA TRADFRI 5 button
     remote.
   use_blueprint:
@@ -1389,7 +1389,7 @@
       brightness_step: 10
       config_mode: single
 - id: '1727117077347'
-  alias: Living Room, Lights - Primary
+  alias: Living Room, Light - Primary
   description: Control primary lights in the living room via a IKEA TRADFRI 2 button
     remote.
   use_blueprint:
@@ -1402,7 +1402,7 @@
       brightness: 40
       force_brightness: true
 - id: '1727117139279'
-  alias: Garage Wall Fan
+  alias: Garage, Wall Fan
   description: Control the fan in the garage via a IKEA TRADFRI 2 button remote.
   use_blueprint:
     path: maxson/remote_ikea_tradfri_2_button.yaml
@@ -1495,10 +1495,18 @@
   actions:
   - repeat:
       sequence:
-      - metadata: {}
+      - action: script.amazon_echo_announcement
+        metadata: {}
         data:
           message: Warning. The garage GFCI outlet needs to be reset.
-        action: script.amazon_echo_announcement
+          send_to:
+          - dining_room
+          - bedroom_1
+          - bedroom_2
+          - bedroom_3
+          - bedroom_4
+          - kitchen
+          - bathroom_1
       - delay:
           hours: 1
           minutes: 0
@@ -1510,397 +1518,6 @@
         - condition: state
           entity_id: light.garage_fan
           state: unavailable
-  mode: queued
-  max: 10
-- id: '1727298892054'
-  alias: Leak Detection
-  description: ''
-  triggers:
-  - entity_id:
-    - binary_sensor.leak_air_conditioner
-    from: 'off'
-    to: 'on'
-    id: Leak in Air Conditioner Intake
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_washing_machine
-    from: 'off'
-    to: 'on'
-    id: Leak Under Washing Machine
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_sink_kitchen
-    from: 'off'
-    to: 'on'
-    id: Leak Under Sink, Kitchen
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_dishwasher
-    from: 'off'
-    to: 'on'
-    id: Leak Under Dish Washer
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_sink_bathroom_main_his
-    from: 'off'
-    to: 'on'
-    id: Leak Under Sink, Main Bathroom (His)
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_sink_bathroom_main_hers
-    from: 'off'
-    to: 'on'
-    id: Leak Under Sink, Main Bathroom (Hers)
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_toilet_bathroom_main
-    from: 'off'
-    to: 'on'
-    id: Leak at Toilet, Main Bathroom
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_sink_bathroom_guest
-    from: 'off'
-    to: 'on'
-    id: Leak Under Sink, Guest Bathroom
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_toilet_bathroom_guest
-    from: 'off'
-    to: 'on'
-    id: Leak at Toilet, Guest Bathroom
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_sink_bathroom_half
-    from: 'off'
-    to: 'on'
-    id: Leak Under Sink, Half Bathroom
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_toilet_bathroom_half
-    from: 'off'
-    to: 'on'
-    id: Leak at Toilet, Half Bathroom
-    trigger: state
-  - entity_id:
-    - binary_sensor.leak_wine_cooler
-    from: 'off'
-    to: 'on'
-    id: Leak Under Wine Cooler
-    trigger: state
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak in Air Conditioner Intake
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Foyer in the bottom of the air
-              conditioner intake.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Foyer in the bottom of
-              the air conditioner intake.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Foyer in the bottom of the air
-              conditioner intake.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Washing Machine
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Laundry Room under the washing
-              machine.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Laundry Room under the
-              washing machine.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Laundry Room under the washing
-              machine.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Sink, Kitchen
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected under the Kitchen sink.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected under the Kitchen sink.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected under the Kitchen sink.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Sink, Main Bathroom (His)
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Main Bathroom under his sink.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Main Bathroom under his
-              sink.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Main Bathroom under his sink.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Sink, Main Bathroom (Hers)
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Main Bathroom under her sink.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Main Bathroom under her
-              sink.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Main Bathroom under her sink.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak at Toilet, Main Bathroom
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Main Bathroom behind the toilet.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Main Bathroom behind
-              the toilet.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Main Bathroom behind the toilet.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Sink, Guest Bathroom
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Guest Bathroom under the sink.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Guest Bathroom under
-              the sink.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Guest Bathroom under the sink.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak at Toilet, Guest Bathroom
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Guest Bathroom behind the toilet.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Guest Bathroom behind
-              the toilet.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Guest Bathroom behind the toilet.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Sink, Half Bathroom
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Half Bathroom under the sink.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Half Bathroom under the
-              sink.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Half Bathroom under the sink.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak at Toilet, Half Bathroom
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected in the Half Bathroom behind the toilet.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected in the Half Bathroom behind
-              the toilet.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected in the Half Bathroom behind the toilet.
-    - conditions:
-      - condition: trigger
-        id:
-        - Leak Under Wine Cooler
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            notification_type: type_critical
-            interruption_level: critical
-            subtitle: Warning
-            message: Water has been detected under the wine cooler.
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            message: Warning! Water has been detected under the wine cooler.
-          alias: Send Notification to Alexa
-        - alias: Create Persistent Notification
-          action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: Water has been detected under the wine cooler.
   mode: queued
   max: 10
 - id: '1727361036902'
@@ -2289,7 +1906,7 @@
   mode: queued
   max: 10
 - id: '1727466621446'
-  alias: Appliance Temperature Detection
+  alias: Temperature Detection, Refrigerator
   description: ''
   triggers:
   - entity_id:
@@ -2301,163 +1918,42 @@
       minutes: 30
       seconds: 0
     above: 50
-  - entity_id:
-    - sensor.temperature_freezer
-    trigger: numeric_state
-    id: Freezer Temperature too HIGH
-    for:
-      hours: 0
-      minutes: 30
-      seconds: 0
-    above: 32
-    enabled: false
-  - entity_id:
-    - sensor.temperature_wine_cooler_bottom
-    trigger: numeric_state
-    id: Wine Cooler (Bottom) Temperature too HIGH
-    for:
-      hours: 0
-      minutes: 30
-      seconds: 0
-    above: 65
-    enabled: false
-  - entity_id:
-    - sensor.temperature_wine_cooler_top
-    trigger: numeric_state
-    id: Wine Cooler (Top) Temperature too HIGH
-    for:
-      hours: 0
-      minutes: 30
-      seconds: 0
-    above: 75
-    enabled: false
   conditions: []
   actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Refrigerator Temperature too HIGH
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            subtitle: Warning
-            interruption_level: critical
-            notification_type: type_critical
-            message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: script.amazon_echo_announcement
-          alias: Send Notification to Alexa
-          data:
-            message: Warning! In the Kitchen, the refrigerator is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-    - conditions:
-      - condition: trigger
-        id:
-        - Freezer Temperature too HIGH
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            subtitle: Warning
-            interruption_level: critical
-            notification_type: type_critical
-            message: In the Kitchen, the freezer is at {{ trigger.to_state.state |
-              round }}°, which is above the {{ trigger.above | round }}° maximum temperature
-              allowed.
-        - action: script.amazon_echo_announcement
-          alias: Send Notification to Alexa
-          data:
-            message: Warning! In the Kitchen, the freezer is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: In the Kitchen, the freezer is at {{ trigger.to_state.state |
-              round }}°, which is above the {{ trigger.above | round }}° maximum temperature
-              allowed.
-    - conditions:
-      - condition: trigger
-        id:
-        - Wine Cooler (Top) Temperature too HIGH
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            subtitle: Warning
-            interruption_level: critical
-            notification_type: type_critical
-            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: script.amazon_echo_announcement
-          alias: Send Notification to Alexa
-          data:
-            message: Warning! In the Bar, the top wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-    - conditions:
-      - condition: trigger
-        id:
-        - Wine Cooler (Bottom) Temperature too HIGH
-      sequence:
-      - parallel:
-        - action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-            - jessica
-            - thomas
-            subtitle: Warning
-            interruption_level: critical
-            notification_type: type_critical
-            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: script.amazon_echo_announcement
-          alias: Send Notification to Alexa
-          data:
-            message: Warning! In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
-        - action: persistent_notification.create
-          metadata: {}
-          data:
-            title: Warning
-            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
-              | round }}°, which is above the {{ trigger.above | round }}° maximum
-              temperature allowed.
+  - parallel:
+    - action: script.push_notification_to_ios_devices
+      metadata: {}
+      data:
+        send_to:
+        - jessica
+        - thomas
+        subtitle: Warning
+        interruption_level: critical
+        notification_type: type_critical
+        message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
+          | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
+    - action: script.amazon_echo_announcement
+      alias: Send Notification to Alexa
+      data:
+        message: Warning! In the Kitchen, the refrigerator is at {{ trigger.to_state.state
+          | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
+        send_to:
+        - dining_room
+        - bedroom_1
+        - bedroom_2
+        - bedroom_3
+        - bedroom_4
+        - kitchen
+        - bathroom_1
+    - action: persistent_notification.create
+      metadata: {}
+      data:
+        title: Warning
+        message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
+          | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
   mode: queued
   max: 10
 - id: '1727539745399'
@@ -3208,6 +2704,14 @@
               metadata: {}
               data:
                 message: Your dishes are clean and are ready to be put away.
+                send_to:
+                - dining_room
+                - bedroom_1
+                - bedroom_2
+                - bedroom_3
+                - bedroom_4
+                - kitchen
+                - bathroom_1
             - delay:
                 hours: 0
                 minutes: 20
@@ -3295,121 +2799,6 @@
       - input_boolean.reminder_toothbrush_complete_thomas
     data: {}
   mode: single
-- id: '1727629160872'
-  alias: Tumble Dryer
-  description: ''
-  triggers:
-  - entity_id:
-    - sensor.laundry_dryer_machine_state
-    to: Standby
-    id: Dryer State is STANDBY
-    trigger: state
-  - entity_id:
-    - sensor.laundry_dryer_machine_state
-    to: Run
-    id: Dryer State is RUN
-    trigger: state
-  - entity_id:
-    - sensor.laundry_dryer_machine_state
-    to: Finished
-    id: Dryer State is FINISHED
-    trigger: state
-  - entity_id:
-    - sensor.laundry_dryer_machine_state
-    to: 'Off'
-    id: Dryer State is OFF
-    trigger: state
-  - entity_id:
-    - binary_sensor.laundry_dryer_door
-    from: 'off'
-    to: 'on'
-    id: Dryer Door did OPEN
-    trigger: state
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Dryer State is RUN
-      - condition: state
-        entity_id: input_text.laundry_dryer_original_duration
-        state: ''
-      sequence:
-      - action: input_text.set_value
-        metadata: {}
-        data:
-          value: '{{ states( ''sensor.laundry_dryer_time_remaining'' ) }}'
-        target:
-          entity_id: input_text.laundry_dryer_original_duration
-      alias: STORE Original Duration
-    - conditions:
-      - condition: trigger
-        id:
-        - Dryer State is OFF
-        - Dryer State is STANDBY
-        - Dryer State is FINISHED
-      sequence:
-      - action: input_text.set_value
-        metadata: {}
-        data:
-          value: ''
-        target:
-          entity_id: input_text.laundry_dryer_original_duration
-      - if:
-        - condition: trigger
-          id:
-          - Dryer State is FINISHED
-        - condition: time
-          after: 07:00:00
-          before: '23:00:00'
-        then:
-        - action: input_boolean.turn_on
-          target:
-            entity_id:
-            - input_boolean.reminder_laundry_complete_dryer
-          data: {}
-        - repeat:
-            sequence:
-            - action: script.amazon_echo_announcement
-              metadata: {}
-              data:
-                message: Your dried clothes are ready to be folded.
-            - delay:
-                hours: 0
-                minutes: 20
-                seconds: 0
-                milliseconds: 0
-            while:
-            - condition: state
-              entity_id: input_boolean.reminder_laundry_complete_dryer
-              state: 'on'
-              for:
-                hours: 0
-                minutes: 0
-                seconds: 0
-      alias: CLEAR Original Duration, Maybe Send Notification
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Dryer Door did OPEN
-        - condition: state
-          entity_id: sensor.custom_laundry_dryer_machine_state
-          state: 'off'
-        - condition: state
-          entity_id: input_boolean.reminder_laundry_complete_dryer
-          state: 'on'
-      sequence:
-      - action: input_boolean.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.reminder_laundry_complete_dryer
-      alias: Dryer Door Did OPEN
-  mode: queued
-  max: 10
 - id: '1727634353709'
   alias: Backups Gone Stale
   description: ''
@@ -3508,122 +2897,6 @@
         target:
           entity_id: light.foyer_ceiling_ledge
   mode: single
-- id: '1727957321847'
-  alias: Washing Machine
-  description: ''
-  triggers:
-  - trigger: state
-    entity_id:
-    - sensor.laundry_washer_machine_state
-    to: Standby
-    id: Washer State is STANDBY
-  - entity_id:
-    - sensor.laundry_washer_machine_state
-    to: Run
-    id: Washer State is RUN
-    trigger: state
-  - entity_id:
-    - sensor.laundry_washer_machine_state
-    to: Finished
-    id: Washer State is FINISHED
-    trigger: state
-  - entity_id:
-    - sensor.laundry_washer_machine_state
-    to: 'Off'
-    id: Washer State is OFF
-    trigger: state
-  - entity_id:
-    - binary_sensor.laundry_washer_door
-    from: 'off'
-    to: 'on'
-    id: Washer Door did OPEN
-    trigger: state
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Washer State is RUN
-      - condition: state
-        entity_id: input_text.laundry_washer_original_duration
-        state: ''
-      sequence:
-      - action: input_text.set_value
-        metadata: {}
-        data:
-          value: '{{ states( ''sensor.laundry_washer_time_remaining'' ) }}'
-        target:
-          entity_id: input_text.laundry_washer_original_duration
-      alias: STORE Original Duration
-    - conditions:
-      - condition: trigger
-        id:
-        - Washer State is OFF
-        - Washer State is STANDBY
-        - Washer State is FINISHED
-      sequence:
-      - action: input_text.set_value
-        metadata: {}
-        data:
-          value: ''
-        target:
-          entity_id: input_text.laundry_washer_original_duration
-      - if:
-        - condition: trigger
-          id:
-          - Washer State is FINISHED
-          enabled: true
-        - condition: time
-          after: 07:00:00
-          before: '23:00:00'
-        then:
-        - action: input_boolean.turn_on
-          target:
-            entity_id:
-            - input_boolean.reminder_laundry_complete_washer
-          data: {}
-        - repeat:
-            sequence:
-            - action: script.amazon_echo_announcement
-              metadata: {}
-              data:
-                message: Your washed clothes are ready to be dried.
-            - delay:
-                hours: 0
-                minutes: 20
-                seconds: 0
-                milliseconds: 0
-            while:
-            - condition: state
-              entity_id: input_boolean.reminder_laundry_complete_washer
-              state: 'on'
-              for:
-                hours: 0
-                minutes: 0
-                seconds: 0
-      alias: CLEAR Original Duration, Maybe Send Notification
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Washer Door did OPEN
-        - condition: state
-          entity_id: sensor.custom_laundry_dryer_machine_state
-          state: 'off'
-        - condition: state
-          entity_id: input_boolean.reminder_laundry_complete_washer
-          state: 'on'
-      sequence:
-      - action: input_boolean.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.reminder_laundry_complete_washer
-      alias: Washer Door Did OPEN
-  mode: queued
-  max: 10
 - id: '1728051627180'
   alias: Kitchen
   description: ''
@@ -4198,7 +3471,7 @@
             entity_id: fan.ceiling_fan_bedroom_3
       idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
 - id: '1730985202477'
-  alias: Foyer, Lights (Sonoff Wireless)
+  alias: Foyer, Light
   description: Control primary lights in the foyer via a Sonoff Wireless remote.
   use_blueprint:
     path: maxson/remote_sonoff_wireless_switch.yaml
@@ -4302,108 +3575,110 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_4
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_4
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are disabled.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_4
+            message: Occupancy automations for this room are disabled.
         else:
         - action: input_boolean.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_4
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_4
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are active.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_4
+            message: Occupancy automations for this room are active.
       button_raise_single:
       - choose:
         - conditions:
           - condition: state
             entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
             state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: low
+              percentage: 33.333333333333336
             target:
               entity_id: fan.ceiling_fan_bedroom_4
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
-            state: low
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: medium
+              percentage: 66.6666666667
             target:
               entity_id: fan.ceiling_fan_bedroom_4
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
-            state: medium
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 66.6666666667 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: high
+              percentage: 100
             target:
               entity_id: fan.ceiling_fan_bedroom_4
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+            data: {}
       button_lower_single:
       - choose:
         - conditions:
           - condition: state
             entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
-            state: high
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: medium
+              percentage: 100
             target:
               entity_id: fan.ceiling_fan_bedroom_4
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
-            state: medium
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_off
+            target:
+              entity_id: fan.ceiling_fan_bedroom_4
+            data: {}
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: low
+              percentage: 33.333333333333336
             target:
               entity_id: fan.ceiling_fan_bedroom_4
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            attribute: preset_mode
-            state: low
+          - condition: template
+            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
+              ) | float <= 100 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: 'off'
+              percentage: 66.6666666667
             target:
               entity_id: fan.ceiling_fan_bedroom_4
       button_on_double:
@@ -4448,34 +3723,24 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_3
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_3
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are disabled.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_3
+            message: Occupancy automations for this room are disabled.
         else:
         - action: input_boolean.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_3
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_3
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are active.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_3
+            message: Occupancy automations for this room are active.
       button_raise_single:
       - choose:
         - conditions:
@@ -4595,34 +3860,24 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_2
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_2
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are disabled.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_2
+            message: Occupancy automations for this room are disabled.
         else:
         - action: input_boolean.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_2
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_2
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are active.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_2
+            message: Occupancy automations for this room are active.
       button_raise_single:
       - choose:
         - conditions:
@@ -4711,6 +3966,19 @@
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_2
+      button_on_hold:
+      - action: cover.open_cover_tilt
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.blinds_bedroom_2
+      button_off_hold:
+      - action: cover.set_cover_tilt_position
+        metadata: {}
+        data:
+          tilt_position: 100
+        target:
+          entity_id: cover.blinds_bedroom_2
 - id: '1737055349278'
   alias: Bedroom 1, Fan
   description: Control the ceiling fan in the main bedroom via the Lutron 3BRL fan
@@ -4742,34 +4010,24 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_1_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_1
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_1
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are disabled.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_1
+            message: Occupancy automations for this room are disabled.
         else:
         - action: input_boolean.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: input_boolean.bedroom_1_automation_allow_occupancy
-        - if:
-          - condition: state
-            entity_id: input_boolean.household_notify_bedroom_1
-            state: 'on'
-          then:
-          - action: notify.alexa_media_echo_dot_bedroom_1
-            metadata: {}
-            data:
-              message: Occupancy automations for this room are active.
-              data:
-                type: announce
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_1
+            message: Occupancy automations for this room are active.
       button_raise_single:
       - choose:
         - conditions:
@@ -4858,8 +4116,20 @@
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_1
+      button_on_hold:
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.large_window_curtains_bedroom_1
+      button_off_hold:
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.large_window_curtains_bedroom_1
 - id: '1737055934253'
-  alias: Bedroom 2, Lights - Primary
+  alias: Bedroom 2, Light - Primary
   description: Control the primary lights in the guest bedroom via the Lutron 3BRL
     light remote.
   use_blueprint:
@@ -5023,7 +4293,7 @@
         target:
           entity_id: cover.blinds_bedroom_4
 - id: '1737121078064'
-  alias: Bedroom 1, Lights - Primary
+  alias: Bedroom 1, Light - Primary
   description: Control primary lights in the main bedroom via a Lutron paddle remote.
   use_blueprint:
     path: maxson/remote_lutron_pico_paddle.yaml
@@ -5054,7 +4324,7 @@
         target:
           entity_id: cover.large_window_curtains_bedroom_1
 - id: '1737126794238'
-  alias: Living Room, Lights - Primary
+  alias: Living Room, Light - Primary
   description: Control the primary lights in the living room via the Lutron 3BRL light
     remote.
   use_blueprint:
@@ -5111,3 +4381,715 @@
         data: {}
         target:
           entity_id: light.dining_room_chandelier
+- id: '1737478714640'
+  alias: Tumble Dryer
+  description: ''
+  use_blueprint:
+    path: maxson/appliance_ge_smarthq.yaml
+    input:
+      appliance_state: sensor.laundry_dryer_machine_state
+      appliance_door: binary_sensor.laundry_dryer_door
+      appliance_complete_flag: input_boolean.reminder_laundry_complete_dryer
+      action_single_start:
+      - action: input_text.set_value
+        metadata: {}
+        data:
+          value: '{{ states( ''sensor.laundry_dryer_time_remaining'' ) }}'
+        target:
+          entity_id: input_text.laundry_dryer_original_duration
+      action_single_finish:
+      - action: input_text.set_value
+        metadata: {}
+        data:
+          value: ''
+        target:
+          entity_id: input_text.laundry_dryer_original_duration
+      action_repeat_finish:
+      - if:
+        - condition: time
+          after: 07:00:00
+          before: '23:00:00'
+        then:
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Your dried clothes are ready to be folded.
+            send_to:
+            - dining_room
+            - bathroom_1
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+      duration_repeat_finish: 20
+- id: '1737482236130'
+  alias: Washing Machine
+  description: ''
+  use_blueprint:
+    path: maxson/appliance_ge_smarthq.yaml
+    input:
+      appliance_state: sensor.laundry_washer_machine_state
+      appliance_door: binary_sensor.laundry_washer_door
+      appliance_complete_flag: input_boolean.reminder_laundry_complete_washer
+      action_single_start:
+      - action: input_text.set_value
+        metadata: {}
+        data:
+          value: '{{ states( ''sensor.laundry_washing_time_remaining'' ) }}'
+        target:
+          entity_id: input_text.laundry_washer_original_duration
+      action_single_finish:
+      - action: input_text.set_value
+        metadata: {}
+        data:
+          value: ''
+        target:
+          entity_id: input_text.laundry_washer_original_duration
+      action_repeat_finish:
+      - if:
+        - condition: time
+          after: 07:00:00
+          before: '23:00:00'
+        then:
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Your washed clothes are ready to be dried.
+            send_to:
+            - dining_room
+            - bathroom_1
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+      duration_repeat_finish: 20
+- id: '1737489771512'
+  alias: Water Leak, Air Conditioner
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 9105473c4abc54acb9272f702eac9ddd
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Foyer in the bottom of the air
+              conditioner intake.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Foyer in the bottom of
+              the air conditioner intake.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Foyer in the bottom of the air
+              conditioner intake.
+- id: '1737490562691'
+  alias: Water Leak, Washing Machine
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 83875f47d69895f805ffee3784ffdded
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Laundry Room under the washing
+              machine.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Laundry Room under the
+              washing machine.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Laundry Room under the washing
+              machine.
+- id: '1737491282677'
+  alias: Water Leak, Sink - Kitchen
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 6bd2c853acb282d85e9968c62bb29aaa
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected under the Kitchen sink.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected under the Kitchen sink.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected under the Kitchen sink.
+- id: '1737491470347'
+  alias: Water Leak, Sink - Main Bathroom (Right Side)
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: f0706e0f97f9cc10b194cecc9edd13d3
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Main Bathroom under his sink.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Main Bathroom under his
+              sink.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Main Bathroom under his sink.
+- id: '1737514851791'
+  alias: Water Leak, Sink - Main Bathroom (Left Side)
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 5417f745a698208c494dfda0747d01bc
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Main Bathroom under her sink.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Main Bathroom under her
+              sink.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Main Bathroom under her sink.
+- id: '1737515000373'
+  alias: Water Leak, Toilet - Main Bathroom
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 09f89e0d53eea01f3b331123d2d301cb
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Main Bathroom behind the toilet.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Main Bathroom behind
+              the toilet.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Main Bathroom behind the toilet.
+- id: '1737516775334'
+  alias: Water Leak, Sink - Guest Bathroom
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 7a9df4008e35b6407605dd95b9861fdb
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Guest Bathroom under the sink.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Guest Bathroom under
+              the sink.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Guest Bathroom under the sink.
+- id: '1737516896883'
+  alias: Water Leak, Toilet - Guest Bathroom
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: e0841d5a6df0fd6591a82c3d2f54c648
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Guest Bathroom behind the toilet.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Guest Bathroom behind
+              the toilet.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Guest Bathroom behind the toilet.
+- id: '1737516955801'
+  alias: Water Leak, Toilet - Guest Bathroom
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 0358df5dd4d6317165009562dff8c8c1
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Half Bathroom behind the toilet.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Half Bathroom behind
+              the toilet.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Half Bathroom behind the toilet.
+- id: '1737517559530'
+  alias: Water Leak, Sink - Half Bathroom
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 940b6fbbc3f55027431599fa5fe79e09
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Half Bathroom under the sink.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Half Bathroom under the
+              sink.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Half Bathroom under the sink.
+- id: '1737518000977'
+  alias: Water Leak, Dishwasher
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: f861e9ce3413e989a3b43bd0ad9c885d
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the kitchen under the dishwasher.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the kitchen under the dishwasher.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the kitchen under the dishwasher.
+- id: '1737518200810'
+  alias: Water Leak, Wine Cooler
+  description: ''
+  use_blueprint:
+    path: maxson/leak_detection.yaml
+    input:
+      device: 100d2b250232ab143f458bfa8894e786
+      action_alert:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            notification_type: type_critical
+            interruption_level: critical
+            subtitle: Warning
+            message: Water has been detected in the Bar under the wine cooler.
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            message: Warning! Water has been detected in the Bar under the wine cooler.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+          alias: Send Notification to Alexa
+        - alias: Create Persistent Notification
+          action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: Water has been detected in the Bar under the wine cooler.
+- id: '1737936432191'
+  alias: Temperature Detection, Freezer
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.temperature_freezer
+    trigger: numeric_state
+    id: Freezer Temperature too HIGH
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    above: 32
+    enabled: true
+  conditions: []
+  actions:
+  - parallel:
+    - action: script.push_notification_to_ios_devices
+      metadata: {}
+      data:
+        send_to:
+        - jessica
+        - thomas
+        subtitle: Warning
+        interruption_level: critical
+        notification_type: type_critical
+        message: In the Kitchen, the freezer is at {{ trigger.to_state.state | round
+          }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
+    - action: script.amazon_echo_announcement
+      alias: Send Notification to Alexa
+      data:
+        message: Warning! In the Kitchen, the freezer is at {{ trigger.to_state.state
+          | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
+        send_to:
+        - dining_room
+        - bedroom_1
+        - bedroom_2
+        - bedroom_3
+        - bedroom_4
+        - kitchen
+        - bathroom_1
+    - action: persistent_notification.create
+      metadata: {}
+      data:
+        title: Warning
+        message: In the Kitchen, the freezer is at {{ trigger.to_state.state | round
+          }}°, which is above the {{ trigger.above | round }}° maximum temperature
+          allowed.
+  mode: queued
+  max: 10
+- id: '1737936448576'
+  alias: Temperature Detection, Wine Cooler
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.temperature_wine_cooler_bottom
+    trigger: numeric_state
+    id: Wine Cooler (Bottom) Temperature too HIGH
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    above: 65
+    enabled: true
+  - entity_id:
+    - sensor.temperature_wine_cooler_top
+    trigger: numeric_state
+    id: Wine Cooler (Top) Temperature too HIGH
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    above: 75
+    enabled: true
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - Wine Cooler (Top) Temperature too HIGH
+      sequence:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            subtitle: Warning
+            interruption_level: critical
+            notification_type: type_critical
+            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+        - action: script.amazon_echo_announcement
+          alias: Send Notification to Alexa
+          data:
+            message: Warning! In the Bar, the top wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+        - action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+    - conditions:
+      - condition: trigger
+        id:
+        - Wine Cooler (Bottom) Temperature too HIGH
+      sequence:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - jessica
+            - thomas
+            subtitle: Warning
+            interruption_level: critical
+            notification_type: type_critical
+            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+        - action: script.amazon_echo_announcement
+          alias: Send Notification to Alexa
+          data:
+            message: Warning! In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+            send_to:
+            - dining_room
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            - bathroom_1
+        - action: persistent_notification.create
+          metadata: {}
+          data:
+            title: Warning
+            message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
+              | round }}°, which is above the {{ trigger.above | round }}° maximum
+              temperature allowed.
+  mode: queued
+  max: 10
