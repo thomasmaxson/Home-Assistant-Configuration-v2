@@ -6071,13 +6071,11 @@ views:
                 show_header_toggle: false
                 entities:
                   - entity: input_boolean.enable_exterior_camera_recording
-                    name: Record Exterior Cameras
-                  - entity: input_boolean.enable_motion_camera_recording
-                    name: Record Motion Cameras
+                    name: Record on Exterior Cameras
                   - entity: input_boolean.enable_interior_camera_recording
-                    name: Record Interior Cameras
-                  - entity: input_boolean.camera_int_privacy_mode
-                    name: Disable Private Interior Cameras
+                    name: Record on Interior Cameras
+                  - entity: input_boolean.enable_motion_camera_recording
+                    name: Record on Motion Cameras
                 card_mod:
                   style: |
                     ha-card.type-entities { 
@@ -6206,6 +6204,8 @@ views:
                     title: Private Interior Cameras
                     show_header_toggle: false
                     entities:
+                      - entity: input_boolean.camera_int_privacy_mode
+                        name: Disable Private Cameras
                       - entity: camera.int_bdr1_high
                         name: Main Bedroom
                       - entity: camera.int_bdr3_high
