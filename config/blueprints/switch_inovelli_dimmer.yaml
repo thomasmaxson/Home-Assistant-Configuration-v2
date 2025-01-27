@@ -1,0 +1,416 @@
+blueprint:
+  name: Switch, Inovelli
+  description: Set different actions for x1, x2, x3, x4, x5 button taps for Inovelli Blue Series switches (2-in-1, dimmer, etc.).
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    switch:
+      name: Switch
+      description: Select the Inovelli switch to trigger your automations.
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Inovelli
+              model: VZM31-SN
+
+    actions_single_press:
+      name: Single Press
+      icon: mdi:gesture-tap
+      collapsed: false
+      input:
+        button_on_single:
+          name: Tap On Button
+          description: Action(s) to perform on single tap of the on button
+          default: []
+          selector:
+            action:
+        button_off_single:
+          name: Tap Off Button
+          description: Action(s) to perform on single tap of the off button
+          default: []
+          selector:
+            action:
+        button_config_single:
+          name: Tap Config Button
+          description: Action(s) to perform on single tap of the config button
+          default: []
+          selector:
+            action:
+
+    actions_double_press:
+      name: (x2) Double Press
+      icon: mdi:gesture-double-tap
+      collapsed: true
+      input:
+        button_on_double:
+          name: x2 Tap On Button
+          description: Action(s) to perform on double tap of the on button
+          default: []
+          selector:
+            action:
+        button_off_double:
+          name: x2 Tap Off Button
+          description: Action(s) to perform on double tap of the off button
+          default: []
+          selector:
+            action:
+        button_config_double:
+          name: x2 Tap Config Button
+          description: Action(s) to perform on double tap of the config button
+          default: []
+          selector:
+            action:
+
+    actions_triple_press:
+      name: (x3) Triple Press
+      icon: mdi:gesture-double-tap
+      collapsed: true
+      input:
+        button_on_triple:
+          name: x3 Tap On Button
+          description: Action(s) to perform on triple tap of the on button
+          default: []
+          selector:
+            action:
+        button_off_triple:
+          name: x3 Tap Off Button
+          description: Action(s) to perform on triple tap of the off button
+          default: []
+          selector:
+            action:
+        button_config_triple:
+          name: x3 Tap Config Button
+          description: Action(s) to perform on triple tap of the config button
+          default: []
+          selector:
+            action:
+
+    actions_quadruple_press:
+      name: (x4) Quadruple Press
+      icon: mdi:gesture-double-tap
+      collapsed: true
+      input:
+        button_on_quadruple:
+          name: x4 Tap On Button
+          description: Action(s) to perform on quadruple tap of the on button
+          default: []
+          selector:
+            action:
+        button_off_quadruple:
+          name: x4 Tap Off Button
+          description: Action(s) to perform on quadruple tap of the off button
+          default: []
+          selector:
+            action:
+        button_config_quadruple:
+          name: x4 Tap Config Button
+          description: Action(s) to perform on quadruple tap of the config button
+          default: []
+          selector:
+            action:
+
+    actions_quintuple_press:
+      name: (x5) Quintuple Press
+      icon: mdi:gesture-double-tap
+      collapsed: true
+      input:
+        button_on_quintuple:
+          name: x5 Tap On Button
+          description: Action(s) to perform on quintuple tap of the on button
+          default: []
+          selector:
+            action:
+        button_off_quintuple:
+          name: x5 Tap Off Button
+          description: Action(s) to perform on quintuple tap of the off button
+          default: []
+          selector:
+            action:
+        button_config_quintuple:
+          name: x5 Tap Config Button
+          description: Action(s) to perform on quintuple tap of the config button
+          default: []
+          selector:
+            action:
+
+    actions_hold_press:
+      name: Press and Hold
+      icon: mdi:gesture-tap-hold
+      collapsed: true
+      input:
+        button_on_hold:
+          name: Hold On Button
+          description: Action(s) to perform on hold of the on button
+          default: []
+          selector:
+            action:
+        button_off_hold:
+          name: Hold Off Button
+          description: Action(s) to perform on hold of the off button
+          default: []
+          selector:
+            action:
+        button_config_hold:
+          name: Hold Config Button
+          description: Action(s) to perform on hold of the config button
+          default: []
+          selector:
+            action:
+
+    actions_release:
+      name: Release
+      icon: mdi:cursor-pointer
+      collapsed: true
+      input:
+        button_on_release:
+          name: Release On Button
+          description: Action to run (will also stop the "Hold Up" action automatically)
+          default: []
+          selector:
+            action:
+        button_off_release:
+          name: Release Off Button
+          description: Action to run (will also stop the "Hold Down" action automatically)
+          default: []
+          selector:
+            action:
+        button_config_release:
+          name: Release Config Button
+          description: Action(s) to run (will also stop the "Hold Down" action automatically)
+          default: []
+          selector:
+            action:
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            Ignored by Single and Restart Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+trigger:
+  # Actions, Single Press
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_single
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_single
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_single
+    trigger: device
+
+  # Actions, Double Press
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_double
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_double
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_double
+    trigger: device
+
+  # Actions, Triple Press
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_triple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_triple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_triple
+    trigger: device
+
+  # Actions, Quadruple Press
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_quadruple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_quadruple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_quadruple
+    trigger: device
+
+  # Actions, Quintuple Press
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_quintuple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_quintuple
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_quintuple
+    trigger: device
+
+  # Actions, Press and Hold
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_held
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_held
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_held
+    trigger: device
+
+  # Actions, Release
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: up_release
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: down_release
+    trigger: device
+  - domain: mqtt
+    device_id: !input switch
+    type: action
+    subtype: config_release
+    trigger: device
+
+action:
+  - variables:
+      command: "{{ trigger.payload }}"
+  - choose:
+      - conditions:
+          - "{{ command == 'up_single' }}"
+        sequence: !input button_on_single
+      - conditions:
+          - "{{ command == 'down_single' }}"
+        sequence: !input button_off_single
+      - conditions:
+          - "{{ command == 'config_single' }}"
+        sequence: !input button_config_single
+
+      - conditions:
+          - "{{ command == 'up_double' }}"
+        sequence: !input button_on_double
+      - conditions:
+          - "{{ command == 'down_double' }}"
+        sequence: !input button_off_double
+      - conditions:
+          - "{{ command == 'config_double' }}"
+        sequence: !input button_config_double
+
+      - conditions:
+          - "{{ command == 'up_triple' }}"
+        sequence: !input button_on_triple
+      - conditions:
+          - "{{ command == 'down_triple' }}"
+        sequence: !input button_off_triple
+      - conditions:
+          - "{{ command == 'config_triple' }}"
+        sequence: !input button_config_triple
+
+      - conditions:
+          - "{{ command == 'up_quadruple' }}"
+        sequence: !input button_on_quadruple
+      - conditions:
+          - "{{ command == 'down_quadruple' }}"
+        sequence: !input button_off_quadruple
+      - conditions:
+          - "{{ command == 'config_quadruple' }}"
+        sequence: !input button_config_quadruple
+
+      - conditions:
+          - "{{ command == 'up_quintuple' }}"
+        sequence: !input button_on_quintuple
+      - conditions:
+          - "{{ command == 'down_quintuple' }}"
+        sequence: !input button_off_quintuple
+      - conditions:
+          - "{{ command == 'config_quintuple' }}"
+        sequence: !input button_config_quintuple
+
+      - conditions:
+          - "{{ command == 'up_held' }}"
+        sequence: !input button_on_hold
+      - conditions:
+          - "{{ command == 'down_held' }}"
+        sequence: !input button_off_hold
+      - conditions:
+          - "{{ command == 'config_held' }}"
+        sequence: !input button_config_hold
+
+      - conditions:
+          - "{{ command == 'up_release' }}"
+        sequence: !input button_on_release
+      - conditions:
+          - "{{ command == 'down_release' }}"
+        sequence: !input button_off_release
+      - conditions:
+          - "{{ command == 'config_release' }}"
+        sequence: !input button_config_release
