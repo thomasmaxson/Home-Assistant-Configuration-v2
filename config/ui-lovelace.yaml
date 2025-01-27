@@ -2164,11 +2164,11 @@ views:
               { 
                 badgeIcon = '<ha-icon icon="mdi:numeric-2-circle"></ha-icon>';
 
-              } else if( statusWasher == 'on' && statusWasher == 'on' )
+              } else if( statusDryer == 'off' && statusWasher == 'on' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:washing-machine"></ha-icon>';
 
-              } else if( statusDryer == 'on' && statusWasher == 'on' )
+              } else if( statusDryer == 'on' && statusWasher == 'off' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
 
