@@ -1047,6 +1047,11 @@ views:
                         entity: light.ceiling_fan_bar
                         collapsible_controls: true
                         show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        name: TV Ambient Lights
+                        entity: light.living_room_tv_ambient_lights
+                        collapsible_controls: true
+                        show_brightness_control: true
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -3488,10 +3493,60 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 15%
-              left: 19%
+              top: 19%
+              left: 14%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 30%
+              left: 14%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
+          - type: state-icon
+            entity: cover.large_window_curtains_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 30%
+              left: 21%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+          - type: state-icon
+            entity: light.ceiling_fan_bedroom_2
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 75%
+              left: 87%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_2_group_occupancy_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 75%
+              left: 82%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_2
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 84%
+              left: 82%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_2
             state_color: false
@@ -3502,72 +3557,84 @@ views:
               target:
                 entity_id: cover.blinds_bedroom_2
             style:
-              top: 79%
-              left: 89%
+              top: 84%
+              left: 87%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_2
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 76%
-              left: 86.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_2_group_occupancy_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 85%
-              left: 84.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
-          - type: state-icon
-            entity: light.ceiling_fan_bedroom_2
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 76%
-              left: 82.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_3
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 25%
-              left: 60%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_3_floor_lamp
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 15%
-              left: 58%
-              border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
-                ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_3
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 25%
-              left: 56%
+              top: 18%
+              left: 61%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_3_floor_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 18%
+              left: 56%
+              border-radius: 100%
+              '--paper-item-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
+                ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_3
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 27%
+              left: 58.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
+          - type: state-icon
+            entity: light.ceiling_fan_bedroom_4
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 73%
+              left: 56.25%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_4_group_occupancy_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 77%
+              left: 52%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+          - type: state-icon
+            entity: light.bedroom_4_tie_fighter_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 77%
+              left: 60%
+              border-radius: 100%
+              '--paper-item-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_4
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 84%
+              left: 53.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -3578,52 +3645,10 @@ views:
               target:
                 entity_id: cover.blinds_bedroom_4
             style:
-              top: 86.5%
-              left: 59.5%
+              top: 84%
+              left: 58.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_4
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 80%
-              left: 58%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_group_occupancy_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 72%
-              left: 56%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
-          - type: state-icon
-            entity: light.ceiling_fan_bedroom_4
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 80%
-              left: 54%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_tie_fighter_lamp
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 82%
-              left: 62%
-              border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
           - type: state-icon
             entity: cover.blinds_kitchen
             state_color: false
@@ -3846,7 +3871,7 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 30%
+              top: 25%
               left: 75%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
@@ -3856,7 +3881,7 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 30%
+              top: 25%
               left: 82%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
@@ -3866,7 +3891,7 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 18%
+              top: 35%
               left: 78.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
@@ -3960,26 +3985,6 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
                 ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 25%
-              left: 22%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
-          - type: state-icon
-            entity: light.ceiling_fan_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 25%
-              left: 18%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
         view_layout:
           grid-area: row1
@@ -4345,23 +4350,13 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 23%
-              left: 79%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
-          - type: state-icon
             entity: light.bedroom_1_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 18%
-              left: 84%
+              top: 16%
+              left: 72%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
@@ -4370,20 +4365,60 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 23%
-              left: 73%
+              top: 16%
+              left: 80%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 22%
+              left: 72%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
             entity: cover.large_window_curtains_bedroom_1
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 11.5%
-              left: 76%
+              top: 22%
+              left: 80%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+          - type: state-icon
+            entity: light.bedroom_2_group_occupancy_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 82%
+              left: 17%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+          - type: state-icon
+            entity: light.ceiling_fan_bedroom_2
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 82%
+              left: 25.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_2
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 87%
+              left: 17%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_2
             state_color: false
@@ -4394,58 +4429,18 @@ views:
               target:
                 entity_id: cover.blinds_bedroom_2
             style:
-              top: 89.5%
-              left: 20.5%
+              top: 87%
+              left: 25.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_2
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 84%
-              left: 24%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_2_group_occupancy_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 79%
-              left: 27.5%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
-          - type: state-icon
-            entity: light.ceiling_fan_bedroom_2
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 84%
-              left: 18%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_3
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 58%
-              left: 78%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_floor_lamp
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 59%
-              left: 86%
+              top: 56%
+              left: 72.5%
               border-radius: 100%
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
@@ -4456,10 +4451,62 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 58%
-              left: 72%
+              top: 56%
+              left: 80.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_3
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 61%
+              left: 76.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_4_group_occupancy_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 55%
+              left: 15%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+          - type: state-icon
+            entity: light.ceiling_fan_bedroom_4
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 51.5%
+              left: 21%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
+          - type: state-icon
+            entity: light.bedroom_4_tie_fighter_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 55%
+              left: 27%
+              border-radius: 100%
+              '--paper-item-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
+          - type: state-icon
+            entity: fan.ceiling_fan_bedroom_4
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 59.5%
+              left: 17.5%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -4471,51 +4518,9 @@ views:
                 entity_id: cover.blinds_bedroom_4
             style:
               top: 59.5%
-              left: 14%
+              left: 24.5%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
-          - type: state-icon
-            entity: fan.ceiling_fan_bedroom_4
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 55.5%
-              left: 24%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_group_occupancy_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 51%
-              left: 21%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
-          - type: state-icon
-            entity: light.ceiling_fan_bedroom_4
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 55.5%
-              left: 18%
-              border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_tie_fighter_lamp
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 61%
-              left: 21%
-              border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
           - type: state-icon
             entity: cover.blinds_kitchen
             state_color: false
@@ -4738,7 +4743,7 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 78%
+              top: 77%
               left: 63%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
@@ -4748,8 +4753,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 78%
-              left: 73%
+              top: 77%
+              left: 74%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
           - type: state-icon
@@ -4758,8 +4763,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 72%
-              left: 68%
+              top: 82%
+              left: 69%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
           - type: state-icon
