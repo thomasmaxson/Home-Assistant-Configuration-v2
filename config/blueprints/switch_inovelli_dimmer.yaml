@@ -1,7 +1,34 @@
+# This blueprint uses an Inovelli Switch (2-in-1, dimmer, etc.)
+# 
+# | Button | Duration        | Action        |
+# | ------ | --------------- | ------------- |
+# | On     | Single Press    | Custom action |
+# | On     | Double Press    | Custom action |
+# | On     | Triple Press    | Custom action |
+# | On     | Quadruple Press | Custom action |
+# | On     | Quintuple Press | Custom action |
+# | On     | Press and Hold  | Custom action |
+# | On     | Release         | Custom action |
+# | Off    | Single Press    | Custom action |
+# | Off    | Double Press    | Custom action |
+# | Off    | Triple Press    | Custom action |
+# | Off    | Quadruple Press | Custom action |
+# | Off    | Quintuple Press | Custom action |
+# | Off    | Press and Hold  | Custom action |
+# | Off    | Release         | Custom action |
+# | Config | Single Press    | Custom action |
+# | Config | Double Press    | Custom action |
+# | Config | Triple Press    | Custom action |
+# | Config | Quadruple Press | Custom action |
+# | Config | Quintuple Press | Custom action |
+# | Config | Press and Hold  | Custom action |
+# | Config | Release         | Custom action |
+
 blueprint:
   name: Switch, Inovelli
   description: Set different actions for x1, x2, x3, x4, x5 button taps for Inovelli Blue Series switches (2-in-1, dimmer, etc.).
   author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/2b0189a9942e992d8e7de20705ccbb51
   homeassistant:
     min_version: 2024.6.0
   domain: automation
