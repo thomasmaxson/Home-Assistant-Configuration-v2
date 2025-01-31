@@ -3478,15 +3478,15 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
-            entity: cover.large_window_curtains_bedroom_1
+            entity: light.ceiling_fan_bedroom_1
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 25%
-              left: 12%
+              top: 19%
+              left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
           - type: state-icon
             entity: light.bedroom_1_group_occupancy_lights
             state_color: false
@@ -7597,6 +7597,14 @@ views:
                 entity: cover.blinds_bedroom_4
                 variables:
                   data_entity: sensor.blinds_bedroom_4_battery
+                  data_type: battery
+                  icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
+                name: Blinds, Guest Bedroom
+                entity: cover.blinds_bedroom_2
+                variables:
+                  data_entity: sensor.blinds_bedroom_2_battery
                   data_type: battery
                   icon_type: battery_level
             card_mod:
