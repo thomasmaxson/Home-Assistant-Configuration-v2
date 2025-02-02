@@ -46,6 +46,7 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Amazon Echo Pop](https://www.amazon.com/gp/product/B09WNK39JN/)
 
 ##### Switches / Plugs
+* [Inovelli Dimmer (Blue Series)](https://inovelli.com/collections/inovelli-blue-series)
 * [Lutron Caseta Lightswitch](https://www.amazon.com/gp/product/B07SJJBTYY/)
 * [Lutron Caseta Outdoor Smart Plug](https://www.amazon.com/gp/product/B00KHSXB60/)
 * [Lutron Caseta Smart Lamp Dimmer](https://www.amazon.com/gp/product/B08YPFFM58/)
@@ -77,6 +78,7 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Aqara Temperature Sensor](https://www.amazon.com/gp/product/B07D37FKGY/)
 
 ##### Other
+* [Inovelli Fan Canopy - Blue Series](https://inovelli.com/collections/inovelli-blue-series/products/zigbee-blue-series-smart-fan-light-canopy-module)
 * [RATGDO Garage Door Hub](https://paulwieland.github.io/ratgdo/)
 * [GE Profile, Washing Machine](https://www.geappliances.com/appliance/GE-Profile-4-9-cu-ft-Capacity-Washer-with-Smarter-Wash-Technology-and-FlexDispense-PTW605BSRWS)
 * [GE Profile, Tumble Dryer](https://www.geappliances.com/appliance/GE-Profile-7-4-cu-ft-Capacity-aluminized-alloy-drum-Electric-Dryer-with-Sanitize-Cycle-and-Sensor-Dry-PTD60EBSRWS)
@@ -109,13 +111,13 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Philips Hue](https://www.home-assistant.io/integrations/hue)
 * [Home Assistant iOS](https://www.home-assistant.io/integrations/ios)
 * [Lutron Caséta](https://www.home-assistant.io/integrations/lutron_caseta)
-* [MyQ](https://www.home-assistant.io/integrations/myq)
 * [Rachio](https://www.home-assistant.io/integrations/rachio)
 * [Schlage](https://www.home-assistant.io/integrations/schlage)
 * [Shelly](https://www.home-assistant.io/integrations/shelly)
 * [Switchbot](https://www.home-assistant.io/integrations/switchbot)
 * [UniFi Protect](https://www.home-assistant.io/integrations/unifiprotect)
 * [WLED](https://www.home-assistant.io/integrations/wled)
+* [Zigbee2MQTT](https://www.zigbee2mqtt.io/)
 * [Zigbee Home Automation](https://www.home-assistant.io/integrations/zha/)
 
 </details>
