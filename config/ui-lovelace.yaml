@@ -1617,10 +1617,12 @@ views:
                       - type: custom:mushroom-title-card
                         title: ''
                         subtitle: Window
-                      - type: custom:decluttering-card
-                        template: mushroom__control_blinds__vertical
-                        variables:
-                          - entity: cover.blinds_bedroom_2
+                      - type: custom:mushroom-cover-card
+                        name: Window Blinds
+                        entity: cover.blinds_bedroom_2
+                        layout: vertical
+                        collapsible_controls: true
+                        show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1999,10 +2001,12 @@ views:
                       - type: custom:mushroom-title-card
                         title: ''
                         subtitle: Window
-                      - type: custom:decluttering-card
-                        template: mushroom__control_blinds__vertical
-                        variables:
-                          - entity: cover.blinds_bedroom_4
+                      - type: custom:mushroom-cover-card
+                        name: Window Blinds
+                        entity: cover.blinds_bedroom_4
+                        layout: vertical
+                        collapsible_controls: true
+                        show_percentage_control: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-template-card
