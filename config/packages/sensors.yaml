@@ -13,7 +13,7 @@ sensor:
         friendly_name: "Tumble Dryer Status"
         icon_template: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
-          {%- set value_off = [ 'Off', 'Standby' ] -%}
+          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_dryer_machine_state' ) %}
 
           {%- if state in value_on -%}
@@ -25,7 +25,7 @@ sensor:
           {%- endif -%}
         value_template: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
-          {%- set value_off = [ 'Off', 'Standby' ] -%}
+          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_dryer_machine_state' ) %}
 
           {%- if state in value_on -%}
@@ -40,7 +40,7 @@ sensor:
         friendly_name: "Washing Machine Status"
         icon_template: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
-          {%- set value_off = [ 'Off', 'Standby' ] -%}
+          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_washer_machine_state' ) %}
 
           {%- if state in value_on -%}
@@ -52,7 +52,7 @@ sensor:
           {%- endif -%}
         value_template: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
-          {%- set value_off = [ 'Off', 'Standby' ] -%}
+          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_washer_machine_state' ) %}
 
           {%- if state in value_on -%}
@@ -67,13 +67,13 @@ sensor:
         friendly_name: "Dishwasher Status"
         icon_template: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
-          {%- set value_off = [ 'Off', 'Idle', 'Complete' ] -%}
+          {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
           {%- set state = states( 'input_select.status_dishwasher' ) %}
 
           {{ 'mdi:dishwasher' if state in value_on else 'mdi:dishwasher' if state in value_off else 'mdi:cloud-question' }}
         value_template: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
-          {%- set value_off = [ 'Off', 'Idle', 'Complete' ] -%}
+          {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
           {%- set state = states( 'input_select.status_dishwasher' ) %}
 
           {{ 'on' if state in value_on else 'off' if state in value_off else 'unavailable' }}
