@@ -82,6 +82,7 @@ fan:
   - platform: template
     fans:
       custom_garage_fan:
+        unique_id: "custom-garage-fan-001"
         friendly_name: "Garage Fan"
         turn_on:
           action: light.turn_on
