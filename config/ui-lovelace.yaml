@@ -1447,7 +1447,7 @@ views:
           icon_off: mdi:bed-outline
           data_blinds: cover.blinds_bedroom_2
           data_door: binary_sensor.door_bedroom_2
-          data_lightOn: light.bedroom_2_bedside_lamps
+          data_lightOn: light.bedroom_2_group_occupancy_lights
           data_temperature: sensor.temperature_bedroom_2
       - type: vertical-stack
         cards:
@@ -1712,7 +1712,7 @@ views:
                     entity: light.bedroom_3_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
-                    entity: fan.ceiling_fan_bedroom_3
+                    entity: fan.custom_ceiling_bedroom_3
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1786,7 +1786,7 @@ views:
                         subtitle: Ceiling Fan
                       - type: custom:mushroom-fan-card
                         name: Ceiling Fan
-                        entity: fan.ceiling_fan_bedroom_3
+                        entity: fan.custom_ceiling_bedroom_3
                         layout: vertical
                         collapsible_controls: false
                         show_percentage_control: true
@@ -3588,7 +3588,7 @@ views:
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bedroom_3
+            entity: fan.custom_ceiling_bedroom_3
             state_color: false
             tap_action:
               action: toggle
@@ -4039,7 +4039,7 @@ views:
               --maxson-floorplan--color-light--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
-              {% set the_entity = 'fan.ceiling_fan_bedroom_3' %}
+              {% set the_entity = 'fan.custom_ceiling_bedroom_3' %}
               --maxson-floorplan--color-fan--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_3_floor_lamp' %}
@@ -4216,7 +4216,7 @@ views:
               --maxson-floorplan--color-light--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
-              {% set the_entity = 'fan.ceiling_fan_bedroom_3' %}
+              {% set the_entity = 'fan.custom_ceiling_bedroom_3' %}
               --maxson-floorplan--color-fan--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_3_group_occupancy_lights' %}
@@ -4460,7 +4460,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bedroom_3
+            entity: fan.custom_ceiling_bedroom_3
             state_color: false
             tap_action:
               action: toggle
@@ -6896,8 +6896,8 @@ views:
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
-                entity: fan.ceiling_fan_bedroom_3
-                collapsible_controls: false
+                entity: fan.custom_ceiling_bedroom_3
+                collapsible_controls: true
                 show_percentage_control: true
               - type: custom:mushroom-light-card
                 name: Floor Lamp
