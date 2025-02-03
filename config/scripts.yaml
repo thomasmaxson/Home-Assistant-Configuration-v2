@@ -13,30 +13,77 @@ select_resident_tab:
   icon: mdi:account-group
 amazon_echo_announcement:
   alias: Announce via Amazon Echo Devices
+  description: ''
+  icon: mdi:speaker-wireless
   fields:
+    send_to:
+      selector:
+        select:
+          multiple: true
+          options:
+          - value: dining_room
+            label: Dining Room
+          - value: bathroom_1
+            label: Bathroom 1 (Main)
+          - value: bedroom_1
+            label: Bedroom 1 (Main)
+          - value: bedroom_2
+            label: Bedroom 2 (Guest)
+          - value: bedroom_3
+            label: Bedroom 3 (Jess' Office)
+          - value: bedroom_4
+            label: Bedroom 4 (Tom's Office)
+          - value: kitchen
+            label: Kitchen
+      name: Send To
+      description: Which area should the annoucement be made in.
+      required: true
+      default:
+      - dining_room
+      - bathroom_1
+      - bedroom_1
+      - bedroom_2
+      - bedroom_3
+      - bedroom_4
+      - kitchen
     message:
       selector:
         text:
       name: Message
       description: The message that you want to be announced on each device.
-      example: This is a test.
+      example: This is a sample message.
       required: true
   sequence:
   - variables:
-      echo_kitchen_volume: '{{ state_attr( ''media_player.echo_kitchen'', ''volume_level''
-        ) | float }}'
-      echo_dining_room_volume: '{{ state_attr( ''media_player.echo_dot_dining_room'',
-        ''volume_level'' ) | float }}'
-      echo_bathroom_1_volume: '{{ state_attr( ''media_player.echo_pop_main_bathroom'',
-        ''volume_level'' ) | float }}'
-      echo_bedroom_1_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_1'',
-        ''volume_level'' ) | float }}'
-      echo_bedroom_2_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_2'',
-        ''volume_level'' ) | float }}'
-      echo_bedroom_3_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_3'',
-        ''volume_level'' ) | float }}'
-      echo_bedroom_4_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_4'',
-        ''volume_level'' ) | float }}'
+      device:
+        kitchen:
+          original_volume: '{{ state_attr( ''media_player.echo_kitchen'', ''volume_level''
+            ) or 0.5 | float }}'
+          temporary_volume: 0.5
+        dining_room:
+          original_volume: '{{ state_attr( ''media_player.echo_dot_dining_room'',
+            ''volume_level'' ) or 0.3 | float }}'
+          temporary_volume: 0.3
+        bathroom_1:
+          original_volume: '{{ state_attr( ''media_player.echo_pop_main_bathroom'',
+            ''volume_level'' ) or 0.3 | float }}'
+          temporary_volume: 0.3
+        bedroom_1:
+          original_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_1'', ''volume_level''
+            ) or 0.3 | float }}'
+          temporary_volume: 0.3
+        bedroom_2:
+          original_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_2'', ''volume_level''
+            ) or 0.3 | float }}'
+          temporary_volume: 0.3
+        bedroom_3:
+          original_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_3'', ''volume_level''
+            ) or 0.3 | float }}'
+          temporary_volume: 0.3
+        bedroom_4:
+          original_volume: '{{ state_attr( ''media_player.echo_dot_bedroom_4'', ''volume_level''
+            ) or 0.3 | float }}'
+          temporary_volume: 0.3
     alias: Store Variables
   - if:
     - alias: Ensure Household Announcements are Allowed
@@ -45,17 +92,21 @@ amazon_echo_announcement:
       state: 'on'
     then:
     - parallel:
-      - alias: Amazon Echo, Kitchen
+      - alias: Announce on Amazon Echo, Kitchen
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_kitchen
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Kitchen Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_kitchen
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''kitchen'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.5
+            volume_level: '{{ device[ ''kitchen'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_kitchen
         - alias: Announce the Message
@@ -72,20 +123,24 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_kitchen_volume }}'
+            volume_level: '{{ device[ ''kitchen'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_kitchen
-      - alias: Amazon Echo, Dining Room
+      - alias: Announce on Amazon Echo, Dining Room
         if:
-        - alias: Ensure Dining Room Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_dining_room
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Dining ROom Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_dining_room
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''dining_room'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''dining_room'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_dining_room
         - alias: Announce the Message
@@ -102,20 +157,24 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_dining_room_volume }}'
+            volume_level: '{{ device[ ''dining_room'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_dining_room
-      - alias: Amazon Echo, Main Bathroom
+      - alias: Announce on Amazon Echo, Main Bathroom
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_bathroom_1
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Main Bathroom Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bathroom_1
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bathroom_1'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''bathroom_1'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_pop_main_bathroom
         - alias: Announce the Message
@@ -132,20 +191,24 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_bathroom_1_volume }}'
+            volume_level: '{{ device[ ''bathroom_1'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_pop_main_bathroom
-      - alias: Amazon Echo, Bedroom 1
+      - alias: Announce on Amazon Echo, Bedroom 1
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_bedroom_1
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 1 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_1
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_1'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''bedroom_1'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_1
         - alias: Announce the Message
@@ -162,20 +225,24 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_bedroom_1_volume }}'
+            volume_level: '{{ device[ ''bedroom_1'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_1
-      - alias: Amazon Echo, Bedroom 2
+      - alias: Announce on Amazon Echo, Bedroom 2
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_bedroom_2
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 2 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_2
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_2'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''bedroom_2'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_2
         - alias: Announce the Message
@@ -184,6 +251,17 @@ amazon_echo_announcement:
             data:
               type: announce
             message: '{{ message }}'
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Green
+            effect: Solid
+            duration: Forever
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+          alias: Enable Light Switch LEDs
         - delay:
             hours: 0
             minutes: 0
@@ -192,20 +270,35 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_bedroom_2_volume }}'
+            volume_level: '{{ device[ ''bedroom_2'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_2
-      - alias: Amazon Echo, Bedroom 3
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: White
+            effect: Clear
+            duration: Forever
+            brightness: 0
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+          alias: Disable Light Switch LEDs
+      - alias: Announce on Amazon Echo, Bedroom 3
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_bedroom_3
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 3 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_3
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_3'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''bedroom_3'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_3
         - alias: Announce the Message
@@ -222,20 +315,24 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_bedroom_3_volume }}'
+            volume_level: '{{ device[ ''bedroom_3'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_3
-      - alias: Amazon Echo, Bedroom 4
+      - alias: Announce on Amazon Echo, Bedroom 4
         if:
-        - alias: Ensure Kitchen Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify_bedroom_4
-          state: 'on'
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 4 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_4
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_4'' in send_to }}'
         then:
         - alias: Set Volume for Announcement
           action: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: '{{ device[ ''bedroom_4'' ][ ''temporary_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_4
         - alias: Announce the Message
@@ -244,6 +341,17 @@ amazon_echo_announcement:
             data:
               type: announce
             message: '{{ message }}'
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Green
+            effect: Solid
+            duration: Forever
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+          alias: Enable Light Switch LEDs
         - delay:
             hours: 0
             minutes: 0
@@ -252,12 +360,21 @@ amazon_echo_announcement:
         - alias: Reset Volume on Device
           action: media_player.volume_set
           data:
-            volume_level: '{{ echo_bedroom_4_volume }}'
+            volume_level: '{{ device[ ''bedroom_4'' ][ ''original_volume'' ] }}'
           target:
             entity_id: media_player.echo_dot_bedroom_4
-  description: ''
-  icon: mdi:speaker-wireless
-  mode: queued
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: White
+            effect: Clear
+            duration: Forever
+            brightness: 0
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+          alias: Disable Light Switch LEDs
+  mode: parallel
   max: 10
 push_notification_to_ios_devices:
   alias: Push Notification to iOS Devices
@@ -570,3 +687,330 @@ turn_off_all_lights:
       - light.all_lights_interior
       - light.backyard_string_lights
   description: ''
+update_inovelli_light_switch_led_s:
+  alias: Update Inovelli Switch LED(s)
+  description: ''
+  icon: mdi:led-on
+  fields:
+    entity_ids:
+      name: Entities
+      description: Inovelli devices.
+      example: light.family_room
+      required: true
+      selector:
+        entity:
+          domain:
+          - light
+          - fan
+          - switch
+          integration: mqtt
+          multiple: true
+    led:
+      name: LED
+      description: Choose which LED to control. Default is All. (Led 1 is at the bottom)
+      default: All
+      selector:
+        select:
+          custom_value: true
+          options:
+          - All
+          - Led 1
+          - Led 2
+          - Led 3
+          - Led 4
+          - Led 5
+          - Led 6
+          - Led 7
+    color:
+      name: LED Color
+      default: Red
+      selector:
+        select:
+          custom_value: true
+          options:
+          - Red
+          - Orange
+          - Yellow
+          - Green
+          - Cyan
+          - Teal
+          - Blue
+          - Purple
+          - Light Pink
+          - Pink
+          - White
+    effect:
+      name: Effect
+      description: Choose LED effect to apply.
+      default: Clear
+      selector:
+        select:
+          custom_value: true
+          options:
+          - 'Off'
+          - Clear
+          - Solid
+          - Aurora
+          - Slow Chase
+          - Chase
+          - Fast Chase
+          - Slow Blink
+          - Medium Blink
+          - Fast Blink
+          - Slow Falling
+          - Medium Falling
+          - Fast Falling
+          - Open/Close
+          - Pulse
+          - Slow Rising
+          - Medium Rising
+          - Fast Rising
+          - Slow Siren
+          - Fast Siren
+          - Small to Big
+    duration:
+      name: Duration
+      description: How long should the effect run?
+      default: Indefinitely
+      selector:
+        select:
+          custom_value: true
+          options:
+          - 1 Second
+          - 2 Seconds
+          - 3 Seconds
+          - 4 Seconds
+          - 5 Seconds
+          - 6 Seconds
+          - 7 Seconds
+          - 8 Seconds
+          - 9 Seconds
+          - 10 Seconds
+          - 15 Seconds
+          - 20 Seconds
+          - 25 Seconds
+          - 30 Seconds
+          - 35 Seconds
+          - 40 Seconds
+          - 45 Seconds
+          - 50 Seconds
+          - 55 Seconds
+          - 1 Minute
+          - 2 Minutes
+          - 3 Minutes
+          - 4 Minutes
+          - 5 Minutes
+          - 6 Minutes
+          - 7 Minutes
+          - 8 Minutes
+          - 9 Minutes
+          - 10 Minutes
+          - 15 Minutes
+          - 20 Minutes
+          - 25 Minutes
+          - 30 Minutes
+          - 35 Minutes
+          - 40 Minutes
+          - 45 Minutes
+          - 50 Minutes
+          - 55 Minutes
+          - 1 Hour
+          - 2 Hours
+          - 3 Hours
+          - 4 Hours
+          - 5 Hours
+          - 6 Hours
+          - 7 Hours
+          - 8 Hours
+          - 9 Hours
+          - 10 Hours
+          - 15 Hours
+          - 20 Hours
+          - 1 Day
+          - 2 Days
+          - 3 Days
+          - 4 Days
+          - 5 Days
+          - Forever
+    brightness:
+      name: Brightness level
+      description: From 0% (off) to 100% brightness.
+      default: 100
+      example: '40'
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 5
+    debug:
+      name: Debug Mode
+      selector:
+        constant:
+          value: true
+          label: Debug mode messaging is enabled
+  variables:
+    allow_debug: '{{ iif( debug is defined, debug, false ) }}'
+    entity_list: '{{ entity_ids }}'
+    level: '{{ level | default( 100 ) }}'
+    led: '{{ led | default( ''all'' ) }}'
+    led_options:
+      all: -1
+      led 1: 0
+      led 2: 1
+      led 3: 2
+      led 4: 3
+      led 5: 4
+      led 6: 5
+      led 7: 6
+    led_value: '{% if led | int( default = -2 ) == -2 %} {{ led_options[led | lower]
+      | int( default = -1 ) }} {% else %} {{ led | int( default = -1 ) }} {% endif
+      %}'
+    color: '{{ color | default( ''red'' ) }}'
+    color_options:
+      'off': 0
+      red: 1
+      orange: 21
+      yellow: 42
+      green: 85
+      cyan: 127
+      teal: 145
+      blue: 170
+      purple: 195
+      light pink: 220
+      lightpink: 220
+      pink: 234
+      white: 255
+    color_value: "{% if color | int( default = -1 ) == -1 %}\n  {{ color_options[color
+      | lower] | int( default = 0 ) }}\n{% else %}\n  {{ color | int( default = 0
+      ) }}\n{% endif %}"
+    effect: '{{ effect | default( ''clear'' ) }}'
+    effect_options:
+      'off': 'off'
+      clear: clear_effect
+      solid: solid
+      aurora: aurora
+      chase: chase
+      fast blink: fast_blink
+      fast chase: fast_chase
+      fast falling: fast_falling
+      fast rising: fast_rising
+      fast siren: fast_siren
+      medium blink: medium_blink
+      medium falling: medium_falling
+      medium rising: medium_rising
+      open/close: open_close
+      open close: open_close
+      pulse: pulse
+      slow blink: slow_blink
+      slow chase: slow_chase
+      slow falling: slow_falling
+      slow rising: slow_rising
+      slow siren: slow_siren
+      small to big: small_to_big
+    effect_value: "{% if effect | lower in effect_options %}\n  {{ effect_options[effect
+      | lower] }}\n{% else %}\n  {{ effect | lower }}\n{% endif %}"
+    duration: '{{ duration | default( ''forever'' ) }}'
+    duration_options:
+      'off': 0
+      1 second: 1
+      2 seconds: 2
+      3 seconds: 3
+      4 seconds: 4
+      5 seconds: 5
+      6 seconds: 6
+      7 seconds: 7
+      8 seconds: 8
+      9 seconds: 9
+      10 seconds: 10
+      15 seconds: 15
+      20 seconds: 20
+      25 seconds: 25
+      30 seconds: 30
+      35 seconds: 35
+      40 seconds: 40
+      45 seconds: 45
+      50 seconds: 50
+      55 seconds: 55
+      1 minute: 60
+      2 minutes: 62
+      3 minutes: 63
+      4 minutes: 64
+      5 minutes: 65
+      6 minutes: 66
+      7 minutes: 67
+      8 minutes: 68
+      9 minutes: 69
+      10 minutes: 70
+      15 minutes: 75
+      20 minutes: 80
+      25 minutes: 85
+      30 minutes: 90
+      35 minutes: 95
+      40 minutes: 100
+      45 minutes: 105
+      50 minutes: 110
+      55 minutes: 115
+      1 hour: 120
+      2 hours: 122
+      3 hours: 123
+      4 hours: 124
+      5 hours: 125
+      6 hours: 126
+      7 hours: 127
+      8 hours: 128
+      9 hours: 129
+      10 hours: 130
+      15 hours: 135
+      20 hours: 140
+      1 day: 144
+      2 days: 168
+      3 days: 192
+      4 days: 216
+      5 days: 240
+      forever: 255
+    duration_value: "{% if duration | int( default = -1 ) == -1 %}\n  {{ duration_options[duration
+      | lower] | int( default = 255 ) }}\n{% else %}\n  {{ duration | int( default
+      = 255 ) }}\n{% endif %}"
+  sequence:
+  - alias: 'Debug: Send notification'
+    if:
+    - condition: template
+      value_template: '{{ allow_debug == true }}'
+    then:
+    - data:
+        title: 'Debug Report: Inovelli Switch LED(s)'
+        message: '**Entity List**: {{ entity_list }} (total: {{ entity_list | count
+          }})
+
+          **LED Bulb(s)**: {{ led }} (value: {{ led_value }})
+
+          **Color**: {{ color }} (value: {{ color_value }})
+
+          **Duration**: {{ duration }} (value: {{ duration_value }})
+
+          **Effect**: {{ effect }} (value: {{ effect_value }})
+
+          **Brightness Level**: {{ level }}%'
+      action: persistent_notification.create
+  - alias: Loop through each entity_id
+    repeat:
+      for_each: '{{ entity_list }}'
+      sequence:
+      - variables:
+          device_identifier: '{% set identifiers = device_attr( repeat.item, ''identifiers''
+            ) | first %} {{ identifiers[1].split( ''_'' )[1] }}'
+          payload: "{% if led_value == -1 %}\n  {% set payload_data = { \n    \"led_effect\":
+            {\n      \"effect\": effect_value,\n      \"color\": color_value,\n      \"level\":
+            level,\n      \"duration\": duration_value\n    }\n  } %}\n{% else %}\n
+            \ {% set payload_data = {\n    \"individual_led_effect\": {\n      \"led\":
+            led_value,\n      \"effect\": effect_value,\n      \"color\": color_value,\n
+            \     \"level\": level,\n      \"duration\": duration_value\n    }\n  }
+            %}\n{% endif %} {{ payload_data | tojson }}"
+      - alias: Send payload to the switch
+        data:
+          topic: zigbee2mqtt/{{ device_identifier }}/set
+          payload: '{{ payload }}'
+        action: mqtt.publish
+  mode: parallel
+  max_exceeded: silent
+  max: 100
