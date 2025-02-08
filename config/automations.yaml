@@ -137,7 +137,6 @@
     target:
       entity_id:
       - light.garage_exterior
-      - light.front_yard_accent_lights
   - alias: If Residents OR Gouda is HOME OR Guests are VISITING
     if:
     - condition: or
@@ -257,12 +256,6 @@
     entity_id: input_boolean.midnight_automations_run
     state: 'on'
   actions:
-  - action: light.turn_off
-    metadata: {}
-    data: {}
-    target:
-      entity_id: light.front_yard_accent_lights
-    alias: Light Turn OFF
   - alias: Garage Lights Turn OFF
     if:
     - condition: state
@@ -1277,7 +1270,6 @@
       target:
         entity_id:
         - light.garage_exterior
-        - light.front_yard_accent_lights
         - light.backyard_string_lights
         - light.foyer_exterior_entryway
         - light.foyer_ceiling_ledge
@@ -1727,7 +1719,7 @@
   mode: queued
   max: 10
 - id: '1727460698990'
-  alias: Bedroom 2 (Guest) - Door Open/Close
+  alias: Bedroom 2, Door Open/Close
   description: ''
   triggers:
   - entity_id:
@@ -1816,7 +1808,7 @@
   mode: restart
   max: 10
 - id: '1727465525056'
-  alias: Bedroom 1 (Main) - Door Open/Close
+  alias: Bedroom 1, Door Open/Close
   description: ''
   triggers:
   - entity_id:
@@ -2667,10 +2659,14 @@
           target:
             entity_id: input_select.status_dishwasher
     - conditions:
-      - condition: trigger
-        id:
-        - Dishwasher Door Did OPEN
-        - Dishwasher Reminder Was DISMISSED
+      - condition: or
+        conditions:
+        - condition: trigger
+          id:
+          - Dishwasher Door Did OPEN
+        - condition: trigger
+          id:
+          - Dishwasher Reminder Was DISMISSED
       sequence:
       - action: input_select.select_option
         metadata: {}
@@ -2798,37 +2794,6 @@
       - input_boolean.reminder_toothbrush_complete_jessica
       - input_boolean.reminder_toothbrush_complete_thomas
     data: {}
-  mode: single
-- id: '1727634353709'
-  alias: Backups Gone Stale
-  description: ''
-  triggers:
-  - entity_id:
-    - binary_sensor.backups_stale
-    from: 'off'
-    to: 'on'
-    trigger: state
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  conditions: []
-  actions:
-  - action: script.push_notification_to_ios_devices
-    metadata: {}
-    data:
-      send_to:
-      - jessica
-      - thomas
-      notification_type: type_warning
-      interruption_level: active
-      subtitle: Warning
-      message: An error occurred while running Google Drive backups.
-  - action: persistent_notification.create
-    metadata: {}
-    data:
-      message: An error occurred while running Google Drive backups.
-      title: Warning
   mode: single
 - id: '1727635161006'
   alias: Person Arrives Home Late
@@ -3114,7 +3079,7 @@
         icon: sfsymbols:clock
   mode: single
 - id: '1729641293123'
-  alias: Bedroom 4 (Tom's Office) - Blinds Open/Close
+  alias: Bedroom 4, Blinds Open/Close
   description: ''
   triggers:
   - trigger: state
@@ -3178,7 +3143,7 @@
       alias: CLOSE Blinds
   mode: single
 - id: '1729642126008'
-  alias: Bedroom 1 (Main) - Closet Doors Open/Close
+  alias: Bedroom 1, Closet Doors Open/Close
   description: ''
   triggers:
   - entity_id:
@@ -3281,7 +3246,7 @@
   mode: queued
   max: 10
 - id: '1730055755910'
-  alias: Bedroom 4 (Tom's Office) - Room Occupancy
+  alias: Bedroom 4, Room Occupancy
   description: ''
   use_blueprint:
     path: maxson/room_management_via_occupancy.yaml
@@ -3361,7 +3326,7 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_fan_bedroom_4
+            entity_id: fan.ceiling_bedroom_4
       disable_action_wait_duration: 300
       disable_occupancy_action_wait:
       - if:
@@ -3373,10 +3338,10 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_fan_bedroom_4
+            entity_id: fan.ceiling_bedroom_4
       idle_timer: timer.bedroom_4_automation_last_motion_idle_reset
 - id: '1730055951025'
-  alias: Bedroom 3 (Jess' Office) - Room Occupancy
+  alias: Bedroom 3, Room Occupancy
   description: ''
   use_blueprint:
     path: maxson/room_management_via_occupancy.yaml
@@ -3456,7 +3421,7 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_fan_bedroom_3
+            entity_id: fan.ceiling_bedroom_3
       disable_action_wait_duration: 300
       disable_occupancy_action_wait:
       - if:
@@ -3468,7 +3433,7 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_fan_bedroom_3
+            entity_id: fan.ceiling_bedroom_3
       idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
 - id: '1730985202477'
   alias: Foyer, Light
@@ -3546,154 +3511,6 @@
       disable_automation:
       - input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
 - id: '1737039379849'
-  alias: Bedroom 4, Fan
-  description: Control the ceiling fan in Tom's office via the Lutron 3BRL fan remote.
-  use_blueprint:
-    path: maxson/remote_lutron_pico_3_button_rl.yaml
-    input:
-      remote: 547912e5c1b5de70af4e7159db0b75cb
-      button_on_single:
-      - action: fan.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      button_off_single:
-      - action: fan.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_4
-      button_preset_single:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: input_boolean.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            send_to:
-            - bedroom_4
-            message: Occupancy automations for this room are disabled.
-        else:
-        - action: input_boolean.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - action: script.amazon_echo_announcement
-          metadata: {}
-          data:
-            send_to:
-            - bedroom_4
-            message: Occupancy automations for this room are active.
-      button_raise_single:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            state: 'off'
-          sequence:
-          - action: fan.turn_on
-            metadata: {}
-            data:
-              percentage: 33.333333333333336
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 33.333333333333336 }}'
-          sequence:
-          - action: fan.set_percentage
-            metadata: {}
-            data:
-              percentage: 66.6666666667
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 66.6666666667 }}'
-          sequence:
-          - action: fan.set_percentage
-            metadata: {}
-            data:
-              percentage: 100
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 100 }}'
-          sequence:
-          - action: fan.turn_off
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-            data: {}
-      button_lower_single:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_4
-            state: 'off'
-          sequence:
-          - action: fan.turn_on
-            metadata: {}
-            data:
-              percentage: 100
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 33.333333333333336 }}'
-          sequence:
-          - action: fan.turn_off
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-            data: {}
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 66.6666666667 }}'
-          sequence:
-          - action: fan.set_percentage
-            metadata: {}
-            data:
-              percentage: 33.333333333333336
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-        - conditions:
-          - condition: template
-            value_template: '{{ state_attr( ''fan.ceiling_fan_bedroom_4'', ''percentage''
-              ) | float <= 100 }}'
-          sequence:
-          - action: fan.set_percentage
-            metadata: {}
-            data:
-              percentage: 66.6666666667
-            target:
-              entity_id: fan.ceiling_fan_bedroom_4
-      button_on_double:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
-      button_off_double:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
-- id: '1737052831738'
   alias: Bedroom 3, Fan
   description: Control the ceiling fan in Jess' office via the Lutron 3BRL fan remote.
   use_blueprint:
@@ -3705,13 +3522,55 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.ceiling_fan_bedroom_3
-      button_off_single:
-      - action: fan.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_3
+          entity_id: fan.custom_ceiling_bedroom_3
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.custom_ceiling_bedroom_3
+            state: 'off'
+          sequence:
+          - action: fan.turn_on
+            metadata: {}
+            data:
+              percentage: 33.333333333333336
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, Off to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, Low to Medium
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 100
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, Medium to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+            data: {}
+          alias: Ceiling Fan, High to Off
       button_preset_single:
       - if:
         - condition: state
@@ -3741,94 +3600,216 @@
             send_to:
             - bedroom_3
             message: Occupancy automations for this room are active.
-      button_raise_single:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: 'off'
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: low
-            target:
-              entity_id: fan.ceiling_fan_bedroom_3
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: low
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: medium
-            target:
-              entity_id: fan.ceiling_fan_bedroom_3
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: medium
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: high
-            target:
-              entity_id: fan.ceiling_fan_bedroom_3
       button_lower_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: high
+            entity_id: fan.custom_ceiling_bedroom_3
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: medium
+              percentage: 100
             target:
-              entity_id: fan.ceiling_fan_bedroom_3
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, Off to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+            data: {}
+          alias: Ceiling Fan, Low to Off
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 33.333333333333336
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, Medium to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_3
+          alias: Ceiling Fan, High to Medium
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.custom_ceiling_bedroom_3
+- id: '1737052831738'
+  alias: Bedroom 4, Fan
+  description: Control the ceiling fan in Tom's office via the Lutron 3BRL fan remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_3_button_rl.yaml
+    input:
+      remote: 547912e5c1b5de70af4e7159db0b75cb
+      button_on_single:
+      - action: fan.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.custom_ceiling_bedroom_4
+      button_raise_single:
+      - choose:
         - conditions:
           - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: medium
+            entity_id: fan.custom_ceiling_bedroom_4
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: low
+              percentage: 33.333333333333336
             target:
-              entity_id: fan.ceiling_fan_bedroom_3
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, Off to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, Low to Medium
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 100
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, Medium to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+            data: {}
+          alias: Ceiling Fan, High to Off
+      button_preset_single:
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_4
+            message: Occupancy automations for this room are disabled.
+        else:
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - bedroom_4
+            message: Occupancy automations for this room are active.
+      button_lower_single:
+      - choose:
         - conditions:
           - condition: state
-            entity_id: fan.ceiling_fan_bedroom_3
-            attribute: preset_mode
-            state: low
+            entity_id: fan.custom_ceiling_bedroom_4
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: 'off'
+              percentage: 100
             target:
-              entity_id: fan.ceiling_fan_bedroom_3
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, Off to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+            data: {}
+          alias: Ceiling Fan, Low to Off
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 33.333333333333336
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, Medium to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_4
+          alias: Ceiling Fan, High to Medium
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.custom_ceiling_bedroom_4
       button_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_3
+          entity_id: light.ceiling_fan_bedroom_4
       button_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_3
+          entity_id: light.ceiling_fan_bedroom_4
 - id: '1737055241030'
   alias: Bedroom 2, Fan
   description: Control the ceiling fan in the guest bedroom via the Lutron 3BRL fan
@@ -3842,13 +3823,55 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.ceiling_fan_bedroom_2
-      button_off_single:
-      - action: fan.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_2
+          entity_id: fan.custom_ceiling_bedroom_2
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.custom_ceiling_bedroom_2
+            state: 'off'
+          sequence:
+          - action: fan.turn_on
+            metadata: {}
+            data:
+              percentage: 33.333333333333336
+            target:
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, Off to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, Low to Medium
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 100
+            target:
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, Medium to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_2
+            data: {}
+          alias: Ceiling Fan, High to Off
       button_preset_single:
       - if:
         - condition: state
@@ -3878,82 +3901,60 @@
             send_to:
             - bedroom_2
             message: Occupancy automations for this room are active.
-      button_raise_single:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: 'off'
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: low
-            target:
-              entity_id: fan.ceiling_fan_bedroom_2
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: low
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: medium
-            target:
-              entity_id: fan.ceiling_fan_bedroom_2
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: medium
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: high
-            target:
-              entity_id: fan.ceiling_fan_bedroom_2
       button_lower_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: high
+            entity_id: fan.custom_ceiling_bedroom_2
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: medium
+              percentage: 100
             target:
-              entity_id: fan.ceiling_fan_bedroom_2
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, Off to High
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: medium
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
           sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: low
+          - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_fan_bedroom_2
+              entity_id: fan.custom_ceiling_bedroom_2
+            data: {}
+          alias: Ceiling Fan, Low to Off
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_2
-            attribute: preset_mode
-            state: low
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 66.6666666667 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: 'off'
+              percentage: 33.333333333333336
             target:
-              entity_id: fan.ceiling_fan_bedroom_2
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, Medium to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_2
+          alias: Ceiling Fan, High to Medium
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.custom_ceiling_bedroom_2
       button_on_double:
       - action: light.turn_on
         metadata: {}
@@ -3981,8 +3982,7 @@
           entity_id: cover.blinds_bedroom_2
 - id: '1737055349278'
   alias: Bedroom 1, Fan
-  description: Control the ceiling fan in the main bedroom via the Lutron 3BRL fan
-    remote.
+  description: Control the ceiling fan the Main Bedroom via the Lutron 3BRL fan remote.
   use_blueprint:
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
@@ -3992,13 +3992,55 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.ceiling_fan_bedroom_1
-      button_off_single:
-      - action: fan.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: fan.ceiling_fan_bedroom_1
+          entity_id: fan.custom_ceiling_bedroom_1
+      button_raise_single:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: fan.custom_ceiling_bedroom_1
+            state: 'off'
+          sequence:
+          - action: fan.turn_on
+            metadata: {}
+            data:
+              percentage: 33.333333333333336
+            target:
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, Off to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, Low to Medium
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 66.6666666667 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 100
+            target:
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, Medium to High
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.turn_off
+            target:
+              entity_id: fan.custom_ceiling_bedroom_1
+            data: {}
+          alias: Ceiling Fan, High to Off
       button_preset_single:
       - if:
         - condition: state
@@ -4028,82 +4070,60 @@
             send_to:
             - bedroom_1
             message: Occupancy automations for this room are active.
-      button_raise_single:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: 'off'
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: low
-            target:
-              entity_id: fan.ceiling_fan_bedroom_1
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: low
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: medium
-            target:
-              entity_id: fan.ceiling_fan_bedroom_1
-        - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: medium
-          sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: high
-            target:
-              entity_id: fan.ceiling_fan_bedroom_1
       button_lower_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: high
+            entity_id: fan.custom_ceiling_bedroom_1
+            state: 'off'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.turn_on
             metadata: {}
             data:
-              preset_mode: medium
+              percentage: 100
             target:
-              entity_id: fan.ceiling_fan_bedroom_1
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, Off to High
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: medium
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 33.333333333333336 }}'
           sequence:
-          - action: fan.set_preset_mode
-            metadata: {}
-            data:
-              preset_mode: low
+          - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_fan_bedroom_1
+              entity_id: fan.custom_ceiling_bedroom_1
+            data: {}
+          alias: Ceiling Fan, Low to Off
         - conditions:
-          - condition: state
-            entity_id: fan.ceiling_fan_bedroom_1
-            attribute: preset_mode
-            state: low
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 66.6666666667 }}'
           sequence:
-          - action: fan.set_preset_mode
+          - action: fan.set_percentage
             metadata: {}
             data:
-              preset_mode: 'off'
+              percentage: 33.333333333333336
             target:
-              entity_id: fan.ceiling_fan_bedroom_1
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, Medium to Low
+        - conditions:
+          - condition: template
+            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+              ) | float <= 100 }}'
+          sequence:
+          - action: fan.set_percentage
+            metadata: {}
+            data:
+              percentage: 66.6666666667
+            target:
+              entity_id: fan.custom_ceiling_bedroom_1
+          alias: Ceiling Fan, High to Medium
+      button_off_single:
+      - action: fan.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: fan.custom_ceiling_bedroom_1
       button_on_double:
       - action: light.turn_on
         metadata: {}
@@ -4116,90 +4136,6 @@
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_1
-      button_on_hold:
-      - action: cover.open_cover
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.large_window_curtains_bedroom_1
-      button_off_hold:
-      - action: cover.close_cover
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.large_window_curtains_bedroom_1
-- id: '1737055934253'
-  alias: Bedroom 2, Light - Primary
-  description: Control the primary lights in the guest bedroom via the Lutron 3BRL
-    light remote.
-  use_blueprint:
-    path: maxson/remote_lutron_pico_3_button_rl.yaml
-    input:
-      remote: 1043e20fa58cfb8c3ee51209b5ce0fc2
-      button_on_single:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      button_preset_single:
-      - action: light.toggle
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      button_off_single:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      button_raise_single:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: 10
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      button_lower_single:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_step_pct: -10
-        target:
-          entity_id: light.bedroom_2_group_occupancy_lights
-      button_on_hold:
-      - action: cover.open_cover_tilt
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.blinds_bedroom_2
-      button_off_hold:
-      - action: cover.set_cover_tilt_position
-        metadata: {}
-        data:
-          tilt_position: 100
-        target:
-          entity_id: cover.blinds_bedroom_2
-- id: '1737059608005'
-  alias: Bedroom 4, Light - Ceiling Fan
-  description: Control the ceiling fan light in Tom's office via a Lutron paddle remote.
-  use_blueprint:
-    path: maxson/remote_lutron_pico_paddle.yaml
-    input:
-      remote: 687b4e1b0875cd0e443f232fe5767e1d
-      button_on_single:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
-      button_off_single:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.ceiling_fan_bedroom_4
 - id: '1737061838951'
   alias: Bedroom 3, Light - Ceiling Fan
   description: Control the ceiling fan light in the Jess' office via a Lutron paddle
@@ -4221,7 +4157,7 @@
         target:
           entity_id: light.ceiling_fan_bedroom_3
 - id: '1737061883401'
-  alias: Bedroom 2, Light - Ceiling Fan
+  alias: Bedroom 2, Light - Primary
   description: Control the ceiling fan light in the guest bedroom via a Lutron paddle
     remote.
   use_blueprint:
@@ -4233,13 +4169,26 @@
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_2
+          entity_id: light.bedroom_2_group_occupancy_lights
       button_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_2
+          entity_id: light.bedroom_2_group_occupancy_lights
+      button_on_hold:
+      - action: cover.open_cover_tilt
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.blinds_bedroom_2
+      button_off_hold:
+      - action: cover.set_cover_tilt_position
+        metadata: {}
+        data:
+          tilt_position: 100
+        target:
+          entity_id: cover.blinds_bedroom_2
 - id: '1737061982300'
   alias: Bedroom 1, Light - Ceiling Fan
   description: Control the ceiling fan light in the main bedroom via a Lutron paddle
@@ -5093,3 +5042,467 @@
               temperature allowed.
   mode: queued
   max: 10
+- id: '1739016919584'
+  alias: Bedroom 4, Fan Speed Change
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    to: low
+    id: To Low Speed
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    id: To Medium Speed
+    to: medium
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    id: To High Speed
+    enabled: true
+    to: high
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Low Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+    - conditions:
+      - condition: trigger
+        id:
+        - To Medium Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 3
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 4
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+    - conditions:
+      - condition: trigger
+        id:
+        - To High Speed
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Blue
+          effect: Solid
+          duration: 1 Second
+          brightness: 100
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_4
+  mode: single
+- id: '1739023889971'
+  alias: Bedroom 1, Fan Speed Change
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    to: low
+    id: To Low Speed
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    id: To Medium Speed
+    to: medium
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    id: To High Speed
+    enabled: true
+    to: high
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Low Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+    - conditions:
+      - condition: trigger
+        id:
+        - To Medium Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 3
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 4
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+    - conditions:
+      - condition: trigger
+        id:
+        - To High Speed
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Blue
+          effect: Solid
+          duration: 1 Second
+          brightness: 100
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_1
+  mode: single
+- id: '1739023971487'
+  alias: Bedroom 2, Fan Speed Change
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    to: low
+    id: To Low Speed
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    id: To Medium Speed
+    to: medium
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    id: To High Speed
+    enabled: true
+    to: high
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Low Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+    - conditions:
+      - condition: trigger
+        id:
+        - To Medium Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 3
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 4
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+    - conditions:
+      - condition: trigger
+        id:
+        - To High Speed
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Blue
+          effect: Solid
+          duration: 1 Second
+          brightness: 100
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_2
+  mode: single
+- id: '1739024076869'
+  alias: Bedroom 3, Fan Speed Change
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    to: low
+    id: To Low Speed
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    id: To Medium Speed
+    to: medium
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    id: To High Speed
+    enabled: true
+    to: high
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Low Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+    - conditions:
+      - condition: trigger
+        id:
+        - To Medium Speed
+      sequence:
+      - parallel:
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 1
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 2
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 3
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: Led 4
+            color: Blue
+            effect: Solid
+            duration: 1 Second
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+    - conditions:
+      - condition: trigger
+        id:
+        - To High Speed
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Blue
+          effect: Solid
+          duration: 1 Second
+          brightness: 100
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_3
+  mode: single
