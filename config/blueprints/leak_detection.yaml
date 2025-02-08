@@ -1,0 +1,75 @@
+blueprint:
+  name: Aqara, Water Leak Detection Action(s)
+  description: Trigger custom action(s) when a leak is detected via an Aqara Water Leak sensor
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    device:
+      name: Aqara Leak Sensor
+      description: "The Aqara water leak sensor that is being monitored."
+      selector:
+        device:
+          filter:
+            - integration: zha
+              manufacturer: LUMI
+              model: lumi.sensor_wleak.aq1
+
+    action_alert:
+      name: Actions
+      description: "Action(s) to perform when a water leak is detected."
+      default: []
+      selector:
+        action:
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: "Mode that the automation runs in."
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Max Number of Runs
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            (ignored by Single and Restart Modes)
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+triggers:
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input device
+
+actions:
+  - variables:
+      device_state: "{{ trigger.event.data.new_state.state }}"
+  - choose:
+      - conditions:
+          - '{{ device_state == "on" }}'
+        sequence: !input action_alert

@@ -122,7 +122,19 @@ triggers:
     device_id: !input remote
     domain: lutron_caseta
     type: press
+    subtype: Button 1
+    id: on_pressed
+  - trigger: device
+    device_id: !input remote
+    domain: lutron_caseta
+    type: press
     subtype: Button 2
+    id: off_pressed
+  - trigger: device
+    device_id: !input remote
+    domain: lutron_caseta
+    type: press
+    subtype: Button 3
     id: off_pressed
 
 conditions:

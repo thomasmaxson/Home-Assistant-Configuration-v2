@@ -43,6 +43,7 @@ blueprint:
           # PJ2-3BRL-GXX-S07 = Draperies (icons + text)
           # PJ2-3BRL-GXX-S08 = N/A
           # PJ2-3BRL-GXX-S09 = Horizontal Sheer Blinds (icons + text)
+          # PJ2-3BRL-GWH-S10 = Tilt Blinds (icons)
 
           filter:
             - integration: lutron_caseta
@@ -178,7 +179,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: Mode that automation runs in.
+          description: Mode that automation runs in
           default: restart
           selector:
             select:
@@ -194,7 +195,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes.
+            Ignored by Single and Restart Modes
           default: 10
           selector:
             number:

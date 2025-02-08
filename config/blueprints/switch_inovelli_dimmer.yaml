@@ -1,5 +1,5 @@
 # This blueprint uses an Inovelli Switch (2-in-1, dimmer, etc.)
-# 
+#
 # | Button | Duration        | Action        |
 # | ------ | --------------- | ------------- |
 # | On     | Single Press    | Custom action |
@@ -42,6 +42,9 @@ blueprint:
             - integration: mqtt
               manufacturer: Inovelli
               model: VZM31-SN
+            - integration: mqtt
+              manufacturer: Inovelli
+              model: VZM35-SN
 
     actions_single_press:
       name: Single Press
@@ -218,7 +221,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: Mode that automation runs in.
+          description: Mode that automation runs in
           default: restart
           selector:
             select:
@@ -234,7 +237,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes.
+            Ignored by Single and Restart Modes
           default: 10
           selector:
             number:
@@ -249,129 +252,130 @@ max: !input config_max_num
 max_exceeded: silent
 
 trigger:
-  # Actions, Single Press
-  - domain: mqtt
-    device_id: !input switch
+  # Triggers, Single Press
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_single
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_single
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_single
-    trigger: device
-
-  # Actions, Double Press
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Double Press
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_double
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_double
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_double
-    trigger: device
-
-  # Actions, Triple Press
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Triple Press
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_triple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_triple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_triple
-    trigger: device
-
-  # Actions, Quadruple Press
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Quadruple Press
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_quadruple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_quadruple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_quadruple
-    trigger: device
-
-  # Actions, Quintuple Press
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Quintuple Press
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_quintuple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_quintuple
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_quintuple
-    trigger: device
-
-  # Actions, Press and Hold
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Press and Hold
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_held
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_held
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_held
-    trigger: device
-
-  # Actions, Release
-  - domain: mqtt
     device_id: !input switch
+
+  # Triggers, Press and Release
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: up_release
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: down_release
-    trigger: device
-  - domain: mqtt
     device_id: !input switch
+  - trigger: device
+    domain: mqtt
     type: action
     subtype: config_release
-    trigger: device
+    device_id: !input switch
 
 action:
   - variables:
       command: "{{ trigger.payload }}"
   - choose:
+      # Actions, Single Press
       - conditions:
           - "{{ command == 'up_single' }}"
         sequence: !input button_on_single
@@ -382,6 +386,7 @@ action:
           - "{{ command == 'config_single' }}"
         sequence: !input button_config_single
 
+      # Actions, Double Press
       - conditions:
           - "{{ command == 'up_double' }}"
         sequence: !input button_on_double
@@ -392,6 +397,7 @@ action:
           - "{{ command == 'config_double' }}"
         sequence: !input button_config_double
 
+      # Actions, Triple Press
       - conditions:
           - "{{ command == 'up_triple' }}"
         sequence: !input button_on_triple
@@ -402,6 +408,7 @@ action:
           - "{{ command == 'config_triple' }}"
         sequence: !input button_config_triple
 
+      # Actions, Quadruple Press
       - conditions:
           - "{{ command == 'up_quadruple' }}"
         sequence: !input button_on_quadruple
@@ -412,6 +419,7 @@ action:
           - "{{ command == 'config_quadruple' }}"
         sequence: !input button_config_quadruple
 
+      # Actions, Quintuple Press
       - conditions:
           - "{{ command == 'up_quintuple' }}"
         sequence: !input button_on_quintuple
@@ -422,6 +430,7 @@ action:
           - "{{ command == 'config_quintuple' }}"
         sequence: !input button_config_quintuple
 
+      # Actions, Press and Hold
       - conditions:
           - "{{ command == 'up_held' }}"
         sequence: !input button_on_hold
@@ -432,6 +441,7 @@ action:
           - "{{ command == 'config_held' }}"
         sequence: !input button_config_hold
 
+      # Actions, Press and Release
       - conditions:
           - "{{ command == 'up_release' }}"
         sequence: !input button_on_release
