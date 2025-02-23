@@ -2661,21 +2661,32 @@ views:
               variables:
                 icon: |
                   [[[ 
-                    let personEntities = [
-                      states['person.thomas'],
-                      states['person.jessica']
-                    ];
+                    let tileIcon =  'mdi:account-outline';
 
-                    for( var i = 0; i < personEntities.length; i++ )
+                    const guestState = states['input_boolean.guests_home'].state;
+
+                    if( guestState === 'on' )
                     { 
-                      if( personEntities[i] !== undefined && personEntities[i].state != 'home' )
-                      { 
-                       return 'mdi:account';
+                      tileIcon = 'mdi:account-plus';
 
+                    } else
+                    { 
+                      let personEntities = [
+                        states['person.thomas'],
+                        states['person.jessica']
+                      ];
+
+                      for( var i = 0; i < personEntities.length; i++ )
+                      { 
+                        if( personEntities[i] !== undefined && personEntities[i].state === 'home' )
+                        { 
+                            tileIcon = 'mdi:account';
+
+                        } // endif
                       } // endif
                     } // endif
 
-                    return 'mdi:account-outline';
+                    return tileIcon;
                   ]]]
       - type: vertical-stack
         cards:
