@@ -3966,18 +3966,6 @@ views:
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
           - type: state-icon
-            entity: light.front_yard_accent_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 79%
-              left: 96.5%
-              border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light--front-yard-accent-lights ) )
-          - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
             tap_action:
@@ -4148,9 +4136,6 @@ views:
               {% set the_entity = 'light.switch_2_bathroom_main_light' %}
               --maxson-floorplan--color-light--bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'light.front_yard_accent_lights' %}      
-              --maxson-floorplan--color-light--front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4325,9 +4310,6 @@ views:
               {% set the_entity = 'light.switch_2_bathroom_main_light' %}
               --maxson-floorplan--color-light--bathroom-main-vanity: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'light.front_yard_accent_lights' %}      
-              --maxson-floorplan--color-light--front-yard-accent-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4837,18 +4819,6 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
-          - type: state-icon
-            entity: light.front_yard_accent_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 95%
-              left: 21.5%
-              border-radius: 100%
-              '--paper-item-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light--front-yard-accent-lights ) )
           - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
@@ -7077,13 +7047,6 @@ views:
                 name: Garage Exterior Sconces
                 collapsible_controls: true
                 show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.front_yard_accent_lights
-                name: Front Yard Ground Lights
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
               - type: custom:mushroom-light-card
                 entity: light.foyer_exterior_entryway
                 name: Front Door Entryway
