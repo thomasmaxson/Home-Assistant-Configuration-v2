@@ -1005,10 +1005,14 @@ views:
                           entity: media_player.appletv_living_room
                           name: AppleTV
                           artwork: cover
+                          info: short
                           hide:
+                            power_state: false
+                            mute: true
                             icon: true
                             source: true
                             volume: true
+                            info: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -1515,10 +1519,14 @@ views:
                           entity: media_player.appletv_bedroom_2
                           name: AppleTV
                           artwork: cover
+                          info: short
                           hide:
+                            power_state: false
+                            mute: true
                             icon: true
                             source: true
                             volume: true
+                            info: true
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1734,10 +1742,14 @@ views:
                           entity: media_player.appletv_bedroom_3
                           name: AppleTV
                           artwork: cover
+                          info: short
                           hide:
+                            power_state: false
+                            mute: true
                             icon: true
                             source: true
                             volume: true
+                            info: true
                       - type: conditional
                         conditions:
                           - condition: or
@@ -1896,10 +1908,14 @@ views:
                           entity: media_player.appletv_bedroom_4
                           name: AppleTV
                           artwork: cover
+                          info: short
                           hide:
+                            power_state: false
+                            mute: true
                             icon: true
                             source: true
                             volume: true
+                            info: true
                       - type: conditional
                         conditions:
                           - condition: or
@@ -2563,11 +2579,6 @@ views:
                       - type: custom:mushroom-light-card
                         name: Garage Exterior
                         entity: light.garage_exterior
-                        collapsible_controls: true
-                        show_brightness_control: true
-                      - type: custom:mushroom-light-card
-                        name: Ground Lights
-                        entity: light.front_yard_accent_lights
                         collapsible_controls: true
                         show_brightness_control: true
           - type: vertical-stack
