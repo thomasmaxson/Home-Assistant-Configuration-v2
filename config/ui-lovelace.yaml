@@ -983,7 +983,7 @@ views:
                     entity: light.living_room_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
-                    entity: fan.ceiling_fan_bar
+                    entity: fan.ceiling_bar
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1065,9 +1065,9 @@ views:
                             subtitle: Ceiling Fan
                           - type: custom:mushroom-fan-card
                             name: Ceiling Fan
-                            entity: fan.ceiling_fan_bar
+                            entity: fan.ceiling_bar
                             layout: vertical
-                            collapsible_controls: false
+                            collapsible_controls: true
                             show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
@@ -1250,7 +1250,7 @@ views:
                     entity: light.bedroom_1_group_lights_all
                   - type: custom:button-card
                     template: chip_detail__fan
-                    entity: fan.ceiling_fan_bedroom_1
+                    entity: fan.custom_ceiling_bedroom_1
                   - type: custom:button-card
                     template: chip_detail__curtain
                     entity: cover.large_window_curtains_bedroom_1
@@ -1383,9 +1383,9 @@ views:
                         subtitle: Ceiling Fan
                       - type: custom:mushroom-fan-card
                         name: Ceiling Fan
-                        entity: fan.ceiling_fan_bedroom_1
+                        entity: fan.custom_ceiling_bedroom_1
                         layout: vertical
-                        collapsible_controls: false
+                        collapsible_controls: true
                         show_percentage_control: true
                   - type: vertical-stack
                     cards:
@@ -1788,7 +1788,7 @@ views:
                         name: Ceiling Fan
                         entity: fan.custom_ceiling_bedroom_3
                         layout: vertical
-                        collapsible_controls: false
+                        collapsible_controls: true
                         show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
@@ -2718,9 +2718,9 @@ views:
                                     subtitle: Ceiling Fan
                                   - type: custom:mushroom-fan-card
                                     name: Ceiling Fan
-                                    entity: fan.ceiling_fan_bar
+                                    entity: fan.ceiling_bar
                                     layout: vertical
-                                    collapsible_controls: false
+                                    collapsible_controls: true
                                     show_percentage_control: true
                       - type: custom:mushroom-title-card
                         title: ''
@@ -3502,7 +3502,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bedroom_1
+            entity: fan.custom_ceiling_bedroom_1
             state_color: false
             tap_action:
               action: toggle
@@ -3722,7 +3722,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bar
+            entity: fan.ceiling_bar
             state_color: false
             tap_action:
               action: toggle
@@ -4004,7 +4004,7 @@ views:
               --maxson-floorplan--color-lock--front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
 
 
-              {% set the_entity = 'fan.ceiling_fan_bedroom_1' %}
+              {% set the_entity = 'fan.custom_ceiling_bedroom_1' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
@@ -4087,7 +4087,7 @@ views:
               {% set the_entity = 'light.ceiling_fan_bar' %}
               --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-              {% set the_entity = 'fan.ceiling_fan_bar' %}
+              {% set the_entity = 'fan.ceiling_bar' %}
               --maxson-floorplan--color-fan--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
 
@@ -4184,7 +4184,7 @@ views:
               {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
               --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
-              {% set the_entity = 'fan.ceiling_fan_bedroom_1' %}
+              {% set the_entity = 'fan.custom_ceiling_bedroom_1' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
@@ -4264,7 +4264,7 @@ views:
               {% set the_entity = 'light.ceiling_fan_bar' %}
               --maxson-floorplan--color-light--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-              {% set the_entity = 'fan.ceiling_fan_bar' %}
+              {% set the_entity = 'fan.ceiling_bar' %}
               --maxson-floorplan--color-fan--bar-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
 
@@ -4374,7 +4374,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bedroom_1
+            entity: fan.custom_ceiling_bedroom_1
             state_color: false
             tap_action:
               action: toggle
@@ -4594,7 +4594,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
-            entity: fan.ceiling_fan_bar
+            entity: fan.ceiling_bar
             state_color: false
             tap_action:
               action: toggle
@@ -4944,8 +4944,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 28%
-              left: 20%
+              top: 30%
+              left: 18%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
           - type: state-icon
@@ -6667,7 +6667,7 @@ views:
                 #states { padding: 0;}
             entities:
               - type: custom:mushroom-fan-card
-                entity: fan.ceiling_fan_bar
+                entity: fan.ceiling_bar
                 name: Ceiling Fan
                 collapsible_controls: true
                 show_percentage_control: true
@@ -6684,7 +6684,7 @@ views:
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
-                entity: fan.ceiling_fan_bedroom_1
+                entity: fan.custom_ceiling_bedroom_1
                 collapsible_controls: false
                 show_percentage_control: true
               - type: custom:mushroom-cover-card

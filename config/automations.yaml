@@ -231,7 +231,7 @@
         metadata: {}
         data:
           transition: 150
-          brightness_pct: 20
+          brightness_pct: 10
         target:
           entity_id: light.foyer_under_table
   mode: queued
@@ -512,6 +512,10 @@
           interruption_level: active
           message: The Garage interior door was opened.
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -544,6 +548,10 @@
           interruption_level: active
           message: The Garage interior door was closed.
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1106,6 +1114,23 @@
         id:
         - Door did OPEN
       sequence:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - jessica
+          - thomas
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: The Laundry Room door was opened.
+          notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
+          - action: SNOOZE_HOUSEHOLD_ACTIVITY
+            title: Snooze
+            icon: sfsymbols:clock
       - alias: If Allowed Run Automations
         if:
         - condition: state
@@ -1118,19 +1143,6 @@
             brightness_pct: 100
           target:
             entity_id: light.laundry_ceiling_light
-      - action: script.push_notification_to_ios_devices
-        metadata: {}
-        data:
-          send_to:
-          - jessica
-          - thomas
-          notification_type: type_activity_door_interior
-          interruption_level: active
-          message: The Laundry Room door was opened.
-          notification_actions:
-          - action: SNOOZE_HOUSEHOLD_ACTIVITY
-            title: Snooze
-            icon: sfsymbols:clock
       alias: When Door is OPENED
     - conditions:
       - condition: and
@@ -1175,6 +1187,23 @@
         id:
         - Door did CLOSE
       sequence:
+      - action: script.push_notification_to_ios_devices
+        metadata: {}
+        data:
+          send_to:
+          - jessica
+          - thomas
+          notification_type: type_activity_door_interior
+          interruption_level: active
+          message: The Laundry Room door was closed.
+          notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
+          - action: SNOOZE_HOUSEHOLD_ACTIVITY
+            title: Snooze
+            icon: sfsymbols:clock
       - if:
         - condition: state
           entity_id: input_boolean.laundry_room_automation_allow_occupancy
@@ -1188,19 +1217,6 @@
           data: {}
           target:
             entity_id: light.laundry_ceiling_light
-      - action: script.push_notification_to_ios_devices
-        metadata: {}
-        data:
-          send_to:
-          - jessica
-          - thomas
-          notification_type: type_activity_door_interior
-          interruption_level: active
-          message: The Laundry Room door was closed.
-          notification_actions:
-          - action: SNOOZE_HOUSEHOLD_ACTIVITY
-            title: Snooze
-            icon: sfsymbols:clock
       alias: When Door is CLOSED
     - conditions:
       - condition: and
@@ -1310,15 +1326,20 @@
           data: {}
     - alias: If Residents are HOME and Guests are NOT HOME
       if:
-      - condition: or
+      - condition: and
         conditions:
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: group.residents
+            state: home
+          - condition: state
+            entity_id: input_boolean.guests_home
+            state: 'off'
+          alias: If Residents are HOME or Guests are NOT HOME
         - condition: state
-          entity_id: group.residents
-          state: home
-        - condition: state
-          entity_id: input_boolean.guests_home
-          state: 'off'
-        alias: If Residents are HOME or Guests are NOT HOME
+          entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+          state: 'on'
       then:
       - alias: Blinds OPEN
         action: cover.open_cover_tilt
@@ -1578,6 +1599,10 @@
           notification_type: type_activity_door_exterior
           message: The primary front door was opened.
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1615,6 +1640,10 @@
           notification_type: type_activity_door_exterior
           interruption_level: active
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1654,6 +1683,10 @@
           message: The secondary front door was opened.
           notification_type: type_activity_door_exterior
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1673,6 +1706,10 @@
           message: The secondary front door was closed.
           notification_type: type_activity_door_exterior
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1758,6 +1795,10 @@
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1789,6 +1830,10 @@
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1847,6 +1892,10 @@
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -1878,6 +1927,10 @@
           notification_type: type_activity_door_interior
           interruption_level: active
           notification_actions:
+          - action: OPEN_APP_UNIFI_PROTECT
+            title: Open Camera App
+            url: unifi-protect://
+            icon: sfsymbols:video
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
@@ -3265,6 +3318,10 @@
           message: Tom's Office door was opened.
           notification_actions:
             notification_actions:
+            - action: OPEN_APP_UNIFI_PROTECT
+              title: Open Camera App
+              url: unifi-protect://
+              icon: sfsymbols:video
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
@@ -3290,6 +3347,10 @@
           message: Tom's Office door was closed.
           notification_actions:
             notification_actions:
+            - action: OPEN_APP_UNIFI_PROTECT
+              title: Open Camera App
+              url: unifi-protect://
+              icon: sfsymbols:video
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
@@ -3360,6 +3421,10 @@
           message: Jess' Office door was opened.
           notification_actions:
             notification_actions:
+            - action: OPEN_APP_UNIFI_PROTECT
+              title: Open Camera App
+              url: unifi-protect://
+              icon: sfsymbols:video
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
@@ -3385,6 +3450,10 @@
           message: Jess' Office door was closed.
           notification_actions:
             notification_actions:
+            - action: OPEN_APP_UNIFI_PROTECT
+              title: Open Camera App
+              url: unifi-protect://
+              icon: sfsymbols:video
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
@@ -3530,7 +3599,7 @@
             entity_id: fan.custom_ceiling_bedroom_3
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 33.333333333333336
@@ -3607,7 +3676,7 @@
             entity_id: fan.custom_ceiling_bedroom_3
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 100
@@ -3674,7 +3743,7 @@
             entity_id: fan.custom_ceiling_bedroom_4
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 33.333333333333336
@@ -3751,7 +3820,7 @@
             entity_id: fan.custom_ceiling_bedroom_4
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 100
@@ -3831,7 +3900,7 @@
             entity_id: fan.custom_ceiling_bedroom_2
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 33.333333333333336
@@ -3908,7 +3977,7 @@
             entity_id: fan.custom_ceiling_bedroom_2
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 100
@@ -4000,7 +4069,7 @@
             entity_id: fan.custom_ceiling_bedroom_1
             state: 'off'
           sequence:
-          - action: fan.turn_on
+          - action: fan.set_percentage
             metadata: {}
             data:
               percentage: 33.333333333333336
@@ -5050,6 +5119,13 @@
     entity_id:
     - fan.custom_ceiling_bedroom_4
     attribute: preset_mode
+    to: 'off'
+    id: To Off
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
     to: low
     id: To Low Speed
     enabled: true
@@ -5070,6 +5146,21 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Off
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Red
+          effect: Solid
+          duration: 1 Second
+          brightness: 50
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_4
     - conditions:
       - condition: trigger
         id:
@@ -5166,6 +5257,13 @@
     entity_id:
     - fan.custom_ceiling_bedroom_1
     attribute: preset_mode
+    to: 'off'
+    id: To Off
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
     to: low
     id: To Low Speed
     enabled: true
@@ -5186,6 +5284,21 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Off
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Red
+          effect: Solid
+          duration: 1 Second
+          brightness: 50
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_1
     - conditions:
       - condition: trigger
         id:
@@ -5282,6 +5395,13 @@
     entity_id:
     - fan.custom_ceiling_bedroom_2
     attribute: preset_mode
+    to: 'off'
+    id: To Off
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
     to: low
     id: To Low Speed
     enabled: true
@@ -5302,6 +5422,21 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Off
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Red
+          effect: Solid
+          duration: 1 Second
+          brightness: 50
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_2
     - conditions:
       - condition: trigger
         id:
@@ -5398,6 +5533,13 @@
     entity_id:
     - fan.custom_ceiling_bedroom_3
     attribute: preset_mode
+    to: 'off'
+    id: To Off
+    enabled: true
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
     to: low
     id: To Low Speed
     enabled: true
@@ -5418,6 +5560,21 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Off
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          color: Red
+          effect: Solid
+          duration: 1 Second
+          brightness: 50
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_3
     - conditions:
       - condition: trigger
         id:
@@ -5506,3 +5663,146 @@
           entity_ids:
           - light.ceiling_fan_switch_bedroom_3
   mode: single
+- id: '1739758198356'
+  alias: Security Control, Lights - All
+  description: ''
+  use_blueprint:
+    path: maxson/remote_aqara_mini_switch.yaml
+    input:
+      remote: 9390af3f5ab0303654a934996f922a6c
+      single_press_action:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.all_lights_interior
+      double_press_action:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.all_lights_interior
+- id: '1740054083449'
+  alias: Firearm Safe Opened
+  description: ''
+  triggers:
+  - entity_id:
+    - binary_sensor.door_firearm_safe
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    trigger: state
+    from: 'off'
+    id: Open Immediately
+  - entity_id:
+    - binary_sensor.door_firearm_safe
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    trigger: state
+    from: 'on'
+    id: Closed Immediately
+  - entity_id:
+    - binary_sensor.door_firearm_safe
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    trigger: state
+    from: 'off'
+    id: Open Delayed
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - Open Immediately
+      sequence:
+      - parallel:
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - thomas
+            subtitle: Danger
+            interruption_level: critical
+            notification_type: type_critical
+            message: The firearm safe is open!
+          enabled: true
+        - action: persistent_notification.create
+          metadata: {}
+          data:
+            message: The firearm safe is open!
+            title: Danger
+            notification_id: id_automation_firearm_safe_open_immediate
+        - action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Red
+            effect: Fast Blink
+            duration: Forever
+            brightness_level: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+            - light.ceiling_fan_switch_bedroom_2
+            - light.ceiling_fan_switch_bedroom_3
+            - light.ceiling_fan_switch_bedroom_4
+    - conditions:
+      - condition: trigger
+        id:
+        - Closed Immediately
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          effect: 'Off'
+          duration: Forever
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_1
+          - light.ceiling_fan_switch_bedroom_2
+          - light.ceiling_fan_switch_bedroom_3
+          - light.ceiling_fan_switch_bedroom_4
+    - conditions:
+      - condition: trigger
+        id:
+        - Open Delayed
+      sequence:
+      - parallel:
+        - action: script.amazon_echo_announcement
+          metadata: {}
+          data:
+            send_to:
+            - dining_room
+            - bathroom_1
+            - bedroom_1
+            - bedroom_2
+            - bedroom_3
+            - bedroom_4
+            - kitchen
+            message: Danger! The firearm safe has been open for 5 minutes.
+        - action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+            - thomas
+            subtitle: Danger
+            interruption_level: critical
+            notification_type: type_critical
+            message: The firearm safe has been open for 5 minutes.
+          enabled: true
+        - action: persistent_notification.create
+          metadata: {}
+          data:
+            message: The firearm safe has been open for 5 minutes.
+            title: Danger
+            notification_id: id_automation_firearm_safe_open_delayed
+  mode: queued
+  max: 10
