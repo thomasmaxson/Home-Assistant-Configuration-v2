@@ -4945,7 +4945,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 27.5%
+              top: 27%
               left: 55%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
@@ -5043,8 +5043,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 20%
-              left: 20%
+              top: 19%
+              left: 18%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_bedroom_2
@@ -5061,8 +5061,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 20%
-              left: 58.5%
+              top: 18%
+              left: 58.75%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_bedroom_4
@@ -5169,7 +5169,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 27.5%
+              top: 27%
               left: 62%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
