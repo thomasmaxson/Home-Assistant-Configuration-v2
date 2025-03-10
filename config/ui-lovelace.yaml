@@ -3023,11 +3023,11 @@ views:
         view_layout:
           grid-area: overflow2
         template: button__icon_name
-        name: Status
+        name: Overview
         icon: mdi:devices
         tap_action:
           action: navigate
-          navigation_path: /lovelace/page-status
+          navigation_path: /lovelace/page-overview
       - type: custom:button-card
         view_layout:
           grid-area: overflow3
@@ -7130,8 +7130,8 @@ views:
                 }
 
                 #states { padding: 0;}
-  - title: Device Status
-    path: page-status
+  - title: Overview
+    path: page-overview
     layout:
       max_columns: 3
     type: custom:horizontal-layout
