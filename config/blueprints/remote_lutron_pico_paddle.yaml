@@ -25,6 +25,9 @@ blueprint:
             - integration: lutron_caseta
               manufacturer: Lutron Electronics Co., Inc
               model: PJ2-1P-GXX (PaddleSwitchPico)
+            - integration: lutron_caseta
+              manufacturer: Lutron Electronics Co., Inc
+              model: PJ2-1P-GXX
           multiple: false
 
     actions_single_press:
@@ -116,26 +119,39 @@ triggers:
     device_id: !input remote
     domain: lutron_caseta
     type: press
-    subtype: Button 0
+    subtype: "on"
     id: on_pressed
+  # - trigger: device
+  #   device_id: !input remote
+  #   domain: lutron_caseta
+  #   type: press
+  #   subtype: Button 0
+  #   id: on_pressed
+  # - trigger: device
+  #   device_id: !input remote
+  #   domain: lutron_caseta
+  #   type: press
+  #   subtype: Button 1
+  #   id: on_pressed
+
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
-    subtype: Button 1
-    id: on_pressed
-  - trigger: device
-    device_id: !input remote
-    domain: lutron_caseta
-    type: press
-    subtype: Button 2
+    subtype: "off"
     id: off_pressed
-  - trigger: device
-    device_id: !input remote
-    domain: lutron_caseta
-    type: press
-    subtype: Button 3
-    id: off_pressed
+  # - trigger: device
+  #   device_id: !input remote
+  #   domain: lutron_caseta
+  #   type: press
+  #   subtype: Button 2
+  #   id: off_pressed
+  # - trigger: device
+  #   device_id: !input remote
+  #   domain: lutron_caseta
+  #   type: press
+  #   subtype: Button 3
+  #   id: off_pressed
 
 conditions:
   - condition: template
@@ -156,7 +172,7 @@ actions:
                 device_id: !input remote
                 domain: lutron_caseta
                 type: release
-                subtype: Button 0
+                subtype: "on"
             timeout:
               hours: 0
               minutes: 0
@@ -179,7 +195,7 @@ actions:
                 device_id: !input remote
                 domain: lutron_caseta
                 type: release
-                subtype: Button 2
+                subtype: "off"
             timeout:
               hours: 0
               minutes: 0
