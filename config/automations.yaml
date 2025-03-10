@@ -95,6 +95,7 @@
         - light.foyer_exterior_entryway
         - light.backyard_string_lights
         - light.living_room_corner_lamp
+        - light.living_room_couch_lamp
         - light.foyer_ceiling_ledge
         - light.cabinet_upper_lights
   mode: queued
@@ -5663,25 +5664,6 @@
           entity_ids:
           - light.ceiling_fan_switch_bedroom_3
   mode: single
-- id: '1739758198356'
-  alias: Security Control, Lights - All
-  description: ''
-  use_blueprint:
-    path: maxson/remote_aqara_mini_switch.yaml
-    input:
-      remote: 9390af3f5ab0303654a934996f922a6c
-      single_press_action:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.all_lights_interior
-      double_press_action:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.all_lights_interior
 - id: '1740054083449'
   alias: Firearm Safe Opened
   description: ''
@@ -5806,3 +5788,139 @@
             notification_id: id_automation_firearm_safe_open_delayed
   mode: queued
   max: 10
+- id: '1740885336563'
+  alias: Security Control, Lights - All
+  description: ''
+  use_blueprint:
+    path: maxson/remote_ikea_2_button.yaml
+    input:
+      remotes:
+      - f45e2cf26f5fb3cf99fd5f874ca22d18
+      button_on_single:
+      - parallel:
+        - alias: Lights On - Common Areas
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.kitchen_ceiling_lights
+            - light.dining_room_chandelier
+            - light.living_room_corner_lamp
+            - light.living_room_couch_lamp
+            - light.foyer_entryway_ceiling
+            - light.kitchen_cabinet_upper_coffee_bar
+            - light.kitchen_cabinet_upper_range
+        - alias: Lights On - Bedroom 1
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_1
+            - light.bedroom_1_lamp_hers
+            - light.bedroom_1_lamp_his
+            - light.closet_hallway_ceiling_light
+            - light.switch_1_bathroom_main_light
+            - light.switch_2_bathroom_main_light
+        - alias: Lights On - Bedroom 2
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_2
+            - light.bedroom_2_lamp_left
+            - light.bedroom_2_lamp_right
+        - alias: Lights On - Bedroom 3
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_3
+            - light.bedroom_3_floor_lamp
+        - alias: Lights On - Bedroom 4
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_4
+            - light.bedroom_4_desk_lamp
+            - light.bedroom_4_lightstrip
+        - alias: Lights On - Misc
+          action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.foyer_hallway_ceiling
+            - light.guest_hallway_light
+            - light.laundry_hallway_light
+            - light.foyer_hallway_ceiling
+            - light.laundry_ceiling_light
+      button_off_single:
+      - parallel:
+        - alias: Lights On - Common Areas
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.kitchen_ceiling_lights
+            - light.dining_room_chandelier
+            - light.living_room_corner_lamp
+            - light.living_room_couch_lamp
+            - light.foyer_entryway_ceiling
+            - light.kitchen_cabinet_upper_coffee_bar
+            - light.kitchen_cabinet_upper_range
+        - alias: Lights On - Bedroom 1
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_1
+            - light.bedroom_1_lamp_hers
+            - light.bedroom_1_lamp_his
+            - light.closet_hallway_ceiling_light
+            - light.switch_1_bathroom_main_light
+            - light.switch_2_bathroom_main_light
+        - alias: Lights On - Bedroom 2
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_2
+            - light.bedroom_2_lamp_left
+            - light.bedroom_2_lamp_right
+        - alias: Lights On - Bedroom 3
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_3
+            - light.bedroom_3_floor_lamp
+        - alias: Lights On - Bedroom 4
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_4
+            - light.bedroom_4_desk_lamp
+            - light.bedroom_4_lightstrip
+        - alias: Lights On - Misc
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.foyer_hallway_ceiling
+            - light.guest_hallway_light
+            - light.laundry_hallway_light
+            - light.foyer_hallway_ceiling
+            - light.laundry_ceiling_light

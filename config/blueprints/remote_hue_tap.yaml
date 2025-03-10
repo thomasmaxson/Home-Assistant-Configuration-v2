@@ -1,0 +1,66 @@
+blueprint:
+  name: Hue Tap Remote
+  description: Control devices with your Philips Hue Tap remote.
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: Philips Hue Tap remote
+      description: "Philips Hue Tap remote used to trigger actions."
+      selector:
+        device:
+          filter:
+            - integration: mqtt
+              manufacturer: Philips
+              model: Hue tap
+    button_1:
+      name: Button Single Dot
+      description: Action to run on click of single dot button
+      default: []
+      selector:
+        action: null
+    button_2:
+      name: Button Two Dots
+      description: Action to run on click of two dot button
+      default: []
+      selector:
+        action: null
+    button_3:
+      name: Button Three Dots
+      description: Action to run on click of three dot button
+      default: []
+      selector:
+        action: null
+    button_4:
+      name: Button Four Dots
+      description: Action to run on click of four dot button
+      default: []
+      selector:
+        action: null
+mode: restart
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id: !input "remote"
+    attribute: action
+
+actions:
+  - variables:
+      command: "{{ trigger.to_state.state }}"
+
+  - choose:
+      - conditions:
+          - "{{ command == 'press_1' }}"
+        sequence: !input button_1
+      - conditions:
+          - "{{ command == 'press_2' }}"
+        sequence: !input button_2
+      - conditions:
+          - "{{ command == 'press_3' }}"
+        sequence: !input button_3
+      - conditions:
+          - "{{ command == 'press_4' }}"
+        sequence: !input button_4
