@@ -45,6 +45,12 @@ blueprint:
             - integration: mqtt
               manufacturer: Inovelli
               model: VZM35-SN
+            - integration: mqtt
+              manufacturer: Inovelli
+              model: 2-in-1 switch + dimmer
+            - integration: mqtt
+              manufacturer: Inovelli
+              model: Fan controller
 
     actions_single_press:
       name: Single Press
