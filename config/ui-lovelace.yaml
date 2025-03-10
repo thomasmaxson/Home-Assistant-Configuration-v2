@@ -7651,20 +7651,6 @@ views:
           - type: entities
             title: Remotes
             show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
             entities:
               - type: custom:button-card
                 template: entity_card
@@ -7706,6 +7692,28 @@ views:
                   data_entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
                   data_type: battery
                   icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
+                name: For Safe Security
+                entity: sensor.remote_firesafe_security_battery
+                variables:
+                  data_entity: sensor.remote_firesafe_security_battery
+                  data_type: battery
+                  icon_type: battery_level
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-right: 0;
+                  padding-bottom: 18px;
+                  padding-left: 0;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
   - title: Residents
     path: page-residents
     theme: casamaxson
