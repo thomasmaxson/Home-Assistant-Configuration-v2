@@ -922,7 +922,7 @@ views:
           path: '#details-living-room'
           icon_on: mdi:sofa
           icon_off: mdi:sofa-outline
-          data_lightOn: light.living_room_corner_lamp
+          data_lightOn: light.living_room_group_occupancy_lights
           data_temperature: sensor.temperature_living_room
           badge_danger: |
             [[[ 
@@ -1046,6 +1046,13 @@ views:
                         show_brightness_control: true
                         show_color_control: true
                         use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: Couch Lamp
+                        entity: light.living_room_couch_lamp
+                        collapsible_controls: true
+                        show_brightness_control: true
+                        show_color_control: false
+                        use_light_color: false
                       - type: custom:mushroom-light-card
                         name: Ceiling Fan Light
                         entity: light.ceiling_fan_bar
@@ -3766,6 +3773,16 @@ views:
                 rgb( var( --maxson-floorplan--color-light--living-room-corner )
                 )
           - type: state-icon
+            entity: light.living_room_couch_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 58%
+              left: 12%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
+          - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
             tap_action:
@@ -4104,6 +4121,9 @@ views:
               {% set the_entity = 'light.living_room_corner_lamp' %}
               --maxson-floorplan--color-light--living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
+              {% set the_entity = 'light.living_room_couch_lamp' %}
+              --maxson-floorplan--white-light--living-room-couch: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
@@ -4277,6 +4297,9 @@ views:
 
               {% set the_entity = 'light.living_room_corner_lamp' %}
               --maxson-floorplan--color-light--living-room-corner: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.living_room_couch_lamp' %}
+              --maxson-floorplan--white-light--living-room-couch: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player--sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
@@ -4619,6 +4642,16 @@ views:
               '--paper-item-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--living-room-corner )
                 )
+          - type: state-icon
+            entity: light.living_room_couch_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 11.5%
+              left: 40%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
           - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
@@ -6605,6 +6638,13 @@ views:
                 collapsible_controls: true
                 show_brightness_control: true
                 show_color_control: true
+                use_light_color: true
+              - type: custom:mushroom-light-card
+                entity: light.living_room_couch_lamp
+                name: Couch Lamp
+                collapsible_controls: true
+                show_brightness_control: true
+                show_color_control: false
                 use_light_color: true
             card_mod:
               style: |
