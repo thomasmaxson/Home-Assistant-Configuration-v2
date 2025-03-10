@@ -59,6 +59,12 @@ switch:
       - light.living_room_corner_lamp
 
   - platform: circadian_lighting
+    name: Light, Couch Lamp Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.living_room_couch_lamp
+
+  - platform: circadian_lighting
     name: Bedside Lamp, Hers Circadian
     disable_brightness_adjust: true
     lights_ct:
