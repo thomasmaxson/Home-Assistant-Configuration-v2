@@ -3194,8 +3194,6 @@ views:
                     entities:
                       - entity: sensor.uptime
                         name: Home Assistant
-                      - entity: sensor.casamaxson_udmp_uptime
-                        name: UniFi Dream Machine Pro
                       - entity: sensor.casamaxson_unvr_uptime
                         name: UniFi Network Video Recorder
               - type: vertical-stack
