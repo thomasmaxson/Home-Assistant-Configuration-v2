@@ -6479,9 +6479,9 @@ views:
                     show_header_toggle: false
                     entities:
                       - entity: camera.ext_doorbell_high
-                        name: Main Entry Doorbell
+                        name: Doorbell Entry
                       - entity: camera.ext_doorbell_package_high
-                        name: Main Entry Doorbell Pacakges
+                        name: Doorbell Packages
                       - entity: camera.ext_backyard_northeast_high
                         name: Backyard, Northeast
                       - entity: camera.ext_backyard_southeast_high
