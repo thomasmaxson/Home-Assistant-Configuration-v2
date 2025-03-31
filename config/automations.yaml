@@ -5698,7 +5698,10 @@
     trigger: state
     from: 'off'
     id: Open Delayed
-  conditions: []
+  conditions:
+  - condition: state
+    entity_id: input_boolean.notification_household_safe_activiy
+    state: 'on'
   actions:
   - choose:
     - conditions:
