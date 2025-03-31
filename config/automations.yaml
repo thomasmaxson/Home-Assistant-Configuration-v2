@@ -4335,13 +4335,13 @@
         metadata: {}
         data: {}
         target:
-          entity_id: cover.large_window_curtains_bedroom_1
+          entity_id: cover.curtains_large_window_bedroom_1
       button_off_hold:
       - action: cover.close_cover
         metadata: {}
         data: {}
         target:
-          entity_id: cover.large_window_curtains_bedroom_1
+          entity_id: cover.curtains_large_window_bedroom_1
 - id: '1737126794238'
   alias: Living Room, Light - Primary
   description: Control the primary lights in the living room via the Lutron 3BRL light
