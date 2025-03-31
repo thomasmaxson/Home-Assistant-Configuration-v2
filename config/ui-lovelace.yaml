@@ -1209,14 +1209,14 @@ views:
         name: Main Bedroom
         entity: light.bedroom_1_group_lights_all
         triggers_update:
-          - cover.large_window_curtains_bedroom_1
+          - cover.curtains_bedroom_1
           - light.bedroom_1_group_lights_all
           - binary_sensor.door_bedroom_1
         variables:
           path: '#details-bedroom-1'
           icon_on: mdi:bed-king
           icon_off: mdi:bed-king-outline
-          data_curtains: cover.large_window_curtains_bedroom_1
+          data_curtains: cover.curtains_bedroom_1
           data_door: binary_sensor.door_bedroom_1
           data_lightOn: light.bedroom_1_group_occupancy_lights
           data_temperature: sensor.temperature_bedroom_1
@@ -1264,7 +1264,7 @@ views:
                     entity: fan.custom_ceiling_bedroom_1
                   - type: custom:button-card
                     template: chip_detail__curtain
-                    entity: cover.large_window_curtains_bedroom_1
+                    entity: cover.curtains_bedroom_1
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1383,30 +1383,40 @@ views:
                         name: Hallway
                         collapsible_controls: true
                         show_brightness_control: true
-          - type: custom:decluttering-card
-            template: room_popup__grid_2_columns
-            variables:
-              - cards:
-                  - type: vertical-stack
-                    cards:
-                      - type: custom:mushroom-title-card
-                        title: ''
-                        subtitle: Ceiling Fan
+          - type: vertical-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: ''
+                subtitle: Ceiling Fan
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
                       - type: custom:mushroom-fan-card
                         name: Ceiling Fan
                         entity: fan.custom_ceiling_bedroom_1
                         layout: vertical
                         collapsible_controls: true
                         show_percentage_control: true
-                  - type: vertical-stack
-                    cards:
-                      - type: custom:mushroom-title-card
-                        title: ''
-                        subtitle: Window
+          - type: vertical-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: ''
+                subtitle: Curtains
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
                       - type: custom:mushroom-cover-card
                         layout: vertical
-                        name: Curtains
-                        entity: cover.large_window_curtains_bedroom_1
+                        name: Large Window
+                        entity: cover.curtains_large_window_bedroom_1
+                        collapsible_controls: true
+                        show_buttons_control: true
+                      - type: custom:mushroom-cover-card
+                        layout: vertical
+                        name: Small Window
+                        entity: cover.curtains_small_window_bedroom_1
                         collapsible_controls: true
                         show_buttons_control: true
           - type: custom:decluttering-card
@@ -1638,6 +1648,12 @@ views:
                         layout: vertical
                         collapsible_controls: true
                         show_percentage_control: true
+                        tap_action:
+                          action: call-service
+                          haptic: success
+                          service: cover.toggle_cover_tilt
+                          target:
+                            entity_id: cover.blinds_bedroom_2
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1828,6 +1844,24 @@ views:
                             name: Allow Room Occupancy Automations
         view_layout:
           grid-area: modalBdr3
+      - type: custom:button-card
+        view_layout:
+          grid-area: tileBdr4
+        template: room_tile
+        name: Tom's Office
+        entity: light.bedroom_4_group_lights_all
+        triggers_update:
+          - cover.blinds_bedroom_4
+          - light.bedroom_4_group_lights_all
+          - binary_sensor.door_bedroom_4
+        variables:
+          path: '#details-bedroom-4'
+          icon_on: mdi:desk-lamp-on
+          icon_off: mdi:desk-lamp
+          data_blinds: cover.blinds_bedroom_4
+          data_door: binary_sensor.door_bedroom_4
+          data_lightOn: light.bedroom_4_group_occupancy_lights
+          data_temperature: sensor.temperature_bedroom_4
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr4
@@ -2138,6 +2172,269 @@ views:
                               name: 'Occupancy Idle In:'
         view_layout:
           grid-area: modalBdr4
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#details-bedroom-1'
+            show_header: false
+            margin: 7px
+            width_desktop: 540px
+            width_mobile: 100%
+            bg_color: var( --popup--background-color )
+            bg_opacity: '90'
+            bg_blur: '6'
+            styles: |-
+              #root {
+                border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
+                background-color: var( --popup--background-color ) !important;
+              }
+          - type: custom:decluttering-card
+            template: room_popup__header
+            variables:
+              - icon: mdi:bed-king
+              - title: Main Bedroom
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                  - type: custom:button-card
+                    template: chip_detail__temperature
+                    entity: sensor.temperature_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__door
+                    entity: binary_sensor.door_bedroom_1
+          - type: custom:decluttering-card
+            template: room_popup__chips
+            variables:
+              - chips:
+                  - type: custom:button-card
+                    template: chip_detail__light
+                    entity: light.bedroom_1_group_lights_all
+                  - type: custom:button-card
+                    template: chip_detail__fan
+                    entity: fan.custom_ceiling_bedroom_1
+                  - type: custom:button-card
+                    template: chip_detail__curtain
+                    entity: cover.curtains_bedroom_1
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: room_popup__grid
+                variables:
+                  - cards:
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.appletv_bedroom_1
+                                state:
+                                  - playing
+                                  - paused
+                                  - buffering
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.appletv_bedroom_1
+                          name: AppleTV
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+                      - type: conditional
+                        conditions:
+                          - condition: or
+                            conditions:
+                              - condition: state
+                                entity: media_player.echo_dot_bedroom_1
+                                state:
+                                  - playing
+                                  - paused
+                        card:
+                          type: custom:mini-media-player
+                          entity: media_player.echo_dot_bedroom_1
+                          name: Amazon Echo Dot
+                          artwork: cover
+                          hide:
+                            icon: true
+                            source: true
+                            volume: true
+          - type: vertical-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: ''
+                subtitle: Lights
+              - type: custom:decluttering-card
+                template: room_popup__grid_2_columns
+                variables:
+                  - cards:
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state: 'on'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Bedside Lamps
+                          entity: light.bedroom_1_group_occupancy_lights
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Jess' Bedside Lamp
+                          entity: light.bedroom_1_lamp_hers
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: conditional
+                        conditions:
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state_not: unavailable
+                          - condition: state
+                            entity: input_boolean.bedroom_1_sync_lights
+                            state: 'off'
+                        card:
+                          type: custom:mushroom-light-card
+                          name: Tom's Bedside Lamp
+                          entity: light.bedroom_1_lamp_his
+                          collapsible_controls: true
+                          show_brightness_control: true
+                          show_color_control: true
+                          use_light_color: true
+                      - type: custom:mushroom-light-card
+                        name: Ceiling Fan Light
+                        entity: light.ceiling_fan_bedroom_1
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_light_hers
+                        name: Jess' Closet
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_light_his
+                        name: Tom's Closet
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_ceiling_light
+                        name: Hallway
+                        collapsible_controls: true
+                        show_brightness_control: true
+          - type: custom:decluttering-card
+            template: room_popup__grid_2_columns
+            variables:
+              - cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Ceiling Fan
+                      - type: custom:mushroom-fan-card
+                        name: Ceiling Fan
+                        entity: fan.custom_ceiling_bedroom_1
+                        layout: vertical
+                        collapsible_controls: true
+                        show_percentage_control: true
+                  - type: conditional
+                    conditions:
+                      - condition: state
+                        entity: input_boolean.bedroom_1_sync_curtains
+                        state_not: unavailable
+                      - condition: state
+                        entity: input_boolean.bedroom_1_sync_curtains
+                        state: 'on'
+                    card:
+                      type: vertical-stack
+                      cards:
+                        - type: custom:mushroom-title-card
+                          title: ''
+                          subtitle: Curtains
+                        - type: custom:mushroom-cover-card
+                          name: Both Windows
+                          entity: cover.curtains_bedroom_1
+                          layout: vertical
+                          collapsible_controls: true
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: input_boolean.bedroom_1_sync_curtains
+                state_not: unavailable
+              - condition: state
+                entity: input_boolean.bedroom_1_sync_curtains
+                state: 'off'
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:mushroom-title-card
+                  title: ''
+                  subtitle: Curtains
+                - type: custom:decluttering-card
+                  template: room_popup__grid_2_columns
+                  variables:
+                    - cards:
+                        - type: custom:mushroom-cover-card
+                          name: Large Window
+                          entity: cover.curtains_large_window_bedroom_1
+                          layout: vertical
+                          collapsible_controls: true
+                        - type: custom:mushroom-cover-card
+                          name: Small Window
+                          entity: cover.curtains_small_window_bedroom_1
+                          layout: vertical
+                          collapsible_controls: true
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Room Settings
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - type: section
+                            label: Lights Configuration
+                          - entity: input_boolean.bedroom_1_sync_lights
+                            name: Sync Bedside Lamps
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_hers_circadian
+                            name: Her Bedside Lamp Adaptive Color
+                          - entity: >-
+                              switch.circadian_lighting_bedside_lamp_his_circadian
+                            name: His Bedside Lamp Adaptive Color
+                          - type: section
+                            label: Curtain Configuration
+                          - entity: input_boolean.bedroom_1_sync_curtains
+                            name: Sync Curtains
+                          - type: section
+                            label: Voice Assistant
+                          - entity: input_boolean.household_notify_bedroom_1
+                            name: Allow Annoucements
+                          - type: section
+                            label: Automations
+                          - entity: input_boolean.bedroom_1_automation_allow_occupancy
+                            name: Allow Occupancy Automations
+                          - entity: >-
+                              input_boolean.bedroom_1_closet_automation_allow_doors
+                            name: Toggle closet light when door opens/closes
+                          - entity: input_boolean.closet_automatic_turn_off
+                            name: Automatically turn off closet lights
+        view_layout:
+          grid-area: modalBdr1
       - type: custom:button-card
         view_layout:
           grid-area: tileLaund
@@ -3539,7 +3836,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
-            entity: cover.large_window_curtains_bedroom_1
+            entity: cover.curtains_large_window_bedroom_1
             state_color: false
             tap_action:
               action: toggle
@@ -4032,7 +4329,7 @@ views:
               {% set the_entity = 'fan.custom_ceiling_bedroom_1' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
+              {% set the_entity = 'cover.curtains_large_window_bedroom_1' %}
               --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
@@ -4206,7 +4503,7 @@ views:
               --maxson-floorplan--color-lock--front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
 
 
-              {% set the_entity = 'cover.large_window_curtains_bedroom_1' %}
+              {% set the_entity = 'cover.curtains_bedroom_1' %}
               --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'fan.custom_ceiling_bedroom_1' %}
@@ -4409,7 +4706,7 @@ views:
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
-            entity: cover.large_window_curtains_bedroom_1
+            entity: cover.curtains_bedroom_1
             state_color: false
             tap_action:
               action: toggle
@@ -6718,10 +7015,13 @@ views:
                 collapsible_controls: false
                 show_percentage_control: true
               - type: custom:mushroom-cover-card
-                entity: cover.large_window_curtains_bedroom_1
-                name: Window Curtains
+                entity: cover.curtains_large_window_bedroom_1
+                name: Curtains, Large Window
                 show_position_control: true
-                show_tilt_position_control: true
+              - type: custom:mushroom-cover-card
+                entity: cover.curtains_small_window_bedroom_1
+                name: Curtains, Small Window
+                show_position_control: true
               - type: conditional
                 conditions:
                   - condition: state
@@ -7596,18 +7896,34 @@ views:
             entities:
               - type: custom:button-card
                 template: entity_card
-                name: Left Curtain, Main Bedroom
-                entity: cover.bedroom_1_large_window_left
+                name: Curtain (Large, Left), Main Bedroom
+                entity: cover.curtain_large_left_bedroom_1
                 variables:
-                  data_entity: sensor.bedroom_1_large_window_left_battery
+                  data_entity: sensor.curtain_large_left_bedroom_1_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
-                name: Right Curtain, Main Bedroom
-                entity: cover.bedroom_1_large_window_right
+                name: Curtain (Large, Right), Main Bedroom
+                entity: cover.curtain_large_right_bedroom_1
                 variables:
-                  data_entity: sensor.bedroom_1_large_window_right_battery
+                  data_entity: sensor.curtain_large_right_bedroom_1_battery
+                  data_type: battery
+                  icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
+                name: Curtain (Small, Left), Main Bedroom
+                entity: cover.curtain_small_left_bedroom_1
+                variables:
+                  data_entity: sensor.curtain_small_left_bedroom_1_battery
+                  data_type: battery
+                  icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
+                name: Curtain (Small, Right), Main Bedroom
+                entity: cover.curtain_small_right_bedroom_1
+                variables:
+                  data_entity: sensor.curtain_small_right_bedroom_1_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
