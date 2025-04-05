@@ -5267,6 +5267,15 @@ views:
 
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
               --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.dishwasher_status' %}
+              --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.laundry_washer_machine_state' %}
+              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
+              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -5474,8 +5483,8 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 60%
-              left: 65%
+              top: 64.5%
+              left: 67%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_refrigerator
@@ -5563,6 +5572,36 @@ views:
               left: 64%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+          - type: state-icon
+            entity: sensor.washing_machine_status
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 49%
+              left: 64%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
+          - type: state-icon
+            entity: sensor.laundry_dryer_machine_state
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 49%
+              left: 61%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
+          - type: state-icon
+            entity: sensor.dishwasher_status
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 79.75%
+              left: 30.25%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
         visibility:
           - condition: screen
@@ -5622,6 +5661,15 @@ views:
 
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
               --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.dishwasher_status' %}
+              --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.laundry_washer_machine_state' %}
+              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+
+              {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
+              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -5831,7 +5879,7 @@ views:
               action: more-info
             style:
               top: 65%
-              left: 40%
+              left: 36%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_refrigerator
@@ -5919,6 +5967,36 @@ views:
               left: 56%
               border-radius: 100%
               '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+          - type: state-icon
+            entity: sensor.washing_machine_status
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 64.5%
+              left: 45%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
+          - type: state-icon
+            entity: sensor.laundry_dryer_machine_state
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 60.5%
+              left: 45%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
+          - type: state-icon
+            entity: sensor.dishwasher_status
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 26%
+              left: 20%
+              border-radius: 100%
+              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
         visibility:
           - condition: screen
