@@ -2371,6 +2371,9 @@
     - conditions:
       - condition: and
         conditions:
+        - condition: state
+          entity_id: group.residents
+          state: home
         - condition: trigger
           id:
           - On 00:00 of every hour
@@ -2407,6 +2410,43 @@
             icon: sfsymbols:clock
       alias: 'TAKE OUT: When Unfinished Send Notification'
     - conditions:
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: group.residents
+          state: home
+        - condition: trigger
+          id:
+          - On 00:00 of every hour
+          - On 00:30 of every hour
+        - condition: time
+          after: '21:30:00'
+          before: '23:59:59'
+        - condition: state
+          entity_id: sensor.days_until_waste_day_solid
+          state: Tomorrow
+        - condition: state
+          entity_id: input_boolean.snooze_waste_reminder_take_out
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.reminder_waste_take_out_solid
+          state: 'on'
+      sequence:
+      - action: script.amazon_echo_announcement
+        metadata: {}
+        data:
+          send_to:
+          - dining_room
+          - bathroom_1
+          - bedroom_1
+          - bedroom_2
+          - bedroom_3
+          - bedroom_4
+          - kitchen
+          message: Trash pickup is tomorrow. Don't forget to take the trash can out
+            to the curb.
+      alias: 'TAKE OUT: When Unfinished Send Announcement'
+    - conditions:
       - condition: trigger
         id:
         - Bring In Schedule Turned ON
@@ -2421,6 +2461,9 @@
     - conditions:
       - condition: and
         conditions:
+        - condition: state
+          entity_id: group.residents
+          state: home
         - condition: trigger
           id:
           - On 00:00 of every hour
