@@ -1303,7 +1303,7 @@
           entity_id: input_boolean.guests_home
           state: 'on'
       then:
-      - alias: Blinds OPEN
+      - alias: OPEN Kitchen Blinds
         action: cover.open_cover_tilt
         target:
           entity_id:
@@ -1329,7 +1329,7 @@
       if:
       - condition: and
         conditions:
-        - condition: or
+        - condition: and
           conditions:
           - condition: state
             entity_id: group.residents
@@ -1342,7 +1342,7 @@
           entity_id: input_boolean.bedroom_2_automation_allow_occupancy
           state: 'on'
       then:
-      - alias: Blinds OPEN
+      - alias: OPEN Bedroom 2 Blinds
         action: cover.open_cover_tilt
         data: {}
         target:
