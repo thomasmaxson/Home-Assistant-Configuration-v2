@@ -3278,7 +3278,7 @@ views:
                 return 'All Lights are on';
                 break;
               case 0:
-                return 'All Lights off';
+                return 'All Lights Off';
                 break;
               case 1:
                 return lightOnCount + ' Light On';
