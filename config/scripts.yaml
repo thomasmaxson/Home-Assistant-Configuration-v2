@@ -222,7 +222,7 @@ amazon_echo_announcement:
           metadata: {}
           data:
             led: All
-            color: Green
+            color: Blue
             effect: Solid
             duration: 10 Seconds
             brightness: 100
@@ -267,7 +267,7 @@ amazon_echo_announcement:
           metadata: {}
           data:
             led: All
-            color: Green
+            color: Blue
             effect: Solid
             duration: 10 Seconds
             brightness: 100
@@ -312,7 +312,7 @@ amazon_echo_announcement:
           metadata: {}
           data:
             led: All
-            color: Green
+            color: Blue
             effect: Solid
             duration: 10 Seconds
             brightness: 100
@@ -357,7 +357,7 @@ amazon_echo_announcement:
           metadata: {}
           data:
             led: All
-            color: Green
+            color: Blue
             effect: Solid
             duration: 10 Seconds
             brightness: 100
