@@ -3805,7 +3805,7 @@ views:
               top: 30%
               left: 91.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
           - type: state-icon
             entity: lock.front_door
             state_color: false
@@ -3815,7 +3815,7 @@ views:
               top: 60%
               left: 72.75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_1
             state_color: false
@@ -3825,7 +3825,7 @@ views:
               top: 19%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
           - type: state-icon
             entity: light.bedroom_1_group_occupancy_lights
             state_color: false
@@ -3835,7 +3835,7 @@ views:
               top: 19%
               left: 14%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
             entity: fan.custom_ceiling_bedroom_1
             state_color: false
@@ -3845,7 +3845,7 @@ views:
               top: 30%
               left: 14%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
             entity: cover.curtains_large_window_bedroom_1
             state_color: false
@@ -3855,7 +3855,7 @@ views:
               top: 30%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_2
             state_color: false
@@ -3865,7 +3865,7 @@ views:
               top: 75%
               left: 87%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
           - type: state-icon
             entity: light.bedroom_2_group_occupancy_lights
             state_color: false
@@ -3875,7 +3875,7 @@ views:
               top: 75%
               left: 82%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
           - type: state-icon
             entity: fan.custom_ceiling_bedroom_2
             state_color: false
@@ -3885,7 +3885,7 @@ views:
               top: 84%
               left: 82%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_2
             state_color: false
@@ -3899,7 +3899,7 @@ views:
               top: 84%
               left: 87%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_3
             state_color: false
@@ -3909,7 +3909,7 @@ views:
               top: 18%
               left: 61%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_floor_lamp
             state_color: false
@@ -3919,7 +3919,7 @@ views:
               top: 18%
               left: 56%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
           - type: state-icon
@@ -3931,7 +3931,7 @@ views:
               top: 27%
               left: 58.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_4
             state_color: false
@@ -3941,7 +3941,7 @@ views:
               top: 73%
               left: 56.25%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_group_occupancy_lights
             state_color: false
@@ -3951,7 +3951,7 @@ views:
               top: 77%
               left: 52%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
           - type: state-icon
             entity: light.bedroom_4_tie_fighter_lamp
             state_color: false
@@ -3961,7 +3961,7 @@ views:
               top: 77%
               left: 60%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
           - type: state-icon
@@ -3973,7 +3973,7 @@ views:
               top: 84%
               left: 53.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -3987,7 +3987,7 @@ views:
               top: 84%
               left: 58.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
           - type: state-icon
             entity: cover.blinds_kitchen
             state_color: false
@@ -4001,7 +4001,7 @@ views:
               top: 86.5%
               left: 41.25%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -4011,7 +4011,7 @@ views:
               top: 79%
               left: 39%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -4021,7 +4021,7 @@ views:
               top: 83%
               left: 47%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-coffee
                 ) )
           - type: state-icon
@@ -4033,7 +4033,7 @@ views:
               top: 66.25%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
           - type: state-icon
@@ -4045,7 +4045,7 @@ views:
               top: 76%
               left: 11%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
           - type: state-icon
             entity: light.ceiling_fan_bar
             state_color: false
@@ -4055,7 +4055,7 @@ views:
               top: 79%
               left: 16.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
             entity: fan.ceiling_bar
             state_color: false
@@ -4065,7 +4065,7 @@ views:
               top: 79%
               left: 20.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
           - type: state-icon
             entity: light.living_room_corner_lamp
             state_color: false
@@ -4075,7 +4075,7 @@ views:
               top: 42%
               left: 11%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--living-room-corner )
                 )
           - type: state-icon
@@ -4087,7 +4087,7 @@ views:
               top: 58%
               left: 12%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
           - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
@@ -4097,7 +4097,7 @@ views:
               top: 48%
               left: 36.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--dining-room-chandelier ) )
           - type: state-icon
@@ -4109,7 +4109,7 @@ views:
               top: 72.5%
               left: 68%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--guest-hallway-light )
                 )
           - type: state-icon
@@ -4121,7 +4121,7 @@ views:
               top: 44%
               left: 61%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--laundry-ceiling-light
                 ) )
           - type: state-icon
@@ -4133,7 +4133,7 @@ views:
               top: 40%
               left: 53.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--laundry-hallway-light
                 ) )
           - type: state-icon
@@ -4145,7 +4145,7 @@ views:
               top: 58%
               left: 45%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--foyer-hallway-ceiling
                 ) )
           - type: state-icon
@@ -4157,7 +4157,7 @@ views:
               top: 60%
               left: 53%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
           - type: state-icon
             entity: light.foyer_ceiling_ledge
             state_color: false
@@ -4167,7 +4167,7 @@ views:
               top: 56%
               left: 58%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--foyer-ceiling-ledge )
                 )
           - type: state-icon
@@ -4179,7 +4179,7 @@ views:
               top: 60%
               left: 68%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--foyer-entryway-ceiling ) )
           - type: state-icon
@@ -4191,7 +4191,7 @@ views:
               top: 60%
               left: 77.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--foyer-exterior-entryway ) )
           - type: state-icon
@@ -4203,7 +4203,7 @@ views:
               top: 13%
               left: 95%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -4213,7 +4213,7 @@ views:
               top: 49%
               left: 95%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_ceiling
             state_color: false
@@ -4223,7 +4223,7 @@ views:
               top: 25%
               left: 75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
           - type: state-icon
             entity: light.garage_door_light
             state_color: false
@@ -4233,7 +4233,7 @@ views:
               top: 25%
               left: 82%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
           - type: state-icon
             entity: fan.custom_garage_fan
             state_color: false
@@ -4243,7 +4243,7 @@ views:
               top: 35%
               left: 78.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
           - type: state-icon
             entity: light.closet_hallway_ceiling_light
             state_color: false
@@ -4253,7 +4253,7 @@ views:
               top: 25%
               left: 29%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
           - type: state-icon
             entity: light.closet_hallway_light_hers
             state_color: false
@@ -4263,7 +4263,7 @@ views:
               top: 15.5%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
           - type: state-icon
             entity: light.closet_hallway_light_his
             state_color: false
@@ -4273,7 +4273,7 @@ views:
               top: 32.5%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
           - type: state-icon
             entity: light.switch_1_bathroom_main_light
             state_color: false
@@ -4283,7 +4283,7 @@ views:
               top: 20%
               left: 42%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-ceiling
                 ) )
           - type: state-icon
@@ -4295,7 +4295,7 @@ views:
               top: 25%
               left: 47.75%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
                 ) )
           - type: state-icon
@@ -4307,7 +4307,7 @@ views:
               top: 50%
               left: 5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
           - type: state-icon
@@ -4319,7 +4319,7 @@ views:
               top: 42%
               left: 17%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
                 ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
@@ -4675,7 +4675,7 @@ views:
               top: 92%
               left: 69.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-cover--garage ) )
           - type: state-icon
             entity: lock.front_door
             state_color: false
@@ -4685,7 +4685,7 @@ views:
               top: 72.5%
               left: 39.75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
             entity: light.bedroom_1_group_occupancy_lights
             state_color: false
@@ -4695,7 +4695,7 @@ views:
               top: 16%
               left: 72%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_1
             state_color: false
@@ -4705,7 +4705,7 @@ views:
               top: 16%
               left: 80%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
           - type: state-icon
             entity: fan.custom_ceiling_bedroom_1
             state_color: false
@@ -4715,7 +4715,7 @@ views:
               top: 22%
               left: 72%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
             entity: cover.curtains_bedroom_1
             state_color: false
@@ -4725,7 +4725,7 @@ views:
               top: 22%
               left: 80%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
           - type: state-icon
             entity: light.bedroom_2_group_occupancy_lights
             state_color: false
@@ -4735,7 +4735,7 @@ views:
               top: 82%
               left: 17%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_2
             state_color: false
@@ -4745,7 +4745,7 @@ views:
               top: 82%
               left: 25.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
           - type: state-icon
             entity: fan.custom_ceiling_bedroom_2
             state_color: false
@@ -4755,7 +4755,7 @@ views:
               top: 87%
               left: 17%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_2
             state_color: false
@@ -4769,7 +4769,7 @@ views:
               top: 87%
               left: 25.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
           - type: state-icon
             entity: light.bedroom_3_floor_lamp
             state_color: false
@@ -4779,7 +4779,7 @@ views:
               top: 56%
               left: 72.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
           - type: state-icon
@@ -4791,7 +4791,7 @@ views:
               top: 56%
               left: 80.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
             entity: fan.custom_ceiling_bedroom_3
             state_color: false
@@ -4801,7 +4801,7 @@ views:
               top: 61%
               left: 76.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_group_occupancy_lights
             state_color: false
@@ -4811,7 +4811,7 @@ views:
               top: 55%
               left: 15%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
           - type: state-icon
             entity: light.ceiling_fan_bedroom_4
             state_color: false
@@ -4821,7 +4821,7 @@ views:
               top: 51.5%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_tie_fighter_lamp
             state_color: false
@@ -4831,7 +4831,7 @@ views:
               top: 55%
               left: 27%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
           - type: state-icon
@@ -4843,7 +4843,7 @@ views:
               top: 59.5%
               left: 17.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -4857,7 +4857,7 @@ views:
               top: 59.5%
               left: 24.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
           - type: state-icon
             entity: cover.blinds_kitchen
             state_color: false
@@ -4871,7 +4871,7 @@ views:
               top: 41%
               left: 14%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -4881,7 +4881,7 @@ views:
               top: 39%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--kitchen-ceiling ) )
           - type: state-icon
             entity: light.cabinet_upper_lights
             state_color: false
@@ -4891,7 +4891,7 @@ views:
               top: 46%
               left: 16.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-coffee
                 ) )
           - type: state-icon
@@ -4903,7 +4903,7 @@ views:
               top: 32%
               left: 32%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--kitchen-upper-range )
                 )
           - type: state-icon
@@ -4915,7 +4915,7 @@ views:
               top: 11.5%
               left: 24%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--christmas-tree ) )
           - type: state-icon
             entity: light.ceiling_fan_bar
             state_color: false
@@ -4925,7 +4925,7 @@ views:
               top: 17%
               left: 29%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
             entity: fan.ceiling_bar
             state_color: false
@@ -4935,7 +4935,7 @@ views:
               top: 17%
               left: 19%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
           - type: state-icon
             entity: light.living_room_corner_lamp
             state_color: false
@@ -4945,7 +4945,7 @@ views:
               top: 11.5%
               left: 59%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--living-room-corner )
                 )
           - type: state-icon
@@ -4957,7 +4957,7 @@ views:
               top: 11.5%
               left: 40%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--white-light--living-room-couch ) )
           - type: state-icon
             entity: light.dining_room_chandelier
             state_color: false
@@ -4967,7 +4967,7 @@ views:
               top: 36%
               left: 53%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--dining-room-chandelier ) )
           - type: state-icon
@@ -4979,7 +4979,7 @@ views:
               top: 69%
               left: 27.5%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--guest-hallway-light )
                 )
           - type: state-icon
@@ -4991,7 +4991,7 @@ views:
               top: 60.5%
               left: 56.26%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--laundry-ceiling-light
                 ) )
           - type: state-icon
@@ -5003,7 +5003,7 @@ views:
               top: 53.5%
               left: 51%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--laundry-hallway-light
                 ) )
           - type: state-icon
@@ -5015,7 +5015,7 @@ views:
               top: 46%
               left: 42%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--foyer-hallway-ceiling
                 ) )
           - type: state-icon
@@ -5027,7 +5027,7 @@ views:
               top: 60%
               left: 45%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--foyer-ceiling-ledge )
                 )
           - type: state-icon
@@ -5039,7 +5039,7 @@ views:
               top: 53%
               left: 39%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--foyer-under-table ) )
           - type: state-icon
             entity: light.foyer_entryway_ceiling
             state_color: false
@@ -5049,7 +5049,7 @@ views:
               top: 67%
               left: 39.75%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--foyer-entryway-ceiling ) )
           - type: state-icon
@@ -5061,7 +5061,7 @@ views:
               top: 78%
               left: 39.75%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--foyer-exterior-entryway ) )
           - type: state-icon
@@ -5073,7 +5073,7 @@ views:
               top: 95%
               left: 87.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_exterior
             state_color: false
@@ -5083,7 +5083,7 @@ views:
               top: 95%
               left: 52%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-exterior ) )
           - type: state-icon
             entity: light.garage_ceiling
             state_color: false
@@ -5093,7 +5093,7 @@ views:
               top: 77%
               left: 63%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-ceiling ) )
           - type: state-icon
             entity: light.garage_door_light
             state_color: false
@@ -5103,7 +5103,7 @@ views:
               top: 77%
               left: 74%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--garage-door-light ) )
           - type: state-icon
             entity: fan.custom_garage_fan
             state_color: false
@@ -5113,7 +5113,7 @@ views:
               top: 82%
               left: 69%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--garage ) )
           - type: state-icon
             entity: light.closet_hallway_ceiling_light
             state_color: false
@@ -5123,7 +5123,7 @@ views:
               top: 31%
               left: 75%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hallway ) )
           - type: state-icon
             entity: light.closet_hallway_light_hers
             state_color: false
@@ -5133,7 +5133,7 @@ views:
               top: 34%
               left: 86%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-hers ) )
           - type: state-icon
             entity: light.closet_hallway_light_his
             state_color: false
@@ -5143,7 +5143,7 @@ views:
               top: 34%
               left: 66%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--closet-his ) )
           - type: state-icon
             entity: light.switch_1_bathroom_main_light
             state_color: false
@@ -5153,7 +5153,7 @@ views:
               top: 42%
               left: 79%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-ceiling
                 ) )
           - type: state-icon
@@ -5165,7 +5165,7 @@ views:
               top: 47%
               left: 75%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
                 ) )
           - type: state-icon
@@ -5177,7 +5177,7 @@ views:
               top: 6%
               left: 46%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
           - type: state-icon
@@ -5189,7 +5189,7 @@ views:
               top: 17%
               left: 59%
               border-radius: 100%
-              '--paper-item-icon-color': >-
+              '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player--sony-bravia-tv
                 ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
@@ -5287,7 +5287,7 @@ views:
               top: 30%
               left: 18%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_2
             state_color: false
@@ -5297,7 +5297,7 @@ views:
               top: 83%
               left: 84.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_3
             state_color: false
@@ -5307,7 +5307,7 @@ views:
               top: 27%
               left: 55%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_4
             state_color: false
@@ -5317,7 +5317,7 @@ views:
               top: 82.5%
               left: 53%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.door_front_primary
             state_color: false
@@ -5327,7 +5327,7 @@ views:
               top: 58%
               left: 73%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
           - type: state-icon
             entity: binary_sensor.door_front_secondary
             state_color: false
@@ -5337,7 +5337,7 @@ views:
               top: 63%
               left: 73%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
           - type: state-icon
             entity: binary_sensor.door_living
             state_color: false
@@ -5347,7 +5347,7 @@ views:
               top: 50%
               left: 5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
           - type: state-icon
             entity: binary_sensor.door_laundry
             state_color: false
@@ -5357,7 +5357,7 @@ views:
               top: 44%
               left: 58%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
           - type: state-icon
             entity: binary_sensor.door_garage_interior
             state_color: false
@@ -5367,7 +5367,7 @@ views:
               top: 35%
               left: 76%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
           - type: state-icon
             entity: binary_sensor.door_closet_hallway_hers
             state_color: false
@@ -5377,7 +5377,7 @@ views:
               top: 16%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
           - type: state-icon
             entity: binary_sensor.door_closet_hallway_his
             state_color: false
@@ -5387,7 +5387,7 @@ views:
               top: 33%
               left: 34%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
           - type: state-label
             entity: sensor.temperature_attic_humidity
             state_color: false
@@ -5531,7 +5531,7 @@ views:
               top: 27%
               left: 62%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
             entity: binary_sensor.bedroom_4_group_all_occupancy
             state_color: false
@@ -5541,7 +5541,7 @@ views:
               top: 82.5%
               left: 60%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.presence_living_room
             state_color: false
@@ -5551,7 +5551,7 @@ views:
               top: 57%
               left: 18.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
           - type: state-icon
             entity: binary_sensor.presence_garage
             tap_action:
@@ -5561,7 +5561,7 @@ views:
               top: 35%
               left: 83%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
           - type: state-icon
             entity: binary_sensor.motion_laundry_room
             tap_action:
@@ -5571,7 +5571,7 @@ views:
               top: 44%
               left: 64%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
           - type: state-icon
             entity: sensor.laundry_washer_machine_state
             tap_action:
@@ -5581,7 +5581,7 @@ views:
               top: 49%
               left: 64%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
           - type: state-icon
             entity: sensor.laundry_dryer_machine_state
             tap_action:
@@ -5591,7 +5591,7 @@ views:
               top: 49%
               left: 61%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
           - type: state-icon
             entity: sensor.custom_dishwasher_state
             tap_action:
@@ -5601,7 +5601,7 @@ views:
               top: 79.75%
               left: 30.25%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
         visibility:
           - condition: screen
@@ -5681,7 +5681,7 @@ views:
               top: 21%
               left: 76.5%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-1 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_2
             state_color: false
@@ -5691,7 +5691,7 @@ views:
               top: 86%
               left: 21%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-2 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_3
             state_color: false
@@ -5701,7 +5701,7 @@ views:
               top: 60%
               left: 73%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-3 ) )
           - type: state-icon
             entity: binary_sensor.door_bedroom_4
             state_color: false
@@ -5711,7 +5711,7 @@ views:
               top: 58%
               left: 17%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.door_front_primary
             state_color: false
@@ -5721,7 +5721,7 @@ views:
               top: 72.5%
               left: 42%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-primary ) )
           - type: state-icon
             entity: binary_sensor.door_front_secondary
             state_color: false
@@ -5731,7 +5731,7 @@ views:
               top: 72.5%
               left: 37%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
           - type: state-icon
             entity: binary_sensor.door_living
             state_color: false
@@ -5741,7 +5741,7 @@ views:
               top: 6%
               left: 49%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
           - type: state-icon
             entity: binary_sensor.door_laundry
             state_color: false
@@ -5751,7 +5751,7 @@ views:
               top: 58%
               left: 56%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-laundry ) )
           - type: state-icon
             entity: binary_sensor.door_garage_interior
             state_color: false
@@ -5761,7 +5761,7 @@ views:
               top: 78%
               left: 65%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
           - type: state-icon
             entity: binary_sensor.door_closet_hallway_hers
             state_color: false
@@ -5771,7 +5771,7 @@ views:
               top: 34%
               left: 84%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
           - type: state-icon
             entity: binary_sensor.door_closet_hallway_his
             state_color: false
@@ -5781,7 +5781,7 @@ views:
               top: 34%
               left: 67%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
           - type: state-label
             entity: sensor.temperature_attic_humidity
             state_color: false
@@ -5926,7 +5926,7 @@ views:
               top: 60%
               left: 80%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-3 ) )
           - type: state-icon
             entity: binary_sensor.bedroom_4_group_all_occupancy
             state_color: false
@@ -5936,7 +5936,7 @@ views:
               top: 58%
               left: 24%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-occupancy-bedroom-4 ) )
           - type: state-icon
             entity: binary_sensor.presence_living_room
             state_color: false
@@ -5946,7 +5946,7 @@ views:
               top: 21%
               left: 49%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-presence-living ) )
           - type: state-icon
             entity: binary_sensor.presence_garage
             state_color: false
@@ -5956,7 +5956,7 @@ views:
               top: 78%
               left: 72%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-presence-garage ) )
           - type: state-icon
             entity: binary_sensor.motion_laundry_room
             state_color: false
@@ -5966,7 +5966,7 @@ views:
               top: 63%
               left: 56%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-motion-laundry-room ) )
           - type: state-icon
             entity: sensor.laundry_washer_machine_state
             tap_action:
@@ -5976,7 +5976,7 @@ views:
               top: 64.5%
               left: 45%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-washer-machine ) )
           - type: state-icon
             entity: sensor.laundry_dryer_machine_state
             tap_action:
@@ -5986,7 +5986,7 @@ views:
               top: 60.5%
               left: 45%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
           - type: state-icon
             entity: sensor.custom_dishwasher_state
             tap_action:
@@ -5996,7 +5996,7 @@ views:
               top: 26%
               left: 20%
               border-radius: 100%
-              '--paper-item-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
         visibility:
           - condition: screen
