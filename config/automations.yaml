@@ -879,6 +879,16 @@
           - switch.camera_int_bdr3_privacy_mode
           - switch.camera_int_bdr4_privacy_mode
         data: {}
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.enable_interior_camera_recording
       alias: Recording DISABLE
   mode: single
 - id: '1726537916764'
