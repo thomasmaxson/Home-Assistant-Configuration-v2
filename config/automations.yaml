@@ -5757,8 +5757,8 @@
         - action: persistent_notification.create
           metadata: {}
           data:
-            message: The firearm safe was opened at {{ now().strftime( '%I:%M %p'
-              ) }} on {{ now().strftime( '%d/%m/%Y' ) }}!
+            message: The gun safe was opened at {{ now().strftime( '%I:%M %p' ) }}
+              on {{ now().strftime( '%m/%d/%Y' ) }}!
             title: Danger
         - action: script.update_inovelli_light_switch_led_s
           metadata: {}
