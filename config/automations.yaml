@@ -5732,16 +5732,16 @@
     trigger: state
     from: 'off'
     id: Open Delayed
-  conditions:
-  - condition: state
-    entity_id: input_boolean.notification_household_safe_activiy
-    state: 'on'
+  conditions: []
   actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - Open Immediately
+      - condition: state
+        entity_id: input_boolean.notification_household_safe_activiy
+        state: 'on'
       sequence:
       - parallel:
         - action: script.push_notification_to_ios_devices
@@ -5749,7 +5749,7 @@
           data:
             send_to:
             - thomas
-            subtitle: Danger
+            subtitle: Safe Activity
             interruption_level: critical
             notification_type: type_critical
             message: The firearm safe is open!
@@ -5757,8 +5757,8 @@
         - action: persistent_notification.create
           metadata: {}
           data:
-            message: The gun safe was opened at {{ now().strftime( '%I:%M %p' ) }}
-              on {{ now().strftime( '%m/%d/%Y' ) }}!
+            message: The firearm safe was opened at {{ now().strftime( '%I:%M %p'
+              ) }} on {{ now().strftime( '%m/%d/%Y' ) }}.
             title: Danger
         - action: script.update_inovelli_light_switch_led_s
           metadata: {}
@@ -5776,23 +5776,10 @@
     - conditions:
       - condition: trigger
         id:
-        - Closed Immediately
-      sequence:
-      - action: script.update_inovelli_light_switch_led_s
-        metadata: {}
-        data:
-          led: All
-          effect: 'Off'
-          duration: Forever
-          entity_ids:
-          - light.ceiling_fan_switch_bedroom_1
-          - light.ceiling_fan_switch_bedroom_2
-          - light.ceiling_fan_switch_bedroom_3
-          - light.ceiling_fan_switch_bedroom_4
-    - conditions:
-      - condition: trigger
-        id:
         - Open Delayed
+      - condition: state
+        entity_id: input_boolean.notification_household_safe_activiy
+        state: 'on'
       sequence:
       - parallel:
         - action: script.amazon_echo_announcement
@@ -5823,6 +5810,22 @@
             message: The firearm safe has been open for 5 minutes.
             title: Danger
             notification_id: id_automation_firearm_safe_open_delayed
+    - conditions:
+      - condition: trigger
+        id:
+        - Closed Immediately
+      sequence:
+      - action: script.update_inovelli_light_switch_led_s
+        metadata: {}
+        data:
+          led: All
+          effect: 'Off'
+          duration: Forever
+          entity_ids:
+          - light.ceiling_fan_switch_bedroom_1
+          - light.ceiling_fan_switch_bedroom_2
+          - light.ceiling_fan_switch_bedroom_3
+          - light.ceiling_fan_switch_bedroom_4
   mode: queued
   max: 10
 - id: '1740885336563'
