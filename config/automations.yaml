@@ -47,11 +47,10 @@
   alias: 3) Run at Bedtime
   description: ''
   triggers:
-  - trigger: sun
-    event: sunset
-    offset: 04:00:00
-  - trigger: time
-    at: '22:15:00'
+  - trigger: state
+    entity_id:
+    - sensor.bedtime_automations_status
+    to: Now
   - trigger: time
     at: 00:00:00
   - trigger: time
@@ -98,15 +97,27 @@
         - light.living_room_couch_lamp
         - light.foyer_ceiling_ledge
         - light.cabinet_upper_lights
+  - if:
+    - condition: state
+      entity_id: input_boolean.guests_home
+      state: 'on'
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.front_yard_garden_lights
+    alias: If Guests are Home, Turn off Front Garden Lights
   mode: queued
   max: 10
 - id: '1726488231167'
   alias: 2) Run at Sunset
   description: ''
   triggers:
-  - trigger: sun
-    event: sunset
-    offset: -00:30:00
+  - trigger: state
+    entity_id:
+    - sensor.sunset_automations_status
+    to: Now
   - trigger: state
     entity_id:
     - input_button.trigger_sunset_automations_run
@@ -125,12 +136,9 @@
     metadata: {}
     data: {}
     target:
-      entity_id:
-      - cover.blinds_kitchen
-      - cover.blinds_bedroom_2
-    data:
-      tilt_position: 100
-  - alias: Fade IN Exterior
+      entity_id: light.front_yard_garden_lights
+    alias: Front Garden Lights Turn ON
+  - alias: Exterior Garage Lights Fade ON
     action: light.turn_on
     metadata: {}
     data:
@@ -1288,9 +1296,10 @@
   alias: 1) Run at Sunrise
   description: ''
   triggers:
-  - event: sunrise
-    trigger: sun
-    offset: -00:15:00
+  - trigger: state
+    entity_id:
+    - sensor.sunrise_automations_status
+    to: Now
   - entity_id:
     - input_button.trigger_sunrise_automations_run
     trigger: state
@@ -1311,6 +1320,7 @@
         - light.foyer_ceiling_ledge
         - light.foyer_under_table
         - light.cabinet_upper_lights
+        - light.front_yard_garden_lights
     - alias: If Residents are HOME or Guests are HOME
       if:
       - condition: state
