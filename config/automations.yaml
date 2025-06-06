@@ -121,8 +121,9 @@
       - input_boolean.sunset_automations_active
     data: {}
     alias: Flag ACTIVATE
-  - alias: Blinds CLOSE
-    action: cover.set_cover_tilt_position
+  - action: light.turn_on
+    metadata: {}
+    data: {}
     target:
       entity_id:
       - cover.blinds_kitchen
@@ -138,6 +139,14 @@
     target:
       entity_id:
       - light.garage_exterior
+  - alias: Blinds CLOSE
+    action: cover.set_cover_tilt_position
+    target:
+      entity_id:
+      - cover.blinds_kitchen
+      - cover.blinds_bedroom_2
+    data:
+      tilt_position: 100
   - alias: If Residents OR Gouda is HOME OR Guests are VISITING
     if:
     - condition: or
@@ -1304,14 +1313,10 @@
         - light.cabinet_upper_lights
     - alias: If Residents are HOME or Guests are HOME
       if:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: group.residents
-          state: home
-        - condition: state
-          entity_id: input_boolean.guests_home
-          state: 'on'
+      - condition: state
+        entity_id: sensor.any_resident_home
+        state: Home
+        alias: If Any Residents are Home
       then:
       - alias: OPEN Kitchen Blinds
         action: cover.open_cover_tilt
@@ -1339,15 +1344,17 @@
       if:
       - condition: and
         conditions:
-        - condition: and
+        - alias: If Residents are HOME and Guests are NOT HOME
+          condition: and
           conditions:
           - condition: state
             entity_id: group.residents
             state: home
+            alias: If Residents are Home
           - condition: state
             entity_id: input_boolean.guests_home
             state: 'off'
-          alias: If Residents are HOME or Guests are NOT HOME
+            alias: If Guests are Not Home
         - condition: state
           entity_id: input_boolean.bedroom_2_automation_allow_occupancy
           state: 'on'
@@ -4293,6 +4300,7 @@
           tilt_position: 100
         target:
           entity_id: cover.blinds_bedroom_2
+      duration_hold: 2000
 - id: '1737061982300'
   alias: Bedroom 1, Light - Ceiling Fan
   description: Control the ceiling fan light in the main bedroom via a Lutron paddle
@@ -4345,6 +4353,7 @@
           tilt_position: 100
         target:
           entity_id: cover.blinds_bedroom_4
+      duration_hold: 2000
 - id: '1737121078064'
   alias: Bedroom 1, Light - Primary
   description: Control primary lights in the main bedroom via a Lutron paddle remote.
@@ -4376,6 +4385,7 @@
         data: {}
         target:
           entity_id: cover.curtains_large_window_bedroom_1
+      duration_hold: 2000
 - id: '1737126794238'
   alias: Living Room, Light - Primary
   description: Control the primary lights in the living room via the Lutron 3BRL light
