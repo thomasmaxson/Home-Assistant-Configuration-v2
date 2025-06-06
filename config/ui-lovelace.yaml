@@ -4305,6 +4305,18 @@ views:
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
                 ) )
           - type: state-icon
+            entity: light.front_yard_garden_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 79%
+              left: 96%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--front-yard-garden-lights ) )
+          - type: state-icon
             entity: light.backyard_string_lights
             state_color: false
             tap_action:
@@ -4493,6 +4505,9 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.front_yard_garden_lights' %}
+              --maxson-floorplan--color-light--front-yard-garden-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
             }
         visibility:
           - condition: screen
@@ -4670,6 +4685,9 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.front_yard_garden_lights' %}
+              --maxson-floorplan--color-light--front-yard-garden-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -5174,6 +5192,18 @@ views:
               '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bathroom-main-vanity
                 ) )
+          - type: state-icon
+            entity: light.front_yard_garden_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 95%
+              left: 21%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--front-yard-garden-lights ) )
           - type: state-icon
             entity: light.backyard_string_lights
             state_color: false
@@ -7510,6 +7540,10 @@ views:
               - type: custom:mushroom-light-card
                 entity: light.backyard_string_lights
                 name: Backyard String Lights
+                collapsible_controls: true
+              - type: custom:mushroom-light-card
+                entity: light.front_yard_garden_lights
+                name: Front Yard Garden Lights
                 collapsible_controls: true
             card_mod:
               style: |
