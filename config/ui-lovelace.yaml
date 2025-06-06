@@ -649,7 +649,7 @@ views:
                       - type: custom:button-card
                         template: appliance_card
                         name: Dishwasher
-                        entity: sensor.custom_dishwasher_state
+                        entity: sensor.status_dishwasher_custom
                         state_display: |
                           [[[
                             let state = states['input_select.status_dishwasher'].state;
@@ -2444,8 +2444,8 @@ views:
         trigger_update:
           - light.laundry_room_group_lights_all
           - binary_sensor.door_laundry
-          - sensor.custom_laundry_washer_machine_state
-          - sensor.custom_laundry_dryer_machine_state
+          - sensor.status_laundry_washer_machine_custom
+          - sensor.status_laundry_dryer_machine_custom
           - input_boolean.reminder_laundry_complete_washer
           - input_boolean.reminder_laundry_complete_dryer
         variables:
@@ -2471,11 +2471,11 @@ views:
             [[[
               let badgeIcon = '';
 
-              if( states['sensor.custom_laundry_washer_machine_state'].state == 'on' )
+              if( states['sensor.status_laundry_washer_machine_custom'].state == 'on' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:washing-machine"></ha-icon>';
 
-              } else if( states['sensor.custom_laundry_dryer_machine_state'].state == 'on' )
+              } else if( states['sensor.status_laundry_dryer_machine_custom'].state == 'on' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
 
@@ -2562,9 +2562,9 @@ views:
                       - type: custom:button-card
                         template: laundry_card
                         name: Washing Machine
-                        entity: sensor.custom_laundry_washer_machine_state
+                        entity: sensor.status_laundry_washer_machine_custom
                         trigger_update:
-                          - sensor.custom_laundry_washer_machine_state
+                          - sensor.status_laundry_washer_machine_custom
                           - sensor.laundry_washer_combined_details
                         tap_action:
                           action: navigate
@@ -2580,9 +2580,9 @@ views:
                       - type: custom:button-card
                         template: laundry_card
                         name: Tumble Dryer
-                        entity: sensor.custom_laundry_dryer_machine_state
+                        entity: sensor.status_laundry_dryer_machine_custom
                         trigger_update:
-                          - sensor.custom_laundry_dryer_machine_state
+                          - sensor.status_laundry_dryer_machine_custom
                           - sensor.laundry_dryer_combined_details
                         tap_action:
                           action: navigate
@@ -3563,6 +3563,7 @@ views:
               - type: vertical-stack
                 cards:
                   - type: entities
+                    title: Schedule
                     show_header_toggle: false
                     card_mod:
                       style: |
@@ -3570,6 +3571,8 @@ views:
                           margin: var( --popup--card-stacks );
                         }
                     entities:
+                      - type: section
+                        label: Household
                       - type: conditional
                         conditions:
                           - entity: schedule.waste_take_out_solid
@@ -3615,27 +3618,11 @@ views:
                           entity: sensor.days_until_cleaning_day
                           name: House Cleaning
                       - type: section
-                        label: Automations Run At
-                      - entity: sensor.sunrise_automations_status
-                        name: Sunrise
-                      - entity: sensor.sunset_automations_status
-                        name: Sunset
-                    title: Household Schedule
-                  - type: entities
-                    show_header_toggle: false
-                    entities:
+                        label: Daily
                       - entity: sensor.time_next_sunrise
                         name: Next Sunrise
                       - entity: sensor.time_next_sunset
                         name: Next Sunset
-                    title: Daily Events
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          margin: var( --popup--card-stacks );
-                        }
-              - type: vertical-stack
-                cards:
                   - type: entities
                     title: Household Alerts
                     show_header_toggle: false
@@ -3647,8 +3634,10 @@ views:
                     entities:
                       - entity: input_boolean.notification_household_safe_activiy
                         name: Safe Activity
+              - type: vertical-stack
+                cards:
                   - type: entities
-                    title: Door Triggered Automations
+                    title: Automations
                     show_header_toggle: false
                     card_mod:
                       style: >
@@ -3657,31 +3646,41 @@ views:
                         }
 
 
-                        #states > div:nth-child( 5 ) { padding-left: 45px
+                        #states > div:nth-child( 10 ) { padding-left: 45px
                         !important;}          
                     entities:
+                      - type: section
+                        label: Run Daily at
+                      - entity: sensor.status_automations_sunrise
+                        name: Sunrise
+                      - entity: sensor.status_automations_sunset
+                        name: Sunset
+                      - entity: sensor.status_automations_bedtime
+                        name: Bedtime
+                      - type: section
+                        label: Triggered By
                       - entity: input_boolean.foyer_automation_door_night_lights
-                        name: Main Entry (Primary and Secondary)
+                        name: Main Entry Doors
                       - entity: input_boolean.garage_automation_allow_occupancy
-                        name: Garage (Interior)
+                        name: Garage (Interior) Door
                       - entity: input_boolean.living_room_automation_door_night_lights
                         name: Sliding Glass Door
                       - entity: input_boolean.bedroom_1_automation_allow_occupancy
-                        name: Main Bedroom
+                        name: Main Bedroom Door
                       - entity: input_boolean.bedroom_1_closet_automation_allow_doors
                         name: Auto-Shutoff Closet Lights
                       - entity: input_boolean.bedroom_2_automation_allow_occupancy
-                        name: Guest Bedroom
+                        name: Guest Bedroom Door
                       - entity: input_boolean.bedroom_3_automation_allow_occupancy
-                        name: Jess' Office
+                        name: Jess' Office Door
                       - entity: input_boolean.bedroom_4_automation_allow_occupancy
-                        name: Tom's Office
+                        name: Tom's Office Door
                       - entity: input_boolean.laundry_room_automation_allow_occupancy
-                        name: Laundry Room
+                        name: Laundry Room Door
               - type: vertical-stack
                 cards:
                   - type: entities
-                    title: Send Notifications To
+                    title: Send To
                     show_header_toggle: false
                     card_mod:
                       style: |
@@ -3689,11 +3688,27 @@ views:
                           margin: var( --popup--card-stacks );
                         }
 
-                        #states > div:nth-child(2), 
+                        #states > div:nth-child(3), 
 
-                        #states > div:nth-child(3) { padding-left: 45px
+                        #states > div:nth-child(4), 
+
+                        #states > div:nth-child(7), 
+
+                        #states > div:nth-child(8), 
+
+                        #states > div:nth-child(9), 
+
+                        #states > div:nth-child(10), 
+
+                        #states > div:nth-child(11), 
+
+                        #states > div:nth-child(12), 
+
+                        #states > div:nth-child(13) { padding-left: 45px
                         !important;}
                     entities:
+                      - type: section
+                        label: Mobile Devices
                       - entity: input_boolean.app_notify
                         name: Mobile Devices
                       - type: conditional
@@ -3710,30 +3725,8 @@ views:
                         row:
                           entity: input_boolean.app_notify_jess
                           name: Jess' iPhone
-                  - type: entities
-                    title: Send Announcements To
-                    show_header_toggle: false
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          margin: var( --popup--card-stacks );
-                        }
-
-                        #states > div:nth-child(2), 
-
-                        #states > div:nth-child(3), 
-
-                        #states > div:nth-child(4), 
-
-                        #states > div:nth-child(5),
-
-                        #states > div:nth-child(6),
-
-                        #states > div:nth-child(7),
-
-                        #states > div:nth-child(8) { padding-left: 45px
-                        !important;}
-                    entities:
+                      - type: section
+                        label: Amazon Alexa Devices
                       - entity: input_boolean.household_notify
                         name: Amazon Alexa Devices
                       - type: conditional
@@ -5309,13 +5302,13 @@ views:
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
               --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_dishwasher_state' %}
+              {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_laundry_washer_machine_state' %}
+              {% set the_entity = 'sensor.status_laundry_washer_machine_custom' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_laundry_dryer_machine_state' %}
+              {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
             }
         elements:
@@ -5634,7 +5627,7 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
           - type: state-icon
-            entity: sensor.custom_dishwasher_state
+            entity: sensor.status_dishwasher_custom
             tap_action:
               action: more-info
             state_color: false
@@ -5703,13 +5696,13 @@ views:
               {% set the_entity = 'binary_sensor.motion_laundry_room' %}
               --maxson-floorplan--color-motion-laundry-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_dishwasher_state' %}
+              {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_laundry_washer_machine_state' %}
+              {% set the_entity = 'sensor.status_laundry_washer_machine_custom' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
 
-              {% set the_entity = 'sensor.custom_laundry_dryer_machine_state' %}
+              {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
             }
         elements:
@@ -6029,7 +6022,7 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dryer-machine ) )
           - type: state-icon
-            entity: sensor.custom_dishwasher_state
+            entity: sensor.status_dishwasher_custom
             tap_action:
               action: more-info
             state_color: false
@@ -6720,10 +6713,10 @@ views:
           - type: custom:button-card
             template: laundry_card
             name: Washing Machine
-            entity: sensor.custom_laundry_washer_machine_state
+            entity: sensor.status_laundry_washer_machine_custom
             trigger_update:
               - sensor.laundry_washer_combined_details
-              - sensor.custom_laundry_washer_machine_state
+              - sensor.status_laundry_washer_machine_custom
               - input_boolean.reminder_laundry_complete_washer
             variables:
               details: sensor.laundry_washer_combined_details
@@ -6758,10 +6751,10 @@ views:
           - type: custom:button-card
             template: laundry_card
             name: Tumble Dryer
-            entity: sensor.custom_laundry_dryer_machine_state
+            entity: sensor.status_laundry_dryer_machine_custom
             trigger_update:
               - sensor.laundry_dryer_combined_details
-              - sensor.custom_laundry_dryer_machine_state
+              - sensor.status_laundry_dryer_machine_custom
               - input_boolean.reminder_laundry_complete_dryer
             variables:
               details: sensor.laundry_dryer_combined_details
@@ -8644,7 +8637,7 @@ views:
                               - entity: input_boolean.sunrise_automations_run
                                 state: 'on'
                             row:
-                              entity: sensor.sunrise_automations_status
+                              entity: sensor.status_automations_sunrise
                               name: Runs at
                           - type: conditional
                             conditions:
@@ -8696,7 +8689,7 @@ views:
                               - entity: input_boolean.sunset_automations_run
                                 state: 'on'
                             row:
-                              entity: sensor.sunset_automations_status
+                              entity: sensor.status_automations_sunset
                               name: Runs at
                           - type: conditional
                             conditions:
@@ -8730,6 +8723,13 @@ views:
                             row:
                               entity: input_button.trigger_bedtime_automations_run
                               name: Trigger
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.bedtime_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_number.bedtime_automations_offset
+                              name: Offset
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
