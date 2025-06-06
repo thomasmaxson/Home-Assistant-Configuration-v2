@@ -20,62 +20,63 @@ template:
         state: >-
           {{ iif( ( now().isocalendar().week % 2 == 1 ), 'on', 'off' ) }}
 
-  - trigger:
-      # Update on Home Assistant startup
-      - trigger: homeassistant
-        event: start
-      # Update on Template reload
-      - trigger: event
-        event_type: event_template_reloaded
-      # Update every minute
-      - trigger: time_pattern
-        hours: "00"
-        minutes: "/01"
-        seconds: "00"
-    sensor:
-      - name: "Sunrise Automations Status"
-        icon: >-
-          {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_rising' ) | as_datetime | as_local ) %}
-          {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
+  # - trigger:
+  #     # Update on Home Assistant startup
+  #     - trigger: homeassistant
+  #       event: start
+  #     # Update on Template reload
+  #     - trigger: event
+  #       event_type: event_template_reloaded
+  #     # Update every minute
+  #     - trigger: time_pattern
+  #       hours: "00"
+  #       minutes: "/01"
+  #       seconds: "00"
+  #   sensor:
+  #     - name: "Sunrise Automations Status"
+  #       icon: >-
+  #         {%- set offset = 30 | int( 0 ) %}
+  #         {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_rising' ) | as_datetime | as_local ) %}
+  #         {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
 
-          {%- if( time_now > time_sunset ) %}
-            mdi:clock-check-outline
-          {%- else %}
-            mdi:clock-outline
-          {%- endif %}
-        state: >-
-          {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_rising' ) | as_datetime | as_local ) %}
-          {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
+  #         {%- if( time_now > time_sunset ) %}
+  #           mdi:clock-check-outline
+  #         {%- else %}
+  #           mdi:clock-outline
+  #         {%- endif %}
+  #       state: >-
+  #         {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_rising' ) | as_datetime | as_local ) %}
+  #         {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
 
-          {%- if( time_now > time_sunset ) %}
-            Complete
-          {%- else %}
-            {{ time_sunset | timestamp_custom( '%I:%M %p' ) }}
-          {%- endif %}
+  #         {%- if( time_now > time_sunset ) %}
+  #           Complete
+  #         {%- else %}
+  #           {{ time_sunset | timestamp_custom( '%I:%M %p' ) }}
+  #         {%- endif %}
 
-      - name: "Sunset Automations Status"
-        icon: >-
-          {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_setting' ) | as_datetime | as_local - timedelta( minutes = 30 ) ) %}
-          {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
+  #     - name: "Sunset Automations Status"
+  #       icon: >-
+  #         {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_setting' ) | as_datetime | as_local - timedelta( minutes = 30 ) ) %}
+  #         {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
 
-          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
-            Active
-          {%- elif( time_now > time_sunset ) %}
-            mdi:clock-check-outline
-          {%- else %}
-            mdi:clock-outline
-          {%- endif %}
-        state: >-
-          {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_setting' ) | as_datetime | as_local - timedelta( minutes = 30 ) ) %}
-          {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
+  #         {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+  #           Active
+  #         {%- elif( time_now > time_sunset ) %}
+  #           mdi:clock-check-outline
+  #         {%- else %}
+  #           mdi:clock-outline
+  #         {%- endif %}
+  #       state: >-
+  #         {%- set time_sunset = as_timestamp( state_attr( 'sun.sun', 'next_setting' ) | as_datetime | as_local - timedelta( minutes = 30 ) ) %}
+  #         {%- set time_now = as_timestamp( now() | as_datetime | as_local ) %}
 
-          {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
-            Active
-          {%- elif( time_now > time_sunset ) %}
-            Complete
-          {%- else %}
-            {{ time_sunset | timestamp_custom( '%I:%M %p' ) }}
-          {%- endif %}
+  #         {%- if( is_state( 'input_boolean.sunset_automations_active', 'on' ) ) %}
+  #           Active
+  #         {%- elif( time_now > time_sunset ) %}
+  #           Complete
+  #         {%- else %}
+  #           {{ time_sunset | timestamp_custom( '%I:%M %p' ) }}
+  #         {%- endif %}
 
   - trigger:
       # Update on Home Assistant startup
