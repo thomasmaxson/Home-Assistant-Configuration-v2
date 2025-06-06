@@ -2885,6 +2885,11 @@ views:
                         entity: light.garage_exterior
                         collapsible_controls: true
                         show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        name: Garden Lights
+                        entity: light.front_yard_garden_lights
+                        collapsible_controls: false
+                        show_brightness_control: false
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
