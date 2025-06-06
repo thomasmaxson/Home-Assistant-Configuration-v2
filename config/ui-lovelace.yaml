@@ -3632,6 +3632,17 @@ views:
               - type: vertical-stack
                 cards:
                   - type: entities
+                    title: Household Alerts
+                    show_header_toggle: false
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          margin: var( --popup--card-stacks );
+                        }
+                    entities:
+                      - entity: input_boolean.notification_household_safe_activiy
+                        name: Safe Activity
+                  - type: entities
                     title: Door Triggered Automations
                     show_header_toggle: false
                     card_mod:
@@ -3662,17 +3673,6 @@ views:
                         name: Tom's Office
                       - entity: input_boolean.laundry_room_automation_allow_occupancy
                         name: Laundry Room
-                  - type: entities
-                    title: Household Alerts
-                    show_header_toggle: false
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          margin: var( --popup--card-stacks );
-                        }
-                    entities:
-                      - entity: input_boolean.notification_household_safe_activiy
-                        name: Safe Activity
               - type: vertical-stack
                 cards:
                   - type: entities
