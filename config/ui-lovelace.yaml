@@ -3559,19 +3559,6 @@ views:
                 cards:
                   - type: entities
                     show_header_toggle: false
-                    entities:
-                      - entity: sensor.time_next_sunrise
-                        name: Next Sunrise
-                      - entity: sensor.time_next_sunset
-                        name: Next Sunset
-                    title: Daily Schedule
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          margin: var( --popup--card-stacks );
-                        }
-                  - type: entities
-                    show_header_toggle: false
                     card_mod:
                       style: |
                         ha-card.type-entities { 
@@ -3622,7 +3609,26 @@ views:
                         row:
                           entity: sensor.days_until_cleaning_day
                           name: House Cleaning
+                      - type: section
+                        label: Automations Run At
+                      - entity: sensor.sunrise_automations_status
+                        name: Sunrise
+                      - entity: sensor.sunset_automations_status
+                        name: Sunset
                     title: Household Schedule
+                  - type: entities
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.time_next_sunrise
+                        name: Next Sunrise
+                      - entity: sensor.time_next_sunset
+                        name: Next Sunset
+                    title: Daily Events
+                    card_mod:
+                      style: |
+                        ha-card.type-entities { 
+                          margin: var( --popup--card-stacks );
+                        }
               - type: vertical-stack
                 cards:
                   - type: entities
@@ -8583,10 +8589,24 @@ views:
                     template: room_popup__entities
                     variables:
                       - entities:
-                          - entity: sensor.sunrise_automations_status
-                            name: Run at
+                          - entity: sensor.time_next_sunrise
+                            name: Next Sunrise
                           - entity: input_boolean.sunrise_automations_run
                             name: Enable
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunrise_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_number.sunrise_automations_offset
+                              name: Offset
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunrise_automations_run
+                                state: 'on'
+                            row:
+                              entity: sensor.sunrise_automations_status
+                              name: Runs at
                           - type: conditional
                             conditions:
                               - entity: input_boolean.sunrise_automations_run
@@ -8621,8 +8641,8 @@ views:
                     template: room_popup__entities
                     variables:
                       - entities:
-                          - entity: sensor.sunset_automations_status
-                            name: Run at
+                          - entity: sensor.time_next_sunset
+                            name: Next Sunset
                           - entity: input_boolean.sunset_automations_run
                             name: Enable
                           - type: conditional
@@ -8630,10 +8650,29 @@ views:
                               - entity: input_boolean.sunset_automations_run
                                 state: 'on'
                             row:
+                              entity: input_number.sunset_automations_offset
+                              name: Offset
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunset_automations_run
+                                state: 'on'
+                            row:
+                              entity: sensor.sunset_automations_status
+                              name: Runs at
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunset_automations_run
+                                state: 'on'
+                            row:
                               entity: input_button.trigger_sunset_automations_run
                               name: Trigger
-                          - entity: input_boolean.sunset_automations_active
-                            name: Active
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.sunset_automations_run
+                                state: 'on'
+                            row:
+                              entity: input_boolean.sunset_automations_active
+                              name: Active
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
