@@ -3551,7 +3551,7 @@ views:
             template: room_popup__header
             variables:
               - icon: mdi:cog
-              - title: Room Settings
+              - title: Configure
           - type: custom:layout-card
             layout_type: custom:masonry-layout
             cards:
