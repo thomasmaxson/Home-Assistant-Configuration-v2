@@ -389,6 +389,7 @@ push_notification_to_ios_devices:
       helper:
         jessica:
           device: notify.mobile_app_jess_iphone
+          device_type: apple
           person: person.jessica
           allow: input_boolean.app_notify_jess
           activity: input_boolean.app_notify_jess_alert_activity
@@ -401,6 +402,7 @@ push_notification_to_ios_devices:
           critical: input_boolean.app_notify_jess_alert_critical
         thomas:
           device: notify.mobile_app_tom_iphone
+          device_type: apple
           person: person.thomas
           allow: input_boolean.app_notify_tom
           activity: input_boolean.app_notify_tom_alert_activity
@@ -421,6 +423,9 @@ push_notification_to_ios_devices:
         - conditions:
           - condition: and
             conditions:
+            - condition: state
+              entity_id: input_boolean.snooze_notify_household_activity
+              state: 'off'
             - condition: template
               value_template: '{{ notification_type == ''type_critical'' }}'
             - condition: template
