@@ -71,7 +71,9 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Aqara Wireless Mini Switch](https://www.amazon.com/gp/product/B07D19YXND/)
 * [IKEA TRÅDFRI Shortcut Button](https://www.ikea.com/us/en/p/tradfri-shortcut-button-white-smart-20356382/)
 * [IKEA TRÅDFRI Wireless Dimmer](https://www.ikea.com/us/en/p/tradfri-wireless-dimmer-smart-white-10408598/)
-
+* [Lutron Paddle Pico for Caseta](https://www.amazon.com/Lutron-Control-Switches-Dimmers-PJ2-P2B-GWH/dp/B0CJ6FDN63/)
+* [Lutron Pico Smart Fan Speed Control for Caseta](https://www.amazon.com/dp/B07NQDT39V)
+  
 ##### Climate
 * [Ecobee Thermostat](https://www.amazon.com/gp/product/B07NQT85FC/)
 * [Ecobee Temperature and Motion Sensors](https://www.amazon.com/gp/product/B07NQVWRR3/)
