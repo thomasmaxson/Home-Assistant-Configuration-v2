@@ -503,7 +503,7 @@ views:
           - cover.blinds_kitchen
           - binary_sensor.all_leak_sensors_kitchen
           - input_boolean.reminder_dishwasher_complete
-          - input_select.status_dishwasher
+          - input_select.status_dishwasher_options
         variables:
           path: '#details-kitchen'
           icon_on: mdi:fridge
@@ -546,7 +546,7 @@ views:
             [[[
               let badgeIcon = '';
 
-              if( states['input_select.status_dishwasher'].state == 'Running' )
+              if( states['input_select.status_dishwasher_options'].state == 'Running' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:dishwasher"></ha-icon>';
 
@@ -652,10 +652,10 @@ views:
                         entity: sensor.status_dishwasher_custom
                         state_display: |
                           [[[
-                            let state = states['input_select.status_dishwasher'].state;
+                            let state = states['input_select.status_dishwasher_options'].state;
                             let stateText = ( state == 'Idle' ) ? 'Ready' : state;
 
-                            if( states['binary_sensor.door_dishwasher'].state == 'on' )
+                            if( states['binary_sensor.door_dishwasher'].state === 'on' )
                             { 
                               stateText += ' &bull; Open';
 
@@ -8728,8 +8728,15 @@ views:
                               - entity: input_boolean.bedtime_automations_run
                                 state: 'on'
                             row:
+                              entity: input_datetime.bedtime_automations_time_manual
+                              name: Latest Time
+                          - type: conditional
+                            conditions:
+                              - entity: input_boolean.bedtime_automations_run
+                                state: 'on'
+                            row:
                               entity: input_number.bedtime_automations_offset
-                              name: Offset
+                              name: Run After Sunset by
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -9203,7 +9210,7 @@ button_card_templates:
           const theEntity = variables.data_temperature;
           let output = '&nbsp;';
 
-          if( theEntity !== false && theEntity !== undefined ) 
+          if( theEntity !== false && theEntity !== undefined )
           { 
             const theState = states[theEntity].state;
             const measurement = states[theEntity].attributes.unit_of_measurement;
@@ -9227,7 +9234,7 @@ button_card_templates:
             : variables.data_lightOn
         ]]]
     show_icon: true
-    show_label: '[[[ return ( variables.text_temperature !== "" ) ? true : false ]]]'
+    show_label: '[[[ return ( variables.text_temperature !== "&nbsp;" ) ? true : false ]]]'
     show_state: false
     icon: >-
       [[[ return ( variables.state_on ) ? variables.icon_on :
