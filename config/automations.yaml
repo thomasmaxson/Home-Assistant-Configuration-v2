@@ -883,6 +883,16 @@
           - switch.camera_int_bdr3_privacy_mode
           - switch.camera_int_bdr4_privacy_mode
         data: {}
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.enable_interior_camera_recording
       alias: Recording ENABLE
     - conditions:
       - condition: trigger
@@ -3310,12 +3320,11 @@
         data: {}
         target:
           entity_id: light.closet_hallway_light_his
-      alias: When His Closet Door is OPENED
+      alias: When His Closet Door was OPENED
     - conditions:
       - condition: trigger
         id:
         - His Closet Door Did CLOSE
-        - His Closet Door Left OPEN
         enabled: true
       sequence:
       - action: light.turn_off
@@ -3323,7 +3332,23 @@
           entity_id:
           - light.closet_hallway_light_his
         data: {}
-      alias: When His Closet Door is CLOSED or left OPEN
+      alias: When His Closet Door was CLOSED
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - His Closet Door Left OPEN
+          enabled: true
+        - condition: state
+          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
+          state: 'on'
+      sequence:
+      - action: light.turn_off
+        data: {}
+        target:
+          entity_id: light.closet_hallway_light_his
+      alias: When His Closet Door was left OPEN
     - conditions:
       - condition: trigger
         id:
@@ -3335,19 +3360,34 @@
         data: {}
         target:
           entity_id: light.closet_hallway_light_hers
-      alias: When Her Closet Door is OPENED
+      alias: When Her Closet Door was OPENED
     - conditions:
       - condition: trigger
         id:
         - Her Closet Door Did CLOSE
-        - Her Closet Door Left OPEN
         enabled: true
       sequence:
       - action: light.turn_off
         data: {}
         target:
           entity_id: light.closet_hallway_light_hers
-      alias: When His Closet Door is CLOSED or left OPEN
+      alias: When Her Closet Door was CLOSED
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - Her Closet Door Left OPEN
+          enabled: true
+        - condition: state
+          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
+          state: 'on'
+      sequence:
+      - action: light.turn_off
+        data: {}
+        target:
+          entity_id: light.closet_hallway_light_hers
+      alias: When Her Closet Door was left OPEN
   mode: queued
   max: 10
 - id: '1730055755910'
@@ -5872,33 +5912,104 @@
           - light.ceiling_fan_switch_bedroom_4
   mode: queued
   max: 10
-- id: '1740885336563'
+- id: '1749910059584'
   alias: Security Control, Lights - All
   description: ''
-  use_blueprint:
-    path: maxson/remote_ikea_2_button.yaml
-    input:
-      remotes:
-      - f45e2cf26f5fb3cf99fd5f874ca22d18
-      button_on_single:
+  triggers:
+  - device_id: f45e2cf26f5fb3cf99fd5f874ca22d18
+    domain: zha
+    type: remote_button_short_press
+    subtype: turn_on
+    trigger: device
+    id: Turn ON
+  - device_id: f45e2cf26f5fb3cf99fd5f874ca22d18
+    domain: zha
+    type: remote_button_short_press
+    subtype: turn_off
+    trigger: device
+    id: Turn OFF
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - Turn ON
+      sequence:
+      - action: switch.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.echo_kitchen_do_not_disturb_switch
+          - switch.echo_dot_dining_room_do_not_disturb_switch
+          - switch.echo_dot_bedroom_1_do_not_disturb_switch
+          - switch.echo_dot_bedroom_2_do_not_disturb_switch
+          - switch.echo_dot_bedroom_3_do_not_disturb_switch
+          - switch.echo_dot_bedroom_4_do_not_disturb_switch
+          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+      - action: scene.create
+        metadata: {}
+        data:
+          scene_id: household_snapshot
+          snapshot_entities:
+          - light.kitchen_light_1
+          - light.kitchen_light_2
+          - light.kitchen_light_3
+          - light.kitchen_light_4
+          - light.kitchen_light_5
+          - light.kitchen_light_6
+          - light.kitchen_cabinet_upper_range
+          - light.kitchen_cabinet_upper_coffee_bar
+          - light.dining_room_chandelier
+          - light.living_room_corner_lamp
+          - light.living_room_couch_lamp
+          - light.foyer_ceiling_ledge
+          - light.foyer_under_table
+          - light.foyer_entryway_ceiling
+          - light.foyer_exterior_entryway
+          - light.ceiling_fan_bedroom_1
+          - light.bedroom_1_lamp_hers
+          - light.bedroom_1_lamp_his
+          - light.closet_hallway_ceiling_light
+          - light.closet_hallway_light_hers
+          - light.closet_hallway_light_his
+          - light.switch_1_bathroom_main_light
+          - light.switch_2_bathroom_main_light
+          - light.ceiling_fan_bedroom_2
+          - light.bedroom_2_lamp_left
+          - light.bedroom_2_lamp_right
+          - light.ceiling_fan_bedroom_3
+          - light.bedroom_3_floor_lamp
+          - light.ceiling_fan_bedroom_4
+          - light.bedroom_4_desk_lamp
+          - light.bedroom_4_lightstrip
+          - light.bedroom_4_tie_fighter_lamp
+          - light.laundry_hallway_light
+          - light.laundry_ceiling_light
+          - light.guest_hallway_light
+          - light.garage_ceiling
+          - light.christmas_tree
       - parallel:
         - alias: Lights On - Common Areas
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.kitchen_ceiling_lights
+            - light.kitchen_cabinet_upper_coffee_bar
+            - light.kitchen_cabinet_upper_range
             - light.dining_room_chandelier
             - light.living_room_corner_lamp
             - light.living_room_couch_lamp
             - light.foyer_entryway_ceiling
-            - light.kitchen_cabinet_upper_coffee_bar
-            - light.kitchen_cabinet_upper_range
         - alias: Lights On - Bedroom 1
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.ceiling_fan_bedroom_1
@@ -5910,7 +6021,8 @@
         - alias: Lights On - Bedroom 2
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.ceiling_fan_bedroom_2
@@ -5919,7 +6031,8 @@
         - alias: Lights On - Bedroom 3
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.ceiling_fan_bedroom_3
@@ -5927,84 +6040,49 @@
         - alias: Lights On - Bedroom 4
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.ceiling_fan_bedroom_4
             - light.bedroom_4_desk_lamp
             - light.bedroom_4_lightstrip
-        - alias: Lights On - Misc
+        - alias: Lights On - Other
           action: light.turn_on
           metadata: {}
-          data: {}
+          data:
+            brightness_pct: 100
           target:
             entity_id:
             - light.foyer_hallway_ceiling
             - light.guest_hallway_light
             - light.laundry_hallway_light
-            - light.foyer_hallway_ceiling
             - light.laundry_ceiling_light
-      button_off_single:
-      - parallel:
-        - alias: Lights On - Common Areas
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.kitchen_ceiling_lights
-            - light.dining_room_chandelier
-            - light.living_room_corner_lamp
-            - light.living_room_couch_lamp
-            - light.foyer_entryway_ceiling
-            - light.kitchen_cabinet_upper_coffee_bar
-            - light.kitchen_cabinet_upper_range
-        - alias: Lights On - Bedroom 1
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_1
-            - light.bedroom_1_lamp_hers
-            - light.bedroom_1_lamp_his
-            - light.closet_hallway_ceiling_light
-            - light.switch_1_bathroom_main_light
-            - light.switch_2_bathroom_main_light
-        - alias: Lights On - Bedroom 2
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_2
-            - light.bedroom_2_lamp_left
-            - light.bedroom_2_lamp_right
-        - alias: Lights On - Bedroom 3
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_3
-            - light.bedroom_3_floor_lamp
-        - alias: Lights On - Bedroom 4
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_4
-            - light.bedroom_4_desk_lamp
-            - light.bedroom_4_lightstrip
-        - alias: Lights On - Misc
-          action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - light.foyer_hallway_ceiling
-            - light.guest_hallway_light
-            - light.laundry_hallway_light
-            - light.foyer_hallway_ceiling
-            - light.laundry_ceiling_light
+    - conditions:
+      - condition: trigger
+        id:
+        - Turn OFF
+      sequence:
+      - action: switch.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.echo_kitchen_do_not_disturb_switch
+          - switch.echo_dot_dining_room_do_not_disturb_switch
+          - switch.echo_dot_bedroom_1_do_not_disturb_switch
+          - switch.echo_dot_bedroom_2_do_not_disturb_switch
+          - switch.echo_dot_bedroom_3_do_not_disturb_switch
+          - switch.echo_dot_bedroom_4_do_not_disturb_switch
+          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+      - action: scene.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: scene.household_snapshot
+      - action: scene.delete
+        metadata: {}
+        data: {}
+        target:
+          entity_id: scene.household_snapshot
+  mode: single
