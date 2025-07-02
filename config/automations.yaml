@@ -711,7 +711,7 @@
           - select.camera_ext_backyard_northeast_recording_mode
           - select.camera_ext_backyard_southeast_recording_mode
           - select.camera_ext_doorbell_recording_mode
-          - select.ext_front_yard_northeast_recording_mode
+          - select.camera_ext_front_yard_northeast_recording_mode
           - select.camera_ext_front_yard_southeast_recording_mode
           - select.camera_ext_side_yard_north_east_recording_mode
           - select.camera_ext_side_yard_north_west_recording_mode
@@ -731,7 +731,7 @@
           - select.camera_ext_backyard_northeast_recording_mode
           - select.camera_ext_backyard_southeast_recording_mode
           - select.camera_ext_doorbell_recording_mode
-          - select.ext_front_yard_northeast_recording_mode
+          - select.camera_ext_front_yard_northeast_recording_mode
           - select.camera_ext_front_yard_southeast_recording_mode
           - select.camera_ext_side_yard_north_east_recording_mode
           - select.camera_ext_side_yard_north_west_recording_mode
