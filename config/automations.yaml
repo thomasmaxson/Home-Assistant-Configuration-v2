@@ -5951,7 +5951,7 @@
       - action: scene.create
         metadata: {}
         data:
-          scene_id: household_snapshot
+          scene_id: snapshot_house_lights
           snapshot_entities:
           - light.kitchen_light_1
           - light.kitchen_light_2
@@ -5990,6 +5990,7 @@
           - light.guest_hallway_light
           - light.garage_ceiling
           - light.christmas_tree
+        alias: Create Scene – Lights
       - parallel:
         - alias: Lights On - Common Areas
           action: light.turn_on
@@ -6058,6 +6059,67 @@
             - light.guest_hallway_light
             - light.laundry_hallway_light
             - light.laundry_ceiling_light
+      - alias: Create Scene – Security, Privacy Mode
+        action: scene.create
+        metadata: {}
+        data:
+          scene_id: snapshot_house_security_privacy
+          snapshot_entities:
+          - input_boolean.camera_int_privacy_mode
+          - switch.camera_ext_backyard_northeast_privacy_mode
+          - switch.camera_ext_backyard_southeast_privacy_mode
+          - switch.camera_ext_doorbell_privacy_mode
+          - switch.camera_ext_front_yard_northeast_privacy_mode
+          - switch.camera_ext_front_yard_southeast_privacy_mode
+          - switch.camera_ext_side_yard_north_east_privacy_mode
+          - switch.camera_ext_side_yard_north_west_privacy_mode
+          - switch.camera_ext_side_yard_south_east_privacy_mode
+          - select.camera_ext_garage_privacy_mode
+          - switch.camera_int_bdr1_privacy_mode
+          - switch.camera_int_bdr3_privacy_mode
+          - switch.camera_int_bdr4_privacy_mode
+          - switch.camera_int_foyer_entry_privacy_mode
+          - switch.camera_int_dining_room_privacy_mode
+          - switch.camera_int_kitchen_privacy_mode
+          - switch.camera_int_living_room_privacy_mode
+      - alias: Create Scene – Security, Recording Mode
+        action: scene.create
+        metadata: {}
+        data:
+          scene_id: snapshot_house_security_recording
+          snapshot_entities:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
+          - select.camera_ext_backyard_northeast_recording_mode
+          - select.camera_ext_backyard_southeast_recording_mode
+          - select.camera_ext_doorbell_recording_mode
+          - select.camera_ext_front_yard_northeast_recording_mode
+          - select.camera_ext_front_yard_southeast_recording_mode
+          - select.camera_ext_side_yard_north_east_recording_mode
+          - select.camera_ext_side_yard_north_west_recording_mode
+          - select.camera_ext_side_yard_south_east_recording_mode
+          - select.camera_ext_garage_recording_mode
+          - select.camera_int_bdr1_recording_mode
+          - select.camera_int_bdr3_recording_mode
+          - select.camera_int_bdr4_recording_mode
+          - select.camera_int_foyer_entry_recording_mode
+          - select.camera_int_dining_room_recording_mode
+          - select.camera_int_kitchen_recording_mode
+          - select.camera_int_living_room_recording_mode
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.camera_int_privacy_mode
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
     - conditions:
       - condition: trigger
         id:
@@ -6079,10 +6141,16 @@
         metadata: {}
         data: {}
         target:
-          entity_id: scene.household_snapshot
+          entity_id:
+          - scene.snapshot_house_lights
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
       - action: scene.delete
         metadata: {}
         data: {}
         target:
-          entity_id: scene.household_snapshot
+          entity_id:
+          - scene.snapshot_house_lights
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
   mode: single
