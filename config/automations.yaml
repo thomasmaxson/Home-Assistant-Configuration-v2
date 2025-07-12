@@ -6383,6 +6383,7 @@
     - condition: time
       after: sensor.sun_next_dusk
       before: sensor.sun_next_dawn
+      enabled: true
   actions:
   - choose:
     - conditions:
@@ -6409,31 +6410,37 @@
           - light.tv_ambient_base
           - light.living_room_corner_lamp
           - light.living_room_couch_lamp
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_pct: 40
+          transition: 1
+        target:
+          entity_id:
+          - light.living_room_corner_lamp
       - action: switch.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: switch.sync_box_light_sync
-      - action: number.set_value
-        metadata: {}
-        data:
-          value: '80'
-        target:
-          entity_id: number.sync_box_brightness
+        enabled: true
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 100
       - action: light.turn_on
         metadata: {}
         data:
-          brightness_pct: 20
-          transition: 3
-        target:
-          entity_id:
-          - light.living_room_corner_lamp
-          - light.living_room_couch_lamp
-      - action: light.turn_on
-        metadata: {}
-        data:
-          color_temp: '{{ state_attr( ''light.living_room_corner_lamp'', ''color_temp''
-            ) | int }}'
+          brightness_pct: '{% set brightness = state_attr( ''light.living_room_corner_lamp'',
+            ''brightness'' ) | int %} {{ ( ( brightness / 255 ) * 100 ) | float |
+            int }}
+
+            '
+          rgb_color: '{{ state_attr( ''light.living_room_corner_lamp'', ''rgb_color''
+            ) | list }}
+
+            '
         target:
           entity_id:
           - light.tv_ambient_wrap
