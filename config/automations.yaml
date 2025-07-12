@@ -260,20 +260,36 @@
   triggers:
   - trigger: time
     at: 00:00:00
+    id: Time is 12:00 AM
   - trigger: time
     at: 01:30:00
+    id: Time is 1:30 AM
   - trigger: time
     at: 03:00:00
+    id: Time is 3:00 AM
   - trigger: time
     at: 04:30:00
+    id: Time is 4:30 AM
   - trigger: state
     entity_id:
     - input_button.trigger_midnight_automations_run
+    id: Manually Triggered
   conditions:
   - condition: state
     entity_id: input_boolean.midnight_automations_run
     state: 'on'
   actions:
+  - if:
+    - condition: trigger
+      id:
+      - Time is 4:30 AM
+    then:
+    - action: button.press
+      metadata: {}
+      data: {}
+      target:
+        entity_id: button.galaxy_tab_a9_restart_device
+    alias: Restart Galaxy A9 Tablet
   - alias: Garage Lights Turn OFF
     if:
     - condition: state
@@ -322,7 +338,7 @@
   - choose:
     - conditions:
       - condition: numeric_state
-        entity_id: sensor.fire_tablet_battery
+        entity_id: sensor.galaxy_tab_a9_battery
         below: 20
       sequence:
       - action: light.turn_on
@@ -333,7 +349,7 @@
       alias: Charger Turn ON (Below 20%)
     - conditions:
       - condition: numeric_state
-        entity_id: sensor.fire_tablet_battery
+        entity_id: sensor.galaxy_tab_a9_battery
         above: 80
       sequence:
       - action: light.turn_off
