@@ -3498,10 +3498,17 @@ views:
                         name: Home Assistant
                       - entity: sensor.casamaxson_unvr_uptime
                         name: UniFi Network Video Recorder
+                      - type: divider
+                      - entity: input_button.home_assistant_restart
+                        icon: mdi:restart
+                        name: Restart Home Assistant
+                        tap_action:
+                          action: call-service
+                          service: homeassistant.restart
               - type: vertical-stack
                 cards:
                   - type: entities
-                    title: Amazon Fire HD Tablet
+                    title: Samsung Galaxy A9 Tablet
                     show_header_toggle: false
                     card_mod:
                       style: |
@@ -3509,29 +3516,25 @@ views:
                           margin: var( --popup--card-stacks );
                         }
                     entities:
-                      - entity: switch.fire_tablet_screen
+                      - entity: switch.galaxy_tab_a9_screen
                         name: Display
                         icon: hass:tablet
-                      - entity: number.fire_tablet_screen_brightness
+                      - entity: number.galaxy_tab_a9_screen_brightness
                         name: Brightness
                       - entity: light.tablet_plug
                         name: Charging
                       - type: divider
-                      - entity: sensor.fire_tablet_battery
+                      - entity: sensor.galaxy_tab_a9_battery
                         name: Battery Level
-                      - entity: sensor.fire_tablet_total_memory
+                      - entity: sensor.galaxy_tab_a9_total_memory
                         name: Total Memory
                         icon: hass:memory
-                      - entity: sensor.fire_tablet_used_memory
+                      - entity: sensor.galaxy_tab_a9_used_memory
                         name: Used Memory
                         icon: mdi:database
-                      - type: divider
-                      - entity: input_button.home_assistant_restart
+                      - entity: button.galaxy_tab_a9_restart_device
                         icon: mdi:restart
-                        name: Restart System
-                        tap_action:
-                          action: call-service
-                          service: homeassistant.restart
+                        name: Restart Tablet
             layout: {}
         view_layout:
           grid-area: modalSys
