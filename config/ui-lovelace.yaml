@@ -4355,6 +4355,26 @@ views:
               '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
                 ) )
+          - type: state-icon
+            entity: switch.sync_box_power
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 46.5%
+              left: 15%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-switch-sync-box-power ) )
+          - type: state-icon
+            entity: switch.sync_box_light_sync
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 46.5%
+              left: 19%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-switch-sync-box-lights ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
         view_layout:
           grid-area: row1
@@ -4465,6 +4485,12 @@ views:
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_power' %}
+              --maxson-floorplan--color-switch-sync-box-power: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_light_sync' %}
+              --maxson-floorplan--color-switch-sync-box-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
 
               {% set the_entity = 'light.dining_room_chandelier' %}
@@ -4645,6 +4671,12 @@ views:
 
               {% set the_entity = 'media_player.sony_bravia_tv' %}
               --maxson-floorplan--color-media-player--sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_power' %}
+              --maxson-floorplan--color-switch-sync-box-power: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_light_sync' %}
+              --maxson-floorplan--color-switch-sync-box-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
 
               {% set the_entity = 'light.dining_room_chandelier' %}
@@ -5243,6 +5275,26 @@ views:
               '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-media-player--sony-bravia-tv
                 ) )
+          - type: state-icon
+            entity: switch.sync_box_power
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 14%
+              left: 52%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-switch-sync-box-power ) )
+          - type: state-icon
+            entity: switch.sync_box_light_sync
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 20%
+              left: 52%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-switch-sync-box-lights ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
         visibility:
           - condition: screen
