@@ -1030,6 +1030,13 @@ views:
                         collapsible_controls: true
                         media_controls: on_off
                         volume_controls: volume_mute volume_buttons
+                      - type: custom:mushroom-light-card
+                        name: Hue Sync Box
+                        entity: switch.sync_box_power
+                        collapsible_controls: false
+                        show_brightness_control: false
+                        show_color_control: false
+                        use_light_color: false
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -1054,13 +1061,15 @@ views:
                         show_color_control: false
                         use_light_color: false
                       - type: custom:mushroom-light-card
+                        name: TV Ambient Lights
+                        entity: switch.sync_box_light_sync
+                        collapsible_controls: true
+                        show_brightness_control: false
+                        show_color_control: false
+                        use_light_color: false
+                      - type: custom:mushroom-light-card
                         name: Ceiling Fan Light
                         entity: light.ceiling_fan_bar
-                        collapsible_controls: true
-                        show_brightness_control: true
-                      - type: custom:mushroom-light-card
-                        name: TV Ambient Lights
-                        entity: light.living_room_tv_ambient_lights
                         collapsible_controls: true
                         show_brightness_control: true
           - type: vertical-stack
@@ -1103,6 +1112,9 @@ views:
                           - entity: >-
                               input_boolean.living_room_automation_door_night_lights
                             name: Turn on lights when door opens at night
+                          - entity: >-
+                              input_boolean.living_room_automation_allow_tv_pause
+                            name: Turn on lights when TV is paused at night
         view_layout:
           grid-area: modalLivR
       - type: custom:button-card
@@ -3649,8 +3661,8 @@ views:
                         }
 
 
-                        #states > div:nth-child( 10 ) { padding-left: 45px
-                        !important;}          
+                        #states > div:nth-child( 9 ), #states > div:nth-child(
+                        11 ){ padding-left: 45px !important;}          
                     entities:
                       - type: section
                         label: Run Daily at
@@ -3668,6 +3680,8 @@ views:
                         name: Garage (Interior) Door
                       - entity: input_boolean.living_room_automation_door_night_lights
                         name: Sliding Glass Door
+                      - entity: input_boolean.living_room_automation_allow_tv_pause
+                        name: Lights when TV is paused
                       - entity: input_boolean.bedroom_1_automation_allow_occupancy
                         name: Main Bedroom Door
                       - entity: input_boolean.bedroom_1_closet_automation_allow_doors
