@@ -6297,6 +6297,7 @@
     domain: remote
     trigger: device
     id: Television Turns ON
+    enabled: false
   - alias: Television Turns OFF
     device_id: 35987879623aec43c30ca84a7bf0eaed
     domain: media_player
@@ -6304,6 +6305,7 @@
     type: turned_off
     trigger: device
     id: Television Turns OFF
+    enabled: false
   - trigger: state
     entity_id:
     - switch.sync_box_power
@@ -6332,7 +6334,7 @@
       - delay:
           hours: 0
           minutes: 0
-          seconds: 2
+          seconds: 5
           milliseconds: 0
       - action: switch.turn_on
         metadata: {}
