@@ -1507,7 +1507,7 @@
   description: ''
   triggers:
   - entity_id:
-    - light.bedroom_4_desk_lamp
+    - light.bedroom_4_accent_lamp_right
     from: 'off'
     to: 'on'
     trigger: state
@@ -1522,7 +1522,7 @@
     data:
       brightness_pct: 40
     target:
-      entity_id: light.bedroom_4_desk_lamp
+      entity_id: light.bedroom_4_accent_lamp_right
   mode: single
 - id: '1727129921085'
   alias: Bedroom 4, Lightstrip
@@ -5998,7 +5998,7 @@
           - light.ceiling_fan_bedroom_3
           - light.bedroom_3_floor_lamp
           - light.ceiling_fan_bedroom_4
-          - light.bedroom_4_desk_lamp
+          - light.bedroom_4_accent_lamp_right
           - light.bedroom_4_lightstrip
           - light.bedroom_4_tie_fighter_lamp
           - light.laundry_hallway_light
@@ -6062,7 +6062,7 @@
           target:
             entity_id:
             - light.ceiling_fan_bedroom_4
-            - light.bedroom_4_desk_lamp
+            - light.bedroom_4_accent_lamp_right
             - light.bedroom_4_lightstrip
         - alias: Lights On - Other
           action: light.turn_on
@@ -6373,7 +6373,6 @@
   - trigger: state
     entity_id:
     - media_player.appletv_living_room
-    from: paused
     to: playing
     id: AppleTV is PLAYING
   conditions:
@@ -6474,3 +6473,85 @@
           - scene.snapshot_media_paused_living_room
       alias: PAUSED to PLAYING
   mode: single
+- id: '1752409868694'
+  alias: Living Room, Hue Sync Box Television Lights
+  description: ''
+  use_blueprint:
+    path: maxson/remote_philips_hue_dimmer.yaml
+    input:
+      remote: b3eb7611f388f72165a6b0e2f915af85
+      button_on_single:
+      - if:
+        - condition: state
+          entity_id: switch.sync_box_power
+          state: 'on'
+        then:
+        - if:
+          - condition: state
+            entity_id: switch.sync_box_light_sync
+            state: 'on'
+          then:
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - switch.sync_box_light_sync
+          else:
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - switch.sync_box_light_sync
+            enabled: true
+          alias: Toggle Hue Sync Box Light Sync
+        enabled: true
+      button_raise_single:
+      - if:
+        - condition: state
+          entity_id: switch.sync_box_power
+          state: 'on'
+        then:
+        - action: number.increment
+          target:
+            entity_id: number.sync_box_brightness
+          data:
+            amount: 5
+      button_lower_single:
+      - if:
+        - condition: state
+          entity_id: switch.sync_box_power
+          state: 'on'
+        then:
+        - action: number.decrement
+          target:
+            entity_id: number.sync_box_brightness
+          data:
+            amount: 5
+      button_off_single:
+      - if:
+        - condition: state
+          entity_id: switch.sync_box_power
+          state: 'on'
+        then:
+        - action: select.select_next
+          target:
+            entity_id: select.sync_box_hdmi_input
+          data:
+            cycle: true
+      button_raise_hold:
+      - action: number.increment
+        target:
+          entity_id: number.sync_box_brightness
+        data:
+          amount: 5
+        enabled: true
+      button_lower_hold:
+      - action: number.decrement
+        target:
+          entity_id: number.sync_box_brightness
+        data:
+          amount: 5
+        enabled: true
+      repeat_duration: 1000
