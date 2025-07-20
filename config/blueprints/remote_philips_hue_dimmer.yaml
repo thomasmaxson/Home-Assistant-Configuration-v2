@@ -1,0 +1,289 @@
+# This blueprint uses a Philips Hue Dimmer Remote Control
+#
+# | Button | Duration     | Action        |
+# | ------ | ------------ | ------------- |
+# | On     | Short Press  | Custom action |
+# | Raise  | Short Press  | Custom action |
+# | Raise  | Hold Press   | Custom action |
+# | Lower  | Short Press  | Custom action |
+# | Lower  | Hold Press   | Custom action |
+# | Off    | Short Press  | Custom action |
+
+blueprint:
+  name: Philips Hue Dimmer Remote
+  description: Control devices with your Philips Hue Dimmer remote.
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: Philips Hue Dimmer remote control
+      description: Select the Philips Hue remote to trigger your automations.
+      selector:
+        device:
+          filter:
+            - integration: hue
+              manufacturer: Signify Netherlands B.V.
+              model: Hue dimmer switch (RWL020)
+            - integration: hue
+              manufacturer: Signify Netherlands B.V.
+              model: Hue dimmer switch (RWL021)
+            - integration: hue
+              manufacturer: Signify Netherlands B.V.
+              model: Hue dimmer switch (RWL022)
+    actions_single_press:
+      name: Single Tap
+      icon: mdi:gesture-tap
+      collapsed: false
+      input:
+        button_on_single:
+          name: Tap On Button
+          description: Action(s) to perform on single tap of the on button
+          default: []
+          selector:
+            action:
+        button_raise_single:
+          name: Tap Up Button
+          description: Action(s) to perform on single tap of the up button
+          default: []
+          selector:
+            action:
+        button_lower_single:
+          name: Tap Down Button
+          description: Action(s) to perform on single tap of the down button
+          default: []
+          selector:
+            action:
+        button_off_single:
+          name: Tap Off Button
+          description: |
+            Action(s) to perform on single tap of the off button
+            "Off" is also the "hue" button
+          default: []
+          selector:
+            action:
+
+    actions_hold_press:
+      name: Press and Hold
+      icon: mdi:gesture-tap-hold
+      collapsed: true
+      input:
+        # button_on_hold:
+        #   name: Hold On Button
+        #   description: Action(s) to perform on hold of the on button
+        #   default: []
+        #   selector:
+        #     action:
+        button_raise_hold:
+          name: Hold Up Button
+          description: Action(s) to perform on hold of the up button
+          default: []
+          selector:
+            action:
+        button_lower_hold:
+          name: Hold Down Button
+          description: Action(s) to perform on hold of the down button
+          default: []
+          selector:
+            action: {}
+        # button_off_hold:
+        #   name: Hold Off Button
+        #   description: Action(s) to perform on hold of the off button
+        #   default: []
+        #   selector:
+        #     action: {}
+        repeat_duration:
+          name: Repeat Duration
+          description: The speed in which to update the device when the button is held.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: milliseconds
+              min: 100
+              max: 1000
+              step: 100
+          default: 500
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            Ignored by Single and Restart Modes
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+trigger:
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 1
+    id: on_pressed
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 2
+    id: raise_pressed
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 3
+    id: lower_pressed
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 4
+    id: off_pressed
+
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 1
+    id: on_release
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 2
+    id: raise_release
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 3
+    id: lower_release
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: short_release
+    subtype: 4
+    id: off_release
+
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: long_release
+    subtype: 1
+    id: on_release_long
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: long_release
+    subtype: 2
+    id: raise_release_long
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: long_release
+    subtype: 3
+    id: lower_release_long
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: long_release
+    subtype: 4
+    id: off_release_long
+
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: repeat
+    subtype: 2
+    id: raise_press_hold
+  - trigger: device
+    domain: hue
+    device_id: !input remote
+    type: repeat
+    subtype: 3
+    id: lower_press_hold
+
+conditions:
+  - condition: template
+    value_template: "{{ remote != 'remote.undefined' }}"
+
+action:
+  - choose:
+      # Short-Press on the ON button
+      - conditions:
+          - condition: trigger
+            id: on_pressed
+        sequence: !input button_on_single
+
+      # Short-Press on the RAISE button
+      - conditions:
+          - condition: trigger
+            id: raise_pressed
+        sequence: !input button_raise_single
+
+      # Short-Press on the LOWER button
+      - conditions:
+          - condition: trigger
+            id: lower_pressed
+        sequence: !input button_lower_single
+
+      # Short-Press on the OFF button
+      - conditions:
+          - condition: trigger
+            id: off_pressed
+        sequence: !input button_off_single
+
+      # Press-Hold on the RAISE button
+      - conditions:
+          - condition: trigger
+            id: raise_press_hold
+        sequence:
+          - repeat:
+              while:
+                - condition: trigger
+                  id: raise_press_hold
+              sequence:
+                - sequence: !input button_raise_hold
+                - delay:
+                    milliseconds: !input repeat_duration
+
+      # Press-Hold on the LOWER button
+      - conditions:
+          - condition: trigger
+            id: lower_press_hold
+        sequence:
+          - repeat:
+              while:
+                - condition: trigger
+                  id: lower_press_hold
+              sequence:
+                - sequence: !input button_lower_hold
+                - delay:
+                    milliseconds: !input repeat_duration
