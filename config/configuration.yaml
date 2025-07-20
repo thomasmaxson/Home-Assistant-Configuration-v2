@@ -89,10 +89,16 @@ switch:
       - light.bedroom_2_lamp_right
 
   - platform: circadian_lighting
-    name: Light, Desk Lamp Circadian
+    name: Light, Accent Lamp (Left) Circadian
     disable_brightness_adjust: true
     lights_ct:
-      - light.bedroom_4_desk_lamp
+      - light.bedroom_4_accent_lamp_left
+
+  - platform: circadian_lighting
+    name: Light, Accent Lamp (Right) Circadian
+    disable_brightness_adjust: true
+    lights_ct:
+      - light.bedroom_4_accent_lamp_right
 
   - platform: circadian_lighting
     name: Lightstrip, Baseboard Circadian
