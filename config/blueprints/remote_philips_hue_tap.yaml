@@ -1,7 +1,17 @@
+# This blueprint uses a Philips Hue Tap Remote Control
+#
+# | Button     | Duration     | Action        |
+# | ---------- | ------------ | ------------- |
+# | One Dot    | Short Press  | Custom action |
+# | Two Dots   | Short Press  | Custom action |
+# | Three Dots | Short Press  | Custom action |
+# | Four Dots  | Short Press  | Custom action |
+
 blueprint:
-  name: Hue Tap Remote
+  name: Philips Hue, Tap Remote Control
   description: Control devices with your Philips Hue Tap remote.
   author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/730d83fa9971097dc66a60a77a02d28c
   homeassistant:
     min_version: 2024.6.0
   domain: automation
@@ -15,31 +25,79 @@ blueprint:
             - integration: mqtt
               manufacturer: Philips
               model: Hue tap
-    button_1:
-      name: Button Single Dot
-      description: Action to run on click of single dot button
-      default: []
-      selector:
-        action: null
-    button_2:
-      name: Button Two Dots
-      description: Action to run on click of two dot button
-      default: []
-      selector:
-        action: null
-    button_3:
-      name: Button Three Dots
-      description: Action to run on click of three dot button
-      default: []
-      selector:
-        action: null
-    button_4:
-      name: Button Four Dots
-      description: Action to run on click of four dot button
-      default: []
-      selector:
-        action: null
-mode: restart
+
+    actions_single_press:
+      name: Single Tap
+      icon: mdi:gesture-tap
+      collapsed: false
+      input:
+        button_1:
+          name: Button Single Dot
+          description: Action(s) to perform on single tap of single dot button
+          default: []
+          selector:
+            action: null
+        button_2:
+          name: Button Two Dots
+          description: Action(s) to perform on single tap of two dot button
+          default: []
+          selector:
+            action: null
+        button_3:
+          name: Button Three Dots
+          description: Action(s) to perform on single tap of three dot button
+          default: []
+          selector:
+            action: null
+        button_4:
+          name: Button Four Dots
+          description: Action(s) to perform on single tap of four dot button
+          default: []
+          selector:
+            action: null
+
+    automation_config:
+      name: Automation Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            Ignored by Single and Restart Modes
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
+mode: !input config_mode
+max: !input config_max_num
 max_exceeded: silent
 
 triggers:
@@ -64,3 +122,15 @@ actions:
       - conditions:
           - "{{ command == 'press_4' }}"
         sequence: !input button_4
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_hue_tap_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Hue Tap remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

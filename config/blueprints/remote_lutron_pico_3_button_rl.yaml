@@ -19,7 +19,7 @@
 # | Off    | Long Press   | Custom action |
 
 blueprint:
-  name: Lutron Pico, 3 Button with Raise/Lower
+  name: Lutron Pico, 3 Button with Raise/Lower Remote Control
   description: Control devices with your Lutron Pico 3 button with raise/lower remote.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/7327b309459d38d8a36ee3bb18ce6b9e
@@ -204,6 +204,13 @@ blueprint:
               min: 1.0
               max: 15.0
               step: 1.0
+
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
 
 mode: !input config_mode
 max: !input config_max_num
@@ -416,3 +423,15 @@ actions:
                     value_template: "{{ wait.trigger == none }}"
                 then: !input button_off_single
                 else: !input button_off_double
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_lutron_pico_3_button_rl_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Lutron Pico 3 Button Raise/Lower remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

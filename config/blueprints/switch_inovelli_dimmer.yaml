@@ -253,6 +253,13 @@ blueprint:
               max: 15.0
               step: 1.0
 
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -457,3 +464,15 @@ action:
       - conditions:
           - "{{ command == 'config_release' }}"
         sequence: !input button_config_release
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: switch_inovelli_dimmer_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Hue Tap remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

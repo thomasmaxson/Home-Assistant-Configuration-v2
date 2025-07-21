@@ -76,6 +76,13 @@ blueprint:
               max: 15.0
               step: 1.0
 
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -107,3 +114,15 @@ actions:
           - '{{ cluster_id == 6 }}'
           - '{{ endpoint_id == 1 }}'
         sequence: !input long_press_action
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_sonoff_wireless_switch_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Sonoff Wireless Switch ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

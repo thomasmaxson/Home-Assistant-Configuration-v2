@@ -10,8 +10,10 @@
 # | Off    | Short Press  | Custom action |
 
 blueprint:
-  name: Philips Hue Dimmer Remote
+  name: Philips Hue, Dimmer Remote Control
   description: Control devices with your Philips Hue Dimmer remote.
+  author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/7aeffeefb4950278c5ecfca303332c12
   homeassistant:
     min_version: 2024.6.0
   domain: automation
@@ -30,6 +32,15 @@ blueprint:
               model: Hue dimmer switch (RWL021)
             - integration: hue
               manufacturer: Signify Netherlands B.V.
+              model: Hue dimmer switch (RWL022)
+            - integration: mqtt
+              manufacturer: Philips
+              model: Hue dimmer switch (RWL020)
+            - integration: mqtt
+              manufacturer: Philips
+              model: Hue dimmer switch (RWL021)
+            - integration: mqtt
+              manufacturer: Philips
               model: Hue dimmer switch (RWL022)
     actions_single_press:
       name: Single Tap
@@ -136,6 +147,13 @@ blueprint:
               min: 1.0
               max: 15.0
               step: 1.0
+
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
 
 mode: !input config_mode
 max: !input config_max_num
@@ -287,3 +305,15 @@ action:
                 - sequence: !input button_lower_hold
                 - delay:
                     milliseconds: !input repeat_duration
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_hue_dimmer_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Hue dimmer ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

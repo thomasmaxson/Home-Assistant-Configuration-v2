@@ -184,6 +184,13 @@ blueprint:
               max: 15.0
               step: 1.0
 
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -310,4 +317,16 @@ action:
         sequence: !input button_left_long
 
     # Any other event will cancel the repeat loops.
-    default: []
+    # default: []
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_ikea_styrbar_4_button__blueprint
+              title: Uncaught Dimmer Command
+              message:
+                IKEA Styrbar 4 button remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

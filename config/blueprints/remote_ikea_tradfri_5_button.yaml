@@ -14,7 +14,7 @@
 # | Right Arrow | Long Press  | Custom action       |
 
 blueprint:
-  name: IKEA TRÅDFRI, 5 Button
+  name: IKEA TRÅDFRI, 5 Button Remote Control
   description: Control devices with your IKEA TRÅDFRI 5 button remote.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/1b776b184882ba9c85c90c20c02b423a
@@ -166,6 +166,13 @@ blueprint:
               min: 1.0
               max: 15.0
               step: 1.0
+
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
 
 mode: !input config_mode
 max: !input config_max_num
@@ -322,4 +329,16 @@ actions:
         sequence: !input button_left_long
 
     # Any other event will cancel the repeat loops
-    default: []
+    # default: []
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: hue_dimmer_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Lutron Pico 5 Button remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

@@ -8,10 +8,10 @@
 # | Off    | Long Press   | Custom action |
 
 blueprint:
-  name: Lutron Pico, Paddle
+  name: Lutron Pico, Paddle Remote Control
   description: Control devices with your Lutron Pico paddle.
   author: Thomas Maxson
-  # source_url: https://gist.github.com/thomasmaxson/7327b309459d38d8a36ee3bb18ce6b9e
+  source_url: https://gist.github.com/thomasmaxson/7a829086a4f3bdde56691cf85184345c
   homeassistant:
     min_version: 2024.6.0
   domain: automation
@@ -110,6 +110,13 @@ blueprint:
               max: 15.0
               step: 1.0
 
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -207,3 +214,15 @@ actions:
                 value_template: "{{ wait.trigger == none }}"
             then: !input button_off_hold
             else: !input button_off_single
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_lutron_pico_paddle_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Lutron Pico Paddle remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

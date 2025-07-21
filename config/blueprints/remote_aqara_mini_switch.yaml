@@ -83,6 +83,13 @@ blueprint:
               max: 15.0
               step: 1.0
 
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -109,3 +116,15 @@ actions:
       - conditions:
           - "{{ command == 'release' }}"
         sequence: !input release_action
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_aqara_mini_switch_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                Aqara Mini Switch ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.

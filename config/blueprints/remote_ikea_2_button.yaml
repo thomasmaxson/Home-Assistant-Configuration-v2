@@ -8,7 +8,7 @@
 # | Off or 2 Dots | Long Press  | Decrease brightness |
 
 blueprint:
-  name: IKEA TRÅDFRI, RODRET or SOMRIG, 2 Button Remote
+  name: IKEA TRÅDFRI, RODRET or SOMRIG, 2 Button Remote Control
   description: Control devices with your IKEA TRÅDFRI, RODRET and SOMRIG 2 button remotes.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674
@@ -213,6 +213,13 @@ blueprint:
               min: 1.0
               max: 15.0
               step: 1.0
+
+        log_invalid_events:
+          name: Log Invalid Remote Events
+          description: Display notification if an invalid trigger is received.
+          default: false
+          selector:
+            boolean:
 
 mode: !input config_mode
 max: !input config_max_num
@@ -611,3 +618,15 @@ actions:
                                       value_template: "{{ wait.trigger.idx is defined }}"
                                   then:
                                     - stop: button released
+
+    default:
+      - condition: template
+        value_template: "{{ log_invalid_events == 'true' }}"
+      - sequence:
+          - action: persistent_notification.create
+            data:
+              notification_id: remote_ikea_2_button_blueprint
+              title: Uncaught Dimmer Command
+              message:
+                IKEA 2 button remote ran the default event from the "choose" event action.
+                Please check any automations which may not be handling this event.
