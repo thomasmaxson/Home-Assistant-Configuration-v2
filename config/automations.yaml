@@ -3443,6 +3443,27 @@
           data: {}
           target:
             entity_id: light.bedroom_4_group_occupancy_lights
+          enabled: true
+        - if:
+          - condition: not
+            conditions:
+            - condition: template
+              value_template: '{{ states.scene.snapshot_activity_bedroom_4_instant
+                != None }}'
+          then:
+          - action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_instant
+          - action: scene.delete
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_instant
+          enabled: false
       disable_door_action:
       - action: script.push_notification_to_ios_devices
         metadata: {}
@@ -3473,6 +3494,27 @@
           data: {}
           target:
             entity_id: light.bedroom_4_group_occupancy_lights
+          enabled: true
+        - if:
+          - condition: not
+            conditions:
+            - condition: template
+              value_template: '{{ states.scene.snapshot_activity_bedroom_4_instant
+                != None }}'
+          then:
+          - action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_instant
+          - action: scene.delete
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_instant
+          enabled: false
       disable_occupancy_action_now:
       - if:
         - condition: state
@@ -3484,6 +3526,17 @@
           data: {}
           target:
             entity_id: light.bedroom_4_group_lights_all
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: snapshot_activity_bedroom_4_instant
+            snapshot_entities:
+            - light.ceiling_fan_bedroom_4
+            - light.bedroom_4_accent_lamp_left
+            - light.bedroom_4_accent_lamp_right
+            - light.bedroom_4_lightstrip
+            - light.bedroom_4_tie_fighter_lamp
+          enabled: false
       enable_action_wait_duration: 30
       enable_occupancy_action_wait:
       - if:
@@ -3496,6 +3549,27 @@
           data: {}
           target:
             entity_id: fan.ceiling_bedroom_4
+          enabled: true
+        - if:
+          - condition: not
+            conditions:
+            - condition: template
+              value_template: '{{ states.scene.snapshot_activity_bedroom_4_delayed
+                != None }}'
+          then:
+          - action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_delayed
+          - action: scene.delete
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.snapshot_activity_bedroom_4_delayed
+          enabled: false
       disable_action_wait_duration: 300
       disable_occupancy_action_wait:
       - if:
@@ -3508,6 +3582,14 @@
           data: {}
           target:
             entity_id: fan.ceiling_bedroom_4
+          enabled: true
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: snapshot_activity_bedroom_4_delayed
+            snapshot_entities:
+            - fan.ceiling_bedroom_4
+          enabled: false
       idle_timer: timer.bedroom_4_automation_last_motion_idle_reset
 - id: '1730055951025'
   alias: Bedroom 3, Room Occupancy
@@ -6169,122 +6251,6 @@
           - scene.snapshot_house_lights
           - scene.snapshot_house_security_privacy
           - scene.snapshot_house_security_recording
-  mode: single
-- id: '1752114014861'
-  alias: Living Room, Hue Sync Box Television Lights
-  description: ''
-  triggers:
-  - device_id: b3eb7611f388f72165a6b0e2f915af85
-    domain: hue
-    type: initial_press
-    subtype: 1
-    unique_id: a6a151b2-b26b-496b-af2d-6a52aa538cf4
-    trigger: device
-    id: Button 1 Pressed - On/Off
-  - device_id: b3eb7611f388f72165a6b0e2f915af85
-    domain: hue
-    type: initial_press
-    subtype: 2
-    unique_id: a34d810a-a452-45ed-b32b-6fc133d9b602
-    trigger: device
-    id: Button 2 Pressed – Increase
-  - device_id: b3eb7611f388f72165a6b0e2f915af85
-    domain: hue
-    type: initial_press
-    subtype: 3
-    unique_id: f172a425-cddd-4cdc-9d74-080a31c04956
-    trigger: device
-    id: Button 3 Pressed – Decrease
-  - device_id: b3eb7611f388f72165a6b0e2f915af85
-    domain: hue
-    type: initial_press
-    subtype: 4
-    unique_id: 0f9ee851-0faf-4b2f-8651-eb32830e7f9e
-    trigger: device
-    id: Button 4 Pressed
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Button 1 Pressed - On/Off
-        - condition: state
-          entity_id: switch.sync_box_power
-          state: 'on'
-      sequence:
-      - if:
-        - condition: state
-          entity_id: switch.sync_box_light_sync
-          state: 'on'
-        then:
-        - action: switch.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - switch.sync_box_light_sync
-        else:
-        - action: switch.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id:
-            - switch.sync_box_light_sync
-          enabled: true
-        alias: Toggle Hue Sync Box Light Sync
-      alias: Remote – Power On/Off
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Button 2 Pressed – Increase
-        - condition: state
-          entity_id: switch.sync_box_power
-          state: 'on'
-      sequence:
-      - action: number.increment
-        target:
-          entity_id: number.sync_box_brightness
-        data:
-          amount: 5
-      alias: Remote – Increase Brightness
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Button 3 Pressed – Decrease
-        - condition: state
-          entity_id: switch.sync_box_power
-          state: 'on'
-      sequence:
-      - action: number.decrement
-        target:
-          entity_id:
-          - number.sync_box_brightness
-        data:
-          amount: 5
-      alias: Remote – Decrease Brightness
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - Button 4 Pressed
-        - condition: state
-          entity_id: switch.sync_box_power
-          state: 'on'
-      sequence:
-      - action: select.select_next
-        target:
-          entity_id: select.sync_box_hdmi_input
-        data:
-          cycle: true
-      alias: Remote – Cycle Through HDMI Ports
   mode: single
 - id: '1752148183680'
   alias: Living Room, Television Sync Box
