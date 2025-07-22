@@ -2132,65 +2132,65 @@ views:
                         layout: vertical
                         collapsible_controls: true
                         show_percentage_control: true
-          - type: vertical-stack
-            cards:
-              - type: custom:mushroom-template-card
-                primary: Desk Height
-                card_mod:
-                  style: |
-                    ha-card {
-                      --card-primary-color: var( --subtitle-color ) !important;
-                      --card-primary-font-size: var( --subtitle-font-size ) !important;
-                      --card-primary-font-weight: var( --subtitle-font-weight ) !important;
-                      --card-primary-line-height: var( --subtitle-line-height ) !important;
-                      --card-primary-letter-spacing: var( --subtitle-letter-spacing ) !important;
-                      border: none;
-                      box-shadow: none;
-                      background: rgba( 0, 0, 0, 0 );
-                      margin: 0;
-                      cursor: default;
-                    }
-              - type: custom:decluttering-card
-                template: room_popup__grid_4_columns
-                variables:
-                  - cards:
-                      - type: custom:button-card
-                        entity: button.desk_bedroom_4_preset_1
-                        name: Lowest
-                        template: button__bdr4_desk_control
-                        variables:
-                          entity_height: sensor.desk_bedroom_4_desk_height
-                          height_min: 0
-                          height_max: 30
-                      - type: custom:button-card
-                        entity: button.desk_bedroom_4_preset_2
-                        name: Sitting
-                        template: button__bdr4_desk_control
-                        variables:
-                          entity_height: sensor.desk_bedroom_4_desk_height
-                          height_min: 30
-                          height_max: 34.5
-                      - type: custom:button-card
-                        entity: button.desk_bedroom_4_preset_3
-                        name: Standing
-                        template: button__bdr4_desk_control
-                        variables:
-                          entity_height: sensor.desk_bedroom_4_desk_height
-                          height_min: 34.5
-                          height_max: 45.5
-                      - type: custom:button-card
-                        entity: button.desk_bedroom_4_preset_4
-                        name: Highest
-                        template: button__bdr4_desk_control
-                        variables:
-                          entity_height: sensor.desk_bedroom_4_desk_height
-                          height_min: 45.5
-                          height_max: 100
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
               - title: Show More
               - cards:
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-template-card
+                        primary: Desk Height
+                        card_mod:
+                          style: |
+                            ha-card {
+                              --card-primary-color: var( --subtitle-color ) !important;
+                              --card-primary-font-size: var( --subtitle-font-size ) !important;
+                              --card-primary-font-weight: var( --subtitle-font-weight ) !important;
+                              --card-primary-line-height: var( --subtitle-line-height ) !important;
+                              --card-primary-letter-spacing: var( --subtitle-letter-spacing ) !important;
+                              border: none;
+                              box-shadow: none;
+                              background: rgba( 0, 0, 0, 0 );
+                              margin: 0;
+                              cursor: default;
+                            }
+                      - type: custom:decluttering-card
+                        template: room_popup__grid_4_columns
+                        variables:
+                          - cards:
+                              - type: custom:button-card
+                                entity: button.desk_bedroom_4_preset_1
+                                name: Lowest
+                                template: button__bdr4_desk_control
+                                variables:
+                                  entity_height: sensor.desk_bedroom_4_desk_height
+                                  height_min: 0
+                                  height_max: 30
+                              - type: custom:button-card
+                                entity: button.desk_bedroom_4_preset_2
+                                name: Sitting
+                                template: button__bdr4_desk_control
+                                variables:
+                                  entity_height: sensor.desk_bedroom_4_desk_height
+                                  height_min: 30
+                                  height_max: 34.5
+                              - type: custom:button-card
+                                entity: button.desk_bedroom_4_preset_3
+                                name: Standing
+                                template: button__bdr4_desk_control
+                                variables:
+                                  entity_height: sensor.desk_bedroom_4_desk_height
+                                  height_min: 34.5
+                                  height_max: 45.5
+                              - type: custom:button-card
+                                entity: button.desk_bedroom_4_preset_4
+                                name: Highest
+                                template: button__bdr4_desk_control
+                                variables:
+                                  entity_height: sensor.desk_bedroom_4_desk_height
+                                  height_min: 45.5
+                                  height_max: 100
                   - type: custom:mushroom-title-card
                     title: ''
                     subtitle: Outlets
@@ -2201,6 +2201,19 @@ views:
                           - type: custom:mushroom-light-card
                             name: Multimedia Power
                             entity: light.bedroom_4_media_plug
+          - type: custom:decluttering-card
+            template: room_popup__expander
+            variables:
+              - title: Scenes
+              - cards:
+                  - type: custom:decluttering-card
+                    template: room_popup__entities
+                    variables:
+                      - entities:
+                          - entity: input_button.bedroom_4_accent_lights_daily
+                            name: Accent Lights, Daily
+                          - entity: input_button.bedroom_4_accent_lights_streaming
+                            name: Accent Lights, Streaming
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
