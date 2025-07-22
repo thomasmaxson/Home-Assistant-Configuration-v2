@@ -134,3 +134,26 @@ Below are a few of my most used resources. If you like what you see here, please
 * [Slacker Labs (Jeffery Stone)](https://github.com/thejeffreystone/homeassistant-config)
 
 </details>
+
+<hr>
+
+### Custom Blueprints:
+
+<details>
+<summary>Click to Expand</summary>
+
+Below are a list of the custom Blueprints that I have created to help easily integrate devices into my smart home.
+
+* [Aqara Wireless Mini Switch](https://gist.github.com/thomasmaxson/67dc65d3cf0725f3d2088d38ba9f0234)
+* [IKEA TRÅDFRI, RODRET or SOMRIG, 2 Button Remote Control](https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674)
+* [IKEA STYRBAR Remote control](https://gist.github.com/thomasmaxson/b494e0d0a67a7ed940188c30eedeb7fa)
+* [IKEA TRÅDFRI, 2 Button Remote Control](https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674)
+* [IKEA TRÅDFRI, 5 Button Remote Control](https://gist.github.com/thomasmaxson/1b776b184882ba9c85c90c20c02b423a)
+* [Lutron Pico, 3 Button with Raise/Lower Remote Control](https://gist.github.com/thomasmaxson/7327b309459d38d8a36ee3bb18ce6b9e)
+* [Lutron Pico, Paddle Remote Control](https://gist.github.com/thomasmaxson/7a829086a4f3bdde56691cf85184345c)
+* [Philips Hue, Dimmer Remote Control](https://gist.github.com/thomasmaxson/7aeffeefb4950278c5ecfca303332c12)
+* [Philips Hue, Tap Remote Control](https://gist.github.com/thomasmaxson/730d83fa9971097dc66a60a77a02d28c)
+* [Sonoff Wireless Switch](https://gist.github.com/thomasmaxson/1caba2eb5bd9bb0bb1aed157b5bfb15c)
+* [Inovelli Switch](https://gist.github.com/thomasmaxson/2b0189a9942e992d8e7de20705ccbb51)
+
+</details>
