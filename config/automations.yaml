@@ -6521,3 +6521,19 @@
           amount: 5
         enabled: true
       repeat_duration: 1000
+- id: '1753191191364'
+  alias: Bedroom 4, Input Button -> Daily Lights
+  description: ''
+  use_blueprint:
+    path: maxson/input_button_trigger_scene.yaml
+    input:
+      input_button: input_button.bedroom_4_accent_lights_daily
+      action: scene.bedroom_4_accent_lights_daily
+- id: '1753191359074'
+  alias: Bedroom 4, Input Button -> Streaming Lights
+  description: ''
+  use_blueprint:
+    path: maxson/input_button_trigger_scene.yaml
+    input:
+      input_button: input_button.bedroom_4_accent_lights_streaming
+      action: scene.bedroom_4_accent_lights_streaming
