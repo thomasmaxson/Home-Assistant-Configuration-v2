@@ -1,0 +1,36 @@
+blueprint:
+  name: Input Button Action
+  description: Make an input_button helper entity execute a script or activate a scene.
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    input_button:
+      name: Input button
+      description: Input button
+      selector:
+        entity:
+          filter:
+            domain: input_button
+    action:
+      name: Script or Scene
+      description: Script to execute or Scene to activate upon pressing the button.
+      selector:
+        entity:
+          filter:
+            domain:
+              - script
+              - scene
+
+mode: single
+
+triggers:
+  - trigger: state
+    entity_id: !input input_button
+
+actions:
+  - alias: "Activate the script/scene"
+    action: homeassistant.turn_on
+    target:
+      entity_id: !input action
