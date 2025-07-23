@@ -8,7 +8,7 @@ blueprint:
   domain: automation
   input:
     remote:
-      name: Sonoff Wireless Switch
+      name: Sonoff, Wireless Switch
       description: "Sonoff Wireless Switch remote used to trigger actions."
       selector:
         device:

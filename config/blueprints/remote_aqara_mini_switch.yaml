@@ -1,5 +1,5 @@
 blueprint:
-  name: Aqara Wireless Mini Switch
+  name: Aqara, Wireless Mini Switch
   description: Control devices with your Aqara Wireless Mini Switch.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/67dc65d3cf0725f3d2088d38ba9f0234

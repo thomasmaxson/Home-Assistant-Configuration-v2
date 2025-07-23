@@ -12,7 +12,7 @@
 # | Right Arrow | Long Press  | Custom action       |
 
 blueprint:
-  name: IKEA STYRBAR Remote control
+  name: IKEA STYRBAR, Remote control
   description: Control devices with your IKEA STYRBAR 4 button remote.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/b494e0d0a67a7ed940188c30eedeb7fa

@@ -25,7 +25,7 @@
 # | Config | Release         | Custom action |
 
 blueprint:
-  name: Switch, Inovelli
+  name: Inovelli, Dimmer Switch
   description: Set different actions for x1, x2, x3, x4, x5 button taps for Inovelli Blue Series switches (2-in-1, dimmer, etc.).
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/2b0189a9942e992d8e7de20705ccbb51
