@@ -2125,6 +2125,12 @@ views:
                         name: TIE Fighter Lamp
                         entity: light.bedroom_4_tie_fighter_lamp
           - type: custom:decluttering-card
+            template: room_popup__entities
+            variables:
+              - entities:
+                  - entity: input_select.bedroom_4_scenes
+                    name: Accent Light Scenes
+          - type: custom:decluttering-card
             template: room_popup__grid_2_columns
             variables:
               - cards:
@@ -2219,19 +2225,6 @@ views:
                           - type: custom:mushroom-light-card
                             name: Multimedia Power
                             entity: light.bedroom_4_media_plug
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Scenes
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: input_button.bedroom_4_accent_lights_daily
-                            name: Accent Lights, Daily
-                          - entity: input_button.bedroom_4_accent_lights_streaming
-                            name: Accent Lights, Streaming
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
