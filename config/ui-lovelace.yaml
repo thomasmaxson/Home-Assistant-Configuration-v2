@@ -6269,45 +6269,45 @@ views:
               --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
 
               {% set the_entity = 'media_player.echo_kitchen' %}
-              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.appletv_living_room' %}
-              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_dining_room' %}
-              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
 
               {% set the_entity = 'media_player.appletv_bedroom_1' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_2' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_3' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_4' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
-              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.sony_bravia_tv' %}
@@ -6344,7 +6344,7 @@ views:
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+                --maxson-floorplan--color-media-player-appletv-living-room ) )
           - type: state-icon
             entity: media_player.echo_dot_dining_room
             icon: mdi:spotify
@@ -6532,45 +6532,45 @@ views:
               --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
 
               {% set the_entity = 'media_player.echo_kitchen' %}
-              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.appletv_living_room' %}
-              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_dining_room' %}
-              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
 
               {% set the_entity = 'media_player.appletv_bedroom_1' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_2' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_3' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.appletv_bedroom_4' %}
-              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
-              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.sony_bravia_tv' %}
@@ -6607,7 +6607,7 @@ views:
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+                --maxson-floorplan--color-media-player-appletv-living-room ) )
           - type: state-icon
             entity: media_player.echo_dot_dining_room
             icon: mdi:spotify
