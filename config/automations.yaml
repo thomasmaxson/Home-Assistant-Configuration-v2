@@ -1455,6 +1455,20 @@
       light: light.bedroom_4_group_occupancy_lights
       brightness_step: 10
       config_mode: single
+      button_left_short:
+      - action: input_select.select_previous
+        metadata: {}
+        data:
+          cycle: true
+        target:
+          entity_id: input_select.bedroom_4_scenes
+      button_right_short:
+      - action: input_select.select_next
+        metadata: {}
+        data:
+          cycle: true
+        target:
+          entity_id: input_select.bedroom_4_scenes
 - id: '1727117077347'
   alias: Living Room, Light - Primary
   description: Control primary lights in the living room via a IKEA TRADFRI 2 button
@@ -1503,7 +1517,7 @@
       entity_id: light.closet_hallway_ceiling_light
   mode: single
 - id: '1727129683083'
-  alias: Bedroom 4, Desk Lamp
+  alias: Bedroom 4, Accent Lamps
   description: ''
   triggers:
   - entity_id:
@@ -1522,7 +1536,9 @@
     data:
       brightness_pct: 40
     target:
-      entity_id: light.bedroom_4_accent_lamp_right
+      entity_id:
+      - light.bedroom_4_accent_lamp_right
+      - light.bedroom_4_accent_lamp_left
   mode: single
 - id: '1727129921085'
   alias: Bedroom 4, Lightstrip
@@ -6521,19 +6537,41 @@
           amount: 5
         enabled: true
       repeat_duration: 1000
-- id: '1753191191364'
-  alias: Bedroom 4, Input Button -> Daily Lights
+- id: '1753529430836'
+  alias: Bedroom 4, Input Select - Cycle Scenes
   description: ''
-  use_blueprint:
-    path: maxson/input_button_trigger_scene.yaml
-    input:
-      input_button: input_button.bedroom_4_accent_lights_daily
-      action: scene.bedroom_4_accent_lights_daily
-- id: '1753191359074'
-  alias: Bedroom 4, Input Button -> Streaming Lights
-  description: ''
-  use_blueprint:
-    path: maxson/input_button_trigger_scene.yaml
-    input:
-      input_button: input_button.bedroom_4_accent_lights_streaming
-      action: scene.bedroom_4_accent_lights_streaming
+  triggers:
+  - trigger: state
+    entity_id:
+    - input_select.bedroom_4_scenes
+    to: Daily
+    id: To Daily
+  - trigger: state
+    entity_id:
+    - input_select.bedroom_4_scenes
+    to: Streaming
+    id: To Streaming
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - To Daily
+      sequence:
+      - action: scene.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: scene.bedroom_4_accent_lights_daily
+    - conditions:
+      - condition: trigger
+        id:
+        - To Streaming
+      sequence:
+      - action: scene.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: scene.bedroom_4_accent_lights_streaming
+  mode: single

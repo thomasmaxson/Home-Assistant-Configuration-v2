@@ -1,1 +1,244 @@
-[]
+- id: "1753531118280"
+  name: Accent Lights - Daily
+  entities:
+    light.bedroom_4_accent_lamp_left:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+        - "off"
+        - candle
+        - fire
+        - prism
+        - sparkle
+        - opal
+        - glisten
+        - underwater
+        - cosmos
+        - sunbeam
+        - enchant
+        - sunrise
+        - sunset
+      supported_color_modes:
+        - color_temp
+        - xy
+      effect: "off"
+      color_mode: color_temp
+      brightness: 102
+      color_temp_kelvin: 3802
+      color_temp: 263
+      hs_color:
+        - 26.923
+        - 38.579
+      rgb_color:
+        - 255
+        - 201
+        - 157
+      xy_color:
+        - 0.432
+        - 0.368
+      mode: normal
+      dynamics: none
+      icon: hue:wellness
+      friendly_name: Light, Accent Lamp (Left)
+      supported_features: 44
+      state: "on"
+    light.bedroom_4_accent_lamp_right:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+        - "off"
+        - candle
+        - fire
+        - prism
+        - sparkle
+        - opal
+        - glisten
+        - underwater
+        - cosmos
+        - sunbeam
+        - enchant
+        - sunrise
+        - sunset
+      supported_color_modes:
+        - color_temp
+        - xy
+      effect: "off"
+      color_mode: color_temp
+      brightness: 102
+      color_temp_kelvin: 3802
+      color_temp: 263
+      hs_color:
+        - 26.923
+        - 38.579
+      rgb_color:
+        - 255
+        - 201
+        - 157
+      xy_color:
+        - 0.432
+        - 0.368
+      mode: normal
+      dynamics: none
+      icon: hue:wellness
+      friendly_name: Light, Accent Lamp (Right)
+      supported_features: 44
+      state: "on"
+    switch.circadian_lighting_light_accent_lamp_left_circadian:
+      hs_color:
+        - 26.939
+        - 38.431
+      brightness:
+      colortemp: 3798.7778420296613
+      icon: mdi:theme-light-dark
+      friendly_name: Light, Accent Lamp (Left) Circadian
+      state: "on"
+    switch.circadian_lighting_light_accent_lamp_right_circadian:
+      hs_color:
+        - 26.939
+        - 38.431
+      brightness:
+      colortemp: 3798.7778420296613
+      icon: mdi:theme-light-dark
+      friendly_name: Light, Accent Lamp (Right) Circadian
+      state: "on"
+    input_boolean.bedroom_4_sync_accent_lights:
+      editable: true
+      icon: mdi:sync-circle
+      friendly_name: Bedroom 4, Sync - Accent Lights
+      state: "on"
+  metadata:
+    light.bedroom_4_accent_lamp_left:
+      entity_only: true
+    light.bedroom_4_accent_lamp_right:
+      entity_only: true
+    switch.circadian_lighting_light_accent_lamp_left_circadian:
+      entity_only: true
+    switch.circadian_lighting_light_accent_lamp_right_circadian:
+      entity_only: true
+    input_boolean.bedroom_4_sync_accent_lights:
+      entity_only: true
+  icon: hue:wellness
+- id: "1753531400959"
+  name: Accent Lights - Streaming
+  entities:
+    light.bedroom_4_accent_lamp_left:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+        - "off"
+        - candle
+        - fire
+        - prism
+        - sparkle
+        - opal
+        - glisten
+        - underwater
+        - cosmos
+        - sunbeam
+        - enchant
+        - sunrise
+        - sunset
+      supported_color_modes:
+        - color_temp
+        - xy
+      effect: "off"
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+        - 187.115
+        - 99.216
+      rgb_color:
+        - 2
+        - 225
+        - 255
+      xy_color:
+        - 0.149
+        - 0.295
+      mode: normal
+      dynamics: none
+      icon: hue:wellness
+      friendly_name: Light, Accent Lamp (Left)
+      supported_features: 44
+      state: "on"
+    light.bedroom_4_accent_lamp_right:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+        - "off"
+        - candle
+        - fire
+        - prism
+        - sparkle
+        - opal
+        - glisten
+        - underwater
+        - cosmos
+        - sunbeam
+        - enchant
+        - sunrise
+        - sunset
+      supported_color_modes:
+        - color_temp
+        - xy
+      effect: "off"
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+        - 312.113
+        - 83.529
+      rgb_color:
+        - 255
+        - 42
+        - 212
+      xy_color:
+        - 0.4415
+        - 0.1872
+      mode: normal
+      dynamics: none
+      icon: hue:wellness
+      friendly_name: Light, Accent Lamp (Right)
+      supported_features: 44
+      state: "on"
+    switch.circadian_lighting_light_accent_lamp_left_circadian:
+      hs_color:
+      brightness:
+      colortemp: 3849.4767687833873
+      icon: mdi:theme-light-dark
+      friendly_name: Light, Accent Lamp (Left) Circadian
+      state: "off"
+    switch.circadian_lighting_light_accent_lamp_right_circadian:
+      hs_color:
+      brightness:
+      colortemp: 3849.4767687833873
+      icon: mdi:theme-light-dark
+      friendly_name: Light, Accent Lamp (Right) Circadian
+      state: "off"
+    input_boolean.bedroom_4_sync_accent_lights:
+      editable: true
+      icon: mdi:sync-circle
+      friendly_name: Bedroom 4, Sync - Accent Lights
+      state: "off"
+  icon: hue:wellness
+  metadata:
+    light.bedroom_4_accent_lamp_left:
+      entity_only: true
+    light.bedroom_4_accent_lamp_right:
+      entity_only: true
+    switch.circadian_lighting_light_accent_lamp_left_circadian:
+      entity_only: true
+    switch.circadian_lighting_light_accent_lamp_right_circadian:
+      entity_only: true
+    input_boolean.bedroom_4_sync_accent_lights:
+      entity_only: true
