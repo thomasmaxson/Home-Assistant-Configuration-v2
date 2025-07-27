@@ -6254,6 +6254,550 @@ views:
         visibility:
           - condition: screen
             media_query: '(min-width: 0px) and (max-width: 767px)'
+  - type: custom:grid-layout
+    path: map-media
+    title: Media
+    theme: casamaxson
+    cards:
+      - type: picture-elements
+        image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
+        view_layout:
+          grid-area: row1
+        card_mod:
+          style: |
+            ha-card {
+              --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
+
+              {% set the_entity = 'media_player.echo_kitchen' %}
+              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.appletv_living_room' %}
+              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_dining_room' %}
+              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+
+              {% set the_entity = 'media_player.appletv_bedroom_1' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_2' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_3' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_4' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
+              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.sony_bravia_tv' %}
+              --maxson-floorplan--color-media-player-sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_power' %}
+              --maxson-floorplan--color-switch-sync-box-power: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_light_sync' %}
+              --maxson-floorplan--color-switch-sync-box-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+            }
+        elements:
+          - type: state-icon
+            entity: media_player.echo_kitchen
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 67%
+              left: 25%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-media-player-echo-kitchen )
+                )
+          - type: state-icon
+            entity: media_player.appletv_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 53%
+              left: 16.75%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+          - type: state-icon
+            entity: media_player.echo_dot_dining_room
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 48%
+              left: 36%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_1
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 25%
+              left: 15%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-1 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_1
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 25%
+              left: 23%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-1 ) )
+          - type: state-icon
+            entity: media_player.echo_pop_main_bathroom
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 22.5%
+              left: 45%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-pop-bathroom-main )
+                )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 79%
+              left: 82%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-2 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_2
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 79%
+              left: 87%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-2 ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 23%
+              left: 56%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-3 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_3
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 23%
+              left: 62%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-3 ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 79%
+              left: 53%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-4 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_4
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 79%
+              left: 59%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-4 ) )
+          - type: state-icon
+            entity: media_player.sony_bravia_tv
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 42%
+              left: 17%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
+                ) )
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: media_player.sony_bravia_tv
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: switch.sync_box_power
+                state_color: false
+                tap_action:
+                  action: toggle
+                style:
+                  top: 46.5%
+                  left: 15%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-switch-sync-box-power )
+                    )
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: media_player.sony_bravia_tv
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: switch.sync_box_light_sync
+                state_color: false
+                tap_action:
+                  action: toggle
+                style:
+                  top: 46.5%
+                  left: 19%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-switch-sync-box-lights )
+                    )
+        visibility:
+          - condition: screen
+            media_query: '(min-width: 768px)'
+      - type: picture-elements
+        view_layout:
+          grid-area: row2
+        card_mod:
+          style: |
+            ha-card {
+              --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
+
+              {% set the_entity = 'media_player.echo_kitchen' %}
+              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.appletv_living_room' %}
+              --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_dining_room' %}
+              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+
+              {% set the_entity = 'media_player.appletv_bedroom_1' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_2' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_3' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.appletv_bedroom_4' %}
+              --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
+              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
+              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              
+              {% set the_entity = 'media_player.sony_bravia_tv' %}
+              --maxson-floorplan--color-media-player--sony-bravia-tv: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_power' %}
+              --maxson-floorplan--color-switch-sync-box-power: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+
+              {% set the_entity = 'switch.sync_box_light_sync' %}
+              --maxson-floorplan--color-switch-sync-box-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
+            }
+        elements:
+          - type: state-icon
+            entity: media_player.echo_kitchen
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 26%
+              left: 33.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-media-player-echo-kitchen )
+                )
+          - type: state-icon
+            entity: media_player.appletv_living_room
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 17%
+              left: 45%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+          - type: state-icon
+            entity: media_player.echo_dot_dining_room
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 38%
+              left: 54%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_1
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 16%
+              left: 76%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-1 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_1
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 23%
+              left: 76%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-1 ) )
+          - type: state-icon
+            entity: media_player.echo_pop_main_bathroom
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 44.5%
+              left: 77.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-pop-bathroom-main )
+                )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_2
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 81.5%
+              left: 20.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-2 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_2
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 87.5%
+              left: 20.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-2 ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_3
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 58%
+              left: 72.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-3 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_3
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 58%
+              left: 81.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-3 ) )
+          - type: state-icon
+            entity: media_player.appletv_bedroom_4
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 53%
+              left: 20.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-appletv-bedroom-4 ) )
+          - type: state-icon
+            entity: media_player.echo_dot_bedroom_4
+            icon: mdi:spotify
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 59%
+              left: 20.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-media-player-echo-dot-bedroom-4 ) )
+          - type: state-icon
+            entity: media_player.sony_bravia_tv
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 17%
+              left: 59%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-media-player--sony-bravia-tv
+                ) )
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: media_player.sony_bravia_tv
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: switch.sync_box_power
+                state_color: false
+                tap_action:
+                  action: toggle
+                style:
+                  top: 14%
+                  left: 52%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-switch-sync-box-power )
+                    )
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: media_player.sony_bravia_tv
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: switch.sync_box_light_sync
+                state_color: false
+                tap_action:
+                  action: toggle
+                style:
+                  top: 20%
+                  left: 52%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-switch-sync-box-lights )
+                    )
+        image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
+        visibility:
+          - condition: screen
+            media_query: '(min-width: 0px) and (max-width: 767px)'
+    layout:
+      grid-gap: 0
+      grid-auto-rows: auto
+      grid-template-columns: 5% 1fr 5%
+      grid-template-areas: |
+        ".  row1  ."
+        ".  row2  ."
+      mediaquery:
+        '(max-width: 992px)':
+          grid-auto-rows: auto
+          grid-template-columns: 2.5% 95% 2.5%
   - layout:
       grid-gap: 0
       grid-auto-rows: auto
