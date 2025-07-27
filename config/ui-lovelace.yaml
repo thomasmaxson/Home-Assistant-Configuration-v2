@@ -974,6 +974,12 @@ views:
                   - type: custom:button-card
                     template: chip_detail__occupancy
                     entity: binary_sensor.presence_living_room
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.presence_living_room_presence_status_reset
+                      data: {}
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
@@ -1746,6 +1752,12 @@ views:
                   - type: custom:button-card
                     template: chip_detail__occupancy
                     entity: binary_sensor.bedroom_3_group_all_occupancy
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.presence_bedroom_3_reset_nopresence_status
+                      data: {}
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
@@ -1927,6 +1939,12 @@ views:
                   - type: custom:button-card
                     template: chip_detail__occupancy
                     entity: binary_sensor.bedroom_4_group_all_occupancy
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.presence_bedroom_4_reset_nopresence_status
+                      data: {}
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
@@ -2832,6 +2850,12 @@ views:
                   - type: custom:button-card
                     template: chip_detail__occupancy
                     entity: binary_sensor.presence_garage
+                    tap_action:
+                      action: call-service
+                      service: button.press
+                      target:
+                        entity_id: button.presence_garage_presence_status_reset
+                      data: {}
           - type: custom:decluttering-card
             template: room_popup__chips
             variables:
