@@ -9,6 +9,19 @@
 sensor:
   - platform: template
     sensors:
+      esphome_board_updates:
+        value_template: "{{ states( 'update.esphome_update' ) }}"
+        attribute_templates:
+          entity_id: >
+            {%- set ns = namespace( entities = [] ) -%}
+            {%- for s in states.update | rejectattr( 'attributes.title', 'undefined' ) -%}
+              {%- if s.attributes.title == 'ESPHome' and s.object_id != 'esphome_update' -%}
+                {% set ns.entities = ns.entities + [ s.entity_id  ] -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {{ ns.entities }}
+
       status_laundry_dryer_machine_custom:
         friendly_name: "Status, Laundry - Tumble Dryer (Custom)"
         icon_template: >-
@@ -68,12 +81,12 @@ sensor:
         icon_template: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
           {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
-          {%- set state = states( 'input_select.dishwasher_status' ) %}
+          {%- set state = states( 'input_select.status_dishwasher_options' ) %}
 
           {{ 'mdi:dishwasher' if state in value_on else 'mdi:dishwasher' if state in value_off else 'mdi:cloud-question' }}
         value_template: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
           {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
-          {%- set state = states( 'input_select.dishwasher_status' ) %}
+          {%- set state = states( 'input_select.status_dishwasher_options' ) %}
 
           {{ 'on' if state in value_on else 'off' if state in value_off else 'unavailable' }}
