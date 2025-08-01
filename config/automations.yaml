@@ -6575,3 +6575,16 @@
         target:
           entity_id: scene.bedroom_4_accent_lights_streaming
   mode: single
+- id: '1753738265510'
+  alias: ESPHome - Update All Devices Automatically
+  description: ''
+  triggers:
+  - trigger: template
+    value_template: '{{ integration_entities( ''esphome'' ) | select( ''match'', ''update.''
+      ) | select( ''is_state'', ''on'' ) | list | count > 0 }}'
+  conditions: []
+  actions:
+  - action: script.update_all_esphome_devices
+    metadata: {}
+    data: {}
+  mode: single
