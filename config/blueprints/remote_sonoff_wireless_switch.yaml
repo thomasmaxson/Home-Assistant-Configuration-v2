@@ -1,5 +1,5 @@
 blueprint:
-  name: Sonoff Wireless Switch
+  name: Sonoff, Wireless Switch
   description: Control devices with your Sonoff Wireless Switch.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/1caba2eb5bd9bb0bb1aed157b5bfb15c
@@ -95,24 +95,24 @@ triggers:
 
 actions:
   - variables:
-      command: '{{ trigger.event.data.command }}'
-      cluster_id: '{{ trigger.event.data.cluster_id }}'
-      endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
   - choose:
       - conditions:
           - '{{ command == "toggle" }}'
-          - '{{ cluster_id == 6 }}'
-          - '{{ endpoint_id == 1 }}'
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
         sequence: !input single_press_action
       - conditions:
           - '{{ command == "on" }}'
-          - '{{ cluster_id == 6 }}'
-          - '{{ endpoint_id == 1 }}'
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
         sequence: !input double_press_action
       - conditions:
           - '{{ command == "off" }}'
-          - '{{ cluster_id == 6 }}'
-          - '{{ endpoint_id == 1 }}'
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
         sequence: !input long_press_action
 
     default:
