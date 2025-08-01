@@ -1,19 +1,19 @@
 select_resident_tab:
   alias: Select Resident Tab
   sequence:
-    - action: input_select.select_option
-      target: {}
-      data:
-        option: Tom
-    - action: browser_mod.navigate
-      target: {}
-      data:
-        path: "#Tom"
+  - action: input_select.select_option
+    target: {}
+    data:
+      option: Tom
+  - action: browser_mod.navigate
+    target: {}
+    data:
+      path: '#Tom'
   description: From the resident dashboard page, select value and show resident content
   icon: mdi:account-group
 amazon_echo_announcement:
   alias: Announce via Amazon Echo Devices
-  description: ""
+  description: ''
   icon: mdi:speaker-wireless
   fields:
     send_to:
@@ -21,31 +21,31 @@ amazon_echo_announcement:
         select:
           multiple: true
           options:
-            - value: dining_room
-              label: Dining Room
-            - value: bathroom_1
-              label: Bathroom 1 (Main)
-            - value: bedroom_1
-              label: Bedroom 1 (Main)
-            - value: bedroom_2
-              label: Bedroom 2 (Guest)
-            - value: bedroom_3
-              label: Bedroom 3 (Jess' Office)
-            - value: bedroom_4
-              label: Bedroom 4 (Tom's Office)
-            - value: kitchen
-              label: Kitchen
+          - value: dining_room
+            label: Dining Room
+          - value: bathroom_1
+            label: Bathroom 1 (Main)
+          - value: bedroom_1
+            label: Bedroom 1 (Main)
+          - value: bedroom_2
+            label: Bedroom 2 (Guest)
+          - value: bedroom_3
+            label: Bedroom 3 (Jess' Office)
+          - value: bedroom_4
+            label: Bedroom 4 (Tom's Office)
+          - value: kitchen
+            label: Kitchen
       name: Send To
       description: Which area should the annoucement be made in.
       required: true
       default:
-        - dining_room
-        - bathroom_1
-        - bedroom_1
-        - bedroom_2
-        - bedroom_3
-        - bedroom_4
-        - kitchen
+      - dining_room
+      - bathroom_1
+      - bedroom_1
+      - bedroom_2
+      - bedroom_3
+      - bedroom_4
+      - kitchen
     message:
       selector:
         text:
@@ -54,571 +54,555 @@ amazon_echo_announcement:
       example: This is a sample message.
       required: true
   sequence:
-    - if:
-        - alias: Ensure Household Announcements are Allowed
-          condition: state
-          entity_id: input_boolean.household_notify
-          state: "on"
-      then:
-        - parallel:
-            - alias: Announce on Amazon Echo, Kitchen
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Kitchen Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_kitchen
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'kitchen' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_kitchen
-                    snapshot_entities:
-                      - media_player.echo_kitchen
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.5
-                  target:
-                    entity_id: media_player.echo_kitchen
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_kitchen
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id:
-                      - scene.alexa_media_state_kitchen
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id:
-                      - scene.alexa_media_state_kitchen
-            - alias: Announce on Amazon Echo, Dining Room
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Dining ROom Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_dining_room
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'dining_room' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_dining_room
-                    snapshot_entities:
-                      - media_player.all_media_dining_room
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_dot_dining_room
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_dot_dining_room
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_dining_room
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_dining_room
-            - alias: Announce on Amazon Echo, Main Bathroom
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Main Bathroom Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_bathroom_1
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'bathroom_1' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_bathroom_main
-                    snapshot_entities:
-                      - media_player.all_media_bathroom_main
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_pop_main_bathroom
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_pop_main_bathroom
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bathroom_main
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bathroom_main
-            - alias: Announce on Amazon Echo, Bedroom 1
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Bedroom 1 Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_bedroom_1
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'bedroom_1' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_bedroom1
-                    snapshot_entities:
-                      - media_player.echo_kitchen
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_dot_bedroom_1
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_dot_bedroom_1
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - alias: Enable Light Switch LEDs
-                  action: script.update_inovelli_light_switch_led_s
-                  metadata: {}
-                  data:
-                    led: All
-                    color: Blue
-                    effect: Solid
-                    duration: 10 Seconds
-                    brightness: 100
-                    entity_ids:
-                      - light.ceiling_fan_switch_bedroom_1
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom1
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom1
-            - alias: Announce on Amazon Echo, Bedroom 2
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Bedroom 2 Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_bedroom_2
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'bedroom_2' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_bedroom2
-                    snapshot_entities:
-                      - media_player.echo_kitchen
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_dot_bedroom_2
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_dot_bedroom_2
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - alias: Enable Light Switch LEDs
-                  action: script.update_inovelli_light_switch_led_s
-                  metadata: {}
-                  data:
-                    led: All
-                    color: Blue
-                    effect: Solid
-                    duration: 10 Seconds
-                    brightness: 100
-                    entity_ids:
-                      - light.ceiling_fan_switch_bedroom_2
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom2
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom2
-            - alias: Announce on Amazon Echo, Bedroom 3
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Bedroom 3 Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_bedroom_3
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'bedroom_3' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_bedroom3
-                    snapshot_entities:
-                      - media_player.echo_kitchen
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_dot_bedroom_3
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_dot_bedroom_3
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - alias: Enable Light Switch LEDs
-                  action: script.update_inovelli_light_switch_led_s
-                  metadata: {}
-                  data:
-                    led: All
-                    color: Blue
-                    effect: Solid
-                    duration: 10 Seconds
-                    brightness: 100
-                    entity_ids:
-                      - light.ceiling_fan_switch_bedroom_3
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom3
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom3
-            - alias: Announce on Amazon Echo, Bedroom 4
-              if:
-                - condition: and
-                  conditions:
-                    - alias: Ensure Bedroom 4 Announcements are Allowed
-                      condition: state
-                      entity_id: input_boolean.household_notify_bedroom_4
-                      state: "on"
-                    - condition: template
-                      value_template: "{{ 'bedroom_4' in send_to }}"
-              then:
-                - action: scene.create
-                  metadata: {}
-                  data:
-                    scene_id: alexa_media_state_bedroom4
-                    snapshot_entities:
-                      - media_player.all_media_dining_room
-                - alias: Set Volume for Announcement
-                  action: media_player.volume_set
-                  data:
-                    volume_level: 0.3
-                  target:
-                    entity_id: media_player.echo_dot_bedroom_4
-                - alias: Announce the Message
-                  action: notify.alexa_media_echo_dot_bedroom_4
-                  data:
-                    data:
-                      type: announce
-                    message: "{{ message }}"
-                - alias: Enable Light Switch LEDs
-                  action: script.update_inovelli_light_switch_led_s
-                  metadata: {}
-                  data:
-                    led: All
-                    color: Blue
-                    effect: Solid
-                    duration: 10 Seconds
-                    brightness: 100
-                    entity_ids:
-                      - light.ceiling_fan_switch_bedroom_4
-                - delay:
-                    hours: 0
-                    minutes: 0
-                    seconds: 8
-                    milliseconds: 0
-                - action: scene.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id:
-                      - scene.alexa_media_state_bedroom4
-                - action: scene.delete
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: scene.alexa_media_state_bedroom4
+  - if:
+    - alias: Ensure Household Announcements are Allowed
+      condition: state
+      entity_id: input_boolean.household_notify
+      state: 'on'
+    then:
+    - parallel:
+      - alias: Announce on Amazon Echo, Kitchen
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Kitchen Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_kitchen
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''kitchen'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_kitchen
+            snapshot_entities:
+            - media_player.echo_kitchen
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.5
+          target:
+            entity_id: media_player.echo_kitchen
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_kitchen
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - scene.alexa_media_state_kitchen
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - scene.alexa_media_state_kitchen
+      - alias: Announce on Amazon Echo, Dining Room
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Dining ROom Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_dining_room
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''dining_room'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_dining_room
+            snapshot_entities:
+            - media_player.all_media_dining_room
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_dot_dining_room
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_dot_dining_room
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_dining_room
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_dining_room
+      - alias: Announce on Amazon Echo, Main Bathroom
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Main Bathroom Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bathroom_1
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bathroom_1'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_bathroom_main
+            snapshot_entities:
+            - media_player.all_media_bathroom_main
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_pop_main_bathroom
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_pop_main_bathroom
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bathroom_main
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bathroom_main
+      - alias: Announce on Amazon Echo, Bedroom 1
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 1 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_1
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_1'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_bedroom1
+            snapshot_entities:
+            - media_player.echo_kitchen
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_dot_bedroom_1
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_dot_bedroom_1
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - alias: Enable Light Switch LEDs
+          action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Blue
+            effect: Solid
+            duration: 10 Seconds
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_1
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom1
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom1
+      - alias: Announce on Amazon Echo, Bedroom 2
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 2 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_2
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_2'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_bedroom2
+            snapshot_entities:
+            - media_player.echo_kitchen
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_dot_bedroom_2
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_dot_bedroom_2
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - alias: Enable Light Switch LEDs
+          action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Blue
+            effect: Solid
+            duration: 10 Seconds
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_2
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom2
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom2
+      - alias: Announce on Amazon Echo, Bedroom 3
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 3 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_3
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_3'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_bedroom3
+            snapshot_entities:
+            - media_player.echo_kitchen
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_dot_bedroom_3
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_dot_bedroom_3
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - alias: Enable Light Switch LEDs
+          action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Blue
+            effect: Solid
+            duration: 10 Seconds
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_3
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom3
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom3
+      - alias: Announce on Amazon Echo, Bedroom 4
+        if:
+        - condition: and
+          conditions:
+          - alias: Ensure Bedroom 4 Announcements are Allowed
+            condition: state
+            entity_id: input_boolean.household_notify_bedroom_4
+            state: 'on'
+          - condition: template
+            value_template: '{{ ''bedroom_4'' in send_to }}'
+        then:
+        - action: scene.create
+          metadata: {}
+          data:
+            scene_id: alexa_media_state_bedroom4
+            snapshot_entities:
+            - media_player.all_media_dining_room
+        - alias: Set Volume for Announcement
+          action: media_player.volume_set
+          data:
+            volume_level: 0.3
+          target:
+            entity_id: media_player.echo_dot_bedroom_4
+        - alias: Announce the Message
+          action: notify.alexa_media_echo_dot_bedroom_4
+          data:
+            data:
+              type: announce
+            message: '{{ message }}'
+        - alias: Enable Light Switch LEDs
+          action: script.update_inovelli_light_switch_led_s
+          metadata: {}
+          data:
+            led: All
+            color: Blue
+            effect: Solid
+            duration: 10 Seconds
+            brightness: 100
+            entity_ids:
+            - light.ceiling_fan_switch_bedroom_4
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 8
+            milliseconds: 0
+        - action: scene.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - scene.alexa_media_state_bedroom4
+        - action: scene.delete
+          metadata: {}
+          data: {}
+          target:
+            entity_id: scene.alexa_media_state_bedroom4
   mode: parallel
   max: 10
 push_notification_to_ios_devices:
   alias: Push Notification to iOS Devices
   variables:
-    passed_title: "{{ title | default('Home Assistant') }}"
-    passed_subtitle: "{{ subtitle | default(false) }}"
-    passed_message: "{{ message | default(false) }}"
-    passed_link: "{{ notification_link | default('/lovelace/home') }}"
-    passed_actions: "{{ notification_actions | default('none') }}"
+    passed_title: '{{ title | default(''Home Assistant'') }}'
+    passed_subtitle: '{{ subtitle | default(false) }}'
+    passed_message: '{{ message | default(false) }}'
+    passed_link: '{{ notification_link | default(''/lovelace/home'') }}'
+    passed_actions: '{{ notification_actions | default(''none'') }}'
   sequence:
-    - variables:
-        helper:
-          jessica:
-            device: notify.mobile_app_jess_iphone
-            device_type: apple
-            person: person.jessica
-            allow: input_boolean.app_notify_jess
-            activity: input_boolean.app_notify_jess_alert_activity
-            activity_door_ext: input_boolean.app_notify_jess_alert_activity_door_exterior
-            activity_door_int: input_boolean.app_notify_jess_alert_activity_door_interior
-            activity_location: input_boolean.app_notify_jess_alert_activity_person_location
-            schedule: input_boolean.app_notify_jess_alert_schedule
-            info: input_boolean.app_notify_jess_alert_info
-            warning: input_boolean.app_notify_jess_alert_warning
-            critical: input_boolean.app_notify_jess_alert_critical
-          thomas:
-            device: notify.mobile_app_tom_iphone
-            device_type: apple
-            person: person.thomas
-            allow: input_boolean.app_notify_tom
-            activity: input_boolean.app_notify_tom_alert_activity
-            activity_door_ext: input_boolean.app_notify_tom_alert_activity_door_exterior
-            activity_door_int: input_boolean.app_notify_tom_alert_activity_door_interior
-            activity_location: input_boolean.app_notify_tom_alert_activity_person_location
-            schedule: input_boolean.app_notify_tom_alert_schedule
-            info: input_boolean.app_notify_tom_alert_info
-            warning: input_boolean.app_notify_tom_alert_warning
-            critical: input_boolean.app_notify_tom_alert_critical
-    - condition: state
-      entity_id: input_boolean.app_notify
-      state: "on"
-    - repeat:
-        for_each: "{{ send_to }}"
-        sequence:
-          - choose:
-              - conditions:
-                  - condition: and
+  - variables:
+      helper:
+        jessica:
+          device: notify.mobile_app_jess_iphone
+          device_type: apple
+          person: person.jessica
+          allow: input_boolean.app_notify_jess
+          activity: input_boolean.app_notify_jess_alert_activity
+          activity_door_ext: input_boolean.app_notify_jess_alert_activity_door_exterior
+          activity_door_int: input_boolean.app_notify_jess_alert_activity_door_interior
+          activity_location: input_boolean.app_notify_jess_alert_activity_person_location
+          schedule: input_boolean.app_notify_jess_alert_schedule
+          info: input_boolean.app_notify_jess_alert_info
+          warning: input_boolean.app_notify_jess_alert_warning
+          critical: input_boolean.app_notify_jess_alert_critical
+        thomas:
+          device: notify.mobile_app_tom_iphone
+          device_type: apple
+          person: person.thomas
+          allow: input_boolean.app_notify_tom
+          activity: input_boolean.app_notify_tom_alert_activity
+          activity_door_ext: input_boolean.app_notify_tom_alert_activity_door_exterior
+          activity_door_int: input_boolean.app_notify_tom_alert_activity_door_interior
+          activity_location: input_boolean.app_notify_tom_alert_activity_person_location
+          schedule: input_boolean.app_notify_tom_alert_schedule
+          info: input_boolean.app_notify_tom_alert_info
+          warning: input_boolean.app_notify_tom_alert_warning
+          critical: input_boolean.app_notify_tom_alert_critical
+  - condition: state
+    entity_id: input_boolean.app_notify
+    state: 'on'
+  - repeat:
+      for_each: '{{ send_to }}'
+      sequence:
+      - choose:
+        - conditions:
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: input_boolean.snooze_notify_household_activity
+              state: 'off'
+            - condition: template
+              value_template: '{{ notification_type == ''type_critical'' }}'
+            - condition: template
+              value_template: '{{ is_state( helper[ repeat.item ][ ''allow'' ], ''on''
+                ) }}'
+            - condition: template
+              value_template: '{{ is_state( helper[ repeat.item ][ ''critical'' ],
+                ''on'' ) }}'
+          sequence:
+          - action: '{{ helper[ repeat.item ][ ''device'' ] }}'
+            metadata: {}
+            data:
+              title: '{{ passed_title }}'
+              message: '{{ passed_message }}'
+              data:
+                channel: '{{ notification_type }}'
+                subtitle: '{{ passed_subtitle }}'
+                subject: '{{ passed_subtitle }}'
+                url: '{{ passed_link }}'
+                clickAction: '{{ passed_link }}'
+                sticky: 'false'
+                actions: '{{ passed_actions }}'
+                push:
+                  interruption-level: '{{ interruption_level }}'
+                  sound:
+                    name: Update.caf
+                    critical: 1
+                    volume: 1
+        - conditions:
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: input_boolean.snooze_notify_household_activity
+              state: 'off'
+            - condition: template
+              value_template: '{{ is_state( helper[ repeat.item ][ ''allow'' ], ''on''
+                ) }}'
+            - condition: or
+              conditions:
+              - alias: 'Activity Type: Exterior Doors'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_door_exterior''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_door_ext''
+                    ], ''on'' ) }}'
+              - alias: 'Activity Type: Interior Doors'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_door_interior''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_door_int''
+                    ], ''on'' ) }}'
+                - condition: or
+                  conditions:
+                  - condition: state
+                    entity_id: input_boolean.guests_home
+                    state: 'on'
+                  - condition: not
                     conditions:
-                      - condition: state
-                        entity_id: input_boolean.snooze_notify_household_activity
-                        state: "off"
-                      - condition: template
-                        value_template: "{{ notification_type == 'type_critical' }}"
-                      - condition: template
-                        value_template:
-                          "{{ is_state( helper[ repeat.item ][ 'allow' ], 'on'
-                          ) }}"
-                      - condition: template
-                        value_template:
-                          "{{ is_state( helper[ repeat.item ][ 'critical' ],
-                          'on' ) }}"
-                sequence:
-                  - action: "{{ helper[ repeat.item ][ 'device' ] }}"
-                    metadata: {}
-                    data:
-                      title: "{{ passed_title }}"
-                      message: "{{ passed_message }}"
-                      data:
-                        channel: "{{ notification_type }}"
-                        subtitle: "{{ passed_subtitle }}"
-                        subject: "{{ passed_subtitle }}"
-                        url: "{{ passed_link }}"
-                        clickAction: "{{ passed_link }}"
-                        sticky: "false"
-                        actions: "{{ passed_actions }}"
-                        push:
-                          interruption-level: "{{ interruption_level }}"
-                          sound:
-                            name: Update.caf
-                            critical: 1
-                            volume: 1
-              - conditions:
-                  - condition: and
-                    conditions:
-                      - condition: state
-                        entity_id: input_boolean.snooze_notify_household_activity
-                        state: "off"
-                      - condition: template
-                        value_template:
-                          "{{ is_state( helper[ repeat.item ][ 'allow' ], 'on'
-                          ) }}"
-                      - condition: or
-                        conditions:
-                          - alias: "Activity Type: Exterior Doors"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template:
-                                  "{{ notification_type == 'type_activity_door_exterior'
-                                  }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity'
-                                  ], 'on' ) }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity_door_ext'
-                                  ], 'on' ) }}"
-                          - alias: "Activity Type: Interior Doors"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template:
-                                  "{{ notification_type == 'type_activity_door_interior'
-                                  }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity'
-                                  ], 'on' ) }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity_door_int'
-                                  ], 'on' ) }}"
-                              - condition: or
-                                conditions:
-                                  - condition: state
-                                    entity_id: input_boolean.guests_home
-                                    state: "on"
-                                  - condition: not
-                                    conditions:
-                                      - condition: template
-                                        value_template:
-                                          "{{ states( helper[ repeat.item ][ 'person'
-                                          ] ) == 'home' }}"
-                          - alias: "Activity Type: Location"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template:
-                                  "{{ notification_type == 'type_activity_location'
-                                  }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity'
-                                  ], 'on' ) }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'activity_location'
-                                  ], 'on' ) }}"
-                          - alias: "Activity Type: Schedule"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template: "{{ notification_type == 'type_schedule' }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'schedule'
-                                  ], 'on' ) }}"
-                          - alias: "Activity Type: Info"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template: "{{ notification_type == 'type_info' }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'info' ],
-                                  'on' ) }}"
-                          - alias: "Activity Type: Warning"
-                            condition: and
-                            conditions:
-                              - condition: template
-                                value_template: "{{ notification_type == 'type_warning' }}"
-                              - condition: template
-                                value_template:
-                                  "{{ is_state( helper[ repeat.item ][ 'warning'
-                                  ], 'on' ) }}"
-                sequence:
-                  - action: "{{ helper[ repeat.item ][ 'device' ] }}"
-                    metadata: {}
-                    data:
-                      title: "{{ passed_title }}"
-                      message: "{{ passed_message }}"
-                      data:
-                        channel: "{{ notification_type }}"
-                        subtitle: "{{ passed_subtitle }}"
-                        subject: "{{ passed_subtitle }}"
-                        url: "{{ passed_link }}"
-                        clickAction: "{{ passed_link }}"
-                        sticky: "false"
-                        actions: "{{ passed_actions }}"
-                        push:
-                          interruption-level: "{{ interruption_level }}"
+                    - condition: template
+                      value_template: '{{ states( helper[ repeat.item ][ ''person''
+                        ] ) == ''home'' }}'
+              - alias: 'Activity Type: Location'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_activity_location''
+                    }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity''
+                    ], ''on'' ) }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''activity_location''
+                    ], ''on'' ) }}'
+              - alias: 'Activity Type: Schedule'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_schedule'' }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''schedule''
+                    ], ''on'' ) }}'
+              - alias: 'Activity Type: Info'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_info'' }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''info'' ],
+                    ''on'' ) }}'
+              - alias: 'Activity Type: Warning'
+                condition: and
+                conditions:
+                - condition: template
+                  value_template: '{{ notification_type == ''type_warning'' }}'
+                - condition: template
+                  value_template: '{{ is_state( helper[ repeat.item ][ ''warning''
+                    ], ''on'' ) }}'
+          sequence:
+          - action: '{{ helper[ repeat.item ][ ''device'' ] }}'
+            metadata: {}
+            data:
+              title: '{{ passed_title }}'
+              message: '{{ passed_message }}'
+              data:
+                channel: '{{ notification_type }}'
+                subtitle: '{{ passed_subtitle }}'
+                subject: '{{ passed_subtitle }}'
+                url: '{{ passed_link }}'
+                clickAction: '{{ passed_link }}'
+                sticky: 'false'
+                actions: '{{ passed_actions }}'
+                push:
+                  interruption-level: '{{ interruption_level }}'
   fields:
     send_to:
       selector:
         select:
           multiple: true
           options:
-            - label: Jessica
-              value: jessica
-            - label: Thomas
-              value: thomas
+          - label: Jessica
+            value: jessica
+          - label: Thomas
+            value: thomas
       name: Send To
       description: Who should the notification be sent to.
       required: true
@@ -630,23 +614,22 @@ push_notification_to_ios_devices:
           mode: dropdown
           multiple: false
           options:
-            - label: Activity, Exterior Door
-              value: type_activity_door_exterior
-            - label: Activity, Interior Door
-              value: type_activity_door_interior
-            - label: Activity, Location
-              value: type_activity_location
-            - label: Schedule
-              value: type_schedule
-            - label: Info
-              value: type_info
-            - label: Warning
-              value: type_warning
-            - label: Critical
-              value: type_critical
+          - label: Activity, Exterior Door
+            value: type_activity_door_exterior
+          - label: Activity, Interior Door
+            value: type_activity_door_interior
+          - label: Activity, Location
+            value: type_activity_location
+          - label: Schedule
+            value: type_schedule
+          - label: Info
+            value: type_info
+          - label: Warning
+            value: type_warning
+          - label: Critical
+            value: type_critical
       name: Notification Type
-      description:
-        The type of notification message. Helps with filtered notification
+      description: The type of notification message. Helps with filtered notification
         permissions.
       required: true
       default: type_info
@@ -661,14 +644,14 @@ push_notification_to_ios_devices:
           mode: dropdown
           multiple: false
           options:
-            - label: Silent (Quiet notifications without waking screen)
-              value: passive
-            - label: Default
-              value: active
-            - label: Important (Overrides Focus)
-              value: time-sensitive
-            - label: Critical (Overrides Focus and mute settings)
-              value: critical
+          - label: Silent (Quiet notifications without waking screen)
+            value: passive
+          - label: Default
+            value: active
+          - label: Important (Overrides Focus)
+            value: time-sensitive
+          - label: Critical (Overrides Focus and mute settings)
+            value: critical
     title:
       name: Title
       description: The title of the notification.
@@ -700,60 +683,60 @@ push_notification_to_ios_devices:
       required: false
       selector:
         object: {}
-  description: ""
+  description: ''
   icon: mdi:speaker-wireless
   mode: queued
   max: 10
 lock_front_door:
   alias: Lock Front Door
   sequence:
-    - action: lock.lock
-      metadata: {}
-      data: {}
-      target:
-        entity_id: lock.front_door
-  description: ""
+  - action: lock.lock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.front_door
+  description: ''
 unlock_front_door:
   alias: Unlock Front Door
   sequence:
-    - action: lock.unlock
-      target:
-        entity_id:
-          - lock.front_door
-      data: {}
-  description: ""
+  - action: lock.unlock
+    target:
+      entity_id:
+      - lock.front_door
+    data: {}
+  description: ''
 open_garage_door:
   alias: Open Garage Door
   sequence:
-    - action: cover.open_cover
-      metadata: {}
-      data: {}
-      target:
-        entity_id: cover.garage_door
-  description: ""
+  - action: cover.open_cover
+    metadata: {}
+    data: {}
+    target:
+      entity_id: cover.garage_door
+  description: ''
 close_garage_door:
   alias: Close Garage Door
   sequence:
-    - action: cover.close_cover
-      target:
-        entity_id:
-          - cover.garage_door
-      data: {}
-  description: ""
+  - action: cover.close_cover
+    target:
+      entity_id:
+      - cover.garage_door
+    data: {}
+  description: ''
 turn_off_all_lights:
   alias: Turn Off All Lights
   sequence:
-    - action: light.turn_off
-      metadata: {}
-      data: {}
-      target:
-        entity_id:
-          - light.all_lights_interior
-          - light.backyard_string_lights
-  description: ""
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.all_lights_interior
+      - light.backyard_string_lights
+  description: ''
 update_inovelli_light_switch_led_s:
   alias: Update Inovelli Switch LED(s)
-  description: ""
+  description: ''
   icon: mdi:led-on
   fields:
     entity_ids:
@@ -764,8 +747,8 @@ update_inovelli_light_switch_led_s:
       selector:
         entity:
           filter:
-            - integration: mqtt
-              domain: light
+          - integration: mqtt
+            domain: light
           multiple: true
     led:
       name: LED
@@ -775,14 +758,14 @@ update_inovelli_light_switch_led_s:
         select:
           custom_value: true
           options:
-            - All
-            - Led 1
-            - Led 2
-            - Led 3
-            - Led 4
-            - Led 5
-            - Led 6
-            - Led 7
+          - All
+          - Led 1
+          - Led 2
+          - Led 3
+          - Led 4
+          - Led 5
+          - Led 6
+          - Led 7
     color:
       name: LED Color
       default: Red
@@ -790,17 +773,17 @@ update_inovelli_light_switch_led_s:
         select:
           custom_value: true
           options:
-            - Red
-            - Orange
-            - Yellow
-            - Green
-            - Cyan
-            - Teal
-            - Blue
-            - Purple
-            - Light Pink
-            - Pink
-            - White
+          - Red
+          - Orange
+          - Yellow
+          - Green
+          - Cyan
+          - Teal
+          - Blue
+          - Purple
+          - Light Pink
+          - Pink
+          - White
     effect:
       name: Effect
       description: Choose LED effect to apply.
@@ -809,27 +792,27 @@ update_inovelli_light_switch_led_s:
         select:
           custom_value: true
           options:
-            - "Off"
-            - Clear
-            - Solid
-            - Aurora
-            - Slow Chase
-            - Chase
-            - Fast Chase
-            - Slow Blink
-            - Medium Blink
-            - Fast Blink
-            - Slow Falling
-            - Medium Falling
-            - Fast Falling
-            - Open/Close
-            - Pulse
-            - Slow Rising
-            - Medium Rising
-            - Fast Rising
-            - Slow Siren
-            - Fast Siren
-            - Small to Big
+          - 'Off'
+          - Clear
+          - Solid
+          - Aurora
+          - Slow Chase
+          - Chase
+          - Fast Chase
+          - Slow Blink
+          - Medium Blink
+          - Fast Blink
+          - Slow Falling
+          - Medium Falling
+          - Fast Falling
+          - Open/Close
+          - Pulse
+          - Slow Rising
+          - Medium Rising
+          - Fast Rising
+          - Slow Siren
+          - Fast Siren
+          - Small to Big
     duration:
       name: Duration
       description: How long should the effect run?
@@ -838,68 +821,68 @@ update_inovelli_light_switch_led_s:
         select:
           custom_value: true
           options:
-            - "Off"
-            - Forever
-            - 1 Second
-            - 2 Seconds
-            - 3 Seconds
-            - 4 Seconds
-            - 5 Seconds
-            - 6 Seconds
-            - 7 Seconds
-            - 8 Seconds
-            - 9 Seconds
-            - 10 Seconds
-            - 15 Seconds
-            - 20 Seconds
-            - 25 Seconds
-            - 30 Seconds
-            - 35 Seconds
-            - 40 Seconds
-            - 45 Seconds
-            - 50 Seconds
-            - 55 Seconds
-            - 1 Minute
-            - 2 Minutes
-            - 3 Minutes
-            - 4 Minutes
-            - 5 Minutes
-            - 6 Minutes
-            - 7 Minutes
-            - 8 Minutes
-            - 9 Minutes
-            - 10 Minutes
-            - 15 Minutes
-            - 20 Minutes
-            - 25 Minutes
-            - 30 Minutes
-            - 35 Minutes
-            - 40 Minutes
-            - 45 Minutes
-            - 50 Minutes
-            - 55 Minutes
-            - 1 Hour
-            - 2 Hours
-            - 3 Hours
-            - 4 Hours
-            - 5 Hours
-            - 6 Hours
-            - 7 Hours
-            - 8 Hours
-            - 9 Hours
-            - 10 Hours
-            - 15 Hours
-            - 20 Hours
-            - 1 Day
-            - 2 Days
-            - 3 Days
-            - 4 Days
-            - 5 Days
+          - 'Off'
+          - Forever
+          - 1 Second
+          - 2 Seconds
+          - 3 Seconds
+          - 4 Seconds
+          - 5 Seconds
+          - 6 Seconds
+          - 7 Seconds
+          - 8 Seconds
+          - 9 Seconds
+          - 10 Seconds
+          - 15 Seconds
+          - 20 Seconds
+          - 25 Seconds
+          - 30 Seconds
+          - 35 Seconds
+          - 40 Seconds
+          - 45 Seconds
+          - 50 Seconds
+          - 55 Seconds
+          - 1 Minute
+          - 2 Minutes
+          - 3 Minutes
+          - 4 Minutes
+          - 5 Minutes
+          - 6 Minutes
+          - 7 Minutes
+          - 8 Minutes
+          - 9 Minutes
+          - 10 Minutes
+          - 15 Minutes
+          - 20 Minutes
+          - 25 Minutes
+          - 30 Minutes
+          - 35 Minutes
+          - 40 Minutes
+          - 45 Minutes
+          - 50 Minutes
+          - 55 Minutes
+          - 1 Hour
+          - 2 Hours
+          - 3 Hours
+          - 4 Hours
+          - 5 Hours
+          - 6 Hours
+          - 7 Hours
+          - 8 Hours
+          - 9 Hours
+          - 10 Hours
+          - 15 Hours
+          - 20 Hours
+          - 1 Day
+          - 2 Days
+          - 3 Days
+          - 4 Days
+          - 5 Days
     brightness_level:
       name: Brightness level
       description: From 0% (off) to 100% brightness.
       default: 100
-      example: "40"
+      example: '40'
       selector:
         number:
           min: 0
@@ -909,23 +892,21 @@ update_inovelli_light_switch_led_s:
       name: Debug Mode
       selector:
         constant:
-          value: "true"
+          value: 'true'
           label: Debug mode messaging is enabled
     command_path_base:
       name: Command Path Base
-      description:
-        "Set the base path for the MQTT command path. This is 'zigbee2mqtt'
+      description: 'Set the base path for the MQTT command path. This is ''zigbee2mqtt''
         by default.
 
         This overrides the Blueprint input `command_path_base`.
 
-        "
+        '
       selector:
         text:
     command_path_map:
       name: Command Path Map
-      description:
-        'Map of Entity IDs with a MQTT command path map when HA and Z2M
+      description: 'Map of Entity IDs with a MQTT command path map when HA and Z2M
         do not match up.
 
         Enter a new row for each mapping: `light.entity_name: "zigbee2mqtt/path/to/device/set"`.
@@ -939,11 +920,11 @@ update_inovelli_light_switch_led_s:
         object:
   variables:
     allow_debug: '{{ iif( debug is defined, debug, "false" ) }}'
-    entity_list: "{{ entity_ids | default( [] ) }}"
-    command_path_base: "{{ command_path_base | default( 'zigbee2mqtt' ) }}"
-    command_path_map: "{{ command_path_map | default( [] ) }}"
-    brightness_level: "{{ brightness_level | default( 100 ) }}"
-    led: "{{ led | default( 'all' ) }}"
+    entity_list: '{{ entity_ids | default( [] ) }}'
+    command_path_base: '{{ command_path_base | default( ''zigbee2mqtt'' ) }}'
+    command_path_map: '{{ command_path_map | default( [] ) }}'
+    brightness_level: '{{ brightness_level | default( 100 ) }}'
+    led: '{{ led | default( ''all'' ) }}'
     led_options:
       all: -1
       led 1: 0
@@ -953,13 +934,12 @@ update_inovelli_light_switch_led_s:
       led 5: 4
       led 6: 5
       led 7: 6
-    led_value:
-      "{% if led | int( default = -2 ) == -2 %}\n  {{ led_options[led | lower]
+    led_value: "{% if led | int( default = -2 ) == -2 %}\n  {{ led_options[led | lower]
       | int( default = -1 ) }}\n{% else %}\n  {{ led | int( default = -1 ) }}\n{%
       endif %}"
-    color: "{{ color | default( 'red' ) }}"
+    color: '{{ color | default( ''red'' ) }}'
     color_options:
-      "off": 0
+      'off': 0
       red: 1
       orange: 21
       yellow: 42
@@ -972,13 +952,12 @@ update_inovelli_light_switch_led_s:
       lightpink: 220
       pink: 234
       white: 255
-    color_value:
-      "{% if color | int( default = -1 ) == -1 %}\n  {{ color_options[color
+    color_value: "{% if color | int( default = -1 ) == -1 %}\n  {{ color_options[color
       | lower] | int( default = 0 ) }}\n{% else %}\n  {{ color | int( default = 0
       ) }}\n{% endif %}"
-    effect: "{{ effect | default( 'solid' ) }}"
+    effect: '{{ effect | default( ''solid'' ) }}'
     effect_options:
-      "off": "off"
+      'off': 'off'
       clear: clear_effect
       solid: solid
       aurora: aurora
@@ -1000,12 +979,11 @@ update_inovelli_light_switch_led_s:
       slow rising: slow_rising
       slow siren: slow_siren
       small to big: small_to_big
-    effect_value:
-      "{% if effect | lower in effect_options %}\n  {{ effect_options[effect
+    effect_value: "{% if effect | lower in effect_options %}\n  {{ effect_options[effect
       | lower] }}\n{% else %}\n  {{ effect | lower }}\n{% endif %}"
-    duration: "{{ duration | default( 'forever' ) }}"
+    duration: '{{ duration | default( ''forever'' ) }}'
     duration_options:
-      "off": 0
+      'off': 0
       1 second: 1
       2 seconds: 2
       3 seconds: 3
@@ -1062,85 +1040,117 @@ update_inovelli_light_switch_led_s:
       4 days: 216
       5 days: 240
       forever: 255
-    duration_value:
-      "{% if duration | int( default = -1 ) == -1 %}\n  {{ duration_options[duration
+    duration_value: "{% if duration | int( default = -1 ) == -1 %}\n  {{ duration_options[duration
       | lower] | int( default = 255 ) }}\n{% else %}\n  {{ duration | int( default
       = 255 ) }}\n{% endif %}"
   sequence:
-    - alias: Maybe Send Persistent Debug Notification
-      if:
+  - alias: Maybe Send Persistent Debug Notification
+    if:
+    - condition: template
+      value_template: '{{ allow_debug == "true" }}'
+    then:
+    - action: persistent_notification.create
+      data:
+        title: 'Debug Report: Inovelli Switch LED(s)'
+        message: '**Entity List**: {{ entity_list }} (total: {{ entity_list | count
+          }})
+
+          **LED Bulb(s)**: {{ led }} (value: {{ led_value }})
+
+          **Color**: {{ color }} (value: {{ color_value }})
+
+          **Duration**: {{ duration }} (value: {{ duration_value }})
+
+          **Effect**: {{ effect }} (value: {{ effect_value }})
+
+          **Brightness Level**: {{ brightness_level }}%
+
+          **Cmd Path, Base**: {{ command_path_base }}
+
+          **Cmd Path, Map**: {{ command_path_map }}'
+  - alias: Confirm entities were provided
+    condition: template
+    value_template: '{{ entity_list | count > 0 }}
+
+      '
+  - variables:
+      payload: "{% if led_value == -1 %}\n  {% set payload_data = { \n    \"led_effect\":
+        {\n      \"effect\": effect_value,\n      \"color\": color_value,\n      \"level\":
+        brightness_level,\n      \"duration\": duration_value\n    }\n  } %}\n{% else
+        %}\n  {% set payload_data = {\n    \"individual_led_effect\": {\n      \"led\":
+        led_value,\n      \"effect\": effect_value,\n      \"color\": color_value,\n
+        \     \"level\": brightness_level,\n      \"duration\": duration_value\n    }\n
+        \ } %}\n{% endif %}\n{{ payload_data | tojson }}"
+  - alias: Loop Through Each Entity
+    repeat:
+      for_each: '{{ entity_list }}'
+      sequence:
+      - variables:
+          device_identifier: '{% set identifiers = device_attr( repeat.item, ''identifiers''
+            ) | first %} {{ identifiers[1].split( ''_'' )[1] }}'
+          command_path: "{% if repeat.item in command_path_map %}\n  {{ command_path_map[repeat.item]
+            }}\n{% else %}\n  {{ command_path_base }}/{{ device_identifier }}/set\n{%
+            endif %}"
+      - alias: Maybe Send Device Specific Persistent Debug Notification
+        if:
         - condition: template
           value_template: '{{ allow_debug == "true" }}'
-      then:
-        - action: persistent_notification.create
-          data:
-            title: "Debug Report: Inovelli Switch LED(s)"
-            message:
-              "**Entity List**: {{ entity_list }} (total: {{ entity_list | count
-              }})
+        then:
+        - data:
+            notification_id: inovelli_blue_led::{{ repeat.item }}
+            title: 'Debug Report: Inovelli Switch LED(s) - {{ repeat.item }}'
+            message: '**Entity**: {{ repeat.item }}
 
-              **LED Bulb(s)**: {{ led }} (value: {{ led_value }})
+              **device name**: {{ device_attr( repeat.item, "name" ) }}
 
-              **Color**: {{ color }} (value: {{ color_value }})
+              **device identifier**: {{ device_identifier }}
 
-              **Duration**: {{ duration }} (value: {{ duration_value }})
+              **topic**: {{ command_path }}
 
-              **Effect**: {{ effect }} (value: {{ effect_value }})
-
-              **Brightness Level**: {{ brightness_level }}%
-
-              **Cmd Path, Base**: {{ command_path_base }}
-
-              **Cmd Path, Map**: {{ command_path_map }}"
-    - alias: Confirm entities were provided
-      condition: template
-      value_template: "{{ entity_list | count > 0 }}
-
-        "
-    - variables:
-        payload:
-          "{% if led_value == -1 %}\n  {% set payload_data = { \n    \"led_effect\":
-          {\n      \"effect\": effect_value,\n      \"color\": color_value,\n      \"level\":
-          brightness_level,\n      \"duration\": duration_value\n    }\n  } %}\n{% else
-          %}\n  {% set payload_data = {\n    \"individual_led_effect\": {\n      \"led\":
-          led_value,\n      \"effect\": effect_value,\n      \"color\": color_value,\n
-          \     \"level\": brightness_level,\n      \"duration\": duration_value\n    }\n
-          \ } %}\n{% endif %}\n{{ payload_data | tojson }}"
-    - alias: Loop Through Each Entity
-      repeat:
-        for_each: "{{ entity_list }}"
-        sequence:
-          - variables:
-              device_identifier:
-                "{% set identifiers = device_attr( repeat.item, 'identifiers'
-                ) | first %} {{ identifiers[1].split( '_' )[1] }}"
-              command_path:
-                "{% if repeat.item in command_path_map %}\n  {{ command_path_map[repeat.item]
-                }}\n{% else %}\n  {{ command_path_base }}/{{ device_identifier }}/set\n{%
-                endif %}"
-          - alias: Maybe Send Device Specific Persistent Debug Notification
-            if:
-              - condition: template
-                value_template: '{{ allow_debug == "true" }}'
-            then:
-              - data:
-                  notification_id: inovelli_blue_led::{{ repeat.item }}
-                  title: "Debug Report: Inovelli Switch LED(s) - {{ repeat.item }}"
-                  message: '**Entity**: {{ repeat.item }}
-
-                    **device name**: {{ device_attr( repeat.item, "name" ) }}
-
-                    **device identifier**: {{ device_identifier }}
-
-                    **topic**: {{ command_path }}
-
-                    **payload**: {{ payload }}'
-                action: persistent_notification.create
-          - alias: Send payload to the switch
-            action: mqtt.publish
-            data:
-              topic: "{{ command_path }}"
-              payload: "{{ payload }}"
+              **payload**: {{ payload }}'
+          action: persistent_notification.create
+      - alias: Send payload to the switch
+        action: mqtt.publish
+        data:
+          topic: '{{ command_path }}'
+          payload: '{{ payload }}'
   mode: parallel
   max_exceeded: silent
   max: 100
+update_all_esphome_devices:
+  sequence:
+  - repeat:
+      for_each: "{{ states.update | selectattr( 'state', 'eq', 'on' ) | \n  map( attribute
+        = 'entity_id' ) | select( 'in', integration_entities( 'esphome' ) ) | \n  list
+        }}\n"
+      sequence:
+      - variables:
+          timestamp: '{{ now() }}'
+          started_time: '{{ now().strftime( ''%I:%M %p'' ) }}'
+          started_date: '{{ now().strftime( ''%m/%d/%Y'' ) }}'
+      - action: persistent_notification.create
+        data:
+          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_started'
+          title: ESPHome Device Update Started
+          message: '"{{ device_attr( repeat.item, ''name'' ) }}" device update has
+            started at {{ now().strftime( ''%I:%M %p'' ) }} on {{ now().strftime(
+            ''%m/%d/%Y'' ) }}.'
+      - action: update.install
+        data: {}
+        target:
+          entity_id: '{{ repeat.item }}'
+      - wait_template: ' {{ is_state( repeat.item, ''off'' ) }}'
+        continue_on_timeout: true
+      - action: persistent_notification.dismiss
+        data:
+          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_started'
+      - action: persistent_notification.create
+        metadata: {}
+        data:
+          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_complete'
+          title: ESPHome Device Update Complete
+          message: '"{{ device_attr( repeat.item, ''name'' ) }}" device update completed
+            at {{ now().strftime( ''%I:%M %p'' ) }} on {{ now().strftime( ''%m/%d/%Y''
+            ) }}.'
+  alias: Update All ESPHome Devices
+  description: Automatically update all ESPHome devices that require updating
