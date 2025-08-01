@@ -1,36 +1,31 @@
 substitutions:
-  name: temp-fridge-freezer
+  name: esp32-refrigerator-temp-c932a4
   friendly_name: Temperature, Refrigerator and Freezer
+
 
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
-  min_version: 2024.6.0
+  min_version: 2025.5.0
   name_add_mac_suffix: false
-  project:
-    name: esphome.web
-    version: dev
 
 esp32:
   board: esp32dev
   framework:
     type: arduino
 
-# dallas:
-#   - pin: GPIO4
+
 one_wire:
   - platform: gpio
     pin: GPIO4
 
 sensor:
-  #- platform: dallas
   - platform: dallas_temp
     address: 0x373ce104573b9028
     name: "Refrigerator Temperature"
     update_interval: 60s
     filters:
         - offset: -3
-  #- platform: dallas
   - platform: dallas_temp
     address: 0x563ce1045708c728
     name: "Freezer Temperature"
@@ -38,8 +33,6 @@ sensor:
     filters:
         - offset: -3
 
-# Enable logging
-logger:
 
 # Enable Home Assistant API
 api:
@@ -48,9 +41,6 @@ api:
 ota:
 - platform: esphome
 
-# Allow provisioning Wi-Fi via serial
-improv_serial:
-
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
@@ -58,22 +48,9 @@ wifi:
     static_ip: !secret fridge_freezer_temperature_ip_address
     gateway: !secret gateway
     subnet: !secret subnet
-  # domain: .ppt7mtmtjhat1fspcuj5nh9j68fd130s.ui.nabu.casa
-  # Set up a wifi access point
-  ap: {}
 
-# In combination with the `ap` this allows the user
-# to provision wifi credentials to the device via WiFi AP.
+# Log all log messages
+logger: 
+
+# Allow web interface
 captive_portal:
-
-dashboard_import:
-  package_import_url: github://esphome/example-configs/esphome-web/esp32.yaml@main
-  import_full_config: true
-
-# Sets up Bluetooth LE (Only on ESP32) to allow the user
-# to provision wifi credentials to the device.
-esp32_improv:
-  authorizer: none
-
-# To have a "next url" for improv serial
-web_server:

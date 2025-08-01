@@ -1,0 +1,45 @@
+substitutions:
+  name: esp32-bluetooth-proxy-9d2588
+  friendly_name: Bluetooth Proxy, Bedroom 2
+
+packages:
+  esphome.bluetooth-proxy: github://esphome/bluetooth-proxies/esp32-generic/esp32-generic.yaml@main
+
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: false
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    # We currently use the defaults to ensure Bluetooth
+    # can co-exist with WiFi In the future we may be able to
+    # enable the built-in coexistence logic in ESP-IDF
+    active: true
+
+bluetooth_proxy:
+  active: true
+
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret bedroom_2_btproxy_api_key
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret bedroom_2_btproxy_ip_address
+    gateway: !secret gateway
+    subnet: !secret subnet
+
+# Log all log messages
+logger: 

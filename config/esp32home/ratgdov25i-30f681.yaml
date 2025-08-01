@@ -1,25 +1,29 @@
 substitutions:
-  name: ratgdov25i-30f681
-  friendly_name: RATGDO, Garage Door Opener
+  name: esp32-upsy-desk-76db20
+  friendly_name: Desk, Bedroom 4
+
 
 packages:
-  ratgdo.esphome: github://ratgdo/esphome-ratgdo/v25iboard.yaml@main
+  tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@v4.0.2
+
 
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
   name_add_mac_suffix: false
 
+
 api:
   encryption:
-    key: !secret ratgdo_api_key
+    key: !secret upsy_desk_api_key
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  fast_connect: on
-  power_save_mode: NONE
   manual_ip:
-    static_ip: !secret ratgdo_ip_address
+    static_ip: !secret upsy_desk_ip_address
     gateway: !secret gateway
     subnet: !secret subnet
+
+# Log all log messages
+logger: 
