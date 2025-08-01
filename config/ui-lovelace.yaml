@@ -243,14 +243,6 @@ views:
           - binary_sensor.all_leak_sensors_foyer
           - binary_sensor.door_front_primary
           - binary_sensor.door_front_secondary
-        double_tap_action:
-          action: call-service
-          service: |
-            [[[
-              return ( states['lock.front_door'].state === 'locked') ? 'lock.unlock' : 'lock.lock';
-            ]]]
-          service_data:
-            entity_id: lock.front_door
         variables:
           path: '#details-foyer'
           icon_on: mdi:globe-light
@@ -266,7 +258,7 @@ views:
               {
                 badgeIcon = '<ha-icon icon="mdi:water-alert"></ha-icon>';
 
-              } else
+              } else if( states['lock.front_door'] !== undefined )
               { 
                 const lockState = states['lock.front_door'].state;
 
@@ -286,12 +278,16 @@ views:
           badge_warning: |
             [[[ 
               let badgeIcon = '';
-              const lockState = states['lock.front_door'].state;
 
-              if( [ 'unlocking', 'locking' ].indexOf( lockState ) >= 0 )
+              if( states['lock.front_door'] !== undefined )
               { 
-                badgeIcon = '<ha-icon icon="mdi:clock-outline"></ha-icon>';
+                const lockState = states['lock.front_door'].state;
 
+                if( [ 'unlocking', 'locking' ].indexOf( lockState ) >= 0 )
+                { 
+                  badgeIcon = '<ha-icon icon="mdi:clock-outline"></ha-icon>';
+
+                } // endif
               } // endif
 
               return badgeIcon;
@@ -2759,14 +2755,6 @@ views:
           - cover.garage_door
           - light.garage_group_lights_all
           - binary_sensor.door_garage_interior
-        double_tap_action:
-          action: call-service
-          service: |
-            [[[ 
-              return ( states['cover.garage_door'].state === 'closed') ? 'cover.open_cover' : 'cover.close_cover';
-            ]]]
-          target:
-            entity_id: cover.garage_door
         variables:
           path: '#details-garage'
           icon_on: mdi:car
@@ -2936,7 +2924,7 @@ views:
           icon: mdi:palm-tree
           data_door: false
           data_lightOn: light.backyard_string_lights
-          data_temperature: sensor.temperature_attic
+          data_temperature: sensor.temperature_outside
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -2965,7 +2953,7 @@ views:
               - chips:
                   - type: custom:button-card
                     template: chip_detail__temperature
-                    entity: sensor.temperature_attic
+                    entity: sensor.temperature_outside
                   - type: custom:button-card
                     template: chip_detail__light
                     entity: light.all_lights_outside
@@ -4631,36 +4619,6 @@ views:
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
-          - type: state-icon
-            entity: media_player.sony_bravia_tv
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 42%
-              left: 17%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var( --maxson-floorplan--color-media-player-sony-bravia-tv
-                ) )
-          - type: conditional
-            conditions:
-              - condition: state
-                entity: media_player.sony_bravia_tv
-                state: 'on'
-            elements:
-              - type: state-icon
-                entity: switch.sync_box_power
-                state_color: false
-                tap_action:
-                  action: toggle
-                style:
-                  top: 46.5%
-                  left: 15%
-                  border-radius: 100%
-                  '--state-icon-color': >-
-                    rgb( var( --maxson-floorplan--color-switch-sync-box-power )
-                    )
           - type: conditional
             conditions:
               - condition: state
@@ -4673,8 +4631,8 @@ views:
                 tap_action:
                   action: toggle
                 style:
-                  top: 46.5%
-                  left: 19%
+                  top: 42%
+                  left: 17%
                   border-radius: 100%
                   '--state-icon-color': >-
                     rgb( var( --maxson-floorplan--color-switch-sync-box-lights )
@@ -5397,36 +5355,6 @@ views:
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
-          - type: state-icon
-            entity: media_player.sony_bravia_tv
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 17%
-              left: 59%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var( --maxson-floorplan--color-media-player--sony-bravia-tv
-                ) )
-          - type: conditional
-            conditions:
-              - condition: state
-                entity: media_player.sony_bravia_tv
-                state: 'on'
-            elements:
-              - type: state-icon
-                entity: switch.sync_box_power
-                state_color: false
-                tap_action:
-                  action: toggle
-                style:
-                  top: 14%
-                  left: 52%
-                  border-radius: 100%
-                  '--state-icon-color': >-
-                    rgb( var( --maxson-floorplan--color-switch-sync-box-power )
-                    )
           - type: conditional
             conditions:
               - condition: state
@@ -5439,8 +5367,8 @@ views:
                 tap_action:
                   action: toggle
                 style:
-                  top: 20%
-                  left: 52%
+                  top: 17%
+                  left: 59%
                   border-radius: 100%
                   '--state-icon-color': >-
                     rgb( var( --maxson-floorplan--color-switch-sync-box-lights )
@@ -5642,15 +5570,6 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
           - type: state-label
-            entity: sensor.temperature_attic_humidity
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 35%
-              left: 95%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
             entity: sensor.temperature_bedroom_1
             tap_action:
               action: more-info
@@ -5722,13 +5641,40 @@ views:
               left: 79.5%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
+            entity: sensor.temperature_outside
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 22%
+              left: 4%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_outside_humidity
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 28%
+              left: 4%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
             entity: sensor.temperature_attic
             state_color: false
             tap_action:
               action: more-info
             style:
               top: 27%
-              left: 95%
+              left: 92%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_attic_humidity
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 35%
+              left: 92%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_foyer
@@ -6115,6 +6061,24 @@ views:
             style:
               top: 73%
               left: 69%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_outside
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 5.5%
+              left: 71%
+              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
+          - type: state-label
+            entity: sensor.temperature_outside_humidity
+            state_color: false
+            tap_action:
+              action: more-info
+            style:
+              top: 5.5%
+              left: 82%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_attic
@@ -6751,7 +6715,7 @@ views:
             conditions:
               - condition: state
                 entity: media_player.sony_bravia_tv
-                state: 'off'
+                state: 'on'
             elements:
               - type: state-icon
                 entity: switch.sync_box_power
@@ -6769,7 +6733,7 @@ views:
             conditions:
               - condition: state
                 entity: media_player.sony_bravia_tv
-                state: 'off'
+                state: 'on'
             elements:
               - type: state-icon
                 entity: switch.sync_box_light_sync
@@ -8773,32 +8737,43 @@ views:
                 #states { padding: 0;}
       - type: vertical-stack
         cards:
-          - type: entities
-            title: Locks
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+          - type: conditional
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity: lock.front_door
+                    state_not: unavailable
+                  - condition: state
+                    entity: lock.front_door
+                    state_not: unknown
+            card:
+              type: entities
+              title: Locks
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card.type-entities { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Front Door
-                entity: lock.front_door
-                variables:
-                  data_entity: sensor.front_door_battery
-                  data_type: battery
-                  icon_type: battery_level
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Front Door
+                  entity: lock.front_door
+                  variables:
+                    data_entity: sensor.front_door_battery
+                    data_type: battery
+                    icon_type: battery_level
           - type: entities
             title: Temperature Sensors
             show_header_toggle: false
@@ -8817,6 +8792,14 @@ views:
 
                 #states { padding: 0;}
             entities:
+              - type: custom:button-card
+                template: entity_card
+                name: Outside
+                entity: sensor.temperature_outside
+                variables:
+                  data_entity: sensor.temperature_outside_battery
+                  data_type: battery
+                  icon_type: battery_level
               - type: custom:button-card
                 template: entity_card
                 name: Attic
