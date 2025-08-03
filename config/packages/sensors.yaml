@@ -9,10 +9,62 @@
 sensor:
   - platform: template
     sensors:
+      media_player_parameters:
+        friendly_name: "Media Player Data Parameters"
+        icon_template: mdi:database-cog
+        value_template: >-
+          {% set media_devices = [
+            states.media_player.echo_kitchen, 
+            states.media_player.echo_dot_dining_room, 
+            states.media_player.echo_dot_bedroom_1, 
+            states.media_player.echo_dot_bedroom_2, 
+            states.media_player.echo_dot_bedroom_3, 
+            states.media_player.echo_dot_bedroom_4, 
+            states.media_player.echo_pop_main_bathroom
+          ] %}
+
+          {{ media_devices | selectattr( 'state', 'in', ['playing', 'paused', 'on'] ) | list | count }}
+
+        attribute_templates:
+          data_array: >-
+            {%- set data = [
+              { 
+                'key': 'kitchen', 
+                'player': 'media_player.echo_kitchen', 
+                'permission': 'input_boolean.household_notify_kitchen'
+              }, { 
+                'key': 'dining_room', 
+                'player': 'media_player.echo_dot_dining_room', 
+                'permission': 'input_boolean.household_notify_dining_room'
+              }, { 
+                'key': 'bedroom_1', 
+                'player': 'media_player.echo_dot_bedroom_1', 
+                'permission': 'input_boolean.household_notify_bedroom_1'
+              }, { 
+                'key': 'bedroom_2', 
+                'player': 'media_player.echo_dot_bedroom_2', 
+                'permission': 'input_boolean.household_notify_bedroom_2'
+              }, { 
+                'key': 'bedroom_3', 
+                'player': 'media_player.echo_dot_bedroom_3', 
+                'permission': 'input_boolean.household_notify_bedroom_3'
+              }, { 
+                'key': 'bedroom_4', 
+                'player': 'media_player.echo_dot_bedroom_4', 
+                'permission': 'input_boolean.household_notify_bedroom_4'
+              }, { 
+                'key': 'bathroom_1', 
+                'player': 'media_player.echo_pop_main_bathroom', 
+                'permission': 'input_boolean.household_notify_bathroom_1'
+              }
+            ] -%}
+
+            {{ data }}
+
       esphome_board_updates:
         value_template: "{{ states( 'update.esphome_update' ) }}"
         attribute_templates:
-          entity_id: >
+          entity_id: >-
             {%- set ns = namespace( entities = [] ) -%}
             {%- for s in states.update | rejectattr( 'attributes.title', 'undefined' ) -%}
               {%- if s.attributes.title == 'ESPHome' and s.object_id != 'esphome_update' -%}
