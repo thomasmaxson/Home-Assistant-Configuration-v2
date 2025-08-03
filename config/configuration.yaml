@@ -21,6 +21,7 @@ homeassistant:
   allowlist_external_dirs:
     - /config
     - /config/www/snapshots
+    - /config/www/chime_tones
 
 # If you remove this, YOU WILL HAVE A BAD TIME
 # Home Assistant will not run properly on restart
