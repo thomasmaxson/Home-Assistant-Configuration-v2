@@ -39,7 +39,7 @@ blueprint:
           filter:
             domain: light
 
-    remote_light:
+    light_config:
       name: Light Configuration
       icon: mdi:lightbulb-on
       collapsed: true
@@ -255,7 +255,7 @@ action:
                 - action: light.turn_on
                   target:
                     entity_id: >-
-                      "{{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}"
+                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
                     transition: "{{ ( var_repeat / 1000 ) | float }}"

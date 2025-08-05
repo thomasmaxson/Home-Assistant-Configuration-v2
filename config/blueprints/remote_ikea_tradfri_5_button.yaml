@@ -27,15 +27,15 @@ blueprint:
       description: Select the IKEA TRÅDFRI remote to trigger your automations.
       selector:
         device:
-          multiple: false
           filter:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: TRADFRI remote control
+          multiple: false
 
     light:
-      name: Light(s)
-      description: Select the light entities you wish to control.
+      name: Light
+      description: Select the light entity you wish to control.
       selector:
         entity:
           multiple: true
@@ -199,6 +199,11 @@ conditions:
     value_template: "{{ var_light | length > 0 }}"
 
 actions:
+  # - action: persistent_notification.create
+  #   metadata: {}
+  #   data:
+  #     message: "{{ trigger.event.data.command }}"
+
   - choose:
       # Short-Press on the power button (ON)
       - conditions:
@@ -283,7 +288,7 @@ actions:
           - action: light.turn_on
             target:
               entity_id: >-
-                "{{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}"
+                {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
             data:
               brightness_step_pct: -20
               transition: "{{ ( var_repeat / 1000 ) | float }}"
