@@ -68,8 +68,12 @@ amazon_echo_announcement:
       then:
       - alias: Get Media Player Data
         variables:
-          media_players: '{{ state_attr( ''sensor.media_player_parameters'', ''data_array''
-            ) }}'
+          media_players: "{%- set ns = namespace( players = [] ) -%}\n{%- set media_data
+            = state_attr( 'sensor.media_player_parameters', 'data_array' ) -%}\n{%-
+            for device in media_data -%}\n  {%- if ( device.key in send_to ) and (
+            is_state( device.permission, 'on' ) ) -%}\n    {% set ns.players = ns.players
+            + [ device.player ] -%}\n  {%- endif -%}\n{%- endfor -%}\n{{ ns.players
+            }}\n"
       - alias: Maybe Enable Light Switch LEDs
         parallel:
         - alias: Main Bedroom Light Switch
@@ -171,14 +175,6 @@ amazon_echo_announcement:
           unjoin_players: true
         target:
           entity_id: '{{ media_players }}'
-      - action: persistent_notification.create
-        metadata: {}
-        data:
-          message: '"{{ media_players }}"
-
-
-            {{ media_players }}'
-          title: This is a test
       else:
       - parallel:
         - alias: Announce on Amazon Echo, Kitchen
