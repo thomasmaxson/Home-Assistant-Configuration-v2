@@ -187,37 +187,40 @@ conditions:
     value_template: "{{ var_light | length > 0 }}"
 
 action:
+  - variables:
+      trigger_command: "{{ trigger.event.data.command }}"
+      trigger_args: "{{ trigger.event.data.args }}"
+
   - choose:
       # Short-Press on the dim-up button
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'on' }}"
+            value_template: "{{ trigger_command == 'on' }}"
           - condition: state
             entity_id: !input light
             state: "off"
         sequence:
-          sequence:
-            - if:
-                - condition: template
-                  value_template: "{{ var_force_brightness }}"
-              then:
-                - action: light.turn_on
-                  target:
-                    entity_id: >-
-                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
-                  data:
-                    transition: "{{ ( var_repeat / 1000 ) | float }}"
-                    brightness_pct: !input brightness
-              else:
-                - action: light.turn_on
-                  target:
-                    entity_id: >-
-                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
+          - if:
+              - condition: template
+                value_template: "{{ var_force_brightness }}"
+            then:
+              - action: light.turn_on
+                target:
+                  entity_id: >-
+                    {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
+                data:
+                  brightness_pct: !input brightness
+                  transition: "{{ ( var_repeat / 1000 ) | float }}"
+            else:
+              - action: light.turn_on
+                target:
+                  entity_id: >-
+                    {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
 
       # Long-Press on the dim-up button
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'move_with_on_off' }}"
+            value_template: "{{ trigger_command == 'move_with_on_off' }}"
           - condition: state
             entity_id: !input light
             state: "on"
@@ -238,7 +241,7 @@ action:
       # Short-Press on the dim-down button
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'off' }}"
+            value_template: "{{ trigger_command == 'off' }}"
         sequence:
           - action: light.turn_off
             target:
@@ -248,7 +251,7 @@ action:
       # Long-Press on the dim-down button
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'move' }}"
+            value_template: "{{ trigger_command == 'move' }}"
         sequence:
           - repeat:
               while: []
@@ -266,33 +269,33 @@ action:
       # Short-Press on the left button
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'press' }}"
+            value_template: "{{ trigger_command == 'press' }}"
           - condition: template
-            value_template: "{{ trigger.event.data.args == [257,13,0] }}"
+            value_template: "{{ trigger.event.data.args == [257, 13, 0] }}"
         sequence: !input button_left_short
 
       # Long-Press on the left button.
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'hold' }}"
+            value_template: "{{ trigger_command == 'hold' }}"
           - condition: template
-            value_template: "{{ trigger.event.data.args == [3329,0] }}"
+            value_template: "{{ trigger_args == [3329, 0] }}"
         sequence: !input button_left_long
 
       # Short-Press on the right button.
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'press' }}"
+            value_template: "{{ trigger_command == 'press' }}"
           - condition: template
-            value_template: "{{ trigger.event.data.args == [256,13,0] }}"
+            value_template: "{{ trigger_args == [256, 13, 0] }}"
         sequence: !input button_right_short
 
       # Long-Press on the right button.
       - conditions:
           - condition: template
-            value_template: "{{ trigger.event.data.command == 'hold' }}"
+            value_template: "{{ trigger_command == 'hold' }}"
           - condition: template
-            value_template: "{{ trigger.event.data.args == [3328,0] }}"
+            value_template: "{{ trigger_args == [3328, 0] }}"
         sequence: !input button_left_long
 
     # Any other event will cancel the repeat loops.

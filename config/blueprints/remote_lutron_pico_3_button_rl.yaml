@@ -257,6 +257,7 @@ actions:
       var_duration_hold: !input duration_hold
       var_duration_double_tap: !input duration_double_tap
       remote: "{{ trigger.event.data.device_id }}"
+
   - choose:
       # Button Press (ON)
       - conditions:
