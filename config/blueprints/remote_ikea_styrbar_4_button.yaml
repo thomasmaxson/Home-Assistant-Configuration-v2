@@ -20,33 +20,6 @@ blueprint:
     min_version: 2024.6.0
   domain: automation
   input:
-    # https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/sonoff_snzb01/sonoff_snzb01.yaml
-    # integration:
-    #   name: Integration
-    #   description: Integration used for connecting the remote with Home Assistant.
-    #   selector:
-    #     select:
-    #       options:
-    #         - deCONZ
-    #         - ZHA
-    #         - Zigbee2MQTT
-
-    # remote_device:
-    #   name: Remote Device (deCONZ, ZHA)
-    #   description: The remote device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA.
-    #   default: ''
-    #   selector:
-    #     device:
-
-    # remote_entity:
-    #   name: Remote Entity (Zigbee2MQTT)
-    #   description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
-    #   default: ''
-    #   selector:
-    #     entity:
-    #       filter:
-    #         - domain: sensor
-
     remote:
       name: IKEA STYRBAR Remote
       description: Select the remote control you wish to use.
@@ -57,23 +30,23 @@ blueprint:
               manufacturer: IKEA of Sweden
               model: Remote Control N2
 
+    light:
+      name: Light(s)
+      description: Select the light entities you wish to control.
+      selector:
+        entity:
+          multiple: true
+          filter:
+            domain: light
+
     remote_light:
       name: Light Configuration
       icon: mdi:lightbulb-on
-      collapsed: false
+      collapsed: true
       input:
-        light:
-          name: Light
-          description: Select the light entity you wish to control.
-          default: "light.undefined"
-          selector:
-            entity:
-              filter:
-                domain: light
-
         force_brightness:
           name: Force turn on brightness
-          description: Force the brightness to the a level, when the "on" button on is pressed.
+          description: Force the brightness to a specific level, when the "on" button on is pressed.
           default: false
           selector:
             boolean: null
@@ -115,9 +88,9 @@ blueprint:
           default: 500
 
     remote_actions:
-      name: Button Actions
-      icon: mdi:hand-pointing-up
-      collapsed: false
+      name: Left/Right Button Actions
+      icon: mdi:code-tags
+      collapsed: true
       input:
         button_left_short:
           name: Left Button - Short Press
@@ -198,6 +171,8 @@ max_exceeded: silent
 variables:
   var_light: !input light
   var_repeat: !input repeat_duration
+  var_brightness: !input brightness
+  var_brightness_step: !input brightness_step
   var_force_brightness: !input force_brightness
 
 triggers:
@@ -208,7 +183,7 @@ triggers:
 
 conditions:
   - condition: template
-    value_template: "{{ light_bulbs != 'light.undefined' }}"
+    value_template: "{{ var_light | length > 0 }}"
 
 action:
   - choose:
@@ -227,14 +202,16 @@ action:
               then:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: >-
+                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     transition: "{{ ( var_repeat / 1000 ) | float }}"
                     brightness_pct: !input brightness
               else:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: >-
+                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
 
       # Long-Press on the dim-up button
       - conditions:
@@ -249,9 +226,10 @@ action:
               sequence:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: >-
+                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
-                    brightness_step_pct: 10
+                    brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
                     transition: "{{ ( var_repeat / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
@@ -263,9 +241,8 @@ action:
         sequence:
           - action: light.turn_off
             target:
-              entity_id: !input light
-            data:
-              transition: "{{ ( var_repeat / 1000 ) | float }}"
+              entity_id: >-
+                {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
 
       # Long-Press on the dim-down button
       - conditions:
@@ -277,9 +254,9 @@ action:
               sequence:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: "{{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}"
                   data:
-                    brightness_step_pct: -10
+                    brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
                     transition: "{{ ( var_repeat / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
