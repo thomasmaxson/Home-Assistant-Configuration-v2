@@ -9,9 +9,10 @@ blueprint:
   input:
     remote:
       name: Sonoff, Wireless Switch
-      description: "Sonoff Wireless Switch remote used to trigger actions."
+      description: Sonoff Wireless Switch remote used to trigger actions.
       selector:
         device:
+          multiple: false
           filter:
             - integration: zha
               manufacturer: eWeLink
@@ -44,7 +45,7 @@ blueprint:
             action:
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -66,7 +67,7 @@ blueprint:
           name: Max Number of Runs
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            (ignored by Single and Restart Modes)
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -117,12 +118,12 @@ actions:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
               notification_id: remote_sonoff_wireless_switch_blueprint
-              title: Uncaught Dimmer Command
+              title: Uncaught Remote Command
               message:
                 Sonoff Wireless Switch ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.

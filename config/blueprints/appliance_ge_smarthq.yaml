@@ -16,18 +16,18 @@ blueprint:
           description: "The current state of the appliance"
           selector:
             entity:
+              multiple: false
               filter:
                 - integration: ge_home
-              multiple: false
 
         appliance_door:
           name: Appliance Door Sensor
           description: "The current state of the appliance door"
           selector:
             entity:
+              multiple: false
               filter:
                 - integration: ge_home
-              multiple: false
 
     custom_fields:
       name: Custom Fields
@@ -39,9 +39,9 @@ blueprint:
           description: "Flag to set when appliance has completed its cycle"
           selector:
             entity:
+              multiple: false
               filter:
                 domain: input_boolean
-              multiple: false
 
     appliance_actions_start:
       name: Start Actions
@@ -87,7 +87,7 @@ blueprint:
               mode: slider
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -109,7 +109,7 @@ blueprint:
           name: Max Number of Runs
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            (ignored by Single and Restart Modes)
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:

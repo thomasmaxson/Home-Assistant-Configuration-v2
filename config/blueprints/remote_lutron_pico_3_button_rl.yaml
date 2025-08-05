@@ -45,6 +45,7 @@ blueprint:
           # PJ2-3BRL-GXX-S09 = Horizontal Sheer Blinds (icons + text)
           # PJ2-3BRL-GWH-S10 = Tilt Blinds (icons)
 
+          multiple: false
           filter:
             - integration: lutron_caseta
               manufacturer: Lutron Electronics Co., Inc
@@ -52,7 +53,6 @@ blueprint:
             - integration: lutron_caseta
               manufacturer: Lutron Electronics Co., Inc
               model: PJ2-3BRL-GXX-X01 (Pico3ButtonRaiseLower)
-          multiple: false
 
     actions_single_press:
       name: Single Tap
@@ -173,7 +173,7 @@ blueprint:
               mode: slider
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -195,7 +195,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -205,9 +205,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -215,6 +227,12 @@ blueprint:
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
+
+variables:
+  trigger_device_id: "{{ trigger.event.data.device_id }}"
+  var_remote: !input remote
+  var_duration_hold: !input duration_hold
+  var_duration_double_tap: !input duration_double_tap
 
 triggers:
   - trigger: device
@@ -250,13 +268,22 @@ triggers:
 
 conditions:
   - condition: template
-    value_template: "{{ remote != 'remote.undefined' }}"
+    value_template: "{{ var_remote | length > 0 }}"
 
 actions:
-  - variables:
-      var_duration_hold: !input duration_hold
-      var_duration_double_tap: !input duration_double_tap
-      remote: "{{ trigger.event.data.device_id }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__lutron_pico_3_button_rl__command_valid
+          title: Remote Command
+          message: >-
+            Lutron Pico 3 Button Raise/Lower remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
 
   - choose:
       # Button Press (ON)
@@ -427,12 +454,15 @@ actions:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_lutron_pico_3_button_rl_blueprint
-              title: Uncaught Dimmer Command
-              message:
+              notification_id: blueprint_debug__lutron_pico_3_button_rl__command_invalid
+              title: Uncaught Remote Command
+              message: >-
                 Lutron Pico 3 Button Raise/Lower remote ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

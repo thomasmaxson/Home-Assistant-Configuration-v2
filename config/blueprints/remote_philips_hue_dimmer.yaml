@@ -23,6 +23,7 @@ blueprint:
       description: Select the Philips Hue remote to trigger your automations.
       selector:
         device:
+          multiple: false
           filter:
             - integration: hue
               manufacturer: Signify Netherlands B.V.
@@ -42,6 +43,7 @@ blueprint:
             - integration: mqtt
               manufacturer: Philips
               model: Hue dimmer switch (RWL022)
+
     actions_single_press:
       name: Single Tap
       icon: mdi:gesture-tap
@@ -79,12 +81,6 @@ blueprint:
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        # button_on_hold:
-        #   name: Hold On Button
-        #   description: Action(s) to perform on hold of the on button
-        #   default: []
-        #   selector:
-        #     action:
         button_raise_hold:
           name: Hold Up Button
           description: Action(s) to perform on hold of the up button
@@ -97,12 +93,6 @@ blueprint:
           default: []
           selector:
             action: {}
-        # button_off_hold:
-        #   name: Hold Off Button
-        #   description: Action(s) to perform on hold of the off button
-        #   default: []
-        #   selector:
-        #     action: {}
         repeat_duration:
           name: Repeat Duration
           description: The speed in which to update the device when the button is held.
@@ -116,7 +106,7 @@ blueprint:
           default: 500
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -138,7 +128,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -148,9 +138,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -250,9 +252,23 @@ trigger:
 
 conditions:
   - condition: template
-    value_template: "{{ remote != 'remote.undefined' }}"
+    value_template: "{{ var_remote | length > 0 }}"
 
 action:
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__philips_hue_dimmer__command_valid
+          title: Remote Command
+          message: >-
+            Philips Hue Dimmer remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
+
   - choose:
       # Short-Press on the ON button
       - conditions:
@@ -308,12 +324,15 @@ action:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_hue_dimmer_blueprint
-              title: Uncaught Dimmer Command
-              message:
-                Hue dimmer ran the default event from the "choose" event action.
+              notification_id: blueprint_debug__philips_hue_dimmer__command_invalid
+              title: Uncaught Remote Command
+              message: >-
+                Philips Hue Dimmer remote ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

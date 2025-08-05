@@ -41,24 +41,20 @@ blueprint:
       icon: mdi:lightbulb-on
       collapsed: false
       input:
-        force_brightness:
-          name: Force turn on brightness
-          description: Force the brightness to a specific level, when the "on" button on is pressed.
-          default: false
-          selector:
-            boolean: null
-
         brightness:
           name: Brightness
-          description: Brightness of the light(s) when turning on.
+          description: >-
+            Brightness of the light(s) when turning on.
+            <br>Set 1-100 to use a specific brightness level
+            <br>Set to 0 to use the lights last brightness level
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0.0
+              min: 0
               max: 100.0
               step: 1.0
-          default: 50
+          default: 0
 
         brightness_step:
           name: Brightness Step
@@ -85,7 +81,7 @@ blueprint:
           default: 500
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -107,7 +103,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes.
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -117,9 +113,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -133,7 +141,6 @@ variables:
   var_repeat: !input repeat_duration
   var_brightness: !input brightness
   var_brightness_step: !input brightness_step
-  var_force_brightness: !input force_brightness
 
 triggers:
   - trigger: event
@@ -146,6 +153,20 @@ conditions:
     value_template: "{{ var_light | length > 0 }}"
 
 actions:
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__remote_ikea_tradfri_2_button__command_valid
+          title: Remote Command
+          message: >-
+            IKEA TRÅDFRI 2 button remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
+
   - choose:
       # Short-Press on the on button
       - conditions:
@@ -158,7 +179,7 @@ actions:
           sequence:
             - if:
                 - condition: template
-                  value_template: "{{ var_force_brightness > 0 }}"
+                  value_template: "{{ var_brightness | int > 0 }}"
               then:
                 - action: light.turn_on
                   target:
@@ -226,12 +247,15 @@ actions:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_ikea_tradfri_2_button_blueprint
-              title: Uncaught Dimmer Command
-              message:
-                IKEA Tradfri 2 button remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
+              notification_id: blueprint_debug__remote_ikea_tradfri_2_button__command_invalid
+              title: Uncaught Remote Command
+              message: >-
+                IKEA TRÅDFRI 2 button remote ran the default event from the "choose" event action.
+                <br>Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

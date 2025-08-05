@@ -38,6 +38,7 @@ blueprint:
       description: Select the Inovelli switch to trigger your automations.
       selector:
         device:
+          multiple: false
           filter:
             - integration: mqtt
               manufacturer: Inovelli
@@ -203,25 +204,31 @@ blueprint:
       input:
         button_on_release:
           name: Release On Button
-          description: Action to run (will also stop the "Hold Up" action automatically)
+          description: >-
+            Action(s) to perform on release of the on button
+            <br>(Action will also stop the "Hold Up" action automatically)
           default: []
           selector:
             action:
         button_off_release:
           name: Release Off Button
-          description: Action to run (will also stop the "Hold Down" action automatically)
+          description: >-
+            Action(s) to perform on release of the off button
+            <br>(Action will also stop the "Hold Down" action automatically)
           default: []
           selector:
             action:
         button_config_release:
           name: Release Config Button
-          description: Action(s) to run (will also stop the "Hold Down" action automatically)
+          description: >-
+            Action(s) to perform on release of the config button
+            <br>(Action will also stop the "Hold Down" action automatically)
           default: []
           selector:
             action:
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -243,7 +250,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -253,9 +260,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -387,6 +406,21 @@ trigger:
 action:
   - variables:
       command: "{{ trigger.payload }}"
+
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__switch_inovelli_dimmer__command_valid
+          title: Inovelli Dimmer Command
+          message: >-
+            Inovelli Dimmer switch remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.payload }}"
+
   - choose:
       # Actions, Single Press
       - conditions:
@@ -467,12 +501,14 @@ action:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: switch_inovelli_dimmer_blueprint
-              title: Uncaught Dimmer Command
-              message:
-                Hue Tap remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
+              notification_id: blueprint_debug__switch_inovelli_dimmer__command_invalid
+              title: Uncaught Inovelli Dimmer Command
+              message: >-
+                Inovelli Dimmer switch ran the default event from the "choose" event action.
+                <br>
+                <br>_Switch Data_: 
+                <br>"{{ trigger.payload }}"

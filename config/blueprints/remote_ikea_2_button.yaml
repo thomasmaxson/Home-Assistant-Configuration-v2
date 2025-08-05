@@ -22,6 +22,7 @@ blueprint:
       default: []
       selector:
         device:
+          multiple: false
           filter:
             - integration: zha
               manufacturer: IKEA of Sweden
@@ -41,7 +42,6 @@ blueprint:
             - integration: mqtt
               manufacturer: IKEA
               model: SOMRIG shortcut button
-          multiple: true
 
     actions_single_press:
       name: Single Press
@@ -182,7 +182,7 @@ blueprint:
               mode: slider
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -204,7 +204,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -621,12 +621,12 @@ actions:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
               notification_id: remote_ikea_2_button_blueprint
-              title: Uncaught Dimmer Command
+              title: Uncaught Remote Command
               message:
                 IKEA 2 button remote ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.

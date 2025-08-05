@@ -21,6 +21,7 @@ blueprint:
       description: Select the Lutron Pico remote to trigger your automations.
       selector:
         device:
+          multiple: false
           filter:
             - integration: lutron_caseta
               manufacturer: Lutron Electronics Co., Inc
@@ -28,7 +29,6 @@ blueprint:
             - integration: lutron_caseta
               manufacturer: Lutron Electronics Co., Inc
               model: PJ2-1P-GXX
-          multiple: false
 
     actions_single_press:
       name: Single Tap
@@ -78,7 +78,7 @@ blueprint:
               mode: slider
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -100,7 +100,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes.
+            <br>Ignored by _Single_ and _Restart_ Modes..
           default: 10
           selector:
             number:
@@ -110,9 +110,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -121,6 +133,10 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+variables:
+  trigger_device_id: "{{ trigger.event.data.device_id }}"
+  var_remote: !input remote
+
 triggers:
   - trigger: device
     device_id: !input remote
@@ -128,18 +144,6 @@ triggers:
     type: press
     subtype: "on"
     id: on_pressed
-  # - trigger: device
-  #   device_id: !input remote
-  #   domain: lutron_caseta
-  #   type: press
-  #   subtype: Button 0
-  #   id: on_pressed
-  # - trigger: device
-  #   device_id: !input remote
-  #   domain: lutron_caseta
-  #   type: press
-  #   subtype: Button 1
-  #   id: on_pressed
 
   - trigger: device
     device_id: !input remote
@@ -147,27 +151,26 @@ triggers:
     type: press
     subtype: "off"
     id: off_pressed
-  # - trigger: device
-  #   device_id: !input remote
-  #   domain: lutron_caseta
-  #   type: press
-  #   subtype: Button 2
-  #   id: off_pressed
-  # - trigger: device
-  #   device_id: !input remote
-  #   domain: lutron_caseta
-  #   type: press
-  #   subtype: Button 3
-  #   id: off_pressed
 
 conditions:
   - condition: template
-    value_template: "{{ remote != 'remote.undefined' }}"
+    value_template: "{{ var_remote | length > 0 }}"
 
 actions:
-  - variables:
-      var_duration_hold: !input duration_hold
-      remote: "{{ trigger.event.data.device_id }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__lutron_pico_paddle__command_valid
+          title: Remote Command
+          message: >-
+            Lutron Pico Paddle remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
+
   - choose:
       # Button Press (ON)
       - conditions:
@@ -217,12 +220,15 @@ actions:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_lutron_pico_paddle_blueprint
-              title: Uncaught Dimmer Command
-              message:
+              notification_id: blueprint_debug__lutron_pico_paddle__command_invalid
+              title: Uncaught Remote Command
+              message: >-
                 Lutron Pico Paddle remote ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

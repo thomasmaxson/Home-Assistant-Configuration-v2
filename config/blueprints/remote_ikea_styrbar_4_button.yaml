@@ -25,11 +25,11 @@ blueprint:
       description: Select the remote control you wish to use.
       selector:
         device:
+          multiple: false
           filter:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: Remote Control N2
-          multiple: false
 
     light:
       name: Light(s)
@@ -45,24 +45,20 @@ blueprint:
       icon: mdi:lightbulb-on
       collapsed: true
       input:
-        force_brightness:
-          name: Force turn on brightness
-          description: Force the brightness to a specific level, when the "on" button on is pressed.
-          default: false
-          selector:
-            boolean: null
-
         brightness:
           name: Brightness
-          description: Brightness of the light(s) when turning on.
+          description: >-
+            Brightness of the light(s) when turning on.
+            <br>Set 1-100 to use a specific brightness level
+            <br>Set to 0 to use the lights last brightness level
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0.0
+              min: 0
               max: 100.0
               step: 1.0
-          default: 50
+          default: 0
 
         brightness_step:
           name: Brightness Step
@@ -126,13 +122,13 @@ blueprint:
             action: null
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
         config_mode:
           name: Automation Mode
-          description: Mode that the automation runs in.
+          description: Mode that automation runs in.
           default: restart
           selector:
             select:
@@ -145,10 +141,10 @@ blueprint:
               multiple: false
 
         config_max_num:
-          name: Max Number of Runs
+          name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            (ignored by Single and Restart Modes)
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -158,9 +154,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -170,11 +178,12 @@ max: !input config_max_num
 max_exceeded: silent
 
 variables:
+  trigger_command: "{{ trigger.event.data.command }}"
+  trigger_args: "{{ trigger.event.data.args }}"
   var_light: !input light
-  var_repeat: !input repeat_duration
   var_brightness: !input brightness
   var_brightness_step: !input brightness_step
-  var_force_brightness: !input force_brightness
+  var_repeat_duration: !input repeat_duration
 
 triggers:
   - trigger: event
@@ -187,9 +196,19 @@ conditions:
     value_template: "{{ var_light | length > 0 }}"
 
 action:
-  - variables:
-      trigger_command: "{{ trigger.event.data.command }}"
-      trigger_args: "{{ trigger.event.data.args }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__remote_ikea_styrbar_4_button__command_valid
+          title: Remote Command
+          message: >-
+            IKEA STYRBAR 4 button remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
 
   - choose:
       # Short-Press on the dim-up button
@@ -202,7 +221,7 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: "{{ var_force_brightness }}"
+                value_template: "{{ var_brightness | int > 0 }}"
             then:
               - action: light.turn_on
                 target:
@@ -210,7 +229,7 @@ action:
                     {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
                 data:
                   brightness_pct: !input brightness
-                  transition: "{{ ( var_repeat / 1000 ) | float }}"
+                  transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
             else:
               - action: light.turn_on
                 target:
@@ -234,7 +253,7 @@ action:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                    transition: "{{ ( var_repeat / 1000 ) | float }}"
+                    transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
 
@@ -262,7 +281,7 @@ action:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                    transition: "{{ ( var_repeat / 1000 ) | float }}"
+                    transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
 
@@ -303,12 +322,16 @@ action:
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_ikea_styrbar_4_button__blueprint
-              title: Uncaught Dimmer Command
-              message:
-                IKEA Styrbar 4 button remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
+              notification_id: blueprint_debug__remote_ikea_styrbar_4_button__command_invalid
+              title: Uncaught IKEA Remote Command
+              message: >-
+                IKEA STYRBAR 4 button remote ran the default event from the "choose" event action.
+                <br>Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"
+

@@ -9,9 +9,10 @@ blueprint:
   input:
     remote:
       name: Aqara Wireless Mini Switch
-      description: "Aqara Mini Switch remote used to trigger actions."
+      description: Aqara Mini Switch remote used to trigger actions.
       selector:
         device:
+          multiple: false
           filter:
             - integration: zha
               manufacturer: LUMI
@@ -51,7 +52,7 @@ blueprint:
             action:
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -73,7 +74,7 @@ blueprint:
           name: Max Number of Runs
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            (ignored by Single and Restart Modes)
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -83,9 +84,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -94,37 +107,60 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+variables:
+  trigger_command: "{{ trigger.event.data.command }}"
+  var_remote: !input remote
+
 triggers:
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
 
+conditions:
+  - condition: template
+    value_template: "{{ remote | length > 0 }}"
+
 actions:
-  - variables:
-      command: "{{ trigger.event.data.command }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__aqara_mini_switch__command_valid
+          title: Remote Command
+          message: >-
+            Aqara Mini Switch remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
+
   - choose:
       - conditions:
-          - "{{ command == 'single' }}"
+          - "{{ trigger_command == 'single' }}"
         sequence: !input single_press_action
       - conditions:
-          - "{{ command == 'double' }}"
+          - "{{ trigger_command == 'double' }}"
         sequence: !input double_press_action
       - conditions:
-          - "{{ command == 'hold' }}"
+          - "{{ trigger_command == 'hold' }}"
         sequence: !input long_press_action
       - conditions:
-          - "{{ command == 'release' }}"
+          - "{{ trigger_command == 'release' }}"
         sequence: !input release_action
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_aqara_mini_switch_blueprint
-              title: Uncaught Dimmer Command
-              message:
+              notification_id: blueprint_debug__aqara_mini_switch__command_invalid
+              title: Uncaught Remote Command
+              message: >-
                 Aqara Mini Switch ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
+                <br>Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

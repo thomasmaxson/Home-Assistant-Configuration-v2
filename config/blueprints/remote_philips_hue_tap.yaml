@@ -17,10 +17,11 @@ blueprint:
   domain: automation
   input:
     remote:
-      name: Philips Hue Tap remote
-      description: "Philips Hue Tap remote used to trigger actions."
+      name: Philips Hue Tap remote control
+      description: Philips Hue Tap remote used to trigger actions.
       selector:
         device:
+          multiple: false
           filter:
             - integration: mqtt
               manufacturer: Philips
@@ -57,7 +58,7 @@ blueprint:
             action: null
 
     automation_config:
-      name: Automation Configuration
+      name: Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -79,7 +80,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            Ignored by Single and Restart Modes
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -89,9 +90,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -100,37 +113,55 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+variables:
+  trigger_command: "{{ trigger.to_state.state }}"
+
 triggers:
   - trigger: state
     entity_id: !input "remote"
     attribute: action
 
 actions:
-  - variables:
-      command: "{{ trigger.to_state.state }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__philips_hue_tap__command_valid
+          title: Remote Command
+          message: >-
+            Philips Hue Tap remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
 
   - choose:
       - conditions:
-          - "{{ command == 'press_1' }}"
+          - "{{ trigger_command == 'press_1' }}"
         sequence: !input button_1
       - conditions:
-          - "{{ command == 'press_2' }}"
+          - "{{ trigger_command == 'press_2' }}"
         sequence: !input button_2
       - conditions:
-          - "{{ command == 'press_3' }}"
+          - "{{ trigger_command == 'press_3' }}"
         sequence: !input button_3
       - conditions:
-          - "{{ command == 'press_4' }}"
+          - "{{ trigger_command == 'press_4' }}"
         sequence: !input button_4
 
     default:
       - condition: template
-        value_template: "{{ log_invalid_events == 'true' }}"
+        value_template: !input log_invalid_events
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_hue_tap_blueprint
-              title: Uncaught Dimmer Command
-              message:
-                Hue Tap remote ran the default event from the "choose" event action.
+              notification_id: blueprint_debug__philips_hue_tap__command_invalid
+              title: Uncaught Remote Command
+              message: >-
+                Philips Hue Tap remote ran the default event from the "choose" event action.
                 Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"
+
