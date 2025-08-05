@@ -29,6 +29,7 @@ blueprint:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: Remote Control N2
+          multiple: false
 
     light:
       name: Light(s)

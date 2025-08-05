@@ -34,8 +34,8 @@ blueprint:
           multiple: false
 
     light:
-      name: Light
-      description: Select the light entity you wish to control.
+      name: Light(s)
+      description: Select the light entities you wish to control.
       selector:
         entity:
           multiple: true
