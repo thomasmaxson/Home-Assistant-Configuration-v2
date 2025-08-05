@@ -42,7 +42,7 @@ blueprint:
 
         force_brightness:
           name: Force turn on brightness
-          description: Force the brightness to the a level, when the "on" button on is pressed.
+          description: Force the brightness to a specific level, when the "on" button on is pressed.
           default: false
           selector:
             boolean: null

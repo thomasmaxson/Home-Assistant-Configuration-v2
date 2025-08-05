@@ -27,29 +27,29 @@ blueprint:
       description: Select the IKEA TRÅDFRI remote to trigger your automations.
       selector:
         device:
+          multiple: false
           filter:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: TRADFRI remote control
-          multiple: false
+
+    light:
+      name: Light(s)
+      description: Select the light entities you wish to control.
+      selector:
+        entity:
+          multiple: true
+          filter:
+            domain: light
 
     remote_light:
       name: Light Configuration
       icon: mdi:lightbulb-on
-      collapsed: false
+      collapsed: true
       input:
-        light:
-          name: Light
-          description: Select the light entity you wish to control.
-          default: "light.undefined"
-          selector:
-            entity:
-              filter:
-                domain: light
-
         force_brightness:
           name: Force turn on brightness
-          description: Force the brightness to the a level, when the "on" button on is pressed.
+          description: Force the brightness to a specific level, when the "on" button on is pressed.
           default: false
           selector:
             boolean: null
@@ -90,10 +90,10 @@ blueprint:
               step: 100
           default: 500
 
-    remote_actions:
-      name: Button Actions
+    additional_actions:
+      name: Additional Button Actions
       icon: mdi:hand-pointing-up
-      collapsed: false
+      collapsed: true
       input:
         button_power_long:
           name: Power Button - Long Press
@@ -102,6 +102,11 @@ blueprint:
           selector:
             action: null
 
+    remote_actions:
+      name: Left/Right Button Actions
+      icon: mdi:code-tags
+      collapsed: true
+      input:
         button_left_short:
           name: Left Button - Short Press
           description: The action to perform on Short Press of the Left Button
@@ -113,7 +118,7 @@ blueprint:
           name: Left Button - Long Press
           description: '
             The action to perform on Long Press of the Left Button.
-            Use with care, before the long press event, the "on" event gets triggered.'
+            <br>Use with care, before the long press event, the "on" event gets triggered.'
           default: []
           selector:
             action: null
@@ -129,7 +134,7 @@ blueprint:
           name: Right Button - Long Press
           description: '
             The action to perform on Long Press of the Right Button.
-            Use with care, before the long press event, the "on" event gets triggered.'
+            <br>Use with care, before the long press event, the "on" event gets triggered.'
           default: []
           selector:
             action: null
@@ -191,7 +196,7 @@ triggers:
 
 conditions:
   - condition: template
-    value_template: "{{ light_bulbs != 'light.undefined' }}"
+    value_template: "{{ var_light | length > 0 }}"
 
 actions:
   - choose:
@@ -199,26 +204,26 @@ actions:
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'toggle' }}"
-
           - condition: state
             entity_id: !input light
             state: "off"
         sequence:
-          sequence:
-            - if:
-                - condition: template
-                  value_template: "{{ var_force_brightness }}"
-              then:
-                - action: light.turn_on
-                  target:
-                    entity_id: !input light
-                  data:
-                    transition: "{{ ( var_repeat / 1000 ) | float }}"
-                    brightness_pct: !input brightness
-              else:
-                - action: light.turn_on
-                  target:
-                    entity_id: !input light
+          - if:
+              - condition: template
+                value_template: "{{ var_force_brightness }}"
+            then:
+              - action: light.turn_on
+                target:
+                  entity_id: >-
+                    {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
+                data:
+                  transition: "{{ ( var_repeat / 1000 ) | float }}"
+                  brightness_pct: !input brightness
+            else:
+              - action: light.turn_on
+                target:
+                  entity_id: >-
+                    {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
 
       # Short-Press on the power button (OFF)
       - conditions:
@@ -230,7 +235,8 @@ actions:
         sequence:
           - action: light.turn_off
             target:
-              entity_id: !input light
+              entity_id: >-
+                {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
 
       # Long-Press on the power button
       - conditions:
@@ -245,12 +251,13 @@ actions:
         sequence:
           - action: light.turn_on
             target:
-              entity_id: !input light
+              entity_id: >-
+                {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
             data:
-              brightness_step_pct: 10
+              brightness_step_pct: 20
               transition: "{{ ( var_repeat / 1000 ) | float }}"
 
-      # Long-Press on the dim-up button.
+      # Long-Press on the dim-up button
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'move_with_on_off' }}"
@@ -260,26 +267,28 @@ actions:
               sequence:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: >-
+                      {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
-                    brightness_step_pct: 10
+                    brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
                     transition: "{{ ( var_repeat / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
 
-      # Short-Press on the dim-down button.
+      # Short-Press on the dim-down button
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'step' }}"
         sequence:
           - action: light.turn_on
             target:
-              entity_id: !input light
+              entity_id: >-
+                "{{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}"
             data:
               brightness_step_pct: -20
               transition: "{{ ( var_repeat / 1000 ) | float }}"
 
-      # Long-Press on the dim-down button.
+      # Long-Press on the dim-down button
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'move' }}"
@@ -289,9 +298,10 @@ actions:
               sequence:
                 - action: light.turn_on
                   target:
-                    entity_id: !input light
+                    entity_id: >-
+                      "{{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}"
                   data:
-                    brightness_step_pct: -10
+                    brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
                     transition: "{{ ( var_repeat / 1000 ) | float }}"
                 - delay:
                     milliseconds: !input repeat_duration
