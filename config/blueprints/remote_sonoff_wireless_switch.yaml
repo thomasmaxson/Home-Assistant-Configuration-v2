@@ -1,3 +1,11 @@
+# This blueprint uses an Sonoff Wireless Switch Remote Control connected through ZHA
+#
+# | Button | Duration     | Action        |
+# | -------| ------------ | ------------- |
+# | Button | Short Press  | Custom action |
+# | Button | Double Press | Custom action |
+# | Button | Long Press   | Custom action |
+
 blueprint:
   name: Sonoff, Wireless Switch
   description: Control devices with your Sonoff Wireless Switch.
@@ -25,21 +33,21 @@ blueprint:
       input:
         single_press_action:
           name: Button Short Press
-          description: "The action to perform on short press of the button."
+          description: The action to perform on short press of the button.
           default: []
           selector:
             action:
 
         double_press_action:
           name: Button Double Press
-          description: "The action to perform on double press of the button."
+          description: The action to perform on double press of the button.
           default: []
           selector:
             action:
 
         long_press_action:
           name: Button Long Press
-          description: "The action to perform on long press of the button."
+          description: The action to perform on long press of the button.
           default: []
           selector:
             action:
@@ -77,9 +85,21 @@ blueprint:
               max: 15.0
               step: 1.0
 
+    debug_config:
+      name: Debug
+      icon: mdi:bug
+      collapsed: true
+      input:
+        log_valid_events:
+          name: Log Valid Remote Events
+          description: Display a persistent notification if a _valid event_ is triggered.
+          default: false
+          selector:
+            boolean:
+
         log_invalid_events:
           name: Log Invalid Remote Events
-          description: Display notification if an invalid trigger is received.
+          description: Display a persistent notification if an _invalid event_ is triggered.
           default: false
           selector:
             boolean:
@@ -88,32 +108,70 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+variables:
+  var_remote: !input remote
+
 triggers:
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
+      command: toggle
+      cluster_id: 6
+      endpoint_id: 1
+    id: toggle_press
+
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: on
+      cluster_id: 6
+      endpoint_id: 1
+    id: on_press
+
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: off
+      cluster_id: 6
+      endpoint_id: 1
+    id: off_press
+
+conditions:
+  - condition: template
+    value_template: "{{ var_remote | length > 0 }}"
 
 actions:
-  - variables:
-      command: "{{ trigger.event.data.command }}"
-      cluster_id: "{{ trigger.event.data.cluster_id }}"
-      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+  - if:
+      - condition: template
+        value_template: !input log_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__sonoff_wireless_switch__command_valid
+          title: Remote Command
+          message: >-
+            Sonoff Wireless Switch remote command.
+            <br>
+            <br>_Remote Data_: 
+            <br>"{{ trigger.event.data }}"
+
   - choose:
       - conditions:
-          - '{{ command == "toggle" }}'
-          - "{{ cluster_id == 6 }}"
-          - "{{ endpoint_id == 1 }}"
+          - condition: trigger
+            id: toggle_press
         sequence: !input single_press_action
+
       - conditions:
-          - '{{ command == "on" }}'
-          - "{{ cluster_id == 6 }}"
-          - "{{ endpoint_id == 1 }}"
+          - condition: trigger
+            id: on_press
         sequence: !input double_press_action
+
       - conditions:
-          - '{{ command == "off" }}'
-          - "{{ cluster_id == 6 }}"
-          - "{{ endpoint_id == 1 }}"
+          - condition: trigger
+            id: off_press
         sequence: !input long_press_action
 
     default:
@@ -122,8 +180,11 @@ actions:
       - sequence:
           - action: persistent_notification.create
             data:
-              notification_id: remote_sonoff_wireless_switch_blueprint
+              notification_id: blueprint_debug__sonoff_wireless_switch__command_invalid
               title: Uncaught Remote Command
-              message:
+              message: >-
                 Sonoff Wireless Switch ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
+                <br>Please check any automations which may not be handling this event.
+                <br>
+                <br>_Remote Data_: 
+                <br>"{{ trigger.event.data }}"

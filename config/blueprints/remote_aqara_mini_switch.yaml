@@ -1,3 +1,12 @@
+# This blueprint uses an Aqara Mini Switch Remote Control connected through ZHA
+#
+# | Button | Duration     | Action        |
+# | -------| ------------ | ------------- |
+# | Button | Short Press  | Custom action |
+# | Button | Double Press | Custom action |
+# | Button | Long Press   | Custom action |
+# | Button | Release      | Custom action |
+
 blueprint:
   name: Aqara, Wireless Mini Switch
   description: Control devices with your Aqara Wireless Mini Switch.
@@ -108,7 +117,6 @@ max: !input config_max_num
 max_exceeded: silent
 
 variables:
-  trigger_command: "{{ trigger.event.data.command }}"
   var_remote: !input remote
 
 triggers:
@@ -116,10 +124,33 @@ triggers:
     event_type: zha_event
     event_data:
       device_id: !input remote
+      command: single
+    id: single_press
+
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: double
+    id: double_press
+
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: hold
+    id: long_press
+
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: release
+    id: release
 
 conditions:
   - condition: template
-    value_template: "{{ remote | length > 0 }}"
+    value_template: "{{ var_remote | length > 0 }}"
 
 actions:
   - if:
@@ -138,16 +169,23 @@ actions:
 
   - choose:
       - conditions:
-          - "{{ trigger_command == 'single' }}"
+          - condition: trigger
+            id: single_press
         sequence: !input single_press_action
+
       - conditions:
-          - "{{ trigger_command == 'double' }}"
+          - condition: trigger
+            id: double_press
         sequence: !input double_press_action
+
       - conditions:
-          - "{{ trigger_command == 'hold' }}"
+          - condition: trigger
+            id: long_press
         sequence: !input long_press_action
+
       - conditions:
-          - "{{ trigger_command == 'release' }}"
+          - condition: trigger
+            id: release
         sequence: !input release_action
 
     default:
