@@ -136,6 +136,7 @@ max_exceeded: silent
 variables:
   trigger_device_id: "{{ trigger.event.data.device_id }}"
   var_remote: !input remote
+  var_duration_hold: !input duration_hold
 
 triggers:
   - trigger: device
@@ -172,7 +173,7 @@ actions:
             <br>"{{ trigger.event.data }}"
 
   - choose:
-      # Button Press (ON)
+      # Press on the ON button
       - conditions:
           - condition: trigger
             id: on_pressed
@@ -195,7 +196,7 @@ actions:
             then: !input button_on_hold
             else: !input button_on_single
 
-      # Button Press (OFF)
+      # Press on the OFF button
       - conditions:
           - condition: trigger
             id: off_pressed
