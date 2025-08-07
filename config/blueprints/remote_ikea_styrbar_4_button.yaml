@@ -489,9 +489,9 @@ actions:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                    transition: "{{ var_repeat_transition | int }}"
+                    transition: "{{ var_repeat_transition | float }}"
                 - delay:
-                    seconds: "{{ var_repeat_delay | int }}"
+                    seconds: "{{ var_repeat_delay | float }}"
 
       # Dim-Down Button Press – SHORT
       - conditions:
@@ -529,9 +529,9 @@ actions:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                    transition: "{{ var_repeat_transition | int }}"
+                    transition: "{{ var_repeat_transition | float }}"
                 - delay:
-                    seconds: "{{ var_repeat_delay | int }}"
+                    seconds: "{{ var_repeat_delay | float }}"
 
       # Left Button Press – SHORT
       - conditions:
