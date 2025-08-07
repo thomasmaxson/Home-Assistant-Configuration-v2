@@ -1,4 +1,4 @@
-# This blueprint uses an IKEA STYRBAR Remote Control connected through ZHA
+# This blueprint uses an IKEA STYRBAR Remote Control connected through ZHA or MQTT.
 #
 # | Button      | Duration    | Action              |
 # | ----------- | ----------- | ------------------- |
@@ -30,6 +30,9 @@ blueprint:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: Remote Control N2
+            - integration: mqtt
+              manufacturer: IKEA
+              model: STYRBAR remote control
 
     light:
       name: Light(s)
@@ -49,8 +52,8 @@ blueprint:
           name: Brightness
           description: >-
             Brightness of the light(s) when turning on.
-            <br>Set 1-100 to use a specific brightness level
-            <br>Set to 0 to use the lights last brightness level
+            <br>&bull; Set 1-100 to use a specific brightness level
+            <br>&bull; Set to 0 to use the lights last brightness level
           selector:
             number:
               mode: slider
@@ -62,27 +65,52 @@ blueprint:
 
         brightness_step:
           name: Brightness Step
-          description: Value to increase/decrease brightness.
+          description: Incremental value to increase or decrease lights brightness.
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 10
+              min: 5
               max: 100
               step: 5.0
           default: 20
 
-        repeat_duration:
-          name: Repeat Duration
-          description: The speed in which to update the light when the button is held.
+        repeat_transition: 
+          name: Transition Time
+          description: The duration for the light transition to occur.
           selector:
             number:
               mode: slider
-              unit_of_measurement: milliseconds
-              min: 100
-              max: 1000
-              step: 100
-          default: 500
+              unit_of_measurement: seconds
+              min: 0.25
+              max: 5
+              step: 0.25
+          default: 1
+
+        repeat_delay:
+          name: Repeat Delay
+          description: Delay between the brightness adjustment steps.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: seconds
+              min: 0.25
+              max: 5
+              step: 0.25
+          default: 1
+
+        repeat_max_count:
+          name: Maximum loop repeats
+          description: >-
+            Maximum number of times to repeat the dimmer brightness event(s).
+            <br>&bull; Used as a safety limit to prevent an endless loop, just in case the corresponding stop event is not received.
+          default: 10
+          selector:
+            number:
+              min: 1
+              max: 100
+              mode: slider
+              step: 1
 
     remote_actions:
       name: Left/Right Button Actions
@@ -178,24 +206,217 @@ max: !input config_max_num
 max_exceeded: silent
 
 variables:
-  trigger_command: "{{ trigger.event.data.command }}"
-  trigger_args: "{{ trigger.event.data.args }}"
+  var_remote: !input remote
   var_light: !input light
   var_brightness: !input brightness
   var_brightness_step: !input brightness_step
-  var_repeat_duration: !input repeat_duration
+  var_repeat_delay: !input repeat_delay
+  var_repeat_max_count: !input repeat_max_count
+  var_repeat_transition: !input repeat_transition
 
 triggers:
+  # Dim-Up Button Press – SHORT
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
+      command: "on"
+    id: press_up_short_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "on"
+    id: press_up_short_mqtt
+
+  # Dim-Up Button Press – LONG
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "move_with_on_off"
+    id: press_up_long_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "brightness_move_up"
+    id: press_up_long_mqtt
+
+  # Dim-Up Button Press – RELEASE
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "stop_with_on_off"
+    id: press_up_release_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "brightness_stop"
+    id: press_up_release_mqtt
+
+
+  # Dim-Down Button Press – SHORT
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "off"
+    id: press_down_short_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "off"
+    id: press_down_short_mqtt
+
+  # Dim-Down Button Press – LONG
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "move"
+    id: press_down_long_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "brightness_move_down"
+    id: press_down_long_mqtt
+
+  # Dim-Down Button Press – RELEASE
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "stop_with_on_off"
+    id: press_down_release_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "brightness_stop"
+    id: press_down_release_mqtt
+
+
+  # Left Button Press – SHORT
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "press"
+      args: [257, 13, 0]
+    id: press_left_short_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_left_click"
+    id: press_left_short_mqtt
+
+  # Left Button Press – LONG
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "hold"
+      args: [3329, 0]
+    id: press_left_long_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_left_hold"
+    id: press_left_long_mqtt
+
+  # Left Button Press – RELEASE
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "release"
+    id: press_left_release_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_left_release"
+    id: press_left_release_mqtt
+
+
+  # Right Button Press – SHORT
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "press"
+      args: [255, 13, 0]
+    id: press_right_short_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_right_click"
+    id: press_right_short_mqtt
+
+  # Right Button Press – LONG
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "hold"
+      args: [3328, 0]
+    id: press_right_long_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_right_hold"
+    id: press_right_long_mqtt
+
+  # Right Button Press – RELEASE
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "release"
+    id: press_right_release_zha
+  - trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "arrow_right_release"
+    id: press_right_release_mqtt
+
 
 conditions:
-  - condition: template
-    value_template: "{{ var_light | length > 0 }}"
+  - condition: and
+    conditions:
+      - condition: template
+        value_template: "{{ var_remote | length > 0 }}"
+      - condition: template
+        value_template: "{{ var_light | length > 0 }}"
 
-action:
+
+actions:
+  - variables:
+      identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ identifiers[0][0] | string | lower }}"
+      trigger_action: >-
+        {%- if integration_type == 'zha' -%}
+          {{ trigger.event.data.command }}
+        {%- elif integration_type == 'mqtt' -%}
+          {{ trigger.payload }}
+        {%- endif -%}
+      trigger_data: >-
+        {%- if integration_type == 'zha' -%}
+          {{ trigger.event.data }}
+        {%- elif integration_type == 'mqtt' -%}
+          {{ trigger }}
+        {%- endif -%}
+
   - if:
       - condition: template
         value_template: !input log_valid_events
@@ -207,17 +428,25 @@ action:
           message: >-
             IKEA STYRBAR 4 button remote command.
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Integration_:
+            <br>{{ integration_type }}
+            <br>
+            <br>_Device ID_:
+            <br>{{ var_remote }}
+            <br>
+            <br>_Action_:
+            <br>{{ trigger_action }}
+            <br>
+            <br>_Data_:
+            <br>{{ trigger_data }}
 
   - choose:
-      # Short-Press on the dim-up button
+      # Dim-Up Button Press – SHORT
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'on' }}"
-          - condition: state
-            entity_id: !input light
-            state: "off"
+          - condition: trigger
+            id: 
+              - press_up_short_zha
+              - press_up_short_mqtt
         sequence:
           - if:
               - condition: template
@@ -229,23 +458,30 @@ action:
                     {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
                 data:
                   brightness_pct: !input brightness
-                  transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
+                  transition: "{{ var_repeat_transition | float }}"
             else:
               - action: light.turn_on
                 target:
                   entity_id: >-
                     {{ expand( var_light ) | selectattr( 'state', 'eq', 'off' ) | map( attribute = 'entity_id' ) | list }}
 
-      # Long-Press on the dim-up button
+      # Dim-Up Button Press – LONG
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'move_with_on_off' }}"
-          - condition: state
-            entity_id: !input light
-            state: "on"
+          - condition: trigger
+            id: 
+              - press_up_long_zha
+              - press_up_long_mqtt
         sequence:
           - repeat:
-              while: []
+              until:
+                - condition: or
+                  conditions:
+                    - condition: trigger
+                      id: 
+                        - press_up_release_zha
+                        - press_up_release_mqtt
+                    - condition: template
+                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
               sequence:
                 - action: light.turn_on
                   target:
@@ -253,27 +489,39 @@ action:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                    transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
+                    transition: "{{ var_repeat_transition | int }}"
                 - delay:
-                    milliseconds: !input repeat_duration
+                    seconds: "{{ var_repeat_delay | int }}"
 
-      # Short-Press on the dim-down button
+      # Dim-Down Button Press – SHORT
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'off' }}"
+          - condition: trigger
+            id: 
+              - press_down_short_zha
+              - press_down_short_mqtt
         sequence:
           - action: light.turn_off
             target:
               entity_id: >-
                 {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
 
-      # Long-Press on the dim-down button
+      # Dim-Down Button Press – LONG
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'move' }}"
+          - condition: trigger
+            id: 
+              - press_down_long_zha
+              - press_down_long_mqtt
         sequence:
           - repeat:
-              while: []
+              until:
+                - condition: or
+                  conditions:
+                    - condition: trigger
+                      id: 
+                        - press_up_release_zha
+                        - press_up_release_mqtt
+                    - condition: template
+                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
               sequence:
                 - action: light.turn_on
                   target:
@@ -281,44 +529,41 @@ action:
                       {{ expand( var_light ) | selectattr( 'state', 'eq', 'on' ) | map( attribute = 'entity_id' ) | list }}
                   data:
                     brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                    transition: "{{ ( var_repeat_duration / 1000 ) | float }}"
+                    transition: "{{ var_repeat_transition | int }}"
                 - delay:
-                    milliseconds: !input repeat_duration
+                    seconds: "{{ var_repeat_delay | int }}"
 
-      # Short-Press on the left button
+      # Left Button Press – SHORT
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'press' }}"
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [257, 13, 0] }}"
+          - condition: trigger
+            id: 
+              - press_left_short_zha
+              - press_left_short_mqtt
         sequence: !input button_left_short
 
-      # Long-Press on the left button.
+      # Left Button Press – LONG
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'hold' }}"
-          - condition: template
-            value_template: "{{ trigger_args == [3329, 0] }}"
+          - condition: trigger
+            id: 
+              - press_left_long_zha
+              - press_left_long_mqtt
         sequence: !input button_left_long
 
-      # Short-Press on the right button.
+      # Right Button Press – SHORT
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'press' }}"
-          - condition: template
-            value_template: "{{ trigger_args == [256, 13, 0] }}"
+          - condition: trigger
+            id: 
+              - press_right_short_zha
+              - press_right_short_mqtt
         sequence: !input button_right_short
 
-      # Long-Press on the right button.
+      # Right Button Press – LONG
       - conditions:
-          - condition: template
-            value_template: "{{ trigger_command == 'hold' }}"
-          - condition: template
-            value_template: "{{ trigger_args == [3328, 0] }}"
-        sequence: !input button_left_long
-
-    # Any other event will cancel the repeat loops.
-    # default: []
+          - condition: trigger
+            id: 
+              - press_right_long_zha
+              - press_right_long_mqtt
+        sequence: !input button_right_long
 
     default:
       - condition: template
@@ -332,6 +577,11 @@ action:
                 IKEA STYRBAR 4 button remote ran the default event from the "choose" event action.
                 <br>Please check any automations which may not be handling this event.
                 <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"
-
+                <br>_Integration_: {{ integration_type }}
+                <br>
+                <br>_Device ID_: {{ var_remote }}
+                <br>
+                <br>_Action_: {{ trigger_action }}
+                <br>
+                <br>_Data_:
+                <br>{{ trigger_data }}
