@@ -1,14 +1,14 @@
-# This blueprint uses an Sonoff Wireless Switch Remote Control connected through ZHA
+# This blueprint uses an SONOFF Wireless Switch Remote Control connected through ZHA or Z2MQTT
 #
 # | Button | Duration     | Action        |
 # | -------| ------------ | ------------- |
-# | Button | Short Press  | Custom action |
-# | Button | Double Press | Custom action |
-# | Button | Long Press   | Custom action |
+# | Power  | Short Press  | Custom action |
+# | Power  | Double Press | Custom action |
+# | Power  | Long Press   | Custom action |
 
 blueprint:
-  name: Sonoff, Wireless Switch
-  description: Control devices with your Sonoff Wireless Switch.
+  name: SONOFF, Wireless Switch
+  description: Control devices with your SONOFF Wireless Switch.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/1caba2eb5bd9bb0bb1aed157b5bfb15c
   homeassistant:
@@ -16,12 +16,15 @@ blueprint:
   domain: automation
   input:
     remote:
-      name: Sonoff, Wireless Switch
-      description: Sonoff Wireless Switch remote used to trigger actions.
+      name: SONOFF, Wireless Switch
+      description: SONOFF Wireless Switch remote used to trigger actions.
       selector:
         device:
           multiple: false
           filter:
+            - integration: mqtt
+              manufacturer: SONOFF
+              model: Wireless button
             - integration: zha
               manufacturer: eWeLink
               model: WB01
@@ -32,22 +35,22 @@ blueprint:
       collapsed: false
       input:
         single_press_action:
-          name: Button Short Press
-          description: The action to perform on short press of the button.
+          name: Button - Short Press
+          description: The action to perform on _single short press_ of the Button.
           default: []
           selector:
             action:
 
         double_press_action:
-          name: Button Double Press
-          description: The action to perform on double press of the button.
+          name: Button - Double Press
+          description: The action to perform on _double short press_ of the Button.
           default: []
           selector:
             action:
 
         long_press_action:
-          name: Button Long Press
-          description: The action to perform on long press of the button.
+          name: Button - Long Press
+          description: The action to perform on _long press_ of the Button.
           default: []
           selector:
             action:
@@ -85,21 +88,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-    debug_config:
-      name: Debug
-      icon: mdi:bug
-      collapsed: true
-      input:
-        log_valid_events:
-          name: Log Valid Remote Events
-          description: Display a persistent notification if a _valid event_ is triggered.
-          default: false
-          selector:
-            boolean:
-
-        log_invalid_events:
-          name: Log Invalid Remote Events
-          description: Display a persistent notification if an _invalid event_ is triggered.
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
           default: false
           selector:
             boolean:
@@ -112,79 +103,104 @@ variables:
   var_remote: !input remote
 
 triggers:
+  # Single Press Events
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
-      command: toggle
-      cluster_id: 6
-      endpoint_id: 1
-    id: toggle_press
+      command: "toggle"
+    id: single_press
+  - trigger: device
+    device_id: !input remote
+    domain: mqtt
+    type: action
+    subtype: single
+    id: single_press
 
+  # Double Press Events
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
-      command: on
-      cluster_id: 6
-      endpoint_id: 1
-    id: on_press
+      command: "on"
+    id: double_press
+  - trigger: device
+    device_id: !input remote
+    domain: mqtt
+    type: action
+    subtype: double
+    id: double_press
 
+  # Long Press Events
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
-      command: off
-      cluster_id: 6
-      endpoint_id: 1
-    id: off_press
+      command: "off"
+    id: long_press
+  - trigger: device
+    device_id: !input remote
+    domain: mqtt
+    type: action
+    subtype: long
+    id: long_press
 
 conditions:
   - condition: template
     value_template: "{{ var_remote | length > 0 }}"
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data.command }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger.payload }}
+        {%- endif -%}
+      trigger_data: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger }}
+        {%- endif -%}
+
   - if:
       - condition: template
-        value_template: !input log_valid_events
+        value_template: !input debug_valid_events
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__sonoff_wireless_switch__command_valid
-          title: Remote Command
+          notification_id: blueprint_debug__remote_sonoff_wireless_switch
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
           message: >-
-            Sonoff Wireless Switch remote command.
+            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
 
   - choose:
       - conditions:
           - condition: trigger
-            id: toggle_press
+            id: single_press
         sequence: !input single_press_action
 
       - conditions:
           - condition: trigger
-            id: on_press
+            id: double_press
         sequence: !input double_press_action
 
       - conditions:
           - condition: trigger
-            id: off_press
+            id: long_press
         sequence: !input long_press_action
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__sonoff_wireless_switch__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Sonoff Wireless Switch ran the default event from the "choose" event action.
-                <br>Please check any automations which may not be handling this event.
-                <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"

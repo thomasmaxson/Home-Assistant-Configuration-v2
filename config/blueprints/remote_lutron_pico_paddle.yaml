@@ -1,11 +1,11 @@
 # This blueprint uses an Lutron Pico Paddle Remote Control
 #
-# | Button | Duration     | Action        |
-# | ------ | ------------ | ------------- |
-# | On     | Short Press  | Custom action |
-# | On     | Long Press   | Custom action |
-# | Off    | Short Press  | Custom action |
-# | Off    | Long Press   | Custom action |
+# | Button | Action       | Event        |
+# | ------ | ------------ | ------------ |
+# | On     | Single Press | Custom event |
+# | On     | Press & Hold | Custom event |
+# | Off    | Single Press | Custom event |
+# | Off    | Press & Hold | Custom event |
 
 blueprint:
   name: Lutron Pico, Paddle Remote Control
@@ -31,37 +31,37 @@ blueprint:
               model: PJ2-1P-GXX
 
     actions_single_press:
-      name: Single Tap
+      name: Single Press Button Events
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        button_on_single:
-          name: Tap On Button
-          description: Action(s) to perform on single tap of the on button
+        event_on_single:
+          name: On Button Press Event
+          description: The action to perform on _single press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        button_off_single:
-          name: Tap Off Button
-          description: Action(s) to perform on single tap of the off button
+        event_off_single:
+          name: Off Button Press Event
+          description: The action to perform on _single press_ of the **Off Button**.
           default: []
           selector:
             action: {}
 
     actions_hold_press:
-      name: Press and Hold
+      name: Press and Hold Button Events
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        button_on_hold:
-          name: Hold On Button
-          description: Action(s) to perform on hold of the on button
+        event_on_hold:
+          name: On Button Hold Event
+          description: The action to perform on _press and hold_ of the **On Button**.
           default: []
           selector:
             action: {}
-        button_off_hold:
-          name: Hold Off Button
-          description: Action(s) to perform on hold of the off button
+        event_off_hold:
+          name: Off Button Hold Event
+          description: The action to perform on _press and hold_ of the **Off Button**.
           default: []
           selector:
             action: {}
@@ -100,7 +100,7 @@ blueprint:
           name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            <br>Ignored by _Single_ and _Restart_ Modes..
+            <br>Ignored by _Single_ and _Restart_ Modes.
           default: 10
           selector:
             number:
@@ -110,21 +110,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-    debug_config:
-      name: Debug
-      icon: mdi:bug
-      collapsed: true
-      input:
-        log_valid_events:
-          name: Log Valid Remote Events
-          description: Display a persistent notification if a _valid event_ is triggered.
-          default: false
-          selector:
-            boolean:
-
-        log_invalid_events:
-          name: Log Invalid Remote Events
-          description: Display a persistent notification if an _invalid event_ is triggered.
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
           default: false
           selector:
             boolean:
@@ -139,44 +127,71 @@ variables:
   var_duration_hold: !input duration_hold
 
 triggers:
+  # Off Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "on"
-    id: on_pressed
+    id: trigger_on_pressed
 
+  # Off Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "off"
-    id: off_pressed
+    id: trigger_off_pressed
 
 conditions:
   - condition: template
     value_template: "{{ var_remote | length > 0 }}"
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data.command }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger.payload }}
+        {%- endif -%}
+      trigger_data: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger }}
+        {%- endif -%}
+
   - if:
       - condition: template
-        value_template: !input log_valid_events
+        value_template: !input debug_valid_events
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__lutron_pico_paddle__command_valid
-          title: Remote Command
+          notification_id: blueprint_debug__lutron_pico_3_button_rl
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
           message: >-
-            Lutron Pico Paddle remote command.
+            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
 
   - choose:
       # Press on the ON button
       - conditions:
           - condition: trigger
-            id: on_pressed
+            id: trigger_on_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -193,13 +208,13 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_on_hold
-            else: !input button_on_single
+            then: !input event_on_hold
+            else: !input event_on_single
 
       # Press on the OFF button
       - conditions:
           - condition: trigger
-            id: off_pressed
+            id: trigger_off_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -216,20 +231,5 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_off_hold
-            else: !input button_off_single
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__lutron_pico_paddle__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Lutron Pico Paddle remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
-                <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"
+            then: !input event_off_hold
+            else: !input event_off_single

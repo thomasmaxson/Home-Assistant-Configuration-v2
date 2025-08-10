@@ -1,39 +1,50 @@
-# This blueprint uses an IKEA STYRBAR Remote Control connected through ZHA or MQTT.
+# This blueprint uses an IKEA TRÅDFRI, RODRET and SOMRIG 2 Button Remote Control connected through ZHA or MQTT.
 #
-# | Button      | Action       | Event                                        |
-# | ----------- | ------------ | -------------------------------------------- |
-# | Dim-Up      | Click        | Turn on OR custom action                     |
-# | Dim-Up      | Press & Hold | Increase brightness (repeat) OR custom event |
-# | Dim-Down    | Click        | Turn off OR custom action                    |
-# | Dim-Down    | Press & Hold | Decrease brightness (repeat) OR custom event |
-# | Left Arrow  | Click        | Custom event                                 |
-# | Left Arrow  | Press & Hold | Custom event                                 |
-# | Right Arrow | Click        | Custom event                                 |
-# | Right Arrow | Press & Hold | Cusotm event                                 |
-# | ----------- | ------------ | -------------------------------------------- |
+# | Button        | Action       | Event                               |
+# | ------------- | ------------ | ----------------------------------- |
+# | On OR 1 Dot   | Click        | Turn on OR custom event             |
+# | On OR 1 Dot   | Press & Hold | Increase brightness OR custom event |
+# | Off OR 2 Dots | Click        | Turn off OR custom event            |
+# | Off OR 2 Dots | Press & Hold | Decrease brightness OR custom event |
+# | ------------- | ------------ | ----------------------------------- |
 
 blueprint:
-  name: IKEA STYRBAR, 4 Button Remote Control
-  description: Control devices with your IKEA STYRBAR 4 button remote.
+  name: IKEA RODRET, SOMRIG or TRÅDFRI, 2 Button Remote Control
+  description: Control devices with your IKEA RODRET, SOMRIG or TRÅDFRI 2 button remotes.
   author: Thomas Maxson
-  source_url: https://gist.github.com/thomasmaxson/b494e0d0a67a7ed940188c30eedeb7fa
+  source_url: https://gist.github.com/thomasmaxson/46933a9ad0271a8517b2faef372857ba
   homeassistant:
     min_version: 2024.6.0
   domain: automation
   input:
     remote:
-      name: IKEA STYRBAR Remote
-      description: Select the remote control you wish to use.
+      name: Remote
+      description: >-
+        Select the IKEA remote to to use
+        <br>Choose from RODRET, SOMRIG or TRÅDFRI 2 button remotes
+      default: []
       selector:
         device:
           multiple: false
           filter:
             - integration: mqtt
               manufacturer: IKEA
-              model: STYRBAR remote control
+              model: TRADFRI on/off switch
+            - integration: mqtt
+              manufacturer: IKEA
+              model: RODRET wireless dimmer/power switch
+            - integration: mqtt
+              manufacturer: IKEA
+              model: SOMRIG shortcut button
             - integration: zha
               manufacturer: IKEA of Sweden
-              model: Remote Control N2
+              model: TRADFRI on/off switch
+            - integration: zha
+              manufacturer: IKEA of Sweden
+              model: RODRET Dimmer
+            - integration: zha
+              manufacturer: IKEA of Sweden
+              model: SOMRIG shortcut button
 
     light:
       name: Light(s)
@@ -102,76 +113,39 @@ blueprint:
               mode: slider
               step: 1
 
-    default_button_events:
-      name: Left/Right Arrow Button Events
-      icon: mdi:code-tags
-      collapsed: true
-      input:
-        event_left_short:
-          name: Left Arrow Button Click Event
-          description: The action to perform on _click_ of the **Left Arrow Button**.
-          default: []
-          selector:
-            action: null
-
-        event_left_long:
-          name: Left Arrow Button Press and Hold Event
-          description: >
-            The action to perform on _press and hold_ of the **Left Arrow Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
-          default: []
-          selector:
-            action: null
-
-        event_right_short:
-          name: Right Arrow Button Click Event
-          description: The action to perform on _click_ of the **Right Arrow Button**.
-          default: []
-          selector:
-            action: null
-
-        event_right_long:
-          name: Right Arrow Button Press and Hold Event
-          description: >
-            The action to perform on _press and hold_ of the **Right Arrow Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
-          default: []
-          selector:
-            action: null
-
     override_button_events:
-      name: Override Dim-Up/Down Button Events
+      name: Override On/Off Button Events
       description: Define custom actions to override the default light control actions.
       icon: mdi:sync-alert
       collapsed: true
       input:
-        event_dim_up_short:
-          name: Dim-Up Button Click Event Override
-          description: The action to perform on _click_ of the **Dim-Up Button**.
+        event_on_short:
+          name: On Button Click Event Override
+          description: The action to perform on _click_ of the **On Button**.
           default: []
           selector:
             action: null
 
-        event_dim_up_long:
-          name: Dim-Up Button Press and Hold Event Override
+        event_on_long:
+          name: On Button Press and Hold Event Override
           description: >-
-            The action to perform on _press and hold_ of the **Dim-Up Button**.
+            The action to perform on _press and hold_ of the **On Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
           default: []
           selector:
             action: null
 
-        event_dim_down_short:
-          name: Dim-Down Button Click Event Override
-          description: The action to perform on _click_ of the **Dim-Down Button**.
+        event_off_short:
+          name: Off Button Click Event Override
+          description: The action to perform on _click_ of the **Off Button**.
           default: []
           selector:
             action: null
 
-        event_dim_down_long:
-          name: Dim-Down Button Press and Hold Event Override
+        event_off_long:
+          name: Off Button Press and Hold Event Override
           description: >
-            The action to perform on _press and hold_ of the **Dim-Down Button**.
+            The action to perform on _press and hold_ of the **Off Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
           default: []
           selector:
@@ -230,188 +204,95 @@ variables:
   var_repeat_max_count: !input repeat_max_count
 
 triggers:
-  # Dim-Up Button Press – SHORT
+  # On Button Press – SHORT
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "on"
-    id: trigger_up_short_zha
+    id: trigger_on_short_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "on"
-    id: trigger_up_short_mqtt
+    id: trigger_on_short_mqtt
 
-  # Dim-Up Button Press – LONG
+  # On Button Press – LONG
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move_with_on_off"
-    id: trigger_up_long_zha
+    id: trigger_on_long_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_up"
-    id: trigger_up_long_mqtt
+    id: trigger_on_long_mqtt
 
-  # Dim-Up Button Press – RELEASE
+  # On Button – RELEASE
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
-    id: trigger_up_release_zha
+    id: trigger_on_release_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_stop"
-    id: trigger_up_release_mqtt
+    id: trigger_on_release_mqtt
 
-
-  # Dim-Down Button Press – SHORT
+  # Off Button Press – SHORT
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "off"
-    id: trigger_down_short_zha
+    id: trigger_off_short_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "off"
-    id: trigger_down_short_mqtt
+    id: trigger_off_short_mqtt
 
-  # Dim-Down Button Press – LONG
+  # Off Button Press – LONG
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move"
-    id: trigger_down_long_zha
+    id: trigger_off_long_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_down"
-    id: trigger_down_long_mqtt
+    id: trigger_off_long_mqtt
 
-  # Dim-Down Button Press – RELEASE
+  # Off Button – RELEASE
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
-    id: trigger_down_release_zha
+    id: trigger_off_release_zha
   - trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_stop"
-    id: trigger_down_release_mqtt
-
-
-  # Left Button Press – SHORT
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "press"
-      args: [257, 13, 0]
-    id: trigger_left_short_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_left_click"
-    id: trigger_left_short_mqtt
-
-  # Left Button Press – LONG
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "hold"
-      args: [3329, 0]
-    id: trigger_left_long_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_left_hold"
-    id: trigger_left_long_mqtt
-
-  # Left Button Press – RELEASE
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "release"
-    id: trigger_left_release_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_left_release"
-    id: trigger_left_release_mqtt
-
-
-  # Right Button Press – SHORT
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "press"
-      args: [255, 13, 0]
-    id: trigger_right_short_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_right_click"
-    id: trigger_right_short_mqtt
-
-  # Right Button Press – LONG
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "hold"
-      args: [3328, 0]
-    id: trigger_right_long_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_right_hold"
-    id: trigger_right_long_mqtt
-
-  # Right Button Press – RELEASE
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input remote
-      command: "release"
-    id: trigger_right_release_zha
-  - trigger: device
-    domain: mqtt
-    device_id: !input remote
-    type: action
-    subtype: "arrow_right_release"
-    id: trigger_right_release_mqtt
-
+    id: trigger_off_release_mqtt
 
 conditions:
   - condition: and
     conditions:
       - condition: template
         value_template: "{{ var_remote | length > 0 }}"
-
 
 actions:
   - variables:
@@ -439,7 +320,7 @@ actions:
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__remote_ikea_styrbar_4_button
+          notification_id: blueprint_debug__remote_ikea_rodret_somrig_tradfri_2_button
           title: >-
             {%- if device_model_id not in [ "", "none", none, null, false] -%}
               {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
@@ -454,12 +335,12 @@ actions:
             <br>```{{ trigger_data }}```
 
   - choose:
-      # Dim-Up Button Press – SHORT
+      # On Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
-              - trigger_up_short_zha
-              - trigger_up_short_mqtt
+            id:
+              - trigger_on_short_zha
+              - trigger_on_short_mqtt
         sequence:
           - if:
               - condition: template
@@ -480,14 +361,14 @@ actions:
                     target:
                       entity_id: >-
                         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_dim_up_short
+            else: !input event_on_short
 
-      # Dim-Up Button Press – LONG
+      # On Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
-              - trigger_up_long_zha
-              - trigger_up_long_mqtt
+            id:
+              - trigger_on_long_zha
+              - trigger_on_long_mqtt
         sequence:
           - if:
               - condition: template
@@ -498,9 +379,9 @@ actions:
                     - condition: or
                       conditions:
                         - condition: trigger
-                          id: 
-                            - trigger_up_release_zha
-                            - trigger_up_release_mqtt
+                          id:
+                            - trigger_on_release_zha
+                            - trigger_on_release_mqtt
                         - condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
                   sequence:
@@ -512,14 +393,14 @@ actions:
                         brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
                     - delay:
                         seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_dim_up_long
+            else: !input event_on_long
 
-      # Dim-Down Button Press – SHORT
+      # Off Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
-              - trigger_down_short_zha
-              - trigger_down_short_mqtt
+            id:
+              - trigger_off_short_zha
+              - trigger_off_short_mqtt
         sequence:
           - if:
               - condition: template
@@ -529,14 +410,14 @@ actions:
                 target:
                   entity_id: >-
                     {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_dim_down_short
+            else: !input event_off_short
 
-      # Dim-Down Button Press – LONG
+      # Off Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
-              - trigger_down_long_zha
-              - trigger_down_long_mqtt
+            id:
+              - trigger_off_long_zha
+              - trigger_off_long_mqtt
         sequence:
           - if:
               - condition: template
@@ -547,9 +428,9 @@ actions:
                     - condition: or
                       conditions:
                         - condition: trigger
-                          id: 
-                            - trigger_down_release_zha
-                            - trigger_down_release_mqtt
+                          id:
+                            - trigger_off_release_zha
+                            - trigger_off_release_mqtt
                         - condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
                   sequence:
@@ -561,36 +442,4 @@ actions:
                         brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
                     - delay:
                         seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_dim_down_long
-
-      # Left Button Press – SHORT
-      - conditions:
-          - condition: trigger
-            id: 
-              - trigger_left_short_zha
-              - trigger_left_short_mqtt
-        sequence: !input event_left_short
-
-      # Left Button Press – LONG
-      - conditions:
-          - condition: trigger
-            id: 
-              - trigger_left_long_zha
-              - trigger_left_long_mqtt
-        sequence: !input event_left_long
-
-      # Right Button Press – SHORT
-      - conditions:
-          - condition: trigger
-            id: 
-              - trigger_right_short_zha
-              - trigger_right_short_mqtt
-        sequence: !input event_right_short
-
-      # Right Button Press – LONG
-      - conditions:
-          - condition: trigger
-            id: 
-              - trigger_right_long_zha
-              - trigger_right_long_mqtt
-        sequence: !input event_right_long
+            else: !input event_off_long

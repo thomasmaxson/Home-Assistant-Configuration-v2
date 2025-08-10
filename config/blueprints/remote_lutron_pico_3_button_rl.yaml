@@ -1,22 +1,35 @@
 # This blueprint uses an Lutron Pico 3 Button with Raise/Lower Remote Control
 #
-# | Button | Duration     | Action        |
-# | ------ | ------------ | ------------- |
-# | On     | Short Press  | Custom action |
-# | On     | Double Press | Custom action |
-# | On     | Long Press   | Custom action |
-# | Raise  | Short Press  | Custom action |
-# | Raise  | Double Press | Custom action |
-# | Raise  | Long Press   | Custom action |
-# | Preset | Short Press  | Custom action |
-# | Preset | Double Press | Custom action |
-# | Preset | Long Press   | Custom action |
-# | Lower  | Short Press  | Custom action |
-# | Lower  | Double Press | Custom action |
-# | Lower  | Long Press   | Custom action |
-# | Off    | Short Press  | Custom action |
-# | Off    | Double Press | Custom action |
-# | Off    | Long Press   | Custom action |
+# | Button | Action       | Event        |
+# | ------ | ------------ | ------------ |
+# | On     | Single Press | Custom event |
+# | On     | Double Press | Custom event |
+# | On     | Press & Hold | Custom event |
+# | Raise  | Single Press | Custom event |
+# | Raise  | Double Press | Custom event |
+# | Raise  | Press & Hold | Custom event |
+# | Preset | Single Press | Custom event |
+# | Preset | Double Press | Custom event |
+# | Preset | Press & Hold | Custom event |
+# | Lower  | Single Press | Custom event |
+# | Lower  | Double Press | Custom event |
+# | Lower  | Press & Hold | Custom event |
+# | Off    | Single Press | Custom event |
+# | Off    | Double Press | Custom event |
+# | Off    | Press & Hold | Custom event |
+
+# PJ2-3BRL-GXX-F01 = Fans (icons only)
+# PJ2-3BRL-GXX-L01 = Lights (icons only)
+# PJ2-3BRL-GXX-S01 = Shades (icons only)
+# PJ2-3BRL-GXX-S02 = Shades (icons + text)
+# PJ2-3BRL-GXX-S03 = Blackouts (icons + text)
+# PJ2-3BRL-GXX-S04 = Sheers (icons + text)
+# PJ2-3BRL-GXX-S05 = Blinds (icons + text)
+# PJ2-3BRL-GXX-S06 = Skylights (icons + text)
+# PJ2-3BRL-GXX-S07 = Draperies (icons + text)
+# PJ2-3BRL-GXX-S08 = N/A
+# PJ2-3BRL-GXX-S09 = Horizontal Sheer Blinds (icons + text)
+# PJ2-3BRL-GWH-S10 = Tilt Blinds (icons)
 
 blueprint:
   name: Lutron Pico, 3 Button with Raise/Lower Remote Control
@@ -32,19 +45,6 @@ blueprint:
       description: Select the Lutron Pico remote to trigger your automations.
       selector:
         device:
-          # PJ2-3BRL-GXX-F01 = Fans (icons only)
-          # PJ2-3BRL-GXX-L01 = Lights (icons only)
-          # PJ2-3BRL-GXX-S01 = Shades (icons only)
-          # PJ2-3BRL-GXX-S02 = Shades (icons + text)
-          # PJ2-3BRL-GXX-S03 = Blackouts (icons + text)
-          # PJ2-3BRL-GXX-S04 = Sheers (icons + text)
-          # PJ2-3BRL-GXX-S05 = Blinds (icons + text)
-          # PJ2-3BRL-GXX-S06 = Skylights (icons + text)
-          # PJ2-3BRL-GXX-S07 = Draperies (icons + text)
-          # PJ2-3BRL-GXX-S08 = N/A
-          # PJ2-3BRL-GXX-S09 = Horizontal Sheer Blinds (icons + text)
-          # PJ2-3BRL-GWH-S10 = Tilt Blinds (icons)
-
           multiple: false
           filter:
             - integration: lutron_caseta
@@ -55,61 +55,61 @@ blueprint:
               model: PJ2-3BRL-GXX-X01 (Pico3ButtonRaiseLower)
 
     actions_single_press:
-      name: Single Tap
+      name: Single Press Button Events
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        button_on_single:
-          name: Tap On Button
-          description: Action(s) to perform on single tap of the on button
+        event_on_single:
+          name: On Button Press Event
+          description: The action to perform on _single press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        button_raise_single:
-          name: Tap Up Button
-          description: Action(s) to perform on single tap of the up button
+        event_raise_single:
+          name: Raise Button Press Event
+          description: The action to perform on _single press_ of the **Raise Button**.
           default: []
           selector:
             action: {}
-        button_preset_single:
-          name: Tap Preset Button
-          description: Action(s) to perform on single tap of the preset button
+        event_preset_single:
+          name: Preset Button Press Event
+          description: The action to perform on _single press_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        button_lower_single:
-          name: Tap Down Button
-          description: Action(s) to perform on single tap of the down button
+        event_lower_single:
+          name: Lower Button Press Event
+          description: The action to perform on _single press_ of the **Lower Button**.
           default: []
           selector:
             action: {}
-        button_off_single:
-          name: Tap Off Button
-          description: Action(s) to perform on single tap of the off button
+        event_off_single:
+          name: Off Button Press Event
+          description: The action to perform on _single press_ of the **Off Button**.
           default: []
           selector:
             action: {}
 
     actions_double_tap:
-      name: Double Tap
+      name: Double Press Button Events
       icon: mdi:gesture-double-tap
       collapsed: true
       input:
-        button_on_double:
-          name: Double Tap On Button
-          description: Action(s) to perform on double tap of the on button
+        event_on_double:
+          name: On Button Double Press Event
+          description: The action to perform on _double press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        button_preset_double:
-          name: Double Tap Preset Button
-          description: Action(s) to perform on double tap of the preset button
+        event_preset_double:
+          name: Preset Button Double Press Event
+          description: The action to perform on _double press_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        button_off_double:
-          name: Double Tap Off Button
-          description: Action(s) to perform on double tap of the off button
+        event_off_double:
+          name: Off Button Double Press Event
+          description: The action to perform on _double press_ of the **Off Button**.
           default: []
           selector:
             action: {}
@@ -126,37 +126,37 @@ blueprint:
               mode: slider
 
     actions_hold_press:
-      name: Press and Hold
+      name: Press and Hold Button Events
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        button_on_hold:
-          name: Hold On Button
-          description: Action(s) to perform on hold of the on button
+        event_on_hold:
+          name: On Button Hold Event
+          description: The action to perform on _press and hold_ of the **On Button**.
           default: []
           selector:
             action: {}
-        button_raise_hold:
-          name: Hold Up Button
-          description: Action(s) to perform on hold of the up button
+        event_raise_hold:
+          name: Raise Button Hold Event
+          description: The action to perform on _press and hold_ of the **Raise Button**.
           default: []
           selector:
             action: {}
-        button_preset_hold:
-          name: Hold Preset Button
-          description: Action(s) to perform on hold of the preset button
+        event_preset_hold:
+          name: Preset Button Hold Event
+          description: The action to perform on _press and hold_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        button_lower_hold:
-          name: Hold Down Button
-          description: Action(s) to perform on hold of the down button
+        event_lower_hold:
+          name: Lower Button Hold Event
+          description: The action to perform on _press and hold_ of the **Lower Button**.
           default: []
           selector:
             action: {}
-        button_off_hold:
-          name: Hold Off Button
-          description: Action(s) to perform on hold of the off button
+        event_off_hold:
+          name: Off Button Hold Event
+          description: The action to perform on _press and hold_ of the **Off Button**.
           default: []
           selector:
             action: {}
@@ -179,7 +179,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: Mode that automation runs in
+          description: Mode that automation runs in.
           default: restart
           selector:
             select:
@@ -205,21 +205,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-    debug_config:
-      name: Debug
-      icon: mdi:bug
-      collapsed: true
-      input:
-        log_valid_events:
-          name: Log Valid Remote Events
-          description: Display a persistent notification if a _valid event_ is triggered.
-          default: false
-          selector:
-            boolean:
-
-        log_invalid_events:
-          name: Log Invalid Remote Events
-          description: Display a persistent notification if an _invalid event_ is triggered.
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
           default: false
           selector:
             boolean:
@@ -235,61 +223,95 @@ variables:
   var_duration_double_tap: !input duration_double_tap
 
 triggers:
+  # On Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "on"
-    id: on_pressed
+    id: trigger_on_pressed
+
+  # Raise Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: raise
-    id: raise_pressed
+    id: trigger_raise_pressed
+
+  # Preset Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: stop
-    id: preset_pressed
+    id: trigger_preset_pressed
+
+  # Down Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: lower
-    id: lower_pressed
+    id: trigger_lower_pressed
+
+  # Off Button Press
   - trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "off"
-    id: off_pressed
+    id: trigger_off_pressed
 
 conditions:
   - condition: template
     value_template: "{{ var_remote | length > 0 }}"
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data.command }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger.payload }}
+        {%- endif -%}
+      trigger_data: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger }}
+        {%- endif -%}
+
   - if:
       - condition: template
-        value_template: !input log_valid_events
+        value_template: !input debug_valid_events
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__lutron_pico_3_button_rl__command_valid
-          title: Remote Command
+          notification_id: blueprint_debug__lutron_pico_3_button_rl
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
           message: >-
-            Lutron Pico 3 Button Raise/Lower remote command.
+            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
 
   - choose:
       # Button Press (ON)
       - conditions:
           - condition: trigger
-            id: on_pressed
+            id: trigger_on_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -306,7 +328,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_on_hold
+            then: !input event_on_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -323,13 +345,13 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input button_on_single
-                else: !input button_on_double
+                then: !input event_on_single
+                else: !input event_on_double
 
       # Button Press (RAISE)
       - conditions:
           - condition: trigger
-            id: raise_pressed
+            id: trigger_raise_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -346,13 +368,13 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_raise_single
-            else: !input button_raise_hold
+            then: !input event_raise_single
+            else: !input event_raise_hold
 
       # Button Press (PRESET/STOP)
       - conditions:
           - condition: trigger
-            id: preset_pressed
+            id: trigger_preset_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -369,7 +391,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_preset_hold
+            then: !input event_preset_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -386,13 +408,13 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input button_preset_single
-                else: !input button_preset_double
+                then: !input event_preset_single
+                else: !input event_preset_double
 
       # Button Press (LOWER)
       - conditions:
           - condition: trigger
-            id: lower_pressed
+            id: trigger_lower_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -409,13 +431,13 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_lower_single
-            else: !input button_lower_hold
+            then: !input event_lower_single
+            else: !input event_lower_hold
 
       # Button Press (OFF)
       - conditions:
           - condition: trigger
-            id: off_pressed
+            id: trigger_off_pressed
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -432,7 +454,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input button_off_hold
+            then: !input event_off_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -449,20 +471,5 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input button_off_single
-                else: !input button_off_double
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__lutron_pico_3_button_rl__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Lutron Pico 3 Button Raise/Lower remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
-                <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"
+                then: !input event_off_single
+                else: !input event_off_double
