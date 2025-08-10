@@ -140,7 +140,7 @@ blueprint:
             action: null
 
     override_button_events:
-      name: Override Brightness Increase/Down Button Events
+      name: Override Brightness Increase/Decrease Button Events
       description: Define custom actions to override the default light control actions.
       icon: mdi:sync-alert
       collapsed: true
