@@ -145,7 +145,7 @@ blueprint:
             action: null
 
     override_button_events:
-      name: Override Button Events
+      name: Override Power and Brightness Button Events
       description: Define custom actions to override the default light control actions.
       icon: mdi:sync-alert
       collapsed: true
@@ -158,14 +158,14 @@ blueprint:
             action: null
 
         event_dim_up_short:
-          name: Brightness Increase Button Press Event Override
+          name: Override Brightness Increase Button Press Event
           description: The action to perform on _press_ of the **Brightness Increase Button**.
           default: []
           selector:
             action: null
 
         event_dim_up_long:
-          name: Brightness Increase Button Press and Hold Event Override
+          name: Override Brightness Increase Button Press and Hold Event
           description: >-
             The action to perform on _press and hold_ of the **Brightness Increase Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
@@ -174,14 +174,14 @@ blueprint:
             action: null
 
         event_dim_down_short:
-          name: Brightness Decrease Button Press Event Override
+          name: Override Brightness Decrease Button Press Event
           description: The action to perform on _press_ of the **Brightness Decrease Button**.
           default: []
           selector:
             action: null
 
         event_dim_down_long:
-          name: Brightness Decrease Button Press and Hold Event Override
+          name: Override Brightness Decrease Button Press and Hold Event
           description: >
             The action to perform on _press and hold_ of the **Brightness Decrease Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.

@@ -120,14 +120,14 @@ blueprint:
       collapsed: true
       input:
         event_on_short:
-          name: On Button Press Event Override
+          name: Override On Button Press Event
           description: The action to perform on _press_ of the **On Button**.
           default: []
           selector:
             action: null
 
         event_on_long:
-          name: On Button Press and Hold Event Override
+          name: Override On Button Press and Hold Event
           description: >-
             The action to perform on _press and hold_ of the **On Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
@@ -136,14 +136,14 @@ blueprint:
             action: null
 
         event_off_short:
-          name: Off Button Press Event Override
+          name: Override Off Button Press Event
           description: The action to perform on _press_ of the **Off Button**.
           default: []
           selector:
             action: null
 
         event_off_long:
-          name: Off Button Press and Hold Event Override
+          name: Override Off Button Press and Hold Event
           description: >
             The action to perform on _press and hold_ of the **Off Button**.
             <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
