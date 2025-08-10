@@ -40,23 +40,23 @@ blueprint:
       icon: mdi:hand-pointing-up
       collapsed: false
       input:
-        single_press_action:
-          name: Button Short Press
-          description: The action to perform on short press of the button.
+        event_on_single:
+          name: Button Single Press Event
+          description: The action to perform on _single press_ of the **Button**.
           default: []
           selector:
             action:
 
-        double_press_action:
-          name: Button Double Press
-          description: The action to perform on double press of the button.
+        event_on_double:
+          name: Button Double Press Event
+          description: The action to perform on _double press_ of the **Button**.
           default: []
           selector:
             action:
 
-        long_press_action:
-          name: Button Long Press
-          description: The action to perform on long press of the button.
+        event_on_hold:
+          name: Button Press & Hold Event
+          description: The action to perform on _press and hold_ of the **Button**.
           default: []
           selector:
             action:
@@ -66,17 +66,17 @@ blueprint:
       icon: mdi:hand-pointing-up
       collapsed: true
       input:
-        release_action:
-          name: Button Release
-          description: The action to perform on release of the button.
+        event_on_release:
+          name: Button Release Event
+          description: The action to perform on _release_ of the **Button**.
           default: []
           selector:
             action:
 
-        release_action:
-          name: Button Shake
+        event_on_shake:
+          name: Button Shake Event
           description: >-
-            The action to perform on shake of the button.
+            The action to perform on _shake_ of the **Device**.
             <br>
             <br>_Note_:
             <br>This interaction type is only available on devices with a gyroscope.
@@ -91,7 +91,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: "Mode that the automation runs in."
+          description: Mode that automation runs in.
           default: restart
           selector:
             select:
@@ -104,7 +104,7 @@ blueprint:
               multiple: false
 
         config_max_num:
-          name: Max Number of Runs
+          name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
             <br>Ignored by _Single_ and _Restart_ Modes.
@@ -117,21 +117,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-    debug_config:
-      name: Debug
-      icon: mdi:bug
-      collapsed: true
-      input:
-        log_valid_events:
-          name: Log Valid Remote Events
-          description: Display a persistent notification if a _valid event_ is triggered.
-          default: false
-          selector:
-            boolean:
-
-        log_invalid_events:
-          name: Log Invalid Remote Events
-          description: Display a persistent notification if an _invalid event_ is triggered.
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
           default: false
           selector:
             boolean:
@@ -147,133 +135,153 @@ variables:
   var_debug_trigger_data: '{{ trigger.event.data if var_debug_identifiers == "zha" else trigger }}'
 
 triggers:
-  - trigger: event
+  - alias: Button Single Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: single
-    id: single_press
-  - platform: device
+    id: trigger_press_single_zha
+  - alias: Button Single Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: single
-    id: single_press
+    id: trigger_press_single_mqtt
 
-  - trigger: event
+
+  - alias: Button Double Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: double
-    id: double_press
-  - platform: device
+    id: trigger_press_double_zha
+  - alias: Button Double Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: double
-    id: double_press
+    id: trigger_press_double_mqtt
 
-  - trigger: event
+
+  - alias: Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: hold
-    id: long_press
-  - platform: device
+    id: trigger_press_hold_zha
+  - alias: Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: hold
-    id: long_press
+    id: trigger_press_hold_mqtt
 
-  - trigger: event
+
+  - alias: Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: release
-    id: release
-  - platform: device
+    id: trigger_release_zha
+  - alias: Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: release
-    id: release
+    id: trigger_release_mqtt
 
-  - platform: device
+  - alias: Button Shake (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: shake
-    id: shake
+    id: trigger_shake_mqtt
 
 conditions:
   - condition: template
     value_template: "{{ var_remote | length > 0 }}"
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data.command }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger.payload }}
+        {%- endif -%}
+      trigger_data: >-
+        {%- if integration_type == "zha" -%}
+          {{ trigger.event.data }}
+        {%- elif integration_type == "mqtt" -%}
+          {{ trigger }}
+        {%- endif -%}
+
   - if:
       - condition: template
-        value_template: !input log_valid_events
+        value_template: !input debug_valid_events
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__aqara_mini_switch__command_valid
-          title: Remote Button Pressed
+          notification_id: blueprint_debug__remote_sonoff_wireless_switch
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
           message: >-
-            Aqara Mini Switch remote command.
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
-            <br>_Device Integration_:
-            <br>{{ var_debug_integration }}
+            <br>_Remote ID_: {{ var_remote }}
             <br>
-            <br>_Device ID_:
-            <br>{{ var_remote }}
-            <br>
-            <br>_Trigger Data_:
-            <br>{{ var_debug_trigger_data }}
+            <br>```{{ trigger_data }}```
 
   - choose:
       - conditions:
           - condition: trigger
-            id: single_press
-        sequence: !input single_press_action
+            id: 
+              - trigger_press_single_zha
+              - trigger_press_single_mqtt
+        sequence: !input event_on_single
 
       - conditions:
           - condition: trigger
-            id: double_press
-        sequence: !input double_press_action
+            id: 
+              - trigger_press_double_zha
+              - trigger_press_double_mqtt
+        sequence: !input event_on_double
 
       - conditions:
           - condition: trigger
-            id: long_press
-        sequence: !input long_press_action
+            id: 
+              - trigger_press_hold_zha
+              - trigger_press_hold_mqtt
+        sequence: !input event_on_hold
 
       - conditions:
           - condition: trigger
-            id: release
-        sequence: !input release_action
+            id: 
+              - trigger_release_zha
+              - trigger_release_mqtt
+        sequence: !input event_on_release
 
       - conditions:
           - condition: trigger
-            id: shake
-        sequence: !input shake_action
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__aqara_mini_switch__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Aqara Mini Switch ran the default event from the "choose" event action.
-                <br>Please check any automations which may not be handling this event.
-                <br>
-                <br>_Device Integration_:
-                <br>{{ var_debug_integration }}
-                <br>
-                <br>_Device ID_:
-                <br>{{ var_remote }}
-                <br>
-                <br>_Trigger Data_:
-                <br>{{ var_debug_trigger_data }}
+            id: 
+              - trigger_shake_zha
+              - trigger_shake_mqtt
+        sequence: !input event_on_shake

@@ -162,25 +162,32 @@ max: !input config_max_num
 max_exceeded: silent
 
 trigger:
-  - trigger: device
+  - alias: On Button Pressed
+    trigger: device
     domain: hue
     device_id: !input remote
     type: short_release
     subtype: 1
     id: on_pressed
-  - trigger: device
+
+  - alias: Brightness Increase Button Pressed
+    trigger: device
     domain: hue
     device_id: !input remote
     type: short_release
     subtype: 2
     id: raise_pressed
-  - trigger: device
+
+  - alias: Brightness Decrease Button Pressed
+    trigger: device
     domain: hue
     device_id: !input remote
     type: short_release
     subtype: 3
     id: lower_pressed
-  - trigger: device
+
+  - alias: Off Button Pressed
+    trigger: device
     domain: hue
     device_id: !input remote
     type: short_release
@@ -321,18 +328,3 @@ action:
                 - sequence: !input button_lower_hold
                 - delay:
                     milliseconds: !input repeat_duration
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__philips_hue_dimmer__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Philips Hue Dimmer remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
-                <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"

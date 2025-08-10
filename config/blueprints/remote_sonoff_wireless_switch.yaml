@@ -34,23 +34,23 @@ blueprint:
       icon: mdi:hand-pointing-up
       collapsed: false
       input:
-        single_press_action:
-          name: Button - Short Press
-          description: The action to perform on _single short press_ of the Button.
+        event_on_single:
+          name: Button Single Press Event
+          description: The action to perform on _single press_ of the **Button**.
           default: []
           selector:
             action:
 
-        double_press_action:
-          name: Button - Double Press
-          description: The action to perform on _double short press_ of the Button.
+        event_on_double:
+          name: Button Double Press Event
+          description: The action to perform on _double press_ of the **Button**.
           default: []
           selector:
             action:
 
-        long_press_action:
-          name: Button - Long Press
-          description: The action to perform on _long press_ of the Button.
+        event_on_hold:
+          name: Button Press & Hold Event
+          description: The action to perform on _press and hold_ of the **Button**.
           default: []
           selector:
             action:
@@ -103,47 +103,50 @@ variables:
   var_remote: !input remote
 
 triggers:
-  # Single Press Events
-  - trigger: event
+  - alias: Button Single Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "toggle"
-    id: single_press
-  - trigger: device
+    id: trigger_press_single_zha
+  - alias: Button Single Press (via MQTT event)
+    trigger: device
     device_id: !input remote
     domain: mqtt
     type: action
     subtype: single
-    id: single_press
+    id: trigger_press_single_mqtt
 
-  # Double Press Events
-  - trigger: event
+  - alias: Button Double Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "on"
-    id: double_press
-  - trigger: device
+    id: trigger_press_double_zha
+  - alias: Button Double Press (via MQTT event)
+    trigger: device
     device_id: !input remote
     domain: mqtt
     type: action
     subtype: double
-    id: double_press
+    id: trigger_press_double_mqtt
 
-  # Long Press Events
-  - trigger: event
+  - alias: Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "off"
-    id: long_press
-  - trigger: device
+    id: trigger_press_hold_zha
+  - alias: Button Press and Hold (via MQTT event)
+    trigger: device
     device_id: !input remote
     domain: mqtt
     type: action
     subtype: long
-    id: long_press
+    id: trigger_press_hold_mqtt
 
 conditions:
   - condition: template
@@ -183,7 +186,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
@@ -192,15 +195,21 @@ actions:
   - choose:
       - conditions:
           - condition: trigger
-            id: single_press
-        sequence: !input single_press_action
+            id: 
+              - trigger_press_single_zha
+              - trigger_press_single_mqtt
+        sequence: !input event_on_single
 
       - conditions:
           - condition: trigger
-            id: double_press
-        sequence: !input double_press_action
+            id: 
+              - trigger_press_double_zha
+              - trigger_press_double_mqtt
+        sequence: !input event_on_double
 
       - conditions:
           - condition: trigger
-            id: long_press
-        sequence: !input long_press_action
+            id: 
+              - trigger_press_hold_zha
+              - trigger_press_hold_mqtt
+        sequence: !input event_on_hold

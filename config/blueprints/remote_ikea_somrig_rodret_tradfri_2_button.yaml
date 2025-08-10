@@ -2,9 +2,9 @@
 #
 # | Button        | Action       | Event                               |
 # | ------------- | ------------ | ----------------------------------- |
-# | On OR 1 Dot   | Click        | Turn on OR custom event             |
+# | On OR 1 Dot   | Press        | Turn on OR custom event             |
 # | On OR 1 Dot   | Press & Hold | Increase brightness OR custom event |
-# | Off OR 2 Dots | Click        | Turn off OR custom event            |
+# | Off OR 2 Dots | Press        | Turn off OR custom event            |
 # | Off OR 2 Dots | Press & Hold | Decrease brightness OR custom event |
 # | ------------- | ------------ | ----------------------------------- |
 
@@ -120,8 +120,8 @@ blueprint:
       collapsed: true
       input:
         event_on_short:
-          name: On Button Click Event Override
-          description: The action to perform on _click_ of the **On Button**.
+          name: On Button Press Event Override
+          description: The action to perform on _press_ of the **On Button**.
           default: []
           selector:
             action: null
@@ -130,14 +130,14 @@ blueprint:
           name: On Button Press and Hold Event Override
           description: >-
             The action to perform on _press and hold_ of the **On Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
 
         event_off_short:
-          name: Off Button Click Event Override
-          description: The action to perform on _click_ of the **Off Button**.
+          name: Off Button Press Event Override
+          description: The action to perform on _press_ of the **Off Button**.
           default: []
           selector:
             action: null
@@ -146,7 +146,7 @@ blueprint:
           name: Off Button Press and Hold Event Override
           description: >
             The action to perform on _press and hold_ of the **Off Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
@@ -191,9 +191,11 @@ blueprint:
           selector:
             boolean:
 
+
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
+
 
 variables:
   var_remote: !input remote
@@ -203,96 +205,106 @@ variables:
   var_repeat_delay: !input repeat_delay
   var_repeat_max_count: !input repeat_max_count
 
+
 triggers:
-  # On Button Press – SHORT
-  - trigger: event
+  - alias: On (Dash, Line or 1 Dot) Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "on"
     id: trigger_on_short_zha
-  - trigger: device
+  - alias: On (Dash, Line or 1 Dot) Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "on"
     id: trigger_on_short_mqtt
 
-  # On Button Press – LONG
-  - trigger: event
+  - alias: On (Dash, Line or 1 Dot) Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move_with_on_off"
     id: trigger_on_long_zha
-  - trigger: device
+  - alias: On (Dash, Line or 1 Dot) Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_up"
     id: trigger_on_long_mqtt
 
-  # On Button – RELEASE
-  - trigger: event
+  - alias: On (Dash, Line or 1 Dot) Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
     id: trigger_on_release_zha
-  - trigger: device
+  - alias: On (Dash, Line or 1 Dot) Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_stop"
     id: trigger_on_release_mqtt
 
-  # Off Button Press – SHORT
-  - trigger: event
+
+  - alias: Off (Circle or 2 Dots) Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "off"
     id: trigger_off_short_zha
-  - trigger: device
+  - alias: Off (Circle or 2 Dots) Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "off"
     id: trigger_off_short_mqtt
 
-  # Off Button Press – LONG
-  - trigger: event
+  - alias: Off (Circle or 2 Dots) Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move"
     id: trigger_off_long_zha
-  - trigger: device
+  - alias: Off (Circle or 2 Dots) Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_down"
     id: trigger_off_long_mqtt
 
-  # Off Button – RELEASE
-  - trigger: event
+  - alias: Off (Circle or 2 Dots) Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
     id: trigger_off_release_zha
-  - trigger: device
+  - alias: Off (Circle or 2 Dots) Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_stop"
     id: trigger_off_release_mqtt
 
+
 conditions:
   - condition: and
     conditions:
       - condition: template
         value_template: "{{ var_remote | length > 0 }}"
+
 
 actions:
   - variables:
@@ -328,7 +340,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>

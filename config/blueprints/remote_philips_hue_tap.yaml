@@ -1,11 +1,11 @@
-# This blueprint uses a Philips Hue Tap Remote Control
+# This blueprint uses a Philips Hue Tap Remote Control connected through MQTT.
 #
-# | Button     | Duration     | Action        |
-# | ---------- | ------------ | ------------- |
-# | One Dot    | Short Press  | Custom action |
-# | Two Dots   | Short Press  | Custom action |
-# | Three Dots | Short Press  | Custom action |
-# | Four Dots  | Short Press  | Custom action |
+# | Button     | Duration | Action        |
+# | ---------- | -------- | ------------- |
+# | One Dot    | Press    | Custom action |
+# | Two Dots   | Press    | Custom action |
+# | Three Dots | Press    | Custom action |
+# | Four Dots  | Press    | Custom action |
 
 blueprint:
   name: Philips Hue, Tap Remote Control
@@ -27,32 +27,32 @@ blueprint:
               manufacturer: Philips
               model: Hue tap
 
-    actions_single_press:
-      name: Single Tap
+    default_button_events:
+      name: Button Events
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        button_1:
-          name: Button Single Dot
-          description: Action(s) to perform on single tap of single dot button
+        event_button_1_dot:
+          name: 1 Dot Button Press Event
+          description: The action to perform on _press_ of the **1 Dot Button**.
           default: []
           selector:
             action: null
-        button_2:
-          name: Button Two Dots
-          description: Action(s) to perform on single tap of two dot button
+        event_button_2_dots:
+          name: 2 Dots Button Press Event
+          description: The action to perform on _press_ of the **2 Dots Button**.
           default: []
           selector:
             action: null
-        button_3:
-          name: Button Three Dots
-          description: Action(s) to perform on single tap of three dot button
+        event_button_3_dots:
+          name: 3 Dots Button Press Event
+          description: The action to perform on _press_ of the **3 Dots Button**.
           default: []
           selector:
             action: null
-        button_4:
-          name: Button Four Dots
-          description: Action(s) to perform on single tap of four dot button
+        event_button_4_dots:
+          name: 4 Dots Button Press Event
+          description: The action to perform on _press_ of the **4 Dots Button**.
           default: []
           selector:
             action: null
@@ -64,7 +64,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: Mode that automation runs in
+          description: Mode that automation runs in.
           default: restart
           selector:
             select:
@@ -90,78 +90,69 @@ blueprint:
               max: 15.0
               step: 1.0
 
-    debug_config:
-      name: Debug
-      icon: mdi:bug
-      collapsed: true
-      input:
-        log_valid_events:
-          name: Log Valid Remote Events
-          description: Display a persistent notification if a _valid event_ is triggered.
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
           default: false
           selector:
             boolean:
 
-        log_invalid_events:
-          name: Log Invalid Remote Events
-          description: Display a persistent notification if an _invalid event_ is triggered.
-          default: false
-          selector:
-            boolean:
 
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+
 variables:
   trigger_command: "{{ trigger.to_state.state }}"
+
 
 triggers:
   - trigger: state
     entity_id: !input "remote"
     attribute: action
 
+
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: "{{ trigger.payload }}"
+      trigger_data: "{{ trigger }}"
+
   - if:
       - condition: template
-        value_template: !input log_valid_events
+        value_template: !input debug_valid_events
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__philips_hue_tap__command_valid
-          title: Remote Command
+          notification_id: blueprint_debug__remote_hue_tap
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
           message: >-
-            Philips Hue Tap remote command.
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
 
   - choose:
       - conditions:
           - "{{ trigger_command == 'press_1' }}"
-        sequence: !input button_1
+        sequence: !input event_button_1_dot
       - conditions:
           - "{{ trigger_command == 'press_2' }}"
-        sequence: !input button_2
+        sequence: !input event_button_2_dots
       - conditions:
           - "{{ trigger_command == 'press_3' }}"
-        sequence: !input button_3
+        sequence: !input event_button_3_dots
       - conditions:
           - "{{ trigger_command == 'press_4' }}"
-        sequence: !input button_4
-
-    default:
-      - condition: template
-        value_template: !input log_invalid_events
-      - sequence:
-          - action: persistent_notification.create
-            data:
-              notification_id: blueprint_debug__philips_hue_tap__command_invalid
-              title: Uncaught Remote Command
-              message: >-
-                Philips Hue Tap remote ran the default event from the "choose" event action.
-                Please check any automations which may not be handling this event.
-                <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"
-
+        sequence: !input event_button_4_dots

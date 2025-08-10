@@ -1,17 +1,21 @@
 # This blueprint uses an IKEA TRÅDFRI 5 Button Remote Control connected through ZHA or MQTT.
 #
-# | Button      | Action       | Event                                        |
-# | ----------- | ------------ | -------------------------------------------- |
-# | Power       | Click        | Toggle the light OR custom event             |
-# | Dim-Up      | Click        | Increase brightness (once) OR custom action  |
-# | Dim-Up      | Press & Hold | Increase brightness (repeat) OR custom event |
-# | Dim-Down    | Click        | Decrease brightness (once) OR custom action  |
-# | Dim-Down    | Press & Hold | Decrease brightness (repeat) OR custom event |
-# | Left Arrow  | Click        | Custom event                                 |
-# | Left Arrow  | Press & Hold | Custom event                                 |
-# | Right Arrow | Click        | Custom event                                 |
-# | Right Arrow | Press & Hold | Cusotm event                                 |
-# | ----------- | ------------ | -------------------------------------------- |
+# | Button               | Action       | Event                                        |
+# | -------------------- | ------------ | -------------------------------------------- |
+# | Power                | Press        | Toggle the light OR custom event             |
+# | Brightness, Increase | Press        | Increase brightness (once) OR custom action  |
+# | Brightness, Increase | Press & Hold | Increase brightness (repeat) OR custom event |
+# | Brightness, Increase | Release      | Custom event                                 |
+# | Brightness, Decrease | Press        | Decrease brightness (once) OR custom action  |
+# | Brightness, Decrease | Press & Hold | Decrease brightness (repeat) OR custom event |
+# | Brightness, Decrease | Release      | Custom event                                 |
+# | Arrow, Left          | Press        | Custom event                                 |
+# | Arrow, Left          | Press & Hold | Custom event                                 |
+# | Arrow, Left          | Release      | Custom event                                 |
+# | Arrow, Right         | Press        | Custom event                                 |
+# | Arrow, Right         | Press & Hold | Cusotm event                                 |
+# | Arrow, Right         | Release      | Cusotm event                                 |
+# | -------------------- | ------------ | -------------------------------------------- |
 
 blueprint:
   name: IKEA TRÅDFRI, 5 Button Remote Control
@@ -109,8 +113,8 @@ blueprint:
       collapsed: true
       input:
         event_left_short:
-          name: Left Arrow Button Click Event
-          description: The action to perform on _click_ of the **Left Arrow Button**.
+          name: Left Arrow Button Press Event
+          description: The action to perform on _press_ of the **Left Arrow Button**.
           default: []
           selector:
             action: null
@@ -119,14 +123,14 @@ blueprint:
           name: Left Arrow Button Press and Hold Event
           description: >
             The action to perform on _press and hold_ of the **Left Arrow Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
 
         event_right_short:
-          name: Right Arrow Button Click Event
-          description: The action to perform on _click_ of the **Right Arrow Button**.
+          name: Right Arrow Button Press Event
+          description: The action to perform on _press_ of the **Right Arrow Button**.
           default: []
           selector:
             action: null
@@ -135,7 +139,7 @@ blueprint:
           name: Right Arrow Button Press and Hold Event
           description: >
             The action to perform on _press and hold_ of the **Right Arrow Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
@@ -147,40 +151,40 @@ blueprint:
       collapsed: true
       input:
         event_power_toggle:
-          name: Power Button Click Event Override
-          description: The action to perform on _click_ of the **Power Button**.
+          name: Power Button Press Event Override
+          description: The action to perform on _press_ of the **Power Button**.
           default: []
           selector:
             action: null
 
         event_dim_up_short:
-          name: Dim-Up Button Click Event Override
-          description: The action to perform on _click_ of the **Dim-Up Button**.
+          name: Brightness Increase Button Press Event Override
+          description: The action to perform on _press_ of the **Brightness Increase Button**.
           default: []
           selector:
             action: null
 
         event_dim_up_long:
-          name: Dim-Up Button Press and Hold Event Override
+          name: Brightness Increase Button Press and Hold Event Override
           description: >-
-            The action to perform on _press and hold_ of the **Dim-Up Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            The action to perform on _press and hold_ of the **Brightness Increase Button**.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
 
         event_dim_down_short:
-          name: Dim-Down Button Click Event Override
-          description: The action to perform on _click_ of the **Dim-Down Button**.
+          name: Brightness Decrease Button Press Event Override
+          description: The action to perform on _press_ of the **Brightness Decrease Button**.
           default: []
           selector:
             action: null
 
         event_dim_down_long:
-          name: Dim-Down Button Press and Hold Event Override
+          name: Brightness Decrease Button Press and Hold Event Override
           description: >
-            The action to perform on _press and hold_ of the **Dim-Down Button**.
-            <br>Use with care, before the _press and hold_ event, this buttons _click_ event gets triggered.
+            The action to perform on _press and hold_ of the **Brightness Decrease Button**.
+            <br>Use with care, before the _press and hold_ event, this buttons _press_ event gets triggered.
           default: []
           selector:
             action: null
@@ -238,14 +242,15 @@ variables:
   var_repeat_max_count: !input repeat_max_count
 
 triggers:
-  # Power Button Press – SHORT
-  - trigger: event
+  - alias: Power Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "toggle"
     id: trigger_power_short_zha
-  - trigger: device
+  - alias: Power Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
@@ -253,42 +258,45 @@ triggers:
     id: trigger_power_short_mqtt
 
 
-  # Dim-Up Button Press – SHORT
-  - trigger: event
+  - alias: Brightness Increase Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "step_with_on_off"
     id: trigger_up_short_zha
-  - trigger: device
+  - alias: Brightness Increase Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_up_click"
     id: trigger_up_short_mqtt
 
-  # Dim-Up Button Press – LONG
-  - trigger: event
+  - alias: Brightness Increase Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move_with_on_off"
     id: trigger_up_long_zha
-  - trigger: device
+  - alias: Brightness Increase Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_up_hold"
     id: trigger_up_long_mqtt
 
-  # Dim-Up Button Press – RELEASE
-  - trigger: event
+  - alias: Brightness Increase Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
     id: trigger_up_release_zha
-  - trigger: device
+  - alias: Brightness Increase Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
@@ -296,42 +304,45 @@ triggers:
     id: trigger_up_release_mqtt
 
 
-  # Dim-Down Button Press – SHORT
-  - trigger: event
+  - alias: Brightness Decrease Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "step"
     id: trigger_down_short_zha
-  - trigger: device
+  - alias: Brightness Decrease Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_down_click"
     id: trigger_down_short_mqtt
 
-  # Dim-Down Button Press – LONG
-  - trigger: event
+  - alias: Brightness Decrease Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "move"
     id: trigger_down_long_zha
-  - trigger: device
+  - alias: Brightness Decrease Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_down_hold"
     id: trigger_down_long_mqtt
 
-  # Dim-Down Button Press – RELEASE
-  - trigger: event
+  - alias: Brightness Decrease Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "stop_with_on_off"
     id: trigger_down_release_zha
-  - trigger: device
+  - alias: Brightness Decrease Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
@@ -339,44 +350,47 @@ triggers:
     id: trigger_down_release_mqtt
 
 
-  # Left Button Press – SHORT
-  - trigger: event
+  - alias: Left Arrow Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "press"
       args: [257, 13, 0]
     id: trigger_left_short_zha
-  - trigger: device
+  - alias: Left Button Press (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "arrow_left_click"
     id: trigger_left_short_mqtt
 
-  # Left Button Press – LONG
-  - trigger: event
+  - alias: Left Arrow Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "hold"
       args: [3329, 0]
     id: trigger_left_long_zha
-  - trigger: device
+  - alias: Left Arrow Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "arrow_left_hold"
     id: trigger_left_long_mqtt
 
-  # Left Button Press – RELEASE
-  - trigger: event
+  - alias: Left Arrow Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "release"
     id: trigger_left_release_zha
-  - trigger: device
+  - alias: Left Arrow Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
@@ -384,44 +398,47 @@ triggers:
     id: trigger_left_release_mqtt
 
 
-  # Right Button Press – SHORT
-  - trigger: event
+  - alias: Right Arrow Button Press (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "press"
       args: [256, 13, 0]
     id: trigger_right_short_zha
-  - trigger: device
+  - alias: Right Arrow Button Press (via ZHA event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "arrow_right_click"
     id: trigger_right_short_mqtt
 
-  # Right Button Press – LONG
-  - trigger: event
+  - alias: Right Arrow Button Press and Hold (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "hold"
       args: [3328, 0]
     id: trigger_right_long_zha
-  - trigger: device
+  - alias: Right Arrow Button Press and Hold (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "arrow_right_hold"
     id: trigger_right_long_mqtt
 
-  # Right Button Press – RELEASE
-  - trigger: event
+  - alias: Right Arrow Button Release (via ZHA event)
+    trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "release"
     id: trigger_right_release_zha
-  - trigger: device
+  - alias: Right Arrow Button Release (via MQTT event)
+    trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
@@ -471,7 +488,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
@@ -481,7 +498,7 @@ actions:
       # Power Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_power_short_zha
               - trigger_power_short_mqtt
         sequence:
@@ -517,10 +534,10 @@ actions:
                         {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
             else: !input event_power_toggle
 
-      # Dim-Up Button Press – SHORT
+      # Brightness Increase Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_up_short_zha
               - trigger_up_short_mqtt
         sequence:
@@ -558,10 +575,10 @@ actions:
                       brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
             else: !input event_dim_up_short
 
-      # Dim-Up Button Press – LONG
+      # Brightness Increase Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_up_long_zha
               - trigger_up_long_mqtt
         sequence:
@@ -574,7 +591,7 @@ actions:
                     - condition: or
                       conditions:
                         - condition: trigger
-                          id: 
+                          id:
                             - trigger_up_release_zha
                             - trigger_up_release_mqtt
                         - condition: template
@@ -590,10 +607,10 @@ actions:
                         seconds: "{{ var_repeat_delay | float }}"
             else: !input event_dim_up_long
 
-      # Dim-Down Button Press – SHORT
+      # Brightness Decrease Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_down_short_zha
               - trigger_down_short_mqtt
         sequence:
@@ -614,10 +631,10 @@ actions:
                       brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
             else: !input event_dim_down_short
 
-      # Dim-Down Button Press – LONG
+      # Brightness Decrease Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_down_long_zha
               - trigger_down_long_mqtt
         sequence:
@@ -630,7 +647,7 @@ actions:
                     - condition: or
                       conditions:
                         - condition: trigger
-                          id: 
+                          id:
                             - trigger_down_release_zha
                             - trigger_down_release_mqtt
                         - condition: template
@@ -649,7 +666,7 @@ actions:
       # Left Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_left_short_zha
               - trigger_left_short_mqtt
         sequence: !input event_left_short
@@ -657,7 +674,7 @@ actions:
       # Left Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_left_long_zha
               - trigger_left_long_mqtt
         sequence: !input event_left_long
@@ -665,7 +682,7 @@ actions:
       # Right Button Press – SHORT
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_right_short_zha
               - trigger_right_short_mqtt
         sequence: !input event_right_short
@@ -673,7 +690,7 @@ actions:
       # Right Button Press – LONG
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_right_long_zha
               - trigger_right_long_mqtt
         sequence: !input event_right_long

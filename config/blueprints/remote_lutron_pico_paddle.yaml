@@ -2,9 +2,9 @@
 #
 # | Button | Action       | Event        |
 # | ------ | ------------ | ------------ |
-# | On     | Single Press | Custom event |
+# | On     | Press        | Custom event |
 # | On     | Press & Hold | Custom event |
-# | Off    | Single Press | Custom event |
+# | Off    | Press        | Custom event |
 # | Off    | Press & Hold | Custom event |
 
 blueprint:
@@ -127,21 +127,21 @@ variables:
   var_duration_hold: !input duration_hold
 
 triggers:
-  # Off Button Press
-  - trigger: device
+  - alias: On Button Press
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "on"
-    id: trigger_on_pressed
+    id: trigger_on_press
 
-  # Off Button Press
-  - trigger: device
+  - alias: Off Button Press
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "off"
-    id: trigger_off_pressed
+    id: trigger_off_press
 
 conditions:
   - condition: template
@@ -154,18 +154,8 @@ actions:
       device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
       device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
       integration_type: "{{ device_identifiers[0][0] | string | lower }}"
-      trigger_action: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data.command }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger.payload }}
-        {%- endif -%}
-      trigger_data: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger }}
-        {%- endif -%}
+      trigger_action: "{{ trigger.event.data.button_type }}"
+      trigger_data: "{{ trigger.event.data }}"
 
   - if:
       - condition: template
@@ -173,7 +163,7 @@ actions:
     then:
       - action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__lutron_pico_3_button_rl
+          notification_id: blueprint_debug__lutron_pico_2_button_paddle
           title: >-
             {%- if device_model_id not in [ "", "none", none, null, false] -%}
               {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
@@ -181,7 +171,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
@@ -191,7 +181,7 @@ actions:
       # Press on the ON button
       - conditions:
           - condition: trigger
-            id: trigger_on_pressed
+            id: trigger_on_press
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -214,7 +204,7 @@ actions:
       # Press on the OFF button
       - conditions:
           - condition: trigger
-            id: trigger_off_pressed
+            id: trigger_off_press
         sequence:
           - wait_for_trigger:
               - trigger: device

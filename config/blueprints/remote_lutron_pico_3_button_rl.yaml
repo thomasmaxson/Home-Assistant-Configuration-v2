@@ -2,19 +2,19 @@
 #
 # | Button | Action       | Event        |
 # | ------ | ------------ | ------------ |
-# | On     | Single Press | Custom event |
+# | On     | Press        | Custom event |
 # | On     | Double Press | Custom event |
 # | On     | Press & Hold | Custom event |
-# | Raise  | Single Press | Custom event |
+# | Raise  | Press        | Custom event |
 # | Raise  | Double Press | Custom event |
 # | Raise  | Press & Hold | Custom event |
-# | Preset | Single Press | Custom event |
+# | Preset | Press        | Custom event |
 # | Preset | Double Press | Custom event |
 # | Preset | Press & Hold | Custom event |
-# | Lower  | Single Press | Custom event |
+# | Lower  | Press        | Custom event |
 # | Lower  | Double Press | Custom event |
 # | Lower  | Press & Hold | Custom event |
-# | Off    | Single Press | Custom event |
+# | Off    | Press        | Custom event |
 # | Off    | Double Press | Custom event |
 # | Off    | Press & Hold | Custom event |
 
@@ -223,45 +223,45 @@ variables:
   var_duration_double_tap: !input duration_double_tap
 
 triggers:
-  # On Button Press
-  - trigger: device
+  - alias: On Button Pressed
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "on"
-    id: trigger_on_pressed
+    id: trigger_on_press
 
-  # Raise Button Press
-  - trigger: device
+  - alias: Raise Button Pressed
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: raise
-    id: trigger_raise_pressed
+    id: trigger_raise_press
 
-  # Preset Button Press
-  - trigger: device
+  - alias: Preset/Stop Button Pressed
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: stop
-    id: trigger_preset_pressed
+    id: trigger_preset_press
 
-  # Down Button Press
-  - trigger: device
+  - alias: Lower Button Pressed
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: lower
-    id: trigger_lower_pressed
+    id: trigger_lower_press
 
-  # Off Button Press
-  - trigger: device
+  - alias: Off Button Pressed
+    trigger: device
     device_id: !input remote
     domain: lutron_caseta
     type: press
     subtype: "off"
-    id: trigger_off_pressed
+    id: trigger_off_press
 
 conditions:
   - condition: template
@@ -274,18 +274,8 @@ actions:
       device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
       device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
       integration_type: "{{ device_identifiers[0][0] | string | lower }}"
-      trigger_action: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data.command }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger.payload }}
-        {%- endif -%}
-      trigger_data: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger }}
-        {%- endif -%}
+      trigger_action: "{{ trigger.event.data.button_type }}"
+      trigger_data: "{{ trigger.event.data }}"
 
   - if:
       - condition: template
@@ -301,7 +291,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }} | _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
@@ -311,7 +301,7 @@ actions:
       # Button Press (ON)
       - conditions:
           - condition: trigger
-            id: trigger_on_pressed
+            id: trigger_on_press
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -351,7 +341,7 @@ actions:
       # Button Press (RAISE)
       - conditions:
           - condition: trigger
-            id: trigger_raise_pressed
+            id: trigger_raise_press
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -374,7 +364,7 @@ actions:
       # Button Press (PRESET/STOP)
       - conditions:
           - condition: trigger
-            id: trigger_preset_pressed
+            id: trigger_preset_press
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -414,7 +404,7 @@ actions:
       # Button Press (LOWER)
       - conditions:
           - condition: trigger
-            id: trigger_lower_pressed
+            id: trigger_lower_press
         sequence:
           - wait_for_trigger:
               - trigger: device
@@ -437,7 +427,7 @@ actions:
       # Button Press (OFF)
       - conditions:
           - condition: trigger
-            id: trigger_off_pressed
+            id: trigger_off_press
         sequence:
           - wait_for_trigger:
               - trigger: device
