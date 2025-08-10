@@ -2,10 +2,11 @@
 #
 # | Button | Duration     | Action        |
 # | -------| ------------ | ------------- |
-# | Button | Short Press  | Custom action |
-# | Button | Double Press | Custom action |
-# | Button | Long Press   | Custom action |
-# | Button | Release      | Custom action |
+# | Power  | Short Press  | Custom action |
+# | Power  | Double Press | Custom action |
+# | Power  | Long Press   | Custom action |
+# | Power  | Release      | Custom action |
+# | Device | Shake        | Custom action |
 
 blueprint:
   name: Aqara, Wireless Mini Switch
@@ -23,39 +24,62 @@ blueprint:
         device:
           multiple: false
           filter:
+            - manufacturer: Aqara
+              model: Wireless mini switch (with gyroscope) (WXKG12LM)
+            - manufacturer: Aqara
+              model: Wireless mini switch (with gyroscope)
+            - integration: mqtt
+              manufacturer: Xiaomi
+              model: WXKG11LM
             - integration: zha
               manufacturer: LUMI
               model: lumi.remote.b1acn01
 
-    remote_actions:
+    remote_actions_default:
       name: Button Actions
       icon: mdi:hand-pointing-up
       collapsed: false
       input:
         single_press_action:
           name: Button Short Press
-          description: "The action to perform on short press of the button."
+          description: The action to perform on short press of the button.
           default: []
           selector:
             action:
 
         double_press_action:
           name: Button Double Press
-          description: "The action to perform on double press of the button."
+          description: The action to perform on double press of the button.
           default: []
           selector:
             action:
 
         long_press_action:
           name: Button Long Press
-          description: "The action to perform on long press of the button."
+          description: The action to perform on long press of the button.
+          default: []
+          selector:
+            action:
+
+    remote_actions_extra:
+      name: Advanced Button Actions
+      icon: mdi:hand-pointing-up
+      collapsed: true
+      input:
+        release_action:
+          name: Button Release
+          description: The action to perform on release of the button.
           default: []
           selector:
             action:
 
         release_action:
-          name: Button Release
-          description: "The action to perform on release of the button."
+          name: Button Shake
+          description: >-
+            The action to perform on shake of the button.
+            <br>
+            <br>_Note_:
+            <br>This interaction type is only available on devices with a gyroscope.
           default: []
           selector:
             action:
@@ -118,6 +142,9 @@ max_exceeded: silent
 
 variables:
   var_remote: !input remote
+  var_debug_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+  var_debug_integration: "{{ var_debug_identifiers[0][0] | string }}"
+  var_debug_trigger_data: '{{ trigger.event.data if var_debug_identifiers == "zha" else trigger }}'
 
 triggers:
   - trigger: event
@@ -126,12 +153,24 @@ triggers:
       device_id: !input remote
       command: single
     id: single_press
+  - platform: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: single
+    id: single_press
 
   - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: double
+    id: double_press
+  - platform: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: double
     id: double_press
 
   - trigger: event
@@ -140,6 +179,12 @@ triggers:
       device_id: !input remote
       command: hold
     id: long_press
+  - platform: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: hold
+    id: long_press
 
   - trigger: event
     event_type: zha_event
@@ -147,6 +192,19 @@ triggers:
       device_id: !input remote
       command: release
     id: release
+  - platform: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: release
+    id: release
+
+  - platform: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: shake
+    id: shake
 
 conditions:
   - condition: template
@@ -160,12 +218,18 @@ actions:
       - action: persistent_notification.create
         data:
           notification_id: blueprint_debug__aqara_mini_switch__command_valid
-          title: Remote Command
+          title: Remote Button Pressed
           message: >-
             Aqara Mini Switch remote command.
             <br>
-            <br>_Remote Data_: 
-            <br>"{{ trigger.event.data }}"
+            <br>_Device Integration_:
+            <br>{{ var_debug_integration }}
+            <br>
+            <br>_Device ID_:
+            <br>{{ var_remote }}
+            <br>
+            <br>_Trigger Data_:
+            <br>{{ var_debug_trigger_data }}
 
   - choose:
       - conditions:
@@ -188,6 +252,11 @@ actions:
             id: release
         sequence: !input release_action
 
+      - conditions:
+          - condition: trigger
+            id: shake
+        sequence: !input shake_action
+
     default:
       - condition: template
         value_template: !input log_invalid_events
@@ -200,5 +269,11 @@ actions:
                 Aqara Mini Switch ran the default event from the "choose" event action.
                 <br>Please check any automations which may not be handling this event.
                 <br>
-                <br>_Remote Data_: 
-                <br>"{{ trigger.event.data }}"
+                <br>_Device Integration_:
+                <br>{{ var_debug_integration }}
+                <br>
+                <br>_Device ID_:
+                <br>{{ var_remote }}
+                <br>
+                <br>_Trigger Data_:
+                <br>{{ var_debug_trigger_data }}

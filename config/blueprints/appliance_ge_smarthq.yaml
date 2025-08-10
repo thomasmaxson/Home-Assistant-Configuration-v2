@@ -13,7 +13,9 @@ blueprint:
       input:
         appliance_state:
           name: Appliance State
-          description: "The current state of the appliance"
+          description: >-
+            The current state of the appliance.
+            <br>Used to trigger actions when the appliance starts or completes its cycle."
           selector:
             entity:
               multiple: false
@@ -22,7 +24,7 @@ blueprint:
 
         appliance_door:
           name: Appliance Door Sensor
-          description: "The current state of the appliance door"
+          description: The current state of the appliance door.
           selector:
             entity:
               multiple: false
@@ -36,7 +38,9 @@ blueprint:
       input:
         appliance_complete_flag:
           name: Completed Flag
-          description: "Flag to set when appliance has completed its cycle"
+          description: >-
+            Flag to set when appliance has completed its cycle.
+            <br>Used to trigger repeatable actions.
           selector:
             entity:
               multiple: false
@@ -49,8 +53,8 @@ blueprint:
       collapsed: true
       input:
         action_single_start:
-          name: Single Action(s)
-          description: "Action(s) to run once when the appliance starts."
+          name: Single Start Action(s)
+          description: Action(s) to run once when the appliance starts.
           default: []
           selector:
             action:
@@ -61,15 +65,17 @@ blueprint:
       collapsed: true
       input:
         action_single_finish:
-          name: Single Action(s)
-          description: "Action(s) to run once when the appliance finishes."
+          name: Single Complete Action(s)
+          description: Action(s) to run once when the appliance completes its cycle.
           default: []
           selector:
             action:
 
         action_repeat_finish:
-          name: Repeatable Action(s)
-          description: "Action(s) to repeat when the appliance finishes."
+          name: Repeat Complete Action(s)
+          description: >-
+            Action(s) to repeat when the appliance completes its cycle.
+            <br>These will repeat until the appliance is turned off or the door is opened.
           default: []
           selector:
             action:
@@ -128,47 +134,53 @@ triggers:
     entity_id:
       - !input appliance_state
     to: "Standby"
-    id: State switched to Standby
+    id: state_to_standby
+
   - trigger: state
     entity_id:
       - !input appliance_state
     to: "Run"
-    id: State switched to Run
+    id: state_to_run
+
   - trigger: state
     entity_id:
       - !input appliance_state
     to: "On"
-    id: State switched to On
+    id: state_to_on
   - trigger: state
     entity_id:
       - !input appliance_state
     to: "on"
-    id: State switched to on
+    id: state_to_on
+
   - trigger: state
     entity_id:
       - !input appliance_state
     to: "Paused"
     id: State switched to Paused
+
   - trigger: state
     entity_id:
       - !input appliance_state
     to: "Finished"
-    id: State switched to Finished
-  - trigger: state
-    entity_id:
-      - !input appliance_state
-    to: "off"
-    id: State turned off
-  - trigger: state
-    entity_id:
-      - !input appliance_state
-    to: "Off"
-    id: State turned Off
+    id: state_to_finished
+
+  # - trigger: state
+  #   entity_id:
+  #     - !input appliance_state
+  #   to: "off"
+  #   id: state_to_off
+  # - trigger: state
+  #   entity_id:
+  #     - !input appliance_state
+  #   to: "Off"
+  #   id: state_to_off
+
   - trigger: state
     entity_id:
       - !input appliance_door
     to: "on"
-    id: Door is Open
+    id: door is_open
 
 actions:
   - choose:
@@ -178,10 +190,10 @@ actions:
             conditions:
               - condition: trigger
                 id:
-                  - State switched to Run
+                  - state_to_run
               - condition: trigger
                 id:
-                  - State switched to On
+                  - state_to_on
               - condition: trigger
                 id:
                   - State switched to on
@@ -193,7 +205,7 @@ actions:
       - conditions:
           - condition: trigger
             id:
-              - State switched to Finished
+              - state_to_finished
         sequence:
           - action: input_boolean.turn_on
             metadata: {}
@@ -203,10 +215,10 @@ actions:
           - choose: []
             default: !input action_single_finish
           - repeat:
-              while:
+              until:
                 - condition: state
                   entity_id: !input appliance_complete_flag
-                  state: "on"
+                  state: "off"
               sequence:
                 - choose: []
                   default: !input action_repeat_finish
@@ -221,7 +233,7 @@ actions:
             conditions:
               - condition: trigger
                 id:
-                  - Door is Open
+                  - door is_open
               - condition: or
                 conditions:
                   - condition: state
