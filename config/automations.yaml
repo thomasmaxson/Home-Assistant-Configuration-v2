@@ -1322,7 +1322,8 @@
   max: 10
 - id: '1726959593051'
   alias: 1) Run at Sunrise
-  description: ''
+  description: This automation runs at sunrise, managing various light and blind states,
+    based on occupancy and other conditions.
   triggers:
   - trigger: state
     entity_id:
@@ -1416,20 +1417,20 @@
     path: maxson/remote_aqara_mini_switch.yaml
     input:
       remote: 47d5b025f28a07acda4690b87b00c9ed
-      single_press_action:
+      event_button_press_on_single:
       - action: cover.open_cover
         metadata: {}
         data: {}
         target:
           entity_id: cover.garage_door
-      double_press_action:
+      event_button_press_press_on_double:
       - action: cover.close_cover
         target:
           entity_id:
           - cover.garage_door
         data: {}
       auto_mode: queued
-      long_press_action:
+      event_button_press_on_hold:
       - action: cover.toggle_cover_tilt
         target:
           entity_id: cover.blinds_kitchen
@@ -1442,10 +1443,11 @@
     path: maxson/remote_ikea_styrbar_4_button.yaml
     input:
       remote: 6b9849701fc9f47c707d23e72e72716a
-      light: light.bedroom_1_group_occupancy_lights
-      brightness_step: 10
+      brightness_step: 20
       auto_mode: queued
       force_brightness: false
+      light:
+      - light.bedroom_1_group_occupancy_lights
 - id: '1727115559199'
   alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a IKEA TRADFRI 5 button
@@ -1454,48 +1456,55 @@
     path: maxson/remote_ikea_tradfri_5_button.yaml
     input:
       remote: 61a2efe93ec921eb2ccfbd6f166e2aef
-      light: light.bedroom_4_group_occupancy_lights
-      brightness_step: 10
-      config_mode: single
-      button_left_short:
+      light:
+      - light.bedroom_4_group_occupancy_lights
+      brightness_step: 20
+      event_button_press_left_single:
       - action: input_select.select_previous
         metadata: {}
         data:
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
-      button_right_short:
+      event_button_press_right_single:
       - action: input_select.select_next
         metadata: {}
         data:
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
+      config_mode: single
 - id: '1727117077347'
   alias: Living Room, Light - Primary
   description: Control primary lights in the living room via a IKEA TRADFRI 2 button
     remote.
   use_blueprint:
-    path: maxson/remote_ikea_tradfri_2_button.yaml
+    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
     input:
       remote: 773fcd7dc85227c001175b0744486dfa
-      light: light.living_room_corner_lamp
+      light:
+      - light.living_room_corner_lamp
       brightness_step: 10
-      auto_mode: queued
       brightness: 40
-      force_brightness: true
 - id: '1727117139279'
   alias: Garage, Wall Fan
   description: Control the fan in the garage via a IKEA TRADFRI 2 button remote.
   use_blueprint:
-    path: maxson/remote_ikea_tradfri_2_button.yaml
+    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
     input:
-      light: light.garage_fan
       remote: 5c4c46dcb1d52a61015e2f96a4b93f48
-      brightness_step: 10
-      force_brightness: true
-      brightness: 100
-      auto_mode: queued
+      event_button_press_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.garage_fan
+      event_button_press_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.garage_fan
 - id: '1727129555803'
   alias: Bedroom 1, Closet Hallway
   description: ''
@@ -1580,7 +1589,7 @@
   actions:
   - repeat:
       sequence:
-      - action: script.announce_on_amazon_echo_device
+      - action: script.amazon_echo_announcement
         metadata: {}
         data:
           message: Warning. The garage GFCI outlet needs to be reset.
@@ -2050,7 +2059,7 @@
         message: In the Kitchen, the refrigerator is at {{ trigger.to_state.state
           | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
           allowed.
-    - action: script.announce_on_amazon_echo_device
+    - action: script.amazon_echo_announcement
       alias: Send Notification to Alexa
       data:
         message: Warning! In the Kitchen, the refrigerator is at {{ trigger.to_state.state
@@ -2484,7 +2493,7 @@
           after: '21:30:00'
           before: '22:59:59'
         then:
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -2737,8 +2746,9 @@
       time: '12:00:00'
       message: '[% bullet %] [% sensor %] ([% state %]%)'
 - id: '1727609900602'
-  alias: Dishwasher
-  description: ''
+  alias: Dishwasher – Cycle Tracking & Announcements
+  description: Tracks dishwasher cycle, provides announcements upon completion, and
+    manages cycle duration information.
   triggers:
   - entity_id:
     - sensor.plug_dishwasher_power
@@ -2846,7 +2856,7 @@
         then:
         - repeat:
             sequence:
-            - action: script.announce_on_amazon_echo_device
+            - action: script.amazon_echo_announcement
               metadata: {}
               data:
                 message: Your dishes are clean and are ready to be put away.
@@ -3715,12 +3725,12 @@
       idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
 - id: '1730985202477'
   alias: Foyer, Light
-  description: Control primary lights in the foyer via a Sonoff Wireless remote.
+  description: Control primary lights in the foyer via a SONOFF Wireless Switch device.
   use_blueprint:
     path: maxson/remote_sonoff_wireless_switch.yaml
     input:
       remote: 537092e8ca96f79dc0619e52a47edc58
-      single_press_action:
+      event_button_press_on_single:
       - if:
         - condition: state
           entity_id: light.foyer_ceiling_ledge
@@ -3738,7 +3748,7 @@
           data: {}
           target:
             entity_id: light.foyer_ceiling_ledge
-      double_press_action:
+      event_button_press_on_double:
       - if:
         - condition: state
           entity_id: light.foyer_under_table
@@ -3795,13 +3805,13 @@
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
       remote: c86536d4eb18d6eaf1ddb6d7e63bb379
-      button_on_single:
+      event_button_press_on_single:
       - action: fan.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_3
-      button_raise_single:
+      event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
@@ -3849,7 +3859,7 @@
               entity_id: fan.custom_ceiling_bedroom_3
             data: {}
           alias: Ceiling Fan, High to Off
-      button_preset_single:
+      event_button_press_preset_single:
       - if:
         - condition: state
           entity_id: input_boolean.bedroom_3_automation_allow_occupancy
@@ -3860,7 +3870,7 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -3872,7 +3882,7 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -3926,7 +3936,7 @@
             target:
               entity_id: fan.custom_ceiling_bedroom_3
           alias: Ceiling Fan, High to Medium
-      button_off_single:
+      event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
@@ -3939,13 +3949,13 @@
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
       remote: 547912e5c1b5de70af4e7159db0b75cb
-      button_on_single:
+      event_button_press_on_single:
       - action: fan.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_4
-      button_raise_single:
+      event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
@@ -3993,7 +4003,7 @@
               entity_id: fan.custom_ceiling_bedroom_4
             data: {}
           alias: Ceiling Fan, High to Off
-      button_preset_single:
+      event_button_press_preset_single:
       - if:
         - condition: state
           entity_id: input_boolean.bedroom_4_automation_allow_occupancy
@@ -4004,7 +4014,7 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -4016,13 +4026,13 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
             - bedroom_4
             message: Occupancy automations for this room are active.
-      button_lower_single:
+      event_button_press_lower_single:
       - choose:
         - conditions:
           - condition: state
@@ -4070,19 +4080,19 @@
             target:
               entity_id: fan.custom_ceiling_bedroom_4
           alias: Ceiling Fan, High to Medium
-      button_off_single:
+      event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_4
-      button_on_double:
+      event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_4
-      button_off_double:
+      event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
@@ -4096,13 +4106,13 @@
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
       remote: a27d9dc278719e77bd1086e297be14fa
-      button_on_single:
+      event_button_press_on_single:
       - action: fan.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_2
-      button_raise_single:
+      event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
@@ -4150,7 +4160,7 @@
               entity_id: fan.custom_ceiling_bedroom_2
             data: {}
           alias: Ceiling Fan, High to Off
-      button_preset_single:
+      event_button_press_preset_single:
       - if:
         - condition: state
           entity_id: input_boolean.bedroom_2_automation_allow_occupancy
@@ -4161,7 +4171,7 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -4173,13 +4183,13 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
             - bedroom_2
             message: Occupancy automations for this room are active.
-      button_lower_single:
+      event_button_press_lower_single:
       - choose:
         - conditions:
           - condition: state
@@ -4227,31 +4237,31 @@
             target:
               entity_id: fan.custom_ceiling_bedroom_2
           alias: Ceiling Fan, High to Medium
-      button_off_single:
+      event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_2
-      button_on_double:
+      event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_2
-      button_off_double:
+      event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_2
-      button_on_hold:
+      event_button_press_on_hold:
       - action: cover.open_cover_tilt
         metadata: {}
         data: {}
         target:
           entity_id: cover.blinds_bedroom_2
-      button_off_hold:
+      event_button_press_off_hold:
       - action: cover.set_cover_tilt_position
         metadata: {}
         data:
@@ -4271,7 +4281,7 @@
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_1
-      button_raise_single:
+      event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
@@ -4319,7 +4329,7 @@
               entity_id: fan.custom_ceiling_bedroom_1
             data: {}
           alias: Ceiling Fan, High to Off
-      button_preset_single:
+      event_button_press_preset_single:
       - if:
         - condition: state
           entity_id: input_boolean.bedroom_1_automation_allow_occupancy
@@ -4330,7 +4340,7 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_1_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -4342,13 +4352,13 @@
           data: {}
           target:
             entity_id: input_boolean.bedroom_1_automation_allow_occupancy
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
             - bedroom_1
             message: Occupancy automations for this room are active.
-      button_lower_single:
+      event_button_press_lower_single:
       - choose:
         - conditions:
           - condition: state
@@ -4396,19 +4406,19 @@
             target:
               entity_id: fan.custom_ceiling_bedroom_1
           alias: Ceiling Fan, High to Medium
-      button_off_single:
+      event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: fan.custom_ceiling_bedroom_1
-      button_on_double:
+      event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_1
-      button_off_double:
+      event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
@@ -4422,13 +4432,13 @@
     path: maxson/remote_lutron_pico_paddle.yaml
     input:
       remote: afe69d52a42055addce27abac118675a
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_3
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
@@ -4442,25 +4452,25 @@
     path: maxson/remote_lutron_pico_paddle.yaml
     input:
       remote: d2694481a3b250b9ed95e4645eb6e40b
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_2_group_occupancy_lights
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_2_group_occupancy_lights
-      button_on_hold:
+      event_button_press_on_hold:
       - action: cover.open_cover_tilt
         metadata: {}
         data: {}
         target:
           entity_id: cover.blinds_bedroom_2
-      button_off_hold:
+      event_button_press_off_hold:
       - action: cover.set_cover_tilt_position
         metadata: {}
         data:
@@ -4476,13 +4486,13 @@
     path: maxson/remote_lutron_pico_paddle.yaml
     input:
       remote: da8f06c90863b596980eda95dd6754ae
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.ceiling_fan_bedroom_1
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
@@ -4495,25 +4505,25 @@
     path: maxson/remote_lutron_pico_paddle.yaml
     input:
       remote: b3de283035b788f368ee8333e37de457
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_4_group_occupancy_lights
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_4_group_occupancy_lights
-      button_on_hold:
+      event_button_press_on_hold:
       - action: cover.open_cover_tilt
         metadata: {}
         data: {}
         target:
           entity_id: cover.blinds_bedroom_4
-      button_off_hold:
+      event_button_press_off_hold:
       - action: cover.set_cover_tilt_position
         metadata: {}
         data:
@@ -4528,25 +4538,25 @@
     path: maxson/remote_lutron_pico_paddle.yaml
     input:
       remote: a7fd95bd8b97ebc8067e659bb3aa7009
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_1_group_occupancy_lights
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.bedroom_1_group_occupancy_lights
-      button_on_hold:
+      event_button_press_on_hold:
       - action: cover.open_cover
         metadata: {}
         data: {}
         target:
           entity_id: cover.curtains_large_window_bedroom_1
-      button_off_hold:
+      event_button_press_off_hold:
       - action: cover.close_cover
         metadata: {}
         data: {}
@@ -4561,59 +4571,60 @@
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
       remote: 52953df2b0850134e6d998ac302e9f8b
-      button_on_single:
+      event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.living_room_corner_lamp
-      button_raise_single:
+      event_button_press_raise_single:
       - action: light.turn_on
         metadata: {}
         data:
           brightness_step_pct: 10
         target:
           entity_id: light.living_room_corner_lamp
-      button_preset_single:
+      event_button_press_preset_single:
       - action: light.toggle
         metadata: {}
         data: {}
         target:
           entity_id: light.living_room_corner_lamp
-      button_lower_single:
+      event_button_press_lower_single:
       - action: light.turn_on
         metadata: {}
         data:
           brightness_step_pct: -10
         target:
           entity_id: light.living_room_corner_lamp
-      button_off_single:
+      event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.living_room_corner_lamp
-      button_on_double:
+      event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
           entity_id: light.dining_room_chandelier
-      button_preset_double:
+      event_button_press_preset_double:
       - action: light.toggle
         metadata: {}
         data: {}
         target:
           entity_id: light.dining_room_chandelier
-      button_off_double:
+      event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.dining_room_chandelier
 - id: '1737478714640'
-  alias: Tumble Dryer
-  description: ''
+  alias: Tumble Dryer – Cycle Tracking & Announcements
+  description: Tracks the tumble dryer cycle, provides announcements upon completion,
+    and manages cycle duration information.
   use_blueprint:
     path: maxson/appliance_ge_smarthq.yaml
     input:
@@ -4640,7 +4651,7 @@
           after: 07:00:00
           before: '23:00:00'
         then:
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Your dried clothes are ready to be folded.
@@ -4654,8 +4665,9 @@
             - kitchen
       duration_repeat_finish: 20
 - id: '1737482236130'
-  alias: Washing Machine
-  description: ''
+  alias: Washing Machine – Cycle Tracking & Announcements
+  description: Tracks washing machine cycles, provides announcements upon completion,
+    and manages cycle duration information.
   use_blueprint:
     path: maxson/appliance_ge_smarthq.yaml
     input:
@@ -4682,7 +4694,7 @@
           after: 07:00:00
           before: '23:00:00'
         then:
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Your washed clothes are ready to be dried.
@@ -4715,7 +4727,7 @@
             subtitle: Warning
             message: Water has been detected in the Foyer in the bottom of the air
               conditioner intake.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Foyer in the bottom of
@@ -4756,7 +4768,7 @@
             subtitle: Warning
             message: Water has been detected in the Laundry Room under the washing
               machine.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Laundry Room under the
@@ -4796,7 +4808,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected under the Kitchen sink.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected under the Kitchen sink.
@@ -4834,7 +4846,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Main Bathroom under his sink.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Main Bathroom under his
@@ -4873,7 +4885,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Main Bathroom under her sink.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Main Bathroom under her
@@ -4912,7 +4924,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Main Bathroom behind the toilet.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Main Bathroom behind
@@ -4951,7 +4963,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Guest Bathroom under the sink.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Guest Bathroom under
@@ -4990,7 +5002,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Guest Bathroom behind the toilet.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Guest Bathroom behind
@@ -5029,7 +5041,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Half Bathroom behind the toilet.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Half Bathroom behind
@@ -5068,7 +5080,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Half Bathroom under the sink.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Half Bathroom under the
@@ -5107,7 +5119,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the kitchen under the dishwasher.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the kitchen under the dishwasher.
@@ -5145,7 +5157,7 @@
             interruption_level: critical
             subtitle: Warning
             message: Water has been detected in the Bar under the wine cooler.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             message: Warning! Water has been detected in the Bar under the wine cooler.
@@ -5193,7 +5205,7 @@
         message: In the Kitchen, the freezer is at {{ trigger.to_state.state | round
           }}°, which is above the {{ trigger.above | round }}° maximum temperature
           allowed.
-    - action: script.announce_on_amazon_echo_device
+    - action: script.amazon_echo_announcement
       alias: Send Notification to Alexa
       data:
         message: Warning! In the Kitchen, the freezer is at {{ trigger.to_state.state
@@ -5261,7 +5273,7 @@
             message: In the Bar, the top wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
             message: Warning! In the Bar, the top wine cooler is at {{ trigger.to_state.state
@@ -5300,7 +5312,7 @@
             message: In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
               | round }}°, which is above the {{ trigger.above | round }}° maximum
               temperature allowed.
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           alias: Send Notification to Alexa
           data:
             message: Warning! In the Bar, the bottom wine cooler is at {{ trigger.to_state.state
@@ -5983,7 +5995,7 @@
         state: 'on'
       sequence:
       - parallel:
-        - action: script.announce_on_amazon_echo_device
+        - action: script.amazon_echo_announcement
           metadata: {}
           data:
             send_to:
@@ -6029,248 +6041,6 @@
           - light.ceiling_fan_switch_bedroom_4
   mode: queued
   max: 10
-- id: '1749910059584'
-  alias: Security Control, Lights - All
-  description: ''
-  triggers:
-  - device_id: f45e2cf26f5fb3cf99fd5f874ca22d18
-    domain: zha
-    type: remote_button_short_press
-    subtype: turn_on
-    trigger: device
-    id: Turn ON
-  - device_id: f45e2cf26f5fb3cf99fd5f874ca22d18
-    domain: zha
-    type: remote_button_short_press
-    subtype: turn_off
-    trigger: device
-    id: Turn OFF
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Turn ON
-      sequence:
-      - action: switch.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - switch.echo_kitchen_do_not_disturb_switch
-          - switch.echo_dot_dining_room_do_not_disturb_switch
-          - switch.echo_dot_bedroom_1_do_not_disturb_switch
-          - switch.echo_dot_bedroom_2_do_not_disturb_switch
-          - switch.echo_dot_bedroom_3_do_not_disturb_switch
-          - switch.echo_dot_bedroom_4_do_not_disturb_switch
-          - switch.echo_pop_main_bathroom_do_not_disturb_switch
-      - action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_lights
-          snapshot_entities:
-          - light.kitchen_light_1
-          - light.kitchen_light_2
-          - light.kitchen_light_3
-          - light.kitchen_light_4
-          - light.kitchen_light_5
-          - light.kitchen_light_6
-          - light.kitchen_cabinet_upper_range
-          - light.kitchen_cabinet_upper_coffee_bar
-          - light.dining_room_chandelier
-          - light.living_room_corner_lamp
-          - light.living_room_couch_lamp
-          - light.foyer_ceiling_ledge
-          - light.foyer_under_table
-          - light.foyer_entryway_ceiling
-          - light.foyer_exterior_entryway
-          - light.ceiling_fan_bedroom_1
-          - light.bedroom_1_lamp_hers
-          - light.bedroom_1_lamp_his
-          - light.closet_hallway_ceiling_light
-          - light.closet_hallway_light_hers
-          - light.closet_hallway_light_his
-          - light.switch_1_bathroom_main_light
-          - light.switch_2_bathroom_main_light
-          - light.ceiling_fan_bedroom_2
-          - light.bedroom_2_lamp_left
-          - light.bedroom_2_lamp_right
-          - light.ceiling_fan_bedroom_3
-          - light.bedroom_3_floor_lamp
-          - light.ceiling_fan_bedroom_4
-          - light.bedroom_4_accent_lamp_right
-          - light.bedroom_4_lightstrip
-          - light.bedroom_4_tie_fighter_lamp
-          - light.laundry_hallway_light
-          - light.laundry_ceiling_light
-          - light.guest_hallway_light
-          - light.garage_ceiling
-          - light.christmas_tree
-        alias: Create Scene – Lights
-      - parallel:
-        - alias: Lights On - Common Areas
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.kitchen_ceiling_lights
-            - light.kitchen_cabinet_upper_coffee_bar
-            - light.kitchen_cabinet_upper_range
-            - light.dining_room_chandelier
-            - light.living_room_corner_lamp
-            - light.living_room_couch_lamp
-            - light.foyer_entryway_ceiling
-        - alias: Lights On - Bedroom 1
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_1
-            - light.bedroom_1_lamp_hers
-            - light.bedroom_1_lamp_his
-            - light.closet_hallway_ceiling_light
-            - light.switch_1_bathroom_main_light
-            - light.switch_2_bathroom_main_light
-        - alias: Lights On - Bedroom 2
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_2
-            - light.bedroom_2_lamp_left
-            - light.bedroom_2_lamp_right
-        - alias: Lights On - Bedroom 3
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_3
-            - light.bedroom_3_floor_lamp
-        - alias: Lights On - Bedroom 4
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.ceiling_fan_bedroom_4
-            - light.bedroom_4_accent_lamp_right
-            - light.bedroom_4_lightstrip
-        - alias: Lights On - Other
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.foyer_hallway_ceiling
-            - light.guest_hallway_light
-            - light.laundry_hallway_light
-            - light.laundry_ceiling_light
-      - alias: Create Scene – Security, Privacy Mode
-        action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_security_privacy
-          snapshot_entities:
-          - input_boolean.camera_int_privacy_mode
-          - switch.camera_ext_backyard_northeast_privacy_mode
-          - switch.camera_ext_backyard_southeast_privacy_mode
-          - switch.camera_ext_doorbell_privacy_mode
-          - switch.camera_ext_front_yard_northeast_privacy_mode
-          - switch.camera_ext_front_yard_southeast_privacy_mode
-          - switch.camera_ext_side_yard_north_east_privacy_mode
-          - switch.camera_ext_side_yard_north_west_privacy_mode
-          - switch.camera_ext_side_yard_south_east_privacy_mode
-          - select.camera_ext_garage_privacy_mode
-          - switch.camera_int_bdr1_privacy_mode
-          - switch.camera_int_bdr3_privacy_mode
-          - switch.camera_int_bdr4_privacy_mode
-          - switch.camera_int_foyer_entry_privacy_mode
-          - switch.camera_int_dining_room_privacy_mode
-          - switch.camera_int_kitchen_privacy_mode
-          - switch.camera_int_living_room_privacy_mode
-      - alias: Create Scene – Security, Recording Mode
-        action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_security_recording
-          snapshot_entities:
-          - input_boolean.enable_exterior_camera_recording
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-          - select.camera_ext_backyard_northeast_recording_mode
-          - select.camera_ext_backyard_southeast_recording_mode
-          - select.camera_ext_doorbell_recording_mode
-          - select.camera_ext_front_yard_northeast_recording_mode
-          - select.camera_ext_front_yard_southeast_recording_mode
-          - select.camera_ext_side_yard_north_east_recording_mode
-          - select.camera_ext_side_yard_north_west_recording_mode
-          - select.camera_ext_side_yard_south_east_recording_mode
-          - select.camera_ext_garage_recording_mode
-          - select.camera_int_bdr1_recording_mode
-          - select.camera_int_bdr3_recording_mode
-          - select.camera_int_bdr4_recording_mode
-          - select.camera_int_foyer_entry_recording_mode
-          - select.camera_int_dining_room_recording_mode
-          - select.camera_int_kitchen_recording_mode
-          - select.camera_int_living_room_recording_mode
-      - action: input_boolean.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.camera_int_privacy_mode
-      - action: input_boolean.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - input_boolean.enable_exterior_camera_recording
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-    - conditions:
-      - condition: trigger
-        id:
-        - Turn OFF
-      sequence:
-      - action: switch.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - switch.echo_kitchen_do_not_disturb_switch
-          - switch.echo_dot_dining_room_do_not_disturb_switch
-          - switch.echo_dot_bedroom_1_do_not_disturb_switch
-          - switch.echo_dot_bedroom_2_do_not_disturb_switch
-          - switch.echo_dot_bedroom_3_do_not_disturb_switch
-          - switch.echo_dot_bedroom_4_do_not_disturb_switch
-          - switch.echo_pop_main_bathroom_do_not_disturb_switch
-      - action: scene.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - scene.snapshot_house_lights
-          - scene.snapshot_house_security_privacy
-          - scene.snapshot_house_security_recording
-      - action: scene.delete
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - scene.snapshot_house_lights
-          - scene.snapshot_house_security_privacy
-          - scene.snapshot_house_security_recording
-  mode: single
 - id: '1752148183680'
   alias: Living Room, Television Sync Box
   description: ''
@@ -6465,7 +6235,7 @@
     path: maxson/remote_philips_hue_dimmer.yaml
     input:
       remote: b3eb7611f388f72165a6b0e2f915af85
-      button_on_single:
+      event_button_press_on_single:
       - if:
         - condition: state
           entity_id: switch.sync_box_power
@@ -6492,7 +6262,7 @@
             enabled: true
           alias: Toggle Hue Sync Box Light Sync
         enabled: true
-      button_raise_single:
+      event_button_press_raise_single:
       - if:
         - condition: state
           entity_id: switch.sync_box_power
@@ -6503,7 +6273,7 @@
             entity_id: number.sync_box_brightness
           data:
             amount: 5
-      button_lower_single:
+      event_button_press_lower_single:
       - if:
         - condition: state
           entity_id: switch.sync_box_power
@@ -6514,7 +6284,7 @@
             entity_id: number.sync_box_brightness
           data:
             amount: 5
-      button_off_single:
+      event_button_press_off_single:
       - if:
         - condition: state
           entity_id: switch.sync_box_power
@@ -6525,14 +6295,14 @@
             entity_id: select.sync_box_hdmi_input
           data:
             cycle: true
-      button_raise_hold:
+      event_button_press_raise_hold:
       - action: number.increment
         target:
           entity_id: number.sync_box_brightness
         data:
           amount: 5
         enabled: true
-      button_lower_hold:
+      event_button_press_lower_hold:
       - action: number.decrement
         target:
           entity_id: number.sync_box_brightness
@@ -6606,3 +6376,232 @@
     metadata: {}
     data: {}
   mode: single
+- id: '1754749195182'
+  alias: Security Control, All Home
+  description: Manage house lights and devices, controls camera privacy and recording
+    modes using an IKEA 2-button remote.
+  use_blueprint:
+    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
+    input:
+      remote: f45e2cf26f5fb3cf99fd5f874ca22d18
+      event_button_press_off_single:
+      - action: switch.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.echo_kitchen_do_not_disturb_switch
+          - switch.echo_dot_dining_room_do_not_disturb_switch
+          - switch.echo_dot_bedroom_1_do_not_disturb_switch
+          - switch.echo_dot_bedroom_2_do_not_disturb_switch
+          - switch.echo_dot_bedroom_3_do_not_disturb_switch
+          - switch.echo_dot_bedroom_4_do_not_disturb_switch
+          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+        alias: ENABLE Amazon Devices
+      - action: scene.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - scene.snapshot_house_lights
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
+        alias: ACTIVATE Scene(s)
+      - action: scene.delete
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - scene.snapshot_house_lights
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
+        alias: DELETE Scene(s)
+      event_button_press_on_single:
+      - action: switch.turn_on
+        alias: DISABLE Amazon Devices
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.echo_kitchen_do_not_disturb_switch
+          - switch.echo_dot_dining_room_do_not_disturb_switch
+          - switch.echo_dot_bedroom_1_do_not_disturb_switch
+          - switch.echo_dot_bedroom_2_do_not_disturb_switch
+          - switch.echo_dot_bedroom_3_do_not_disturb_switch
+          - switch.echo_dot_bedroom_4_do_not_disturb_switch
+          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+      - action: scene.create
+        metadata: {}
+        data:
+          scene_id: snapshot_house_lights
+          snapshot_entities:
+          - light.kitchen_light_1
+          - light.kitchen_light_2
+          - light.kitchen_light_3
+          - light.kitchen_light_4
+          - light.kitchen_light_5
+          - light.kitchen_light_6
+          - light.kitchen_cabinet_upper_range
+          - light.kitchen_cabinet_upper_coffee_bar
+          - light.dining_room_chandelier
+          - light.living_room_corner_lamp
+          - light.living_room_couch_lamp
+          - light.foyer_ceiling_ledge
+          - light.foyer_under_table
+          - light.foyer_entryway_ceiling
+          - light.foyer_exterior_entryway
+          - light.ceiling_fan_bedroom_1
+          - light.bedroom_1_lamp_hers
+          - light.bedroom_1_lamp_his
+          - light.closet_hallway_ceiling_light
+          - light.closet_hallway_light_hers
+          - light.closet_hallway_light_his
+          - light.switch_1_bathroom_main_light
+          - light.switch_2_bathroom_main_light
+          - light.ceiling_fan_bedroom_2
+          - light.bedroom_2_lamp_left
+          - light.bedroom_2_lamp_right
+          - light.ceiling_fan_bedroom_3
+          - light.bedroom_3_floor_lamp
+          - light.ceiling_fan_bedroom_4
+          - light.bedroom_4_accent_lamp_right
+          - light.bedroom_4_lightstrip
+          - light.bedroom_4_tie_fighter_lamp
+          - light.laundry_hallway_light
+          - light.laundry_ceiling_light
+          - light.guest_hallway_light
+          - light.garage_ceiling
+          - light.christmas_tree
+        alias: CREATE Scene – Household Lights
+      - parallel:
+        - alias: Lights On - Common Areas
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.kitchen_ceiling_lights
+            - light.kitchen_cabinet_upper_coffee_bar
+            - light.kitchen_cabinet_upper_range
+            - light.dining_room_chandelier
+            - light.living_room_corner_lamp
+            - light.living_room_couch_lamp
+            - light.foyer_entryway_ceiling
+        - alias: Lights On - Bedroom 1
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_1
+            - light.bedroom_1_lamp_hers
+            - light.bedroom_1_lamp_his
+            - light.closet_hallway_ceiling_light
+            - light.switch_1_bathroom_main_light
+            - light.switch_2_bathroom_main_light
+        - alias: Lights On - Bedroom 2
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_2
+            - light.bedroom_2_lamp_left
+            - light.bedroom_2_lamp_right
+        - alias: Lights On - Bedroom 3
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_3
+            - light.bedroom_3_floor_lamp
+        - alias: Lights On - Bedroom 4
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.ceiling_fan_bedroom_4
+            - light.bedroom_4_accent_lamp_right
+            - light.bedroom_4_lightstrip
+        - alias: Lights On - Other
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+            - light.foyer_hallway_ceiling
+            - light.guest_hallway_light
+            - light.laundry_hallway_light
+            - light.laundry_ceiling_light
+        alias: Turn ON Lights
+      - alias: Create Scene – Security, Privacy Mode
+        action: scene.create
+        metadata: {}
+        data:
+          scene_id: snapshot_house_security_privacy
+          snapshot_entities:
+          - input_boolean.camera_int_privacy_mode
+          - switch.camera_ext_backyard_northeast_privacy_mode
+          - switch.camera_ext_backyard_southeast_privacy_mode
+          - switch.camera_ext_doorbell_privacy_mode
+          - switch.camera_ext_front_yard_northeast_privacy_mode
+          - switch.camera_ext_front_yard_southeast_privacy_mode
+          - switch.camera_ext_side_yard_north_east_privacy_mode
+          - switch.camera_ext_side_yard_north_west_privacy_mode
+          - switch.camera_ext_side_yard_south_east_privacy_mode
+          - select.camera_ext_garage_privacy_mode
+          - switch.camera_int_bdr1_privacy_mode
+          - switch.camera_int_bdr3_privacy_mode
+          - switch.camera_int_bdr4_privacy_mode
+          - switch.camera_int_foyer_entry_privacy_mode
+          - switch.camera_int_dining_room_privacy_mode
+          - switch.camera_int_kitchen_privacy_mode
+          - switch.camera_int_living_room_privacy_mode
+      - alias: Create Scene – Security, Recording Mode
+        action: scene.create
+        metadata: {}
+        data:
+          scene_id: snapshot_house_security_recording
+          snapshot_entities:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
+          - select.camera_ext_backyard_northeast_recording_mode
+          - select.camera_ext_backyard_southeast_recording_mode
+          - select.camera_ext_doorbell_recording_mode
+          - select.camera_ext_front_yard_northeast_recording_mode
+          - select.camera_ext_front_yard_southeast_recording_mode
+          - select.camera_ext_side_yard_north_east_recording_mode
+          - select.camera_ext_side_yard_north_west_recording_mode
+          - select.camera_ext_side_yard_south_east_recording_mode
+          - select.camera_ext_garage_recording_mode
+          - select.camera_int_bdr1_recording_mode
+          - select.camera_int_bdr3_recording_mode
+          - select.camera_int_bdr4_recording_mode
+          - select.camera_int_foyer_entry_recording_mode
+          - select.camera_int_dining_room_recording_mode
+          - select.camera_int_kitchen_recording_mode
+          - select.camera_int_living_room_recording_mode
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.camera_int_privacy_mode
+        alias: DISABLED Interior Privacy Mode
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
+        alias: ENABLE Recording for All Cameras
