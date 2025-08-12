@@ -32,25 +32,25 @@ blueprint:
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        event_button_1_dot:
+        event_button_press_1_dot_single:
           name: 1 Dot Button Press Event
           description: The action to perform on _press_ of the **1 Dot Button**.
           default: []
           selector:
             action: null
-        event_button_2_dots:
+        event_button_press_2_dots_single:
           name: 2 Dots Button Press Event
           description: The action to perform on _press_ of the **2 Dots Button**.
           default: []
           selector:
             action: null
-        event_button_3_dots:
+        event_button_press_3_dots_single:
           name: 3 Dots Button Press Event
           description: The action to perform on _press_ of the **3 Dots Button**.
           default: []
           selector:
             action: null
-        event_button_4_dots:
+        event_button_press_4_dots_single:
           name: 4 Dots Button Press Event
           description: The action to perform on _press_ of the **4 Dots Button**.
           default: []
@@ -113,6 +113,11 @@ triggers:
     attribute: action
 
 
+conditions:
+  - condition: template
+    value_template: "{{ var_remote | length > 0 }}"
+    
+
 actions:
   - variables:
       device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
@@ -146,13 +151,13 @@ actions:
   - choose:
       - conditions:
           - "{{ trigger_command == 'press_1' }}"
-        sequence: !input event_button_1_dot
+        sequence: !input event_button_press_1_dot_single
       - conditions:
           - "{{ trigger_command == 'press_2' }}"
-        sequence: !input event_button_2_dots
+        sequence: !input event_button_press_2_dots_single
       - conditions:
           - "{{ trigger_command == 'press_3' }}"
-        sequence: !input event_button_3_dots
+        sequence: !input event_button_press_3_dots_single
       - conditions:
           - "{{ trigger_command == 'press_4' }}"
-        sequence: !input event_button_4_dots
+        sequence: !input event_button_press_4_dots_single

@@ -34,21 +34,21 @@ blueprint:
       icon: mdi:hand-pointing-up
       collapsed: false
       input:
-        event_on_single:
-          name: Button Single Press Event
+        event_button_press_on_single:
+          name: Button Press Once Event
           description: The action to perform on _single press_ of the **Button**.
           default: []
           selector:
             action:
 
-        event_on_double:
-          name: Button Double Press Event
+        event_button_press_on_double:
+          name: Button Press Twice Event
           description: The action to perform on _double press_ of the **Button**.
           default: []
           selector:
             action:
 
-        event_on_hold:
+        event_button_press_on_hold:
           name: Button Press & Hold Event
           description: The action to perform on _press and hold_ of the **Button**.
           default: []
@@ -103,14 +103,14 @@ variables:
   var_remote: !input remote
 
 triggers:
-  - alias: Button Single Press (via ZHA event)
+  - alias: Button Press Once (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "toggle"
     id: trigger_press_single_zha
-  - alias: Button Single Press (via MQTT event)
+  - alias: Button Press Once (via MQTT event)
     trigger: device
     device_id: !input remote
     domain: mqtt
@@ -118,14 +118,14 @@ triggers:
     subtype: single
     id: trigger_press_single_mqtt
 
-  - alias: Button Double Press (via ZHA event)
+  - alias: Button Press Twice (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: "on"
     id: trigger_press_double_zha
-  - alias: Button Double Press (via MQTT event)
+  - alias: Button Press Twice (via MQTT event)
     trigger: device
     device_id: !input remote
     domain: mqtt
@@ -198,18 +198,18 @@ actions:
             id: 
               - trigger_press_single_zha
               - trigger_press_single_mqtt
-        sequence: !input event_on_single
+        sequence: !input event_button_press_on_single
 
       - conditions:
           - condition: trigger
             id: 
               - trigger_press_double_zha
               - trigger_press_double_mqtt
-        sequence: !input event_on_double
+        sequence: !input event_button_press_on_double
 
       - conditions:
           - condition: trigger
             id: 
               - trigger_press_hold_zha
               - trigger_press_hold_mqtt
-        sequence: !input event_on_hold
+        sequence: !input event_button_press_on_hold

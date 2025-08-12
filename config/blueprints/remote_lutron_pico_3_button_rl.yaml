@@ -59,31 +59,31 @@ blueprint:
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        event_on_single:
+        event_button_press_on_single:
           name: On Button Press Event
           description: The action to perform on _single press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        event_raise_single:
+        event_button_press_raise_single:
           name: Raise Button Press Event
           description: The action to perform on _single press_ of the **Raise Button**.
           default: []
           selector:
             action: {}
-        event_preset_single:
+        event_button_press_preset_single:
           name: Preset Button Press Event
           description: The action to perform on _single press_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        event_lower_single:
+        event_button_press_lower_single:
           name: Lower Button Press Event
           description: The action to perform on _single press_ of the **Lower Button**.
           default: []
           selector:
             action: {}
-        event_off_single:
+        event_button_press_off_single:
           name: Off Button Press Event
           description: The action to perform on _single press_ of the **Off Button**.
           default: []
@@ -95,20 +95,20 @@ blueprint:
       icon: mdi:gesture-double-tap
       collapsed: true
       input:
-        event_on_double:
-          name: On Button Double Press Event
+        event_button_press_on_double:
+          name: On Button Press Twice Event
           description: The action to perform on _double press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        event_preset_double:
-          name: Preset Button Double Press Event
+        event_button_press_preset_double:
+          name: Preset Button Press Twice Event
           description: The action to perform on _double press_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        event_off_double:
-          name: Off Button Double Press Event
+        event_button_press_off_double:
+          name: Off Button Press Twice Event
           description: The action to perform on _double press_ of the **Off Button**.
           default: []
           selector:
@@ -130,31 +130,31 @@ blueprint:
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        event_on_hold:
+        event_button_press_on_hold:
           name: On Button Hold Event
           description: The action to perform on _press and hold_ of the **On Button**.
           default: []
           selector:
             action: {}
-        event_raise_hold:
+        event_button_press_raise_hold:
           name: Raise Button Hold Event
           description: The action to perform on _press and hold_ of the **Raise Button**.
           default: []
           selector:
             action: {}
-        event_preset_hold:
+        event_button_press_preset_hold:
           name: Preset Button Hold Event
           description: The action to perform on _press and hold_ of the **Preset Button**.
           default: []
           selector:
             action: {}
-        event_lower_hold:
+        event_button_press_lower_hold:
           name: Lower Button Hold Event
           description: The action to perform on _press and hold_ of the **Lower Button**.
           default: []
           selector:
             action: {}
-        event_off_hold:
+        event_button_press_off_hold:
           name: Off Button Hold Event
           description: The action to perform on _press and hold_ of the **Off Button**.
           default: []
@@ -318,7 +318,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_on_hold
+            then: !input event_button_press_on_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -335,8 +335,8 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input event_on_single
-                else: !input event_on_double
+                then: !input event_button_press_on_single
+                else: !input event_button_press_on_double
 
       # Button Press (RAISE)
       - conditions:
@@ -358,8 +358,8 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_raise_single
-            else: !input event_raise_hold
+            then: !input event_button_press_raise_single
+            else: !input event_button_press_raise_hold
 
       # Button Press (PRESET/STOP)
       - conditions:
@@ -381,7 +381,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_preset_hold
+            then: !input event_button_press_preset_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -398,8 +398,8 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input event_preset_single
-                else: !input event_preset_double
+                then: !input event_button_press_preset_single
+                else: !input event_button_press_preset_double
 
       # Button Press (LOWER)
       - conditions:
@@ -421,8 +421,8 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_lower_single
-            else: !input event_lower_hold
+            then: !input event_button_press_lower_single
+            else: !input event_button_press_lower_hold
 
       # Button Press (OFF)
       - conditions:
@@ -444,7 +444,7 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_off_hold
+            then: !input event_button_press_off_hold
             else:
               - wait_for_trigger:
                   - trigger: device
@@ -461,5 +461,5 @@ actions:
               - if:
                   - condition: template
                     value_template: "{{ wait.trigger == none }}"
-                then: !input event_off_single
-                else: !input event_off_double
+                then: !input event_button_press_off_single
+                else: !input event_button_press_off_double

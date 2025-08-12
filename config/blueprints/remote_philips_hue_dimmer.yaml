@@ -49,25 +49,25 @@ blueprint:
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        button_on_single:
+        event_button_press_on_single:
           name: Tap On Button
           description: Action(s) to perform on single tap of the on button
           default: []
           selector:
             action:
-        button_raise_single:
+        event_button_press_raise_single:
           name: Tap Up Button
           description: Action(s) to perform on single tap of the up button
           default: []
           selector:
             action:
-        button_lower_single:
+        event_button_press_lower_single:
           name: Tap Down Button
           description: Action(s) to perform on single tap of the down button
           default: []
           selector:
             action:
-        button_off_single:
+        event_button_press_off_single:
           name: Tap Off Button
           description: |
             Action(s) to perform on single tap of the off button
@@ -81,13 +81,13 @@ blueprint:
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        button_raise_hold:
+        event_button_press_raise_hold:
           name: Hold Up Button
           description: Action(s) to perform on hold of the up button
           default: []
           selector:
             action:
-        button_lower_hold:
+        event_button_press_lower_hold:
           name: Hold Down Button
           description: Action(s) to perform on hold of the down button
           default: []
@@ -281,25 +281,25 @@ action:
       - conditions:
           - condition: trigger
             id: on_pressed
-        sequence: !input button_on_single
+        sequence: !input event_button_press_on_single
 
       # Short-Press on the RAISE button
       - conditions:
           - condition: trigger
             id: raise_pressed
-        sequence: !input button_raise_single
+        sequence: !input event_button_press_raise_single
 
       # Short-Press on the LOWER button
       - conditions:
           - condition: trigger
             id: lower_pressed
-        sequence: !input button_lower_single
+        sequence: !input event_button_press_lower_single
 
       # Short-Press on the OFF button
       - conditions:
           - condition: trigger
             id: off_pressed
-        sequence: !input button_off_single
+        sequence: !input event_button_press_off_single
 
       # Press-Hold on the RAISE button
       - conditions:
@@ -311,7 +311,7 @@ action:
                 - condition: trigger
                   id: raise_press_hold
               sequence:
-                - sequence: !input button_raise_hold
+                - sequence: !input event_button_press_raise_hold
                 - delay:
                     milliseconds: !input repeat_duration
 
@@ -325,6 +325,6 @@ action:
                 - condition: trigger
                   id: lower_press_hold
               sequence:
-                - sequence: !input button_lower_hold
+                - sequence: !input event_button_press_lower_hold
                 - delay:
                     milliseconds: !input repeat_duration

@@ -1,0 +1,224 @@
+blueprint:
+  name: IKEA SYMFONISK, Sound Controller (GEN2)
+  description: >-
+    Control media with an IKEA SYMFONISK sound controller GEN2 (the square one).
+    <br>Full media control with the media buttons (play/pause, volume up/down and skip/previous track).
+    <br>Fully customisable dot-button events for single press, double press and press and hold.
+  author: Thomas Maxson
+  # source_url: https://gist.github.com/thomasmaxson/
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: IKEA STYRBAR Remote
+      description: Select the remote control you wish to use.
+      selector:
+        device:
+          multiple: false
+          filter:
+            device:
+              - integration: zha
+                manufacturer: IKEA of Sweden
+                model: SYMFONISK sound remote gen2
+
+    media_player:
+      name: Media Player
+      description: Select the medias player you wish to control.
+      selector:
+        target:
+          entity:
+            domain: media_player
+
+    default_button_events:
+      name: One/Two Dot Button Events
+      icon: mdi:code-tags
+      collapsed: true
+      input:
+        event_one_dot_single:
+          name: One Dot Button Press Once Event
+          description: The action to perform on _single press_ of the **One Dot Button**.
+          default: []
+          selector:
+            action: null
+
+        event_one_dot_double:
+          name: One Dot Button Press Twice Event
+          description: The action to perform on _double press_ of the **One Dot Button**.
+          default: []
+          selector:
+            action: null
+
+        event_one_dot_hold:
+          name: One Dot Button Press and Hold Event
+          description: >
+            The action to perform on _press and hold_ of the **One Dot Button**.
+          default: []
+          selector:
+            action: null
+
+
+
+
+
+
+
+
+
+
+
+    single_dot_single_press:
+      name: Single dot (Single press)
+      description: Action to run on single dot press
+      default: []
+      selector:
+        action: {}
+
+
+
+
+
+
+
+blueprint:
+# Needs the updated firmware: version 0x01000035 (mine came with version 0x00010012)
+# Added dot-button support by Atlantis_One
+# Based on https://gist.github.com/cooljimy84/f1f2da3a6b214879b82bf06a68d89264 by James Crook
+  name: ZHA - IKEA Symfonisk sound controller GEN2 for media and dot-buttons control
+  description: 'Control media with an IKEA Symfonisk sound controller GEN2 (Square one).
+    Full media control with the media buttons (play/pause, volume up/down and skip/previous track).
+    Fully customisable dot-buttons, with options for single, double and long press for each one.'
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA Symfonisk controller GEN2 to use
+      selector:
+        device:
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: SYMFONISK sound remote gen2
+          multiple: false
+    media_player:
+      name: Media Player
+      description: The media player to control
+      selector:
+        target:
+          entity:
+            domain: media_player
+    single_dot_single_press:
+      name: Single dot (Single press)
+      description: Action to run on single dot press
+      default: []
+      selector:
+        action: {}
+    single_dot_double_press:
+      name: Single dot (Double press)
+      description: Action to run on single dot double press
+      default: []
+      selector:
+        action: {}
+    single_dot_long_press:
+      name: Single dot (Long press)
+      description: Action to run on single dot long press
+      default: []
+      selector: 
+        action: {}
+    double_dot_single_press:
+      name: Double dot (Single press)
+      description: Action to run on double dot press
+      default: []
+      selector:
+        action: {}
+    double_dot_double_press:
+      name: Double dot (Double press)
+      description: Action to run on double dot double press
+      default: []
+      selector:
+        action: {}
+    double_dot_long_press:
+      name: Double dot (Long press)
+      description: Action to run on double dot long press
+      default: []
+      selector:
+        action: {}
+  source_url: https://community.home-assistant.io/t/zha-ikea-symfonisk-sound-controller-gen2-the-square-one-with-dot-button-support-for-new-firmware/573802
+mode: single
+max_exceeded: silent
+trigger:
+- platform: event
+  event_type: zha_event
+  event_data:
+    device_id: !input remote
+action:
+- variables:
+    command: '{{ trigger.event.data.command }}'
+    cluster_id: '{{ trigger.event.data.cluster_id }}'
+    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+    args: '{{ trigger.event.data.args }}'
+- choose:
+  - conditions:
+    - '{{ command == ''toggle'' }}'
+    - '{{ cluster_id == 6 }}'
+    - '{{ endpoint_id == 1 }}'
+    sequence:
+    - service: media_player.media_play_pause
+      target: !input media_player
+  - conditions:
+    - '{{ command == ''move_with_on_off'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ trigger.event.data.params.move_mode == 0}}'
+    sequence:
+    - service: media_player.volume_up
+      target: !input media_player
+    - delay: 0.1
+  - conditions:
+    - '{{ command == ''move_with_on_off'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ trigger.event.data.params.move_mode == 1 }}'
+    sequence:
+    - service: media_player.volume_down
+      target: !input media_player
+    - delay: 0.1
+  - conditions:
+    - '{{ command == ''step'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ trigger.event.data.params.step_mode == 0 }}'
+    sequence:
+    - service: media_player.media_next_track
+      target: !input media_player
+  - conditions:
+    - '{{ command == ''step'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ trigger.event.data.params.step_mode == 1 }}'
+    sequence:
+    - service: media_player.media_previous_track
+      target: !input media_player
+  - conditions:
+    - '{{ command == ''short_release'' }}'
+    - '{{ endpoint_id == 2 }}'
+    sequence: !input single_dot_single_press
+  - conditions:
+    - '{{ command == ''multi_press_complete'' }}'
+    - '{{ endpoint_id == 2 }}'
+    sequence: !input single_dot_double_press
+  - conditions:
+    - '{{ command == ''long_press'' }}'
+    - '{{ endpoint_id == 2 }}'
+    sequence: !input single_dot_long_press
+  - conditions:
+    - '{{ command == ''short_release'' }}'
+    - '{{ endpoint_id == 3 }}'
+    sequence: !input double_dot_single_press
+  - conditions:
+    - '{{ command == ''multi_press_complete'' }}'
+    - '{{ endpoint_id == 3 }}'
+    sequence: !input double_dot_double_press
+  - conditions:
+    - '{{ command == ''long_press'' }}'
+    - '{{ endpoint_id == 3 }}'
+    sequence: !input double_dot_long_press

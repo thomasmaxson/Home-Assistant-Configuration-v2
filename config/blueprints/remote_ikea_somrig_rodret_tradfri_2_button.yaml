@@ -119,14 +119,14 @@ blueprint:
       icon: mdi:sync-alert
       collapsed: true
       input:
-        event_on_short:
+        event_button_press_on_single:
           name: Override On Button Press Event
           description: The action to perform on _press_ of the **On Button**.
           default: []
           selector:
             action: null
 
-        event_on_long:
+        event_button_press_on_hold:
           name: Override On Button Press and Hold Event
           description: >-
             The action to perform on _press and hold_ of the **On Button**.
@@ -135,14 +135,14 @@ blueprint:
           selector:
             action: null
 
-        event_off_short:
+        event_button_press_off_single:
           name: Override Off Button Press Event
           description: The action to perform on _press_ of the **Off Button**.
           default: []
           selector:
             action: null
 
-        event_off_long:
+        event_button_press_off_hold:
           name: Override Off Button Press and Hold Event
           description: >
             The action to perform on _press and hold_ of the **Off Button**.
@@ -213,14 +213,14 @@ triggers:
     event_data:
       device_id: !input remote
       command: "on"
-    id: trigger_on_short_zha
+    id: trigger_on_single_press_zha
   - alias: On (Dash, Line or 1 Dot) Button Press (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "on"
-    id: trigger_on_short_mqtt
+    id: trigger_on_single_press_mqtt
 
   - alias: On (Dash, Line or 1 Dot) Button Press and Hold (via ZHA event)
     trigger: event
@@ -228,14 +228,14 @@ triggers:
     event_data:
       device_id: !input remote
       command: "move_with_on_off"
-    id: trigger_on_long_zha
+    id: trigger_on_hold_press_zha
   - alias: On (Dash, Line or 1 Dot) Button Press and Hold (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_up"
-    id: trigger_on_long_mqtt
+    id: trigger_on_hold_press_mqtt
 
   - alias: On (Dash, Line or 1 Dot) Button Release (via ZHA event)
     trigger: event
@@ -259,14 +259,14 @@ triggers:
     event_data:
       device_id: !input remote
       command: "off"
-    id: trigger_off_short_zha
+    id: trigger_off_single_press_zha
   - alias: Off (Circle or 2 Dots) Button Press (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "off"
-    id: trigger_off_short_mqtt
+    id: trigger_off_single_press_mqtt
 
   - alias: Off (Circle or 2 Dots) Button Press and Hold (via ZHA event)
     trigger: event
@@ -274,14 +274,14 @@ triggers:
     event_data:
       device_id: !input remote
       command: "move"
-    id: trigger_off_long_zha
+    id: trigger_off_hold_press_zha
   - alias: Off (Circle or 2 Dots) Button Press and Hold (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
     subtype: "brightness_move_down"
-    id: trigger_off_long_mqtt
+    id: trigger_off_hold_press_mqtt
 
   - alias: Off (Circle or 2 Dots) Button Release (via ZHA event)
     trigger: event
@@ -300,37 +300,39 @@ triggers:
 
 
 conditions:
-  - condition: and
-    conditions:
-      - condition: template
-        value_template: "{{ var_remote | length > 0 }}"
+  - condition: template
+    value_template: "{{ var_remote | length > 0 }}"
 
 
 actions:
-  - variables:
-      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
-      trigger_action: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data.command }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger.payload }}
-        {%- endif -%}
-      trigger_data: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger }}
-        {%- endif -%}
-
-  - if:
-      - condition: template
+  - alias: "Maybe display debug notification"
+    if:
+      - alias: "Confirm debug remote is active"
+        condition: template
         value_template: !input debug_valid_events
     then:
-      - action: persistent_notification.create
+      - alias: "Setup debug variables"
+        variables:
+          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
+          trigger_action: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data.command }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger.payload }}
+            {%- endif -%}
+          trigger_data: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger }}
+            {%- endif -%}
+
+      - alias: "Display debug notification with remote and event details"
+        action: persistent_notification.create
         data:
           notification_id: blueprint_debug__remote_ikea_rodret_somrig_tradfri_2_button
           title: >-
@@ -340,118 +342,148 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
             <br>```{{ trigger_data }}```
 
-  - choose:
-      # On Button Press – SHORT
-      - conditions:
-          - condition: trigger
+  - alias: "Determine button event to execute"
+    choose:
+      - alias: "Button: On, Press"
+        conditions:
+          - alias: "Check if triggered by On button press"
+            condition: trigger
             id:
-              - trigger_on_short_zha
-              - trigger_on_short_mqtt
+              - trigger_on_single_press_zha
+              - trigger_on_single_press_mqtt
         sequence:
-          - if:
-              - condition: template
+          - alias: "Turn on light(s) if set, otherwise execute custom action"
+            if:
+              - alias: "Check if light(s) to be controlled are set"
+                condition: template
                 value_template: "{{ var_light | length > 0 }}"
             then:
-              - if:
-                  - condition: template
+              - alias: "Determine how to turn on light(s)"
+                if:
+                  - alias: "Check if light brightness option is greater than 0"
+                    condition: template
                     value_template: "{{ var_brightness | int > 0 }}"
                 then:
-                  - action: light.turn_on
+                  - alias: "Turn on light(s) with the set brightness option"
+                    action: light.turn_on
                     target:
                       entity_id: >-
                         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
                     data:
                       brightness_pct: !input brightness
                 else:
-                  - action: light.turn_on
+                  - alias: "Turn on light(s)"
+                    action: light.turn_on
                     target:
                       entity_id: >-
                         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_on_short
+            else: !input event_button_press_on_single
 
-      # On Button Press – LONG
-      - conditions:
-          - condition: trigger
+      - alias: "Button: On, Press and Hold"
+        conditions:
+          - alias: "Check if triggered by On button press and hold"
+            condition: trigger
             id:
-              - trigger_on_long_zha
-              - trigger_on_long_mqtt
+              - trigger_on_hold_press_zha
+              - trigger_on_hold_press_mqtt
         sequence:
-          - if:
-              - condition: template
+          - alias: "Increase brightness for light(s) if set, otherwise execute custom action"
+            if:
+              - alias: "Check if light(s) to be controlled are set"
+                condition: template
                 value_template: "{{ var_light | length > 0 }}"
             then:
-              - repeat:
+              - alias: "Repeat brightness increase for the light(s) that are on"
+                repeat:
                   until:
-                    - condition: or
-                      conditions:
-                        - condition: trigger
-                          id:
-                            - trigger_on_release_zha
-                            - trigger_on_release_mqtt
-                        - condition: template
-                          value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                    - alias: "Check if triggered by button press"
+                      condition: trigger
+                      id:
+                        - trigger_on_release_zha
+                        - trigger_on_release_mqtt
+                    - alias: "Check if the maximum repeat count reached"
+                      condition: template
+                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                    - alias: "Wait for button to be released"
+                      condition: template
+                      value_template: "{{ wait.trigger is not none }}"
                   sequence:
-                    - action: light.turn_on
+                    - alias: "Increase brightness for light(s) that are on"
+                      action: light.turn_on
                       target:
                         entity_id: >-
                           {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
                       data:
                         brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                    - delay:
+                    - alias: "Delay between brightness increase steps"
+                      delay:
                         seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_on_long
+            else: !input event_button_press_on_hold
 
-      # Off Button Press – SHORT
-      - conditions:
-          - condition: trigger
+      - alias: "Button: Off, Press"
+        conditions:
+          - alias: "Check if triggered by Off button press"
+            condition: trigger
             id:
-              - trigger_off_short_zha
-              - trigger_off_short_mqtt
+              - trigger_off_single_press_zha
+              - trigger_off_single_press_mqtt
         sequence:
-          - if:
-              - condition: template
+          - alias: "Turn off light(s) if set, otherwise execute custom action"
+            if:
+              - alias: "Check if light(s) to be controlled are set"
+                condition: template
                 value_template: "{{ var_light | length > 0 }}"
             then:
-              - action: light.turn_off
+              - alias: "Turn off light(s)"
+                action: light.turn_off
                 target:
                   entity_id: >-
                     {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_off_short
+            else: !input event_button_press_off_single
 
-      # Off Button Press – LONG
-      - conditions:
-          - condition: trigger
+      - alias: "Button: Off, Press and Hold"
+        conditions:
+          - alias: "Check if triggered by Off button press and hold"
+            condition: trigger
             id:
-              - trigger_off_long_zha
-              - trigger_off_long_mqtt
+              - trigger_off_hold_press_zha
+              - trigger_off_hold_press_mqtt
         sequence:
-          - if:
-              - condition: template
+          - alias: "Decrease brightness for light(s) if set, otherwise execute custom action"
+            if:
+              - alias: "Check if light(s) to be controlled are set"
+                condition: template
                 value_template: "{{ var_light | length > 0 }}"
             then:
-              - repeat:
+              - alias: "Repeat brightness decrease for the light(s) that are on"
+                repeat:
                   until:
-                    - condition: or
-                      conditions:
-                        - condition: trigger
-                          id:
-                            - trigger_off_release_zha
-                            - trigger_off_release_mqtt
-                        - condition: template
-                          value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                    - alias: "Check if triggered by button press"
+                      condition: trigger
+                      id:
+                        - trigger_off_release_zha
+                        - trigger_off_release_mqtt
+                    - alias: "Check if the maximum repeat count reached"
+                      condition: template
+                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                    - alias: "Wait for button to be released"
+                      condition: template
+                      value_template: "{{ wait.trigger is not none }}"
                   sequence:
-                    - action: light.turn_on
+                    - alias: "Decrease brightness for light(s) that are on"
+                      action: light.turn_on
                       target:
                         entity_id: >-
                           {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
                       data:
                         brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                    - delay:
+                    - alias: "Delay between brightness decrease steps"
+                      delay:
                         seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_off_long
+            else: !input event_button_press_off_hold

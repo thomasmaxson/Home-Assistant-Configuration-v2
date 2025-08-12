@@ -35,13 +35,13 @@ blueprint:
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        event_on_single:
+        event_button_press_on_single:
           name: On Button Press Event
           description: The action to perform on _single press_ of the **On Button**.
           default: []
           selector:
             action: {}
-        event_off_single:
+        event_button_press_off_single:
           name: Off Button Press Event
           description: The action to perform on _single press_ of the **Off Button**.
           default: []
@@ -53,13 +53,13 @@ blueprint:
       icon: mdi:gesture-tap-hold
       collapsed: true
       input:
-        event_on_hold:
+        event_button_press_on_hold:
           name: On Button Hold Event
           description: The action to perform on _press and hold_ of the **On Button**.
           default: []
           selector:
             action: {}
-        event_off_hold:
+        event_button_press_off_hold:
           name: Off Button Hold Event
           description: The action to perform on _press and hold_ of the **Off Button**.
           default: []
@@ -198,8 +198,8 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_on_hold
-            else: !input event_on_single
+            then: !input event_button_press_on_hold
+            else: !input event_button_press_on_single
 
       # Press on the OFF button
       - conditions:
@@ -221,5 +221,5 @@ actions:
           - if:
               - condition: template
                 value_template: "{{ wait.trigger == none }}"
-            then: !input event_off_hold
-            else: !input event_off_single
+            then: !input event_button_press_off_hold
+            else: !input event_button_press_off_single
