@@ -1448,6 +1448,7 @@
       force_brightness: false
       light:
       - light.bedroom_1_group_occupancy_lights
+      debug_valid_events: true
 - id: '1727115559199'
   alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a IKEA TRADFRI 5 button
@@ -1458,7 +1459,7 @@
       remote: 61a2efe93ec921eb2ccfbd6f166e2aef
       light:
       - light.bedroom_4_group_occupancy_lights
-      brightness_step: 20
+      brightness_step: 10
       event_button_press_left_single:
       - action: input_select.select_previous
         metadata: {}
@@ -1473,7 +1474,8 @@
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
-      config_mode: single
+      config_mode: restart
+      debug_valid_events: false
 - id: '1727117077347'
   alias: Living Room, Light - Primary
   description: Control primary lights in the living room via a IKEA TRADFRI 2 button
@@ -5343,29 +5345,57 @@
     entity_id:
     - fan.custom_ceiling_bedroom_4
     attribute: preset_mode
+    from: high
     to: 'off'
-    id: To Off
-    enabled: true
+    id: From High Speed to Off
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_4
     attribute: preset_mode
+    from: low
+    to: 'off'
+    id: From Low Speed to Off
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    from: 'off'
     to: low
-    id: To Low Speed
-    enabled: true
+    id: From Off to Low Speed
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_4
     attribute: preset_mode
-    id: To Medium Speed
+    from: medium
+    to: low
+    id: From Medium Speed to Low Speed
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    id: From Low Speed to Medium Speed
+    from: low
     to: medium
-    enabled: true
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_4
     attribute: preset_mode
-    id: To High Speed
-    enabled: true
+    id: From High Speed to Medium Speed
+    from: high
+    to: medium
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    id: From Medium Speed to High Speed
+    from: medium
+    to: high
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_4
+    attribute: preset_mode
+    id: From Off to High Speed
+    from: 'off'
     to: high
   conditions:
   - condition: and
@@ -5379,7 +5409,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Off
+        - From High Speed to Off
+        - From Low Speed to Off
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5394,7 +5425,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Low Speed
+        - From Off to Low Speed
+        - From Medium Speed to Low Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5420,7 +5452,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Medium Speed
+        - From Low Speed to Medium Speed
+        - From High Speed to Medium Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5466,7 +5499,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To High Speed
+        - From Medium Speed to High Speed
+        - From Off to High Speed
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5487,29 +5521,57 @@
     entity_id:
     - fan.custom_ceiling_bedroom_1
     attribute: preset_mode
+    from: high
     to: 'off'
-    id: To Off
-    enabled: true
+    id: From High Speed to Off
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_1
     attribute: preset_mode
+    from: low
+    to: 'off'
+    id: From Low Speed to Off
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    from: 'off'
     to: low
-    id: To Low Speed
-    enabled: true
+    id: From Off to Low Speed
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_1
     attribute: preset_mode
-    id: To Medium Speed
+    from: medium
+    to: low
+    id: From Medium Speed to Low Speed
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    id: From Low Speed to Medium Speed
+    from: low
     to: medium
-    enabled: true
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_1
     attribute: preset_mode
-    id: To High Speed
-    enabled: true
+    id: From High Speed to Medium Speed
+    from: high
+    to: medium
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    id: From Medium Speed to High Speed
+    from: medium
+    to: high
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_1
+    attribute: preset_mode
+    id: From Off to High Speed
+    from: 'off'
     to: high
   conditions:
   - condition: and
@@ -5523,7 +5585,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Off
+        - From High Speed to Off
+        - From Low Speed to Off
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5538,7 +5601,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Low Speed
+        - From Off to Low Speed
+        - From Medium Speed to Low Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5564,7 +5628,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Medium Speed
+        - From Low Speed to Medium Speed
+        - From High Speed to Medium Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5610,7 +5675,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To High Speed
+        - From Medium Speed to High Speed
+        - From Off to High Speed
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5631,29 +5697,57 @@
     entity_id:
     - fan.custom_ceiling_bedroom_2
     attribute: preset_mode
+    from: high
     to: 'off'
-    id: To Off
-    enabled: true
+    id: From High Speed to Off
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_2
     attribute: preset_mode
+    from: low
+    to: 'off'
+    id: From Low Speed to Off
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    from: 'off'
     to: low
-    id: To Low Speed
-    enabled: true
+    id: From Off to Low Speed
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_2
     attribute: preset_mode
-    id: To Medium Speed
+    from: medium
+    to: low
+    id: From Medium Speed to Low Speed
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    id: From Low Speed to Medium Speed
+    from: low
     to: medium
-    enabled: true
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_2
     attribute: preset_mode
-    id: To High Speed
-    enabled: true
+    id: From High Speed to Medium Speed
+    from: high
+    to: medium
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    id: From Medium Speed to High Speed
+    from: medium
+    to: high
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_2
+    attribute: preset_mode
+    id: From Off to High Speed
+    from: 'off'
     to: high
   conditions:
   - condition: and
@@ -5667,7 +5761,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Off
+        - From High Speed to Off
+        - From Low Speed to Off
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5682,7 +5777,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Low Speed
+        - From Off to Low Speed
+        - From Medium Speed to Low Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5708,7 +5804,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Medium Speed
+        - From Low Speed to Medium Speed
+        - From High Speed to Medium Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5754,7 +5851,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To High Speed
+        - From Medium Speed to High Speed
+        - From Off to High Speed
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5775,29 +5873,57 @@
     entity_id:
     - fan.custom_ceiling_bedroom_3
     attribute: preset_mode
+    from: high
     to: 'off'
-    id: To Off
-    enabled: true
+    id: From High Speed to Off
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_3
     attribute: preset_mode
+    from: low
+    to: 'off'
+    id: From Low Speed to Off
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    from: 'off'
     to: low
-    id: To Low Speed
-    enabled: true
+    id: From Off to Low Speed
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_3
     attribute: preset_mode
-    id: To Medium Speed
+    from: medium
+    to: low
+    id: From Medium Speed to Low Speed
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    id: From Low Speed to Medium Speed
+    from: low
     to: medium
-    enabled: true
   - trigger: state
     entity_id:
     - fan.custom_ceiling_bedroom_3
     attribute: preset_mode
-    id: To High Speed
-    enabled: true
+    id: From High Speed to Medium Speed
+    from: high
+    to: medium
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    id: From Medium Speed to High Speed
+    from: medium
+    to: high
+  - trigger: state
+    entity_id:
+    - fan.custom_ceiling_bedroom_3
+    attribute: preset_mode
+    id: From Off to High Speed
+    from: 'off'
     to: high
   conditions:
   - condition: and
@@ -5811,7 +5937,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Off
+        - From High Speed to Off
+        - From Low Speed to Off
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
@@ -5826,7 +5953,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Low Speed
+        - From Off to Low Speed
+        - From Medium Speed to Low Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5852,7 +5980,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To Medium Speed
+        - From Low Speed to Medium Speed
+        - From High Speed to Medium Speed
       sequence:
       - parallel:
         - action: script.update_inovelli_light_switch_led_s
@@ -5898,7 +6027,8 @@
     - conditions:
       - condition: trigger
         id:
-        - To High Speed
+        - From Medium Speed to High Speed
+        - From Off to High Speed
       sequence:
       - action: script.update_inovelli_light_switch_led_s
         metadata: {}
