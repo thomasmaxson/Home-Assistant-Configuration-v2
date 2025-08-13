@@ -1448,7 +1448,6 @@
       force_brightness: false
       light:
       - light.bedroom_1_group_occupancy_lights
-      debug_valid_events: true
 - id: '1727115559199'
   alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a IKEA TRADFRI 5 button
@@ -1475,7 +1474,6 @@
         target:
           entity_id: input_select.bedroom_4_scenes
       config_mode: restart
-      debug_valid_events: false
 - id: '1727117077347'
   alias: Living Room, Light - Primary
   description: Control primary lights in the living room via a IKEA TRADFRI 2 button
