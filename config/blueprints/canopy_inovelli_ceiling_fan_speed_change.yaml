@@ -7,24 +7,22 @@ blueprint:
   domain: automation
   input:
     ceiling_fan:
-      name: Ceiling Fan Canopy Module
+      name: Ceiling Fan Canopy Module to watch for speed changes
       description: ""
       selector:
         entity:
           multiple: false
           filter:
-            - integration: mqtt
-              domain: fan
+            - domain: fan
 
     light_switch:
-      name: Light Switch
+      name: Light Switch to show visual feedback on
       description: ""
       selector:
         entity:
           multiple: false
           filter:
-            - integration: mqtt
-              domain: light
+            - domain: light
 
     speed_to_high_config:
       name: Speed Changed to High
