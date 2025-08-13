@@ -145,7 +145,7 @@ triggers:
 
 conditions:
   - condition: template
-    value_template: "{{ var_remote | length > 0 }}"
+    value_template: "{{ var_remote | count > 0 }}"
 
 actions:
   - variables:
