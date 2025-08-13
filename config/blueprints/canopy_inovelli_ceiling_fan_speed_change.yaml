@@ -1,0 +1,509 @@
+blueprint:
+  name: Inovelli, Ceiling Fan Module Speed Change
+  description: Update Inovelli light switch LEDs and trigger custom action(s) when an Inovelli ceiling fan canopy module speed is changed
+  author: Thomas Maxson
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    ceiling_fan:
+      name: Ceiling Fan Canopy Module
+      description: ""
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - integration: mqtt
+              domain: fan
+
+    light_switch:
+      name: Light Switch
+      description: ""
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - integration: mqtt
+              domain: light
+
+    speed_to_high_config:
+      name: Speed Changed to High
+      icon: mdi:fan-speed-3
+      collapsed: true
+      input:
+        to_high_led_color:
+          name: LED Color
+          description: >-
+            Color of the light switch LEDs.
+          selector:
+            select:
+              options:
+                - Red
+                - Orange
+                - Yellow
+                - Green
+                - Cyan
+                - Teal
+                - Blue
+                - Purple
+                - Light Pink
+                - Pink
+                - White
+          default: "Green"
+
+        to_high_led_brightness:
+          name: Brightness
+          description: >-
+            Brightness of the light switch LEDs.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 5.0
+          default: 100
+
+        event_to_high_speed:
+          name: Custom Event
+          description: The action to perform when the fan speed changes to _high_.
+          default: []
+          selector:
+            action: null
+
+    speed_to_medium_config:
+      name: Speed Changed to Medium
+      icon: mdi:fan-speed-2
+      collapsed: true
+      input:
+        to_medium_led_color:
+          name: LED Color
+          description: >-
+            Color of the light switch LEDs.
+          selector:
+            select:
+              options:
+                - Red
+                - Orange
+                - Yellow
+                - Green
+                - Cyan
+                - Teal
+                - Blue
+                - Purple
+                - Light Pink
+                - Pink
+                - White
+          default: "Green"
+
+        to_medium_led_brightness:
+          name: Brightness
+          description: >-
+            Brightness of the light switch LEDs.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 5.0
+          default: 75
+
+        event_to_medium_speed:
+          name: Custom Event
+          description: The action to perform when the fan speed changes to _medium_.
+          default: []
+          selector:
+            action: null
+
+    speed_to_low_config:
+      name: Speed Changed to Low
+      icon: mdi:fan-speed-1
+      collapsed: true
+      input:
+        to_low_led_color:
+          name: LED Color
+          description: >-
+            Color of the light switch LEDs.
+          selector:
+            select:
+              options:
+                - Red
+                - Orange
+                - Yellow
+                - Green
+                - Cyan
+                - Teal
+                - Blue
+                - Purple
+                - Light Pink
+                - Pink
+                - White
+          default: "Green"
+
+        to_low_led_brightness:
+          name: Brightness
+          description: >-
+            Brightness of the light switch LEDs.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 5.0
+          default: 50
+
+        event_to_low_speed:
+          name: Custom Event
+          description: The action to perform when the fan speed changes to _low_.
+          default: []
+          selector:
+            action: null
+
+    speed_to_off_config:
+      name: Speed Changed to Off
+      icon: mdi:fan-off
+      collapsed: true
+      input:
+        to_off_led_color:
+          name: LED Color
+          description: >-
+            Color of the light switch LEDs.
+          selector:
+            select:
+              options:
+                - Red
+                - Orange
+                - Yellow
+                - Green
+                - Cyan
+                - Teal
+                - Blue
+                - Purple
+                - Light Pink
+                - Pink
+                - White
+          default: "Red"
+
+        to_off_led_brightness:
+          name: Brightness
+          description: >-
+            Brightness of the light switch LEDs.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 5.0
+          default: 10
+
+        event_to_off_speed:
+          name: Custom Event
+          description: The action to perform when the fan speed changes to _off_.
+          default: []
+          selector:
+            action: null
+
+    automation_config:
+      name: Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
+
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            <br>Ignored by _Single_ and _Restart_ Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+
+mode: !input config_mode
+max: !input config_max_num
+max_exceeded: silent
+
+
+variables:
+  var_ceiling_fan: !input ceiling_fan
+  var_light_switch: !input light_switch
+  var_to_low_led_brightness: !input to_low_led_brightness
+  var_to_medium_led_brightness: !input to_medium_led_brightness
+  var_to_high_led_brightness: !input to_high_led_brightness
+  var_to_off_led_brightness: !input to_off_led_brightness
+  var_to_low_led_color: !input to_low_led_color
+  var_to_medium_led_color: !input to_medium_led_color
+  var_to_high_led_color: !input to_high_led_color
+  var_to_off_led_color: !input to_off_led_color
+
+triggers:
+  - alias: Fan speed changes from on to off (at any speed)
+    trigger: state
+    entity_id: !input ceiling_fan
+    from: "on"
+    to: "off"
+    id: fan_speed_from_on_to_off
+
+  - alias: Fan speed changes from off to high
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 0
+    to: 100
+    id: fan_speed_from_off_to_high
+  - alias: Fan speed changes from low to high
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 33
+    to: 100
+    id: fan_speed_from_low_to_high
+  - alias: Fan speed changes from medium to high
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 66
+    to: 100
+    id: fan_speed_from_medium_to_high
+
+  - alias: Fan speed changes from off to medium
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 0
+    to: 66
+    id: fan_speed_from_off_to_medium
+  - alias: Fan speed changes from low to medium
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 33
+    to: 66
+    id: fan_speed_from_low_to_medium
+  - alias: Fan speed changes from high to medium
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 100
+    to: 66
+    id: fan_speed_from_high_to_medium
+
+  - alias: Fan speed changes from off to low
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 0
+    to: 33
+    id: fan_speed_from_off_to_low
+  - alias: Fan speed changes from medium to low
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 66
+    to: 33
+    id: fan_speed_from_medium_to_low
+  - alias: Fan speed changes from high to low
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 100
+    to: 33
+    id: fan_speed_from_high_to_low
+
+  - alias: Fan speed changes from low to off
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 33
+    to: 0
+    id: fan_speed_from_low_to_off
+  - alias: Fan speed changes from medium to off
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 66
+    to: 0
+    id: fan_speed_from_medium_to_off
+  - alias: Fan speed changes from high to off
+    trigger: state
+    entity_id: !input ceiling_fan
+    attribute: percentage
+    from: 100
+    to: 0
+    id: fan_speed_from_high_to_off
+
+
+conditions:
+  - condition: and
+    conditions:
+      - alias: "Check if fan to use is set"
+        condition: template
+        value_template: "{{ var_ceiling_fan | count > 0 }}"
+      - alias: "Check if light to use is set"
+        condition: template
+        value_template: "{{ var_light_switch | count > 0 }}"
+
+
+actions:
+  - alias: "Determine action to execute"
+    choose:
+      - alias: "Event: Fan speed changed to high"
+        conditions:
+          - alias: "Check if triggered by To High event"
+            condition: trigger
+            id:
+              - fan_speed_from_off_to_high
+              - fan_speed_from_low_to_high
+              - fan_speed_from_medium_to_high
+        sequence:
+          - alias: "Provide feedback via all Inovelli light switch LEDs"
+            action: script.update_inovelli_light_switch_led_s
+            metadata: {}
+            data:
+              entity_ids:
+                - !input light_switch
+              led: All
+              color: !input to_high_led_color
+              effect: Solid
+              duration: 1 Second
+              brightness_level: "{{ var_to_high_led_brightness | default(100) | int }}"
+          - choose: []
+            default: !input event_to_high_speed
+
+      - alias: "Event: Fan speed changed to medium"
+        conditions:
+          - alias: "Check if triggered by To Medium event"
+            condition: trigger
+            id:
+              - fan_speed_from_off_to_medium
+              - fan_speed_from_low_to_medium
+              - fan_speed_from_high_to_medium
+        sequence:
+          - parallel:
+              - alias: "Provide feedback via Inovelli light switch #1 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 1
+                  color: !input to_medium_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+              - alias: "Provide feedback via Inovelli light switch #2 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 2
+                  color: !input to_medium_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+              - alias: "Provide feedback via Inovelli light switch #3 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 3
+                  color: !input to_medium_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+              - alias: "Provide feedback via Inovelli light switch #4 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 4
+                  color: !input to_medium_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+          - choose: []
+            default: !input event_to_medium_speed
+
+      - alias: "Event: Fan speed changed to low"
+        conditions:
+          - alias: "Check if triggered by To Low event"
+            condition: trigger
+            id:
+              - fan_speed_from_off_to_low
+              - fan_speed_from_medium_to_low
+              - fan_speed_from_high_to_low
+        sequence:
+          - alias: "Run all of the following at the same time"
+            parallel:
+              - alias: "Provide feedback via Inovelli light switch #1 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 1
+                  color: !input to_low_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_low_led_brightness | default(100) | int }}"
+              - alias: "Provide feedback via Inovelli light switch #2 LED"
+                action: script.update_inovelli_light_switch_led_s
+                metadata: {}
+                data:
+                  entity_ids:
+                    - !input light_switch
+                  led: Led 2
+                  color: !input to_low_led_color
+                  effect: Solid
+                  duration: 1 Second
+                  brightness_level: "{{ var_to_low_led_brightness | default(100) | int }}"
+          - choose: []
+            default: !input event_to_low_speed
+
+      - alias: "Event: Fan speed changed to off"
+        conditions:
+          - alias: "Check if triggered by To Off event"
+            condition: trigger
+            id:
+              - fan_speed_from_on_to_off
+              - fan_speed_from_low_to_off
+              - fan_speed_from_medium_to_off
+              - fan_speed_from_high_to_off
+        sequence:
+          - alias: "Provide feedback via all Inovelli light switch LEDs"
+            action: script.update_inovelli_light_switch_led_s
+            metadata: {}
+            data:
+              entity_ids:
+                - !input light_switch
+              led: All
+              color: !input to_off_led_color
+              effect: Solid
+              duration: 1 Second
+              brightness_level: "{{ var_to_off_led_brightness | default(100) | int }}"
+          - choose: []
+            default: !input event_to_off_speed
