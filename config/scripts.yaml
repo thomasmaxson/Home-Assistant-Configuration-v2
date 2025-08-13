@@ -1234,6 +1234,8 @@ update_inovelli_light_switch_led_s:
   max_exceeded: silent
   max: 100
 update_all_esphome_devices:
+  alias: Update All ESPHome Devices
+  description: Automatically update all ESPHome devices that require updating
   sequence:
   - repeat:
       for_each: "{{ states.update | selectattr( 'state', 'eq', 'on' ) | \n  map( attribute
@@ -1241,35 +1243,35 @@ update_all_esphome_devices:
         }}\n"
       sequence:
       - variables:
-          timestamp: '{{ now() }}'
-          started_time: '{{ now().strftime( ''%I:%M %p'' ) }}'
-          started_date: '{{ now().strftime( ''%m/%d/%Y'' ) }}'
+          var_device: '{{ repeat.item }}'
+          var_device_slug: '{{ repeat.item.replace( ''.'', ''_'' ) }}'
+          var_device_name: '{{ device_attr( repeat.item, ''name'' ) }}'
+          var_started_time: '{{ now().strftime( ''%I:%M %p'' ) }}'
+          var_started_date: '{{ now().strftime( ''%m/%d/%Y'' ) }}'
       - action: persistent_notification.create
         data:
-          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_started'
+          notification_id: '{{ var_device_slug }}_started'
           title: ESPHome Device Update Started
-          message: '"{{ device_attr( repeat.item, ''name'' ) }}" device update has
-            started at {{ now().strftime( ''%I:%M %p'' ) }} on {{ now().strftime(
-            ''%m/%d/%Y'' ) }}.'
+          message: _{{ var_device_name }}_ device update is in progress at {{ var_started_time
+            }} on {{ var_started_date }}. Please be patient while this runs in the
+            background.
       - action: update.install
         data: {}
         target:
-          entity_id: '{{ repeat.item }}'
-      - wait_template: ' {{ is_state( repeat.item, ''off'' ) }}'
+          entity_id: '{{ var_device }}'
+      - wait_template: '{{ is_state( repeat.item, ''off'' ) }}'
         continue_on_timeout: true
       - action: persistent_notification.dismiss
         data:
-          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_started'
+          notification_id: '{{ var_device_slug }}_started'
       - action: persistent_notification.create
         metadata: {}
         data:
-          notification_id: '{{ repeat.item.replace( ''.'', ''_'' ) }}_complete'
+          notification_id: '{{ var_device_slug }}_complete'
           title: ESPHome Device Update Complete
-          message: '"{{ device_attr( repeat.item, ''name'' ) }}" device update completed
-            at {{ now().strftime( ''%I:%M %p'' ) }} on {{ now().strftime( ''%m/%d/%Y''
-            ) }}.'
-  alias: Update All ESPHome Devices
-  description: Automatically update all ESPHome devices that require updating
+          message: _{{ var_device_name }}_ device update completed at {{ now().strftime(
+            '%I:%M %p' ) }} on {{ now().strftime( '%m/%d/%Y' ) }}. The update process
+            ran for {{ time_since( timestamp, 2 ) }}.
 announce_via_amazon_echo_device:
   alias: Announce via Amazon Echo Device – Single
   description: ''
