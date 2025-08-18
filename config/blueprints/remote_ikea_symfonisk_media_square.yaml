@@ -17,10 +17,9 @@ blueprint:
         device:
           multiple: false
           filter:
-            device:
-              - integration: zha
-                manufacturer: IKEA of Sweden
-                model: SYMFONISK sound remote gen2
+            - integration: zha
+              manufacturer: IKEA of Sweden
+              model: SYMFONISK sound remote gen2
 
     media_player:
       name: Media Player
@@ -30,195 +29,466 @@ blueprint:
           entity:
             domain: media_player
 
+    media_player_config:
+      name: Media Player Configuration
+      icon: mdi:speaker-wireless
+      collapsed: true
+      input:
+        volume_step:
+          name: Volume Step
+          description: Incremental value to increase or decrease volume level.
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "Num"
+              min: 5
+              max: 50
+              step: 5.0
+          default: 5
+
     default_button_events:
-      name: One/Two Dot Button Events
+      name: Button Events
       icon: mdi:code-tags
       collapsed: true
       input:
-        event_one_dot_single:
+        event_button_one_dot_single:
           name: One Dot Button Press Once Event
           description: The action to perform on _single press_ of the **One Dot Button**.
           default: []
           selector:
             action: null
 
-        event_one_dot_double:
+        event_button_one_dot_double:
           name: One Dot Button Press Twice Event
           description: The action to perform on _double press_ of the **One Dot Button**.
           default: []
           selector:
             action: null
 
-        event_one_dot_hold:
+        event_button_one_dot_hold:
           name: One Dot Button Press and Hold Event
-          description: >
-            The action to perform on _press and hold_ of the **One Dot Button**.
+          description: The action to perform on _press and hold_ of the **One Dot Button**.
           default: []
           selector:
             action: null
 
+        event_button_two_dots_single:
+          name: Two Dots Button Press Once Event
+          description: The action to perform on _single press_ of the **Two Dots Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_two_dots_double:
+          name: Two Dots Button Press Twice Event
+          description: The action to perform on _double press_ of the **Two Dots Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_two_dots_hold:
+          name: Two Dots Button Press and Hold Event
+          description: The action to perform on _press and hold_ of the **Two Dots Button**.
+          default: []
+          selector:
+            action: null
 
+    override_button_events:
+      name: Override Media Player Button Events
+      description: Define custom actions to override the default media player control actions.
+      icon: mdi:sync-alert
+      collapsed: true
+      input:
+        event_button_play_pause_single:
+          name: Play Button Press Once Event
+          description: The action to perform on _single press_ of the **Volume Play Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_volume_up_single:
+          name: Volume Up Button Press Once Event
+          description: The action to perform on _single press_ of the **Volume Up Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_volume_down_single:
+          name: Volume Down Button Press Once Event
+          description: The action to perform on _single press_ of the **Volume Down Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_next_single:
+          name: Next Button Press Once Event
+          description: The action to perform on _single press_ of the **Next Button**.
+          default: []
+          selector:
+            action: null
 
+        event_button_previous_single:
+          name: Previous Button Press Once Event
+          description: The action to perform on _single press_ of the **Previous Button**.
+          default: []
+          selector:
+            action: null
 
+    automation_config:
+      name: Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
 
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            <br>Ignored by _Single_ and _Restart_ Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
 
-    single_dot_single_press:
-      name: Single dot (Single press)
-      description: Action to run on single dot press
-      default: []
-      selector:
-        action: {}
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
+          default: false
+          selector:
+            boolean:
 
+variables:
+  var_media_player: !input media_player
+  var_volume_step: !input volume_step
+  var_volume_level: "{{ 1.0 / var_volume_step }}"
 
+triggers:
+  - alias: Play/Pause Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "toggle"
+    id: trigger_play_pause_single_press_zha
 
+  - alias: Volume Up Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "move_with_on_off"
+      args: [0, 255]
+    id: trigger_volume_up_single_press_zha
 
+  - alias: Volume Down Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "move_with_on_off"
+      args: [1, 255]
+    id: trigger_volume_down_single_press_zha
 
+  - alias: Next Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "step"
+      args: [0, 1, 0, 0, 0]
+    id: trigger_next_single_press_zha
 
+  - alias: Previous Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "step"
+      args: [1, 1, 0, 0, 0]
+    id: trigger_previous_single_press_zha
 
-blueprint:
-# Needs the updated firmware: version 0x01000035 (mine came with version 0x00010012)
-# Added dot-button support by Atlantis_One
-# Based on https://gist.github.com/cooljimy84/f1f2da3a6b214879b82bf06a68d89264 by James Crook
-  name: ZHA - IKEA Symfonisk sound controller GEN2 for media and dot-buttons control
-  description: 'Control media with an IKEA Symfonisk sound controller GEN2 (Square one).
-    Full media control with the media buttons (play/pause, volume up/down and skip/previous track).
-    Fully customisable dot-buttons, with options for single, double and long press for each one.'
-  domain: automation
-  input:
-    remote:
-      name: Remote
-      description: IKEA Symfonisk controller GEN2 to use
-      selector:
-        device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: SYMFONISK sound remote gen2
-          multiple: false
-    media_player:
-      name: Media Player
-      description: The media player to control
-      selector:
-        target:
-          entity:
-            domain: media_player
-    single_dot_single_press:
-      name: Single dot (Single press)
-      description: Action to run on single dot press
-      default: []
-      selector:
-        action: {}
-    single_dot_double_press:
-      name: Single dot (Double press)
-      description: Action to run on single dot double press
-      default: []
-      selector:
-        action: {}
-    single_dot_long_press:
-      name: Single dot (Long press)
-      description: Action to run on single dot long press
-      default: []
-      selector: 
-        action: {}
-    double_dot_single_press:
-      name: Double dot (Single press)
-      description: Action to run on double dot press
-      default: []
-      selector:
-        action: {}
-    double_dot_double_press:
-      name: Double dot (Double press)
-      description: Action to run on double dot double press
-      default: []
-      selector:
-        action: {}
-    double_dot_long_press:
-      name: Double dot (Long press)
-      description: Action to run on double dot long press
-      default: []
-      selector:
-        action: {}
-  source_url: https://community.home-assistant.io/t/zha-ikea-symfonisk-sound-controller-gen2-the-square-one-with-dot-button-support-for-new-firmware/573802
-mode: single
-max_exceeded: silent
-trigger:
-- platform: event
-  event_type: zha_event
-  event_data:
-    device_id: !input remote
-action:
-- variables:
-    command: '{{ trigger.event.data.command }}'
-    cluster_id: '{{ trigger.event.data.cluster_id }}'
-    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
-    args: '{{ trigger.event.data.args }}'
-- choose:
-  - conditions:
-    - '{{ command == ''toggle'' }}'
-    - '{{ cluster_id == 6 }}'
-    - '{{ endpoint_id == 1 }}'
-    sequence:
-    - service: media_player.media_play_pause
-      target: !input media_player
-  - conditions:
-    - '{{ command == ''move_with_on_off'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ trigger.event.data.params.move_mode == 0}}'
-    sequence:
-    - service: media_player.volume_up
-      target: !input media_player
-    - delay: 0.1
-  - conditions:
-    - '{{ command == ''move_with_on_off'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ trigger.event.data.params.move_mode == 1 }}'
-    sequence:
-    - service: media_player.volume_down
-      target: !input media_player
-    - delay: 0.1
-  - conditions:
-    - '{{ command == ''step'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ trigger.event.data.params.step_mode == 0 }}'
-    sequence:
-    - service: media_player.media_next_track
-      target: !input media_player
-  - conditions:
-    - '{{ command == ''step'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ trigger.event.data.params.step_mode == 1 }}'
-    sequence:
-    - service: media_player.media_previous_track
-      target: !input media_player
-  - conditions:
-    - '{{ command == ''short_release'' }}'
-    - '{{ endpoint_id == 2 }}'
-    sequence: !input single_dot_single_press
-  - conditions:
-    - '{{ command == ''multi_press_complete'' }}'
-    - '{{ endpoint_id == 2 }}'
-    sequence: !input single_dot_double_press
-  - conditions:
-    - '{{ command == ''long_press'' }}'
-    - '{{ endpoint_id == 2 }}'
-    sequence: !input single_dot_long_press
-  - conditions:
-    - '{{ command == ''short_release'' }}'
-    - '{{ endpoint_id == 3 }}'
-    sequence: !input double_dot_single_press
-  - conditions:
-    - '{{ command == ''multi_press_complete'' }}'
-    - '{{ endpoint_id == 3 }}'
-    sequence: !input double_dot_double_press
-  - conditions:
-    - '{{ command == ''long_press'' }}'
-    - '{{ endpoint_id == 3 }}'
-    sequence: !input double_dot_long_press
+  - alias: One Dot Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "short_release"
+      endpoint_id: 2
+      cluster_id: 64640
+    id: trigger_one_dot_single_press_zha
+
+  - alias: One Dot Button Double Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "multi_press_complete"
+      endpoint_id: 2
+      cluster_id: 64640
+    id: trigger_one_dot_double_press_zha
+
+  - alias: One Dot Button Press and Hold (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "long_release"
+      endpoint_id: 2
+      cluster_id: 64640
+    id: trigger_one_dot_hold_press_zha
+
+  - alias: Two Dots Button Single Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "short_release"
+      endpoint_id: 3
+      cluster_id: 64640
+    id: trigger_two_dots_single_press_zha
+
+  - alias: Two Dots Button Double Press (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "multi_press_complete"
+      endpoint_id: 3
+      cluster_id: 64640
+    id: trigger_two_dots_double_press_zha
+
+  - alias: Two Dots Button Press and Hold (via ZHA event)
+    trigger: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+      command: "long_release"
+      endpoint_id: 3
+      cluster_id: 64640
+    id: trigger_two_dots_hold_press_zha
+
+conditions:
+  - alias: "Check if remote to use is set"
+    condition: template
+    value_template: "{{ var_remote | count > 0 }}"
+
+actions:
+  - alias: "Maybe display debug notification"
+    if:
+      - alias: "Confirm debug remote is active"
+        condition: template
+        value_template: !input debug_valid_events
+    then:
+      - alias: "Setup debug variables"
+        variables:
+          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
+          trigger_action: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data.command }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger.payload }}
+            {%- endif -%}
+          trigger_data: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger }}
+            {%- endif -%}
+
+      - alias: "Display debug notification with remote and event details"
+        action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__remote_ikea_styrbar_4_button
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
+          message: >-
+            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}
+            <br>
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
+
+  - alias: "Determine button event to execute"
+    choose:
+      - alias: "Button: Play/Pause, Press"
+        conditions:
+          - alias: "Check if triggered by Play/Pause button press"
+            condition: trigger
+            id:
+              - trigger_play_pause_single_press_zha
+        sequence:
+          - alias: "Trigger custom action, otherwise trigger default action"
+            if:
+              - alias: "Check if custom action is set for button press event"
+                condition: template
+                value_template: "{{ event_button_play_pause_single | length > 0 }}"
+            then: !input event_button_play_pause_single
+            else:
+              - alias: "Toggle media player play/pause state"
+                action: media_player.media_play_pause
+                entity_id: !input media_player
+
+      - alias: "Button: Volume Up, Press"
+        conditions:
+          - alias: "Check if triggered by Volume Up button press"
+            condition: trigger
+            id:
+              - trigger_volume_up_single_press_zha
+        sequence:
+          - alias: "Trigger custom action, otherwise trigger default action"
+            if:
+              - alias: "Check if custom action is set for button press event"
+                condition: template
+                value_template: "{{ event_button_volume_up_single | length > 0 }}"
+            then: !input event_button_volume_up_single
+            else:
+              - if:
+                  - alias: "Confirm that the media player is playing audio"
+                    condition: template
+                    value_template: "{{ state_attr( media_player, 'volume_level' ) is not none }}"
+                then:
+                  - action: media_player.volume_set
+                    target:
+                      entity_id: !input media_player
+                    data:
+                      volume_level: >-
+                        {% set volume = state_attr( media_player, 'volume_level' ) + var_volume_level | int %}
+                        {{ 1.0 if volume > 1.0 else volume }}
+                  - delay:
+                      seconds: 1
+
+      - alias: "Button: Volume Down, Press"
+        conditions:
+          - alias: "Check if triggered by Volume Down button press"
+            condition: trigger
+            id:
+              - trigger_volume_down_single_press_zha
+        sequence:
+          - alias: "Trigger custom action, otherwise trigger default action"
+            if:
+              - alias: "Check if custom action is set for button press event"
+                condition: template
+                value_template: "{{ event_button_volume_down_single | length > 0 }}"
+            then: !input event_button_volume_down_single
+            else:
+              - if:
+                  - alias: "Confirm that the media player is playing audio"
+                    condition: template
+                    value_template: "{{ state_attr( media_player, 'volume_level' ) is not none }}"
+                then:
+                  - action: media_player.volume_set
+                    target:
+                      entity_id: !input media_player
+                    data:
+                      volume_level: >-
+                        {% set volume = state_attr( media_player, 'volume_level' ) - var_volume_level | int %}
+                        {{ 0 if volume < 0 else volume }}
+                  - delay:
+                      seconds: 1
+
+      - alias: "Button: Next, Press"
+        conditions:
+          - alias: "Check if triggered by Next button press"
+            condition: trigger
+            id:
+              - trigger_next_single_press_zha
+        sequence:
+          - alias: "Trigger custom action, otherwise trigger default action"
+            if:
+              - alias: "Check if custom action is set for button press event"
+                condition: template
+                value_template: "{{ event_button_next_single | length > 0 }}"
+            then: !input event_button_next_single
+            else:
+              - action: media_player.media_next_track
+                entity_id: !input media_player
+
+      - alias: "Button: Previous, Press"
+        conditions:
+          - alias: "Check if triggered by Previous button press"
+            condition: trigger
+            id:
+              - trigger_previous_single_press_zha
+        sequence:
+          - alias: "Trigger custom action, otherwise trigger default action"
+            if:
+              - alias: "Check if custom action is set for button press event"
+                condition: template
+                value_template: "{{ event_button_previous_single | length > 0 }}"
+            then: !input event_button_previous_single
+            else:
+              - action: media_player.media_previous_track
+                entity_id: !input media_player
+
+      - alias: "Button: One Dot, Single Press"
+        conditions:
+          - alias: "Check if triggered by One Dot button single press"
+            condition: trigger
+            id:
+              - trigger_one_dot_single_press_zha
+        sequence: !input event_button_one_dot_single
+
+      - alias: "Button: One Dot, Double Press"
+        conditions:
+          - alias: "Check if triggered by One Dot button double press"
+            condition: trigger
+            id:
+              - trigger_one_dot_double_press_zha
+        sequence: !input event_button_one_dot_double
+
+      - alias: "Button: One Dot, Press and Hold"
+        conditions:
+          - alias: "Check if triggered by One Dot button press and hold"
+            condition: trigger
+            id:
+              - trigger_one_dot_hold_press_zha
+        sequence: !input event_button_one_dot_hold
+
+      - alias: "Button: Two Dots, Single Press"
+        conditions:
+          - alias: "Check if triggered by Two Dots button single press"
+            condition: trigger
+            id:
+              - trigger_two_dots_single_press_zha
+        sequence: !input event_button_two_dots_single
+
+      - alias: "Button: Two Dots, Double Press"
+        conditions:
+          - alias: "Check if triggered by Two Dots button double press"
+            condition: trigger
+            id:
+              - trigger_two_dots_double_press_zha
+        sequence: !input event_button_two_dots_double
+
+      - alias: "Button: Two Dots, Press and Hold"
+        conditions:
+          - alias: "Check if triggered by Two Dots button press and hold"
+            condition: trigger
+            id:
+              - trigger_two_dots_hold_press_zha
+        sequence: !input event_button_two_dots_hold

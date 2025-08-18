@@ -11,12 +11,26 @@ template:
       - unique_id: notifications
         state: template
         attributes:
-          laundry_complete_washer: |
-            {%- if is_state( 'input_boolean.reminder_laundry_complete_washer', 'on' ) -%}
+          laundry_complete: |
+            {%- set ignore = [null, 'off', 'unknown', 'unavailable'] %}
+
+            {%- set state_washing_machine = states( 'input_boolean.reminder_laundry_complete_washer' ) %}
+            {%- set state_tumble_dryer = states( 'input_boolean.reminder_laundry_complete_dryer' ) %}
+
+            {%- set is_washer_complete = state_washing_machine not in ignore %}
+            {%- set is_dryer_complete = state_tumble_dryer not in ignore %}
+
+            {%- if is_washer_complete and is_dryer_complete %}
+              {{ [
+                'It looks like both the washing machine and dryer cycles are complete.',
+                'It's time to fold your dried clothes, and move your wet clothes to the dryer.',
+                'Chop chop – The laundry is complete, and it is not going to finish itself.',
+                'If I had arms, I would help you. But I don't... It's time to finish your laundry.',
+                'Your laundry is complete. Back in the day, I remember having to go down to the river to wash my laundry.'
+              ] | random }}
+            {% elif is_washer_complete -%}
               Your washed clothes are ready to be dried.
-            {%- endif -%}
-          laundry_complete_dryer: |
-            {%- if is_state( 'input_boolean.reminder_laundry_complete_dryer', 'on' ) -%}
+            {%- elif is_dryer_complete %}
               Your dried clothes are ready to be folded.
             {%- endif -%}
           waste_bring_in: |
