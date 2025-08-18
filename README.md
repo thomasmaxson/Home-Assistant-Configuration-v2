@@ -32,6 +32,7 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Home Assistant Yellow](https://crowdsupply.com/nabu-casa/home-assistant-yellow)
 * [SAMSUNG 970 EVO Plus SSD 1TB NVMe M.2](https://www.amazon.com/dp/B07MFZY2F2/)
 * [ESPHome Bluetooth Proxy](https://esphome.io/components/bluetooth_proxy.html)
+* [Home Assistant Connect ZBT-1 (Sky Connect)](https://www.home-assistant.io/connectzbt1/)
 
 <hr>
 
