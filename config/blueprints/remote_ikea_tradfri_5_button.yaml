@@ -662,7 +662,7 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}  | Trigger ID: {{ trigger.id }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
@@ -687,17 +687,16 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ event_button_power == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_power == 'Toggle light' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
-                        value_template: "{{ var_all_lights_on | length > 0 }}"
+                        value_template: "{{ var_light | length > 0 }}"
                 sequence:
                   - alias: "Determine weather to turn the light(s) on or off"
                     if:
                       - alias: "Check if the light(s) are currently off"
-                        condition: state
-                        entity_id: !input light
-                        state: "off"
+                        condition: template
+                        value_template: "{{ var_all_lights_on | length == 0 }}"
                     then:
                       - alias: "Determine how to turn on light(s)"
                         if:
@@ -726,7 +725,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_button_power == 'Custom action' }}"
+                    value_template: "{{ var_event_button_power == 'Custom action' }}"
                 sequence: !input action_button_press_power_toggle
 
 
@@ -747,7 +746,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -781,7 +780,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_raise_single
 
 
@@ -802,7 +801,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -839,7 +838,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_raise_hold
 
 
@@ -860,7 +859,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -876,7 +875,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_lower_single
 
 
@@ -897,7 +896,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -934,7 +933,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_lower_hold
 
 
@@ -958,10 +957,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1007,7 +1006,7 @@ actions:
                 conditions:
                   - alias: "Check if button press should trigger custom events"
                     condition: template
-                    value_template: "{{ event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_left_single
 
 
@@ -1031,10 +1030,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1102,7 +1101,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_left_hold
 
 
@@ -1126,10 +1125,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1174,7 +1173,7 @@ actions:
                 conditions:
                   - alias: "Check if button press should trigger custom events"
                     condition: template
-                    value_template: "{{ event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_right_single
 
 
@@ -1198,10 +1197,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1268,5 +1267,5 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_right_hold
