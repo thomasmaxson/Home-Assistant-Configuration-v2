@@ -37,7 +37,7 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 
 ### Devices:
 * Various Apple Devices (Macbooks, iPhones and iPads)
-* Fire Tablet HD10
+* Samsung Galaxy Tab A9+ Plus 11”
 
 ##### Media
 * AppleTV
