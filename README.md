@@ -32,12 +32,13 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Home Assistant Yellow](https://crowdsupply.com/nabu-casa/home-assistant-yellow)
 * [SAMSUNG 970 EVO Plus SSD 1TB NVMe M.2](https://www.amazon.com/dp/B07MFZY2F2/)
 * [ESPHome Bluetooth Proxy](https://esphome.io/components/bluetooth_proxy.html)
+* [Home Assistant Connect ZBT-1 (Sky Connect)](https://www.home-assistant.io/connectzbt1/)
 
 <hr>
 
 ### Devices:
 * Various Apple Devices (Macbooks, iPhones and iPads)
-* Fire Tablet HD10
+* Samsung Galaxy Tab A9+ Plus 11”
 
 ##### Media
 * AppleTV
@@ -145,7 +146,7 @@ Below are a few of my most used resources. If you like what you see here, please
 Below are a list of the custom Blueprints that I have created to help easily integrate devices into my smart home.
 
 * [Remote - Aqara, Wireless Mini Switch](https://gist.github.com/thomasmaxson/67dc65d3cf0725f3d2088d38ba9f0234)
-* [Remote - IKEA TRÅDFRI, RODRET or SOMRIG, 2 Button](https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674)
+* [Remote - IKEA TRÅDFRI, RODRET or SOMRIG, 2 Button](https://gist.github.com/thomasmaxson/46933a9ad0271a8517b2faef372857ba)
 * [Remote - IKEA STYRBAR, 4 Button](https://gist.github.com/thomasmaxson/b494e0d0a67a7ed940188c30eedeb7fa)
 * [Remote - IKEA TRÅDFRI, 2 Button](https://gist.github.com/thomasmaxson/0e7f511eb9e65927708014e461a57674)
 * [Remote - IKEA TRÅDFRI, 5 Button](https://gist.github.com/thomasmaxson/1b776b184882ba9c85c90c20c02b423a)
