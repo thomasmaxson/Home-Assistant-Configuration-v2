@@ -1,17 +1,39 @@
 # This blueprint uses an IKEA TRÅDFRI 5 Button Remote Control connected through ZHA or MQTT.
-#
-# | Button               | Interaction  | Action                                                              |
-# | -------------------- | ------------ | ------------------------------------------------------------------- |
-# | Power                | Press        | Toggle the light(s) OR custom action                                |
-# | Brightness, Increase | Press        | Increase light brightness (once) OR custom action                   |
-# | Brightness, Increase | Press & Hold | Increase light brightness (repeat) OR custom action                 |
-# | Brightness, Decrease | Press        | Decrease light brightness (once) OR custom action                   |
-# | Brightness, Decrease | Press & Hold | Decrease light brightness (repeat) OR custom action                 |
-# | Arrow, Left          | Press        | Adjust color temperature, light hue and saturation OR custom action |
-# | Arrow, Left          | Press & Hold | Custom action                                                       |
-# | Arrow, Right         | Press        | Adjust color temperature, light hue and saturation OR custom action |
-# | Arrow, Right         | Press & Hold | Custom action                                                       |
-# | -------------------- | ------------ | ------------------------------------------------------------------- |
+# It allows you to control lights and run custom actions with the remote's buttons
+# 
+# | Button Type          | Interaction  | Action Choices                             |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Power                | Press        | - Toggle light(s) state                    |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Increase | Press        | - Increase light brightness (once)         |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Increase | Press & Hold | - Increase light brightness (repeat)       |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Decrease | Press        | - Increase light brightness (once)         |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Decrease | Press & Hold | - Decrease light brightness (repeat)       |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Left          | Press        | - Adjust color temperature (once)          |
+# |                      |              | - Adjust light hue and saturation (once)   |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Left          | Press & Hold | - Adjust color temperature (repeat)        |
+# |                      |              | - Adjust light hue and saturation (repeat) |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Right         | Press        | - Adjust color temperature (once)          |
+# |                      |              | - Adjust light hue and saturation (once)   |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Right         | Press & Hold | - Adjust color temperature (repeat)        |
+# |                      |              | - Adjust light hue and saturation (repeat) |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
 
 blueprint:
   name: IKEA TRÅDFRI, 5 Button Remote Control
@@ -56,7 +78,7 @@ blueprint:
           description: >-
             Select the event you want the **Power Button** to do.
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "Toggle light"
           selector:
             select:
@@ -96,7 +118,7 @@ blueprint:
           description: >-
             Select the event you want the **Brightness Buttons** to do.
             <br>&bull; _Adjust brightness_: Increase/Decrease brightness of the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "Adjust brightness"
           selector:
             select:
@@ -141,7 +163,7 @@ blueprint:
 
         action_button_press_lower_hold:
           name: Brightness Decrease, Press and Hold Action
-          description: >
+          description: >-
             The action to perform on _press and hold_.
             <br>Use with care, before the _press and hold_ action, this buttons _press_ action gets triggered.
           default: []
@@ -158,15 +180,15 @@ blueprint:
           description: >-
             Select what you wish for the left/right arrow buttons to manage.
             <br>
-            <br>_Adjust Hue/Auturation_: Adjust your selected light(s) hue and saturation.
+            <br>_Adjust light hue and saturation_: Adjust your selected light(s) hue and saturation.
             <br>&bull; Left arrow adjusts your light(s) saturation
             <br>&bull; Right arrow adjusts your light(s) hue
             <br>
-            <br>_Adjust Color Temperature_: Adjust your selected light(s) color temperature.
+            <br>_Adjust color temperature_: Adjust your selected light(s) color temperature.
             <br>&bull; Left arrow decreases your light(s) color temperature
             <br>&bull; Right arrow increases your light(s) color temperature
             <br>
-            <br>_Custom Actions_: Trigger your own custom actions
+            <br>_Custom action_: Trigger your own custom actions
           default: "Adjust light hue and saturation"
           selector:
             select:
@@ -323,14 +345,14 @@ blueprint:
 
         repeat_delay:
           name: Repeat Delay
-          description: Delay between the brightness adjustment steps.
+          description: Delay between interations when pressing and holding a button.
           selector:
             number:
               mode: slider
               unit_of_measurement: seconds
-              min: 0.25
+              min: 0.5
               max: 5
-              step: 0.25
+              step: 0.5
           default: 1
 
         repeat_max_count:
@@ -707,7 +729,7 @@ actions:
                           - alias: "Turn on light(s) with the set brightness option"
                             action: light.turn_on
                             target:
-                              entity_id: "{{ var_all_lights_on }}"
+                              entity_id: "{{ var_all_lights_off }}"
                             data:
                               brightness_pct: !input brightness_on_percent
                         else:
@@ -889,7 +911,7 @@ actions:
         sequence:
           - alias: "Determine event action to trigger"
             choose:
-              - alias: "For Increase Brightness button press, manage light on/off state"
+              - alias: "For Decrease Brightness button press, manage light on/off state"
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: and
