@@ -1,5 +1,5 @@
-# This blueprint uses a Philips Hue Dimmer Remote Control
-# It allows you to control lights and run custom actions with the remote's buttons
+# This blueprint uses a Philips Hue Dimmer (RWL020 (US), RWL021 (EU) and RWL022) Remote Control connected through the Hue integration
+# This blueprint allows you to control lights and/or run custom actions with the remote's buttons
 # 
 # | Button Type          | Interaction  | Action Choices                       |
 # | -------------------- | ------------ | ------------------------------------ |
@@ -7,6 +7,7 @@
 # | Power Button (v2)    |              | - Toggle light(s) state              |
 # |                      |              | - Run custom action                  |
 # | -------------------- | ------------ | ------------------------------------ |
+
 # | Power On (v1)        | Press & Hold | - Run custom action                  |
 # | Power Button (v2)    |              |                                      |
 # | -------------------- | ------------ | ------------------------------------ |
@@ -22,8 +23,8 @@
 # | Brightness, Decrease | Press & Hold | - Decrease light brightness (repeat) |
 # |                      |              | - Run custom action                  |
 # | -------------------- | ------------ | ------------------------------------ |
-# | Power Off /          | Press        | - Turn off light(s)                  |
-# | Hue Button           |              | - Run custom action                  |
+# | Power Off (v1)       | Press        | - Turn off light(s)                  |
+# | Hue Button (v2)      |              | - Run custom action                  |
 # | -------------------- | ------------ | ------------------------------------ |
 # | Power Off (v1)       | Press & Hold | - Run custom action                  |
 # | Hue Button (v2)      |              |                                      |
@@ -53,15 +54,6 @@ blueprint:
               model: Hue dimmer switch (RWL021)
             - integration: hue
               manufacturer: Signify Netherlands B.V.
-              model: Hue dimmer switch (RWL022)
-            - integration: mqtt
-              manufacturer: Philips
-              model: Hue dimmer switch (RWL020)
-            - integration: mqtt
-              manufacturer: Philips
-              model: Hue dimmer switch (RWL021)
-            - integration: mqtt
-              manufacturer: Philips
               model: Hue dimmer switch (RWL022)
 
     light:
@@ -276,13 +268,6 @@ trigger:
     type: short_release
     subtype: 1
     id: trigger_top_press_hue
-  - alias: Top Button Press and Hold (via HUE event)
-    trigger: device
-    domain: hue
-    device_id: !input remote
-    type: repeat
-    subtype: 1
-    id: trigger_top_press_hold_hue
 
   - alias: Brightness Increase Button Press (via HUE event)
     trigger: device
@@ -291,13 +276,6 @@ trigger:
     type: short_release
     subtype: 2
     id: trigger_raise_press_hue
-  - alias: Brightness Increase Button Press and Hold (via HUE event)
-    trigger: device
-    domain: hue
-    device_id: !input remote
-    type: repeat
-    subtype: 2
-    id: trigger_raise_press_hold_hue
 
   - alias: Brightness Decrease Button Press (via HUE event)
     trigger: device
@@ -306,13 +284,6 @@ trigger:
     type: short_release
     subtype: 3
     id: trigger_lower_press_hue
-  - alias: Brightness Decrease Button Press and Hold (via HUE event)
-    trigger: device
-    domain: hue
-    device_id: !input remote
-    type: repeat
-    subtype: 3
-    id: trigger_lower_press_hold_hue
 
   - alias: Bottom Button Press (via HUE event)
     trigger: device
@@ -321,6 +292,32 @@ trigger:
     type: short_release
     subtype: 4
     id: trigger_bottom_press_hue
+
+
+  - alias: Top Button Press and Hold (via HUE event)
+    trigger: device
+    domain: hue
+    device_id: !input remote
+    type: repeat
+    subtype: 1
+    id: trigger_top_press_hold_hue
+
+  - alias: Brightness Increase Button Press and Hold (via HUE event)
+    trigger: device
+    domain: hue
+    device_id: !input remote
+    type: repeat
+    subtype: 2
+    id: trigger_raise_press_hold_hue
+
+  - alias: Brightness Decrease Button Press and Hold (via HUE event)
+    trigger: device
+    domain: hue
+    device_id: !input remote
+    type: repeat
+    subtype: 3
+    id: trigger_lower_press_hold_hue
+
   - alias: Bottom Button Press and Hold (via HUE event)
     trigger: device
     domain: hue
@@ -351,8 +348,7 @@ actions:
         conditions:
           - alias: "Check if triggered by top button press"
             condition: trigger
-            id:
-              - trigger_top_press_hue
+            id: trigger_top_press_hue
 
         sequence: 
           - alias: "Determine event action to trigger"
@@ -428,8 +424,8 @@ actions:
         conditions:
           - alias: "Check if triggered by Top button press and hold"
             condition: trigger
-            id:
-              - trigger_top_press_hold_hue
+            id: trigger_top_press_hold_hue
+
         sequence: !input action_button_press_top_hold
 
 
@@ -437,8 +433,8 @@ actions:
         conditions:
           - alias: "Check if triggered by Brightness Increase button press"
             condition: trigger
-            id:
-              - trigger_raise_press_hue
+            id: trigger_raise_press_hue
+
         sequence:
           - alias: "Determine event action to trigger"
             choose:
@@ -453,6 +449,7 @@ actions:
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
+
                 sequence:
                   - alias: "Determine if to turn on or increase brightness for light(s)"
                     if:
@@ -491,8 +488,8 @@ actions:
         conditions:
           - alias: "Check if triggered by Brightness Increase button press and hold"
             condition: trigger
-            id:
-              - trigger_raise_press_hold_hue
+            id: trigger_raise_press_hold_hue
+
         sequence:
           - alias: "Determine event action to trigger"
             choose:
@@ -507,6 +504,7 @@ actions:
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
+
                 sequence:
                   - alias: "Increase brightness for light(s) that are on"
                     action: light.turn_on
@@ -527,8 +525,8 @@ actions:
         conditions:
           - alias: "Check if triggered by Brightness Decrease button press"
             condition: trigger
-            id:
-              - trigger_lower_press_hue
+            id: trigger_lower_press_hue
+
         sequence:
           - alias: "Determine event action to trigger"
             choose:
@@ -543,6 +541,7 @@ actions:
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
+
                 sequence:
                   - alias: "Decrease brightness for light(s) that are on"
                     action: light.turn_on
@@ -563,8 +562,8 @@ actions:
         conditions:
           - alias: "Check if triggered by Brightness Decrease button press and hold"
             condition: trigger
-            id:
-              - trigger_lower_press_hold_hue
+            id: trigger_lower_press_hold_hue
+
         sequence:
           - alias: "Determine event action to trigger"
             choose:
@@ -579,6 +578,7 @@ actions:
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
+
                 sequence:
                   - alias: "Decrease brightness for light(s) that are on"
                     action: light.turn_on
@@ -599,8 +599,7 @@ actions:
         conditions:
           - alias: "Check if triggered by bottom button press"
             condition: trigger
-            id:
-              - trigger_bottom_press_hue
+            id: trigger_bottom_press_hue
 
         sequence: 
           - alias: "Determine event action to trigger"
@@ -635,6 +634,6 @@ actions:
         conditions:
           - alias: "Check if triggered by Bottom button press and hold"
             condition: trigger
-            id:
-              - trigger_bottom_press_hold_hue
+            id: trigger_bottom_press_hold_hue
+
         sequence: !input action_button_press_bottom_hold
