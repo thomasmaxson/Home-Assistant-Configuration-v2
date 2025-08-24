@@ -1,4 +1,5 @@
 # This blueprint uses a Philips Hue Tap Remote Control connected through MQTT.
+# This blueprint allows you to run custom actions with the remote's buttons
 #
 # | Button     | Duration | Action        |
 # | ---------- | -------- | ------------- |

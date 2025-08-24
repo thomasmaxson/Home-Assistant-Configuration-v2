@@ -1,5 +1,5 @@
 # This blueprint uses an IKEA TRÅDFRI 5 Button Remote Control connected through ZHA or MQTT.
-# It allows you to control lights and run custom actions with the remote's buttons
+# This blueprint allows you to control lights and run custom actions with the remote's buttons
 # 
 # | Button Type          | Interaction  | Action Choices                             |
 # | -------------------- | ------------ | ------------------------------------------ |

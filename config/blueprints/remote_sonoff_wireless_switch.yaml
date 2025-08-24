@@ -1,4 +1,5 @@
 # This blueprint uses an SONOFF Wireless Switch Remote Control connected through ZHA or Z2MQTT
+# This blueprint allows you to control lights and run custom actions with the remote's buttons
 #
 # | Button Type   | Interaction  | Action Choices          |
 # | ------------- | ------------ | ----------------------- |

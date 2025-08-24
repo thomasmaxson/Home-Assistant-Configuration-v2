@@ -1,4 +1,5 @@
 # This blueprint uses an IKEA TRÅDFRI, RODRET and SOMRIG 2 Button Remote Control connected through ZHA or MQTT.
+# This blueprint allows you to control lights and run custom actions with the remote's buttons
 #
 # | Button Type   | Interaction  | Action Choices          |
 # | ------------- | ------------ | ----------------------- |
@@ -36,15 +37,12 @@ blueprint:
           filter:
             - integration: mqtt
               manufacturer: IKEA
-              model: TRADFRI on/off switch
-            - integration: mqtt
-              manufacturer: IKEA
               model: RODRET wireless dimmer/power switch
             - integration: mqtt
               manufacturer: IKEA
               model: SOMRIG shortcut button
-            - integration: zha
-              manufacturer: IKEA of Sweden
+            - integration: mqtt
+              manufacturer: IKEA
               model: TRADFRI on/off switch
             - integration: zha
               manufacturer: IKEA of Sweden
@@ -52,6 +50,9 @@ blueprint:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: SOMRIG shortcut button
+            - integration: zha
+              manufacturer: IKEA of Sweden
+              model: TRADFRI on/off switch
 
     event_button_type:
       name: Event Type

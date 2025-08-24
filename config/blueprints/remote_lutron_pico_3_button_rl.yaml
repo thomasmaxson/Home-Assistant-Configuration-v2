@@ -1,4 +1,5 @@
 # This blueprint uses an Lutron Pico 3 Button with Raise/Lower Remote Control
+# This blueprint allows you to run custom actions with the remote's buttons
 #
 # | Button | Action       | Event        |
 # | ------ | ------------ | ------------ |
