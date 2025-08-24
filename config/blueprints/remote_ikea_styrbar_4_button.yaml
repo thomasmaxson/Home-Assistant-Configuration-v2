@@ -427,7 +427,7 @@ max_exceeded: silent
 variables: 
   var_remote: !input remote
   var_light: !input light
-  var_target_lights: !input target_lights
+  # var_target_lights: !input target_lights
 
   var_event_button_power: !input event_button_power
   var_event_buttons_brightness: !input event_buttons_brightness
