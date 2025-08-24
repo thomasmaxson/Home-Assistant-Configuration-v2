@@ -381,4 +381,3 @@ actions:
               - trigger_hold_zha
               - trigger_hold_mqtt
         sequence: !input action_button_press_hold
-
