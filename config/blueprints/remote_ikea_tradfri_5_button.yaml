@@ -724,7 +724,7 @@ actions:
                         if:
                           - alias: "Check if light brightness option is greater than 0"
                             condition: template
-                            value_template: "{{ brightness_on_percent | int > 0 }}"
+                            value_template: "{{ var_brightness_on_percent | int > 0 }}"
                         then:
                           - alias: "Turn on light(s) with the set brightness option"
                             action: light.turn_on
