@@ -1,5 +1,6 @@
 # This blueprint uses an Lutron Pico Paddle Remote Control
 # This blueprint allows you to run custom actions with the remote's buttons
+#
 # | Button | Action       | Event        |
 # | ------ | ------------ | ------------ |
 # | On     | Press        | Custom event |
