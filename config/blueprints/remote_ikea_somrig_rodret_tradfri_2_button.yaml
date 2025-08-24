@@ -1,12 +1,19 @@
 # This blueprint uses an IKEA TRÅDFRI, RODRET and SOMRIG 2 Button Remote Control connected through ZHA or MQTT.
 #
-# | Button        | Action       | Event                               |
-# | ------------- | ------------ | ----------------------------------- |
-# | On OR 1 Dot   | Press        | Turn on OR custom event             |
-# | On OR 1 Dot   | Press & Hold | Increase brightness OR custom event |
-# | Off OR 2 Dots | Press        | Turn off OR custom event            |
-# | Off OR 2 Dots | Press & Hold | Decrease brightness OR custom event |
-# | ------------- | ------------ | ----------------------------------- |
+# | Button Type   | Interaction  | Action Choices          |
+# | ------------- | ------------ | ----------------------- |
+# | Power On      | Press        | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Power On      | Press & Hold | - Increase brightness   |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Power Off     | Press        | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Power Off     | Press & Hold | - Decrease brightness   |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
 
 blueprint:
   name: IKEA RODRET, SOMRIG or TRÅDFRI, 2 Button Remote Control
@@ -46,25 +53,38 @@ blueprint:
               manufacturer: IKEA of Sweden
               model: SOMRIG shortcut button
 
-    light:
-      name: Light(s)
-      description: Select the light entities you wish to control.
-      default: []
+    event_button_type:
+      name: Event Type
+      description: >-
+        Select the event you want the remote to do.
+        <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+        <br>&bull; _Custom Action_: Trigger your own custom action
+      default: "Toggle light"
       selector:
-        entity:
-          multiple: true
-          filter:
-            domain: light
+        select:
+          options:
+            - Toggle light
+            - Custom action
 
     light_config:
       name: Light Configuration
       icon: mdi:lightbulb-on
       collapsed: true
       input:
-        brightness:
-          name: Brightness
+        light:
+          name: Light(s)
+          description: Select the light entities you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        brightness_on_percent:
+          name: Brightness Level When Light Turns on
           description: >-
-            Brightness of the light(s) when turning on.
+            Level of brightness to set the light(s) to when turning on.
             <br>&bull; Set 1-100 to use a specific brightness level
             <br>&bull; Set to 0 to use the lights last brightness level
           selector:
@@ -103,7 +123,7 @@ blueprint:
         repeat_max_count:
           name: Maximum loop repeats
           description: >-
-            Maximum number of times to repeat the dimmer brightness event(s).
+            Maximum number of times to repeat the brightness event(s).
             <br>&bull; Used as a safety limit to prevent an endless loop, just in case the corresponding stop event is not received.
           default: 10
           selector:
@@ -113,8 +133,8 @@ blueprint:
               mode: slider
               step: 1
 
-    override_button_events:
-      name: Override On/Off Button Events
+    custom_button_events:
+      name: Custom Button Events
       description: Define custom actions to override the default light control actions.
       icon: mdi:sync-alert
       collapsed: true
@@ -200,10 +220,12 @@ max_exceeded: silent
 variables:
   var_remote: !input remote
   var_light: !input light
-  var_brightness: !input brightness
+  var_brightness_on_percent: !input brightness_on_percent
   var_brightness_step: !input brightness_step
   var_repeat_delay: !input repeat_delay
   var_repeat_max_count: !input repeat_max_count
+
+  var_event_button_type: !input event_button_type
 
 
 triggers:
@@ -305,6 +327,14 @@ conditions:
 
 
 actions:
+  - variables:
+      var_all_lights_on: >-
+        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
+      var_all_lights_off: >-
+        {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
+      var_first_light_on: >-
+        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list | first }}
+
   - alias: "Maybe display debug notification"
     if:
       - alias: "Confirm debug remote is active"
@@ -358,32 +388,45 @@ actions:
               - trigger_on_single_press_zha
               - trigger_on_single_press_mqtt
         sequence:
-          - alias: "Turn on light(s) if set, otherwise execute custom action"
-            if:
-              - alias: "Check if light(s) to be controlled are set"
-                condition: template
-                value_template: "{{ var_light | length > 0 }}"
-            then:
-              - alias: "Determine how to turn on light(s)"
-                if:
-                  - alias: "Check if light brightness option is greater than 0"
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For On button press, manage light on/off state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_all_lights_on | length == 0 }}"
+                sequence:
+                  - alias: "Determine how to turn on light(s)"
+                    if:
+                      - alias: "Check if light brightness option is greater than 0"
+                        condition: template
+                        value_template: "{{ var_brightness_on_percent | int > 0 }}"
+                    then:
+                      - alias: "Turn on light(s) with the configured brightness level"
+                        action: light.turn_on
+                        target:
+                          entity_id: "{{ var_all_lights_off }}"
+                        data:
+                          brightness_pct: !input brightness_on_percent
+                    else:
+                      - alias: "Turn on light(s)"
+                        action: light.turn_on
+                        target:
+                          entity_id: "{{ var_all_lights_off }}"
+
+              - alias: "For On button press, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_brightness | int > 0 }}"
-                then:
-                  - alias: "Turn on light(s) with the set brightness option"
-                    action: light.turn_on
-                    target:
-                      entity_id: >-
-                        {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
-                    data:
-                      brightness_pct: !input brightness
-                else:
-                  - alias: "Turn on light(s)"
-                    action: light.turn_on
-                    target:
-                      entity_id: >-
-                        {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_button_press_on_single
+                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                sequence: !input event_button_press_on_single
+
 
       - alias: "Button: On, Press and Hold"
         conditions:
@@ -393,38 +436,52 @@ actions:
               - trigger_on_hold_press_zha
               - trigger_on_hold_press_mqtt
         sequence:
-          - alias: "Increase brightness for light(s) if set, otherwise execute custom action"
-            if:
-              - alias: "Check if light(s) to be controlled are set"
-                condition: template
-                value_template: "{{ var_light | length > 0 }}"
-            then:
-              - alias: "Repeat brightness increase for the light(s) that are on"
-                repeat:
-                  until:
-                    - alias: "Check if triggered by button press"
-                      condition: trigger
-                      id:
-                        - trigger_on_release_zha
-                        - trigger_on_release_mqtt
-                    - alias: "Check if the maximum repeat count reached"
-                      condition: template
-                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                    - alias: "Wait for button to be released"
-                      condition: template
-                      value_template: "{{ wait.trigger is not none }}"
-                  sequence:
-                    - alias: "Increase brightness for light(s) that are on"
-                      action: light.turn_on
-                      target:
-                        entity_id: >-
-                          {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-                      data:
-                        brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                    - alias: "Delay between brightness increase steps"
-                      delay:
-                        seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_button_press_on_hold
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For On button press, manage light state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_all_lights_on | length > 0 }}"
+                sequence:
+                  - alias: "Repeat brightness increase for the light(s) that are on"
+                    repeat:
+                      until:
+                        - alias: "Check if triggered by button press"
+                          condition: trigger
+                          id:
+                            - trigger_on_release_zha
+                            - trigger_on_release_mqtt
+                        - alias: "Check if the maximum repeat count reached"
+                          condition: template
+                          value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                        - alias: "Wait for button to be released"
+                          condition: template
+                          value_template: "{{ wait.trigger is not none }}"
+                      sequence:
+                        - alias: "Increase brightness for light(s) that are on"
+                          action: light.turn_on
+                          target:
+                            entity_id: "{{ var_all_lights_on }}"
+                          data:
+                            brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
+                        - alias: "Delay between brightness increase steps"
+                          delay:
+                            seconds: "{{ var_repeat_delay | float }}"
+
+              - alias: "For On button press and hold, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                sequence: !input event_button_press_on_hold
+
 
       - alias: "Button: Off, Press"
         conditions:
@@ -434,56 +491,95 @@ actions:
               - trigger_off_single_press_zha
               - trigger_off_single_press_mqtt
         sequence:
-          - alias: "Turn off light(s) if set, otherwise execute custom action"
-            if:
-              - alias: "Check if light(s) to be controlled are set"
-                condition: template
-                value_template: "{{ var_light | length > 0 }}"
-            then:
-              - alias: "Turn off light(s)"
-                action: light.turn_off
-                target:
-                  entity_id: >-
-                    {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-            else: !input event_button_press_off_single
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For Off button press, manage light on/off state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_all_lights_on | length > 0 }}"
+                sequence:
+                  - alias: "Turn off light(s) if set, otherwise execute custom action"
+                    if:
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_light | length > 0 }}"
+                    then:
+                      - alias: "Turn off light(s)"
+                        action: light.turn_off
+                        target:
+                          entity_id: "{{ var_all_lights_on }}"
+
+              - alias: "For Off button press, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                sequence: !input event_button_press_off_single
+
 
       - alias: "Button: Off, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Off button press and hold"
+          - alias: "Check if triggered by On button press and hold"
             condition: trigger
             id:
               - trigger_off_hold_press_zha
               - trigger_off_hold_press_mqtt
         sequence:
-          - alias: "Decrease brightness for light(s) if set, otherwise execute custom action"
-            if:
-              - alias: "Check if light(s) to be controlled are set"
-                condition: template
-                value_template: "{{ var_light | length > 0 }}"
-            then:
-              - alias: "Repeat brightness decrease for the light(s) that are on"
-                repeat:
-                  until:
-                    - alias: "Check if triggered by button press"
-                      condition: trigger
-                      id:
-                        - trigger_off_release_zha
-                        - trigger_off_release_mqtt
-                    - alias: "Check if the maximum repeat count reached"
-                      condition: template
-                      value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                    - alias: "Wait for button to be released"
-                      condition: template
-                      value_template: "{{ wait.trigger is not none }}"
-                  sequence:
-                    - alias: "Decrease brightness for light(s) that are on"
-                      action: light.turn_on
-                      target:
-                        entity_id: >-
-                          {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-                      data:
-                        brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                    - alias: "Delay between brightness decrease steps"
-                      delay:
-                        seconds: "{{ var_repeat_delay | float }}"
-            else: !input event_button_press_off_hold
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For Off button press, manage light state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_all_lights_on | length > 0 }}"
+                sequence:
+                  - alias: "Decrease brightness for light(s) if set, otherwise execute custom action"
+                    if:
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_light | length > 0 }}"
+                    then:
+                      - alias: "Repeat brightness decrease for the light(s) that are on"
+                        repeat:
+                          until:
+                            - alias: "Check if triggered by button press"
+                              condition: trigger
+                              id:
+                                - trigger_off_release_zha
+                                - trigger_off_release_mqtt
+                            - alias: "Check if the maximum repeat count reached"
+                              condition: template
+                              value_template: "{{ repeat.index > var_repeat_max_count | int }}"
+                            - alias: "Wait for button to be released"
+                              condition: template
+                              value_template: "{{ wait.trigger is not none }}"
+                          sequence:
+                            - alias: "Decrease brightness for light(s) that are on"
+                              action: light.turn_on
+                              target:
+                                entity_id: "{{ var_all_lights_on }}"
+                              data:
+                                brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
+                            - alias: "Delay between brightness decrease steps"
+                              delay:
+                                seconds: "{{ var_repeat_delay | float }}"
+
+              - alias: "For Off button press and hold, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                sequence: !input event_button_press_off_hold

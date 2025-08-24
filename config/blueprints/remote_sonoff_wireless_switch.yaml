@@ -1,10 +1,15 @@
 # This blueprint uses an SONOFF Wireless Switch Remote Control connected through ZHA or Z2MQTT
 #
-# | Button | Duration     | Action        |
-# | -------| ------------ | ------------- |
-# | Power  | Short Press  | Custom action |
-# | Power  | Double Press | Custom action |
-# | Power  | Long Press   | Custom action |
+# | Button Type   | Interaction  | Action Choices          |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Single Press | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Double Press | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Press & Hold | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
 
 blueprint:
   name: SONOFF, Wireless Switch
@@ -29,31 +34,90 @@ blueprint:
               manufacturer: eWeLink
               model: WB01
 
-    remote_actions:
-      name: Button Actions
-      icon: mdi:hand-pointing-up
-      collapsed: false
+    button_single_press_config:
+      name: Single Press Configuration
+      icon: mdi:gesture-tap
+      collapsed: true
       input:
-        event_button_press_on_single:
-          name: Button Press Once Event
+        event_button_press_single:
+          name: Single Press Event Type
+          description: >-
+            Select the event you want the **Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "Toggle light"
+          selector:
+            select:
+              options:
+                - Toggle light
+                - Custom action
+
+        light_press_single:
+          name: Single Press Light(s)
+          description: Select the light entities you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        action_button_press_single:
+          name: Single Button Press Event
           description: The action to perform on _single press_ of the **Button**.
           default: []
           selector:
-            action:
+            action: null
 
-        event_button_press_on_double:
-          name: Button Press Twice Event
+
+    button_double_press_config:
+      name: Double Press Configuration
+      icon: mdi:gesture-double-tap
+      collapsed: true
+      input:
+        event_button_press_double:
+          name: Double Press Event Type
+          description: >-
+            Select the event you want the **Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "Toggle light"
+          selector:
+            select:
+              options:
+                - Toggle light
+                - Custom action
+
+        light_press_double:
+          name: Double Press Light(s)
+          description: Select the light entities you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        action_button_press_double:
+          name: Double Press Button Event
           description: The action to perform on _double press_ of the **Button**.
           default: []
           selector:
-            action:
+            action: null
 
-        event_button_press_on_hold:
+
+    button_other_events:
+      name: Other Button Events
+      icon: mdi:gesture-tap
+      collapsed: true
+      input:
+        action_button_press_hold:
           name: Button Press & Hold Event
           description: The action to perform on _press and hold_ of the **Button**.
           default: []
           selector:
             action:
+
 
     automation_config:
       name: Configuration
@@ -62,7 +126,7 @@ blueprint:
       input:
         config_mode:
           name: Automation Mode
-          description: "Mode that the automation runs in."
+          description: Mode that automation runs in.
           default: restart
           selector:
             select:
@@ -75,7 +139,7 @@ blueprint:
               multiple: false
 
         config_max_num:
-          name: Max Number of Runs
+          name: Mode Max
           description: >
             Maximum number of runs that can be executed or queued at a time.
             <br>Ignored by _Single_ and _Restart_ Modes.
@@ -99,8 +163,17 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
+
 variables:
   var_remote: !input remote
+
+  var_light_press_single: !input light_press_single
+  var_light_press_double: !input light_press_double
+
+  var_event_button_press_single: !input event_button_press_single
+  var_event_button_press_double: !input event_button_press_double
+  var_action_button_press_hold: !input action_button_press_hold
+
 
 triggers:
   - alias: Button Press Once (via ZHA event)
@@ -148,37 +221,58 @@ triggers:
     subtype: long
     id: trigger_press_hold_mqtt
 
+
 conditions:
   - condition: template
     value_template: "{{ var_remote | count > 0 }}"
 
+
 actions:
   - variables:
-      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
-      trigger_action: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data.command }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger.payload }}
-        {%- endif -%}
-      trigger_data: >-
-        {%- if integration_type == "zha" -%}
-          {{ trigger.event.data }}
-        {%- elif integration_type == "mqtt" -%}
-          {{ trigger }}
-        {%- endif -%}
+      var_all_lights_on_single: >-
+        {{ expand( var_light_press_single ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list }}
+      var_all_lights_off_single: >-
+        {{ expand( var_light_press_single ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
+      var_first_light_on_single: >-
+        {{ expand( var_light_press_single ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
+      var_all_lights_on_double: >-
+        {{ expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list }}
+      var_all_lights_off_double: >-
+        {{ expand( var_light_press_double ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
+      var_first_light_on_double: >-
+        {{ expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
 
-  - if:
-      - condition: template
+
+  - alias: "Maybe display debug notification"
+    if:
+      - alias: "Confirm debug remote is active"
+        condition: template
         value_template: !input debug_valid_events
     then:
-      - action: persistent_notification.create
+      - alias: "Setup debug variables"
+        variables:
+          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
+          trigger_action: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data.command }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger.payload }}
+            {%- endif -%}
+          trigger_data: >-
+            {%- if device_integration == "zha" -%}
+              {{ trigger.event.data }}
+            {%- elif device_integration == "mqtt" -%}
+              {{ trigger }}
+            {%- endif -%}
+
+      - alias: "Display debug notification with remote and event details"
+        action: persistent_notification.create
         data:
-          notification_id: blueprint_debug__remote_sonoff_wireless_switch
+          notification_id: blueprint_debug__remote_sonoff_wireless_switch_button
           title: >-
             {%- if device_model_id not in [ "", "none", none, null, false] -%}
               {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
@@ -186,11 +280,12 @@ actions:
               {{ device_manufacturer + " " + device_model }}
             {%- endif -%}
           message: >-
-            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
+            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}  | Trigger ID: {{ trigger.id }}
             <br>
             <br>_Remote ID_: {{ var_remote }}
             <br>
             <br>```{{ trigger_data }}```
+
 
   - choose:
       - conditions:
@@ -198,18 +293,91 @@ actions:
             id: 
               - trigger_press_single_zha
               - trigger_press_single_mqtt
-        sequence: !input event_button_press_on_single
+        sequence: 
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For Single button press, toggle light state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_press_single == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_light_press_single | length > 0 }}"
+                sequence:
+                  - alias: "Determine weather to turn the light(s) on or off"
+                    if:
+                      - alias: "Check if the light(s) are currently off"
+                        condition: template
+                        value_template: "{{ var_all_lights_on_single | length == 0 }}"
+                    then:
+                      - alias: "Turn on light(s)"
+                        action: light.turn_on
+                        target:
+                          entity_id: "{{ var_all_lights_off_single }}"
+                    else:
+                      - alias: "Turn off light(s)"
+                        action: light.turn_off
+                        target:
+                          entity_id: "{{ var_all_lights_on_single }}"
+
+              - alias: "For Single press, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event_button_press_single == 'Custom action' }}"
+                sequence: !input action_button_press_single
 
       - conditions:
           - condition: trigger
             id: 
               - trigger_press_double_zha
               - trigger_press_double_mqtt
-        sequence: !input event_button_press_on_double
+        sequence: 
+          - alias: "Determine event action to trigger"
+            choose:
+              - alias: "For Double button press, manage light on/off state"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: and
+                    conditions:
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event_button_press_double == 'Toggle light' }}"
+                      - alias: "Check if light(s) to be controlled are set"
+                        condition: template
+                        value_template: "{{ var_light_press_double | length > 0 }}"
+                sequence:
+                  - alias: "Determine weather to turn the light(s) on or off"
+                    if:
+                      - alias: "Check if the light(s) are currently off"
+                        condition: template
+                        value_template: "{{ var_all_lights_on_double | length == 0 }}"
+                    then:
+                      - alias: "Turn on light(s)"
+                        action: light.turn_on
+                        target:
+                          entity_id: "{{ var_all_lights_off_double }}"
+                    else:
+                      - alias: "Turn off light(s)"
+                        action: light.turn_off
+                        target:
+                          entity_id: "{{ var_all_lights_on_double }}"
+
+              - alias: "For Double press, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event_button_press_double == 'Custom action' }}"
+                sequence: !input action_button_press_double
 
       - conditions:
           - condition: trigger
             id: 
-              - trigger_press_hold_zha
-              - trigger_press_hold_mqtt
-        sequence: !input event_button_press_on_hold
+              - trigger_hold_zha
+              - trigger_hold_mqtt
+        sequence: !input action_button_press_hold
+
