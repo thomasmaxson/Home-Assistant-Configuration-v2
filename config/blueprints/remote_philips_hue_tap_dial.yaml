@@ -3,19 +3,36 @@
 #
 # | Button Type | Interaction       | Action Choices      |
 # | ----------- | ----------------- | ------------------- |
-# | One Dot     | Press             | - Run custom action |
+# | One Dot     | Press             | - Toggle light      |
+# |             |                   | - Turn on light     |
+# |             |                   | - Turn off light    |
+# |             |                   | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
 # | One Dot     | Press & Hold      | - Run custom action |
 # | ----------- | ----------------- | ------------------- |
-# | Two Dots    | Press             | - Run custom action |
+# | Two Dot     | Press             | - Toggle light      |
+# |             |                   | - Turn on light     |
+# |             |                   | - Turn off light    |
+# |             |                   | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
 # | Two Dots    | Press & Hold      | - Run custom action |
 # | ----------- | ----------------- | ------------------- |
-# | Three Dots  | Press             | - Run custom action |
+# | Three Dots  | Press             | - Toggle light      |
+# |             |                   | - Turn on light     |
+# |             |                   | - Turn off light    |
+# |             |                   | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
 # | Three Dots  | Press & Hold      | - Run custom action |
 # | ----------- | ----------------- | ------------------- |
-# | Four Dots   | Press             | - Run custom action |
+# | Four Dots   | Press             | - Toggle light      |
+# |             |                   | - Turn on light     |
+# |             |                   | - Turn off light    |
+# |             |                   | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
 # | Four Dots   | Press & Hold      | - Run custom action |
 # | ----------- | ----------------- | ------------------- |
 # | Dial        | Rotate Left       | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
 # | Dial        | Rotate Right      | - Run custom action |
 # | ----------- | ----------------- | ------------------- |
 
