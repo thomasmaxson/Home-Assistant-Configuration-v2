@@ -7,13 +7,6 @@
 ################################################################################
 
 homeassistant:
-  external_url: !secret homeassistant_external_url
-  internal_url: !secret homeassistant_internal_url
-
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret homeassistant_latitude
-  longitude: !secret homeassistant_longitude
-
   # Custom specific entities
   packages: !include_dir_named packages
 

@@ -36,9 +36,9 @@ themes:
     white-color-hex: "#ffffff"
     white-color-rgb: "206, 206, 206"
 
-    layout-margin: "0"
-    layout-padding: "0"
-    masonry-view-card-margin: "0"
+    # layout-margin: "0"
+    # layout-padding: "0"
+    # masonry-view-card-margin: "0"
     # vertical-stack-card-gap: "0"
 
     layout--grid-column-gap: "4vw"

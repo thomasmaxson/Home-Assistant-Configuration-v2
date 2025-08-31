@@ -6,8 +6,8 @@ views:
     container_margins: false
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 1.875vw
-      grid-column-gap: 2.25vw
+      grid-row-gap: 0.5vw
+      grid-column-gap: 2vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
       grid-template-areas: |
@@ -46,7 +46,7 @@ views:
             ".  overflow3   overflow4  ."
             ".  modalSys    modalConf  ."
         '(max-width: 992px)':
-          grid-row-gap: 1.5vw
+          grid-row-gap: 0.5vw
           grid-column-gap: 3vw
           grid-auto-rows: min-content
           grid-template-columns: 1vw repeat( 6, 1fr ) 1vw
@@ -90,8 +90,8 @@ views:
             ".  modalConf   modalConf   modalConf  modalSys   modalSys   
             modalSys    ."
         '(max-width: 1200px)':
-          grid-row-gap: 1.25vw
-          grid-column-gap: 2.5vw
+          grid-row-gap: 0.5vw
+          grid-column-gap: 2.0vw
           grid-auto-rows: min-content
           grid-template-columns: 0 30% repeat( 6, 1fr ) 0
           grid-template-areas: >
@@ -292,6 +292,18 @@ views:
 
               return badgeIcon;
             ]]]
+          badge_info: |
+            [[[
+              let badgeIcon = '';
+
+              if( states['input_select.status_dehumidifier_options'].state == 'On' )
+              { 
+                badgeIcon = '<ha-icon icon="mdi:air-humidifier"></ha-icon>';
+
+              } // endif
+
+              return badgeIcon;
+            ]]]
       - type: vertical-stack
         cards:
           - type: custom:bubble-card
@@ -382,6 +394,12 @@ views:
                           action: more-info
                         double_tap_action:
                           action: more-info
+                      - type: custom:mushroom-light-card
+                        name: Dehimidifier
+                        icon: mdi:air-humidifier
+                        entity: switch.dehumidifier_power_switch
+                        collapsible_controls: false
+                        show_brightness_control: false
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -893,12 +911,12 @@ views:
                           - type: section
                             label: Lights Configuration
                           - entity: input_boolean.sync_kitchen_ceiling_lights
-                            name: Ceiling Lights
+                            name: Sync Ceiling Lights
                           - entity: >-
                               switch.circadian_lighting_kitchen_ceiling_lights_circadian
                             name: Ceiling Lights Adaptive Color
                           - entity: input_boolean.sync_cabinet_above_lights
-                            name: Cabinet Up Lights
+                            name: Sync Cabinet Up Lights
                           - type: section
                             label: Voice Assistant
                           - entity: input_boolean.household_notify_kitchen
@@ -2219,8 +2237,11 @@ views:
                     variables:
                       - cards:
                           - type: custom:mushroom-light-card
-                            name: Multimedia Power
-                            entity: light.bedroom_4_media_plug
+                            name: Television Multimedia
+                            entity: light.plug_bedroom_4_media
+                          - type: custom:mushroom-light-card
+                            name: Computer Peripherals
+                            entity: light.plug_bedroom_4_computer_peripherals
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -3797,8 +3818,6 @@ views:
 
                         #states > div:nth-child(4), 
 
-                        #states > div:nth-child(7), 
-
                         #states > div:nth-child(8), 
 
                         #states > div:nth-child(9), 
@@ -3809,7 +3828,9 @@ views:
 
                         #states > div:nth-child(12), 
 
-                        #states > div:nth-child(13) { padding-left: 45px
+                        #states > div:nth-child(13), 
+
+                        #states > div:nth-child(14) { padding-left: 45px
                         !important;}
                     entities:
                       - type: section
@@ -3832,6 +3853,8 @@ views:
                           name: Jess' iPhone
                       - type: section
                         label: Amazon Alexa Devices
+                      - entity: input_boolean.app_notify_via_thirdparty
+                        name: Use Third-Party Voice
                       - entity: input_boolean.household_notify
                         name: Amazon Alexa Devices
                       - type: conditional
@@ -5457,6 +5480,9 @@ views:
 
               {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
+
+              {% set the_entity = 'input_select.status_dehumidifier_options' %}
+              --maxson-floorplan--color-status-dehumidifier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'On' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -5801,6 +5827,17 @@ views:
               left: 30.25%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
+          - type: state-icon
+            entity: switch.dehumidifier_power_switch
+            icon: mdi:air-humidifier
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 60.5%
+              left: 50%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dehumidifier ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-horizontal.png
         visibility:
           - condition: screen
@@ -5869,6 +5906,9 @@ views:
 
               {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
+
+              {% set the_entity = 'input_select.status_dehumidifier_options' %}
+              --maxson-floorplan--color-status-dehumidifier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'On' ) %} var( --orange-color-rgb ) {% else %} var( --blue-color-rgb ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -6214,6 +6254,17 @@ views:
               left: 20%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dishwasher ) )
+          - type: state-icon
+            entity: switch.dehumidifier_power_switch
+            icon: mdi:air-humidifier
+            tap_action:
+              action: more-info
+            state_color: false
+            style:
+              top: 49%
+              left: 40%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-status-dehumidifier ) )
         image: /local/images/floor-plan/casa-maxson-floor-plan-vertical.png
         visibility:
           - condition: screen
@@ -7200,10 +7251,8 @@ views:
             media_query: '(min-width: 0px) and (max-width: 767px)'
     visible:
       - user: e1643ac2dd974ccfa68c25e246677c19
-      - user: 47e0e8bec26042a79ab8f89e3b381c1f
       - user: 3b74293450f74023a8d630c484054480
       - user: c38ed23229dc4d279b69129a8216d46a
-      - user: 10744496f87649af8d0dd6d79e16f537
       - user: 81d0c51b2fac42de984b3fe7b9655cf9
       - user: d2f33f9bd4404fe0a40404aff6a2ad90
   - title: Security
@@ -7437,10 +7486,8 @@ views:
     layout: {}
     visible:
       - user: e1643ac2dd974ccfa68c25e246677c19
-      - user: 47e0e8bec26042a79ab8f89e3b381c1f
       - user: 3b74293450f74023a8d630c484054480
       - user: c38ed23229dc4d279b69129a8216d46a
-      - user: 10744496f87649af8d0dd6d79e16f537
       - user: 81d0c51b2fac42de984b3fe7b9655cf9
       - user: d2f33f9bd4404fe0a40404aff6a2ad90
   - title: Laundry Details
@@ -7781,6 +7828,18 @@ views:
           - type: entities
             title: Living Room
             show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
             entities:
               - type: custom:mushroom-light-card
                 entity: light.living_room_corner_lamp
@@ -7796,6 +7855,9 @@ views:
                 show_brightness_control: true
                 show_color_control: false
                 use_light_color: true
+          - type: entities
+            title: Dining Room
+            show_header_toggle: false
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -7808,9 +7870,6 @@ views:
                 }
 
                 #states { padding: 0;}
-          - type: entities
-            title: Dining Room
-            show_header_toggle: false
             entities:
               - type: custom:mushroom-light-card
                 entity: light.dining_room_chandelier
@@ -7818,18 +7877,6 @@ views:
                 collapsible_controls: true
                 show_brightness_control: true
                 show_color_control: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
           - type: entities
             title: Bar
             show_header_toggle: false
@@ -7840,9 +7887,7 @@ views:
                   --ha-card-border-width: 0;
                   --ha-card-border-radius: 0;
                   --ha-card-background: transparent;
-                  padding-right: 0;
                   padding-bottom: 18px;
-                  padding-left: 0;
                   border-bottom: 1px solid var( --divider-color );
                 }
 
@@ -7877,6 +7922,18 @@ views:
           - type: entities
             title: Main Bedroom
             show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
@@ -7957,18 +8014,6 @@ views:
                 name: Tom's Closet
                 collapsible_controls: true
                 show_brightness_control: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
           - type: entities
             title: Main Bathroom
             show_header_toggle: false
@@ -7996,6 +8041,18 @@ views:
           - type: entities
             title: Guest Bedroom
             show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
             entities:
               - type: custom:mushroom-fan-card
                 name: Ceiling Fan
@@ -8063,18 +8120,6 @@ views:
                 entity: light.ceiling_fan_bedroom_2
                 name: Ceiling Fan Light
                 collapsible_controls: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
       - type: vertical-stack
         cards:
           - type: entities
@@ -8245,6 +8290,18 @@ views:
           - type: entities
             title: Hallways
             show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
             entities:
               - type: custom:mushroom-light-card
                 entity: light.guest_hallway_light
@@ -8256,6 +8313,9 @@ views:
                 name: Laundry Hallway
                 collapsible_controls: true
                 show_brightness_control: true
+          - type: entities
+            title: Laundry Room
+            show_header_toggle: false
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -8268,27 +8328,12 @@ views:
                 }
 
                 #states { padding: 0;}
-          - type: entities
-            title: Laundry Room
-            show_header_toggle: false
             entities:
               - type: custom:mushroom-light-card
                 entity: light.laundry_ceiling_light
                 name: Ceiling
                 collapsible_controls: true
                 show_brightness_control: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
           - type: entities
             title: Garage
             show_header_toggle: false
@@ -8320,6 +8365,18 @@ views:
           - type: entities
             title: Outside
             show_header_toggle: false
+            card_mod:
+              style: |
+                ha-card.type-entities { 
+                  --ha-card-border-color: transparent;
+                  --ha-card-border-width: 0;
+                  --ha-card-border-radius: 0;
+                  --ha-card-background: transparent;
+                  padding-bottom: 18px;
+                  border-bottom: 1px solid var( --divider-color );
+                }
+
+                #states { padding: 0;}
             entities:
               - type: custom:mushroom-light-card
                 entity: light.garage_exterior
@@ -8339,18 +8396,6 @@ views:
                 entity: light.front_yard_garden_lights
                 name: Front Yard Garden Lights
                 collapsible_controls: true
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
   - title: Overview
     path: page-overview
     layout:
@@ -8699,8 +8744,8 @@ views:
             entities:
               - type: custom:button-card
                 template: entity_card
-                name: Garage, Fan
-                entity: light.garage_fan
+                name: Foyer, Dehumidifier Override
+                entity: switch.plug_repeater_switch
               - type: custom:button-card
                 template: entity_card
                 name: Kitchen, Above Coffee Bar
@@ -8719,8 +8764,16 @@ views:
                 entity: light.tablet_plug
               - type: custom:button-card
                 template: entity_card
-                name: Tom's Office, Media
-                entity: light.bedroom_4_media_plug
+                name: Garage, Fan
+                entity: light.garage_fan
+              - type: custom:button-card
+                template: entity_card
+                name: Tom's Office, Television Media
+                entity: light.plug_bedroom_4_media
+              - type: custom:button-card
+                template: entity_card
+                name: Tom's Office, Computer Peripherals
+                entity: light.plug_bedroom_4_computer_peripherals
             card_mod:
               style: |
                 ha-card.type-entities { 
@@ -8794,14 +8847,6 @@ views:
             entities:
               - type: custom:button-card
                 template: entity_card
-                name: Outside
-                entity: sensor.temperature_outside
-                variables:
-                  data_entity: sensor.temperature_outside_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
                 name: Attic
                 entity: sensor.temperature_attic
                 variables:
@@ -8814,6 +8859,14 @@ views:
                 entity: sensor.temperature_garage
                 variables:
                   data_entity: sensor.temperature_garage_battery
+                  data_type: battery
+                  icon_type: battery_level
+              - type: custom:button-card
+                template: entity_card
+                name: Outside
+                entity: sensor.temperature_outside
+                variables:
+                  data_entity: sensor.temperature_outside_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -10451,7 +10504,7 @@ button_card_templates:
         - right: calc( var( --tile-card-badge--padding ) * -1 )
         - top: calc( var( --tile-card-badge--padding ) * -1 )
         - padding: var( --tile-card-badge--padding )
-        - border-radius: 50%
+        - border-radius: 100%
         - margin: 0 0 var( --tile-card-badge--padding )
         - transition: all 0.3s ease-out
         - z-index: 1
