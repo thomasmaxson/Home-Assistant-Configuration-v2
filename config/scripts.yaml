@@ -1253,9 +1253,9 @@ update_all_esphome_devices:
         data:
           notification_id: '{{ var_device_slug }}_started'
           title: ESPHome Device Update Started
-          message: _{{ var_device_name }}_ device update is in progress. Be patient
-            while this runs in the background. <br> <br>This process started at {{
-            var_start_time }} on {{ var_start_date }}.
+          message: The _{{ var_device_name }}_ update is in progress. Be patient while
+            this runs in the background. <br> <br>This process started at {{ var_start_time
+            }} on {{ var_start_date }}.
       - action: update.install
         data: {}
         target:
@@ -1269,50 +1269,21 @@ update_all_esphome_devices:
           var_end_timestamp: '{{ now().timestamp() }}'
           var_duration: '{{ ( var_end_timestamp ) - ( var_start_timestamp ) | relative_time
             | int }}'
-          var_duration_minutes: '{{ ( ( var_duration % 3600 ) // 60 ) }}'
-          var_duration_hours: '{{ ( ( var_duration % 86400 ) // 3600 ) }}'
-          var_duration_days: '{{ ( var_duration // 86400 ) }}'
-          var_output_minutes: '{{ ''{}m''.format( minutes ) if minutes > 0 else ''''
-            }}'
-          var_output_hours: '{{ ''{}h ''.format( hours ) if hours > 0 else '''' }}'
-          var_output_days: '{{ ''{}d ''.format( days ) if days > 0 else '''' }}'
-          var_output_duration: '{{ ''less than 1 min'' if time < 60 else days + hours
-            + minutes }}'
+          var_duration_days: '{{ ( var_duration // 86400 ) | int }}'
+          var_duration_minutes: '{{ ( ( var_duration % 3600 ) // 60 ) | int }}'
+          var_duration_hours: '{{ ( ( var_duration % 86400 ) // 3600 ) | int }}'
+          var_output_days: '{{ '' {} days''.format( var_duration_days ) if var_duration_days
+            > 0 else '''' }}'
+          var_output_hours: '{{ '' {} hours''.format( var_duration_hours ) if var_duration_hours
+            > 0 else '''' }}'
+          var_output_minutes: '{{ '' {} minutes''.format( var_duration_minutes ) if
+            var_duration_minutes > 0 else '''' }}'
+          var_output_duration: '{{ ''less than 1 minute'' if var_duration < 60 else
+            var_output_days + var_output_hours + var_output_minutes }}'
       - action: persistent_notification.create
         metadata: {}
         data:
           notification_id: '{{ var_device_slug }}_complete'
           title: ESPHome Device Update Complete
-          message: _{{ var_device_name }}_ device update has completed.  <br> <br>This
-            process ran for {{ var_output_duration }}.
-test:
-  alias: Test
-  description: ''
-  sequence:
-  - variables:
-      var_start_time: '{{ now().timestamp() }}'
-      var_started_time: '{{ now().strftime( ''%I:%M %p'' ) }}'
-      var_started_date: '{{ now().strftime( ''%m/%d/%Y'' ) }}'
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 5
-      milliseconds: 0
-  - variables:
-      var_end_time: '{{ now().timestamp() }}'
-      var_duration: '{{ ( var_end_time ) - ( var_start_time ) | relative_time }}'
-  - action: persistent_notification.create
-    data:
-      title: Script Completion
-      message: '{%- set time = var_duration | int  %} {%- set minutes = ( ( time %
-        3600 ) // 60 ) %} {%- set minutes = ''{}m''.format( minutes ) if minutes >
-        0 else '''' %} {%- set hours = ( ( time % 86400 ) // 3600 ) %} {%- set hours
-        = ''{}h ''.format( hours ) if hours > 0 else '''' %} {%- set days = ( time
-        // 86400 ) %} {%- set days = ''{}d ''.format( days ) if days > 0 else ''''
-        %}
-
-        {{ ''Less than 1 min'' if time < 60 else days + hours + minutes }} ago
-
-        {{ var_started_time }}
-
-        {{ var_started_date }}'
+          message: The _{{ var_device_name }}_ update is complete. <br> <br>This process
+            ran for approximately {{ var_output_duration }}.
