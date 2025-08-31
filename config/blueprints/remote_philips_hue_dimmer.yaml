@@ -364,7 +364,7 @@ actions:
                         condition: template
                         value_template: "{{ var_all_lights_on | length == 0 }}"
                     then:
-                      - alias: ""
+                      - alias: "Check if should adjust brightness when turning on light(s)"
                         if:
                           - alias: "Check if light brightness option is greater than 0"
                             condition: template
@@ -393,7 +393,7 @@ actions:
                     condition: template
                     value_template: "{{ var_event_button_top == 'Turn on light' }}"
                 sequence:
-                  - alias: ""
+                  - alias: "Check if should adjust brightness when turning on light(s)"
                     if:
                       - alias: "Check if light brightness option is greater than 0"
                         condition: template

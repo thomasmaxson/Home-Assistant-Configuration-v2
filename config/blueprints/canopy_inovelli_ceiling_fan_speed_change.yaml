@@ -7,22 +7,24 @@ blueprint:
   domain: automation
   input:
     ceiling_fan:
-      name: Ceiling Fan Canopy Module to watch for speed changes
+      name: Ceiling Fan Canopy Module
       description: ""
       selector:
         entity:
           multiple: false
           filter:
-            - domain: fan
+            - integration: mqtt
+              domain: fan
 
     light_switch:
-      name: Light Switch to show visual feedback on
+      name: Light Switch
       description: ""
       selector:
         entity:
           multiple: false
           filter:
-            - domain: light
+            - integration: mqtt
+              domain: light
 
     speed_to_high_config:
       name: Speed Changed to High
@@ -237,11 +239,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
-
 
 variables:
   var_ceiling_fan: !input ceiling_fan
@@ -351,17 +351,15 @@ triggers:
     to: 0
     id: fan_speed_from_high_to_off
 
-
 conditions:
   - condition: and
     conditions:
       - alias: "Check if fan to use is set"
         condition: template
-        value_template: "{{ var_ceiling_fan | count > 0 }}"
+        value_template: "{{ var_ceiling_fan | length > 0 }}"
       - alias: "Check if light to use is set"
         condition: template
-        value_template: "{{ var_light_switch | count > 0 }}"
-
+        value_template: "{{ var_light_switch | length > 0 }}"
 
 actions:
   - alias: "Determine action to execute"

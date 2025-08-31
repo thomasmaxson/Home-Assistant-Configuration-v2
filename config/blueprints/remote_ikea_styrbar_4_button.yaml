@@ -55,17 +55,15 @@ blueprint:
               manufacturer: IKEA of Sweden
               model: Remote Control N2
 
-    # target_lights:
-    #   name: Light(s)
-    #   description: Select the light entities you wish to control.
-    #   default: []
-    #   selector:
-    #     target:
-    #       entity:
-    #         - integration: mqtt
-    #           domain: light
-    #         - integration: zha
-    #           domain: light
+    target_lights:
+      name: Light(s)
+      description: Select the light entities you wish to control.
+      default: []
+      selector:
+        target:
+          entity:
+            - domain:
+                - light
 
     light:
       name: Light(s)
@@ -427,7 +425,7 @@ max_exceeded: silent
 variables: 
   var_remote: !input remote
   var_light: !input light
-  # var_target_lights: !input target_lights
+  var_target_lights: !input target_lights
 
   var_event_button_power: !input event_button_power
   var_event_buttons_brightness: !input event_buttons_brightness

@@ -60,12 +60,14 @@ blueprint:
         Select the event you want the remote to do.
         <br>&bull; _Toggle light_: Toggle the power state of the light(s)
         <br>&bull; _Custom Action_: Trigger your own custom action
-      default: "Toggle light"
+      default: "toggle"
       selector:
         select:
           options:
-            - Toggle light
-            - Custom action
+            - label: Toggle light
+              value: toggle
+            - label: Custom action
+              value: action
 
     light_config:
       name: Light Configuration
@@ -336,49 +338,6 @@ actions:
       var_first_light_on: >-
         {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list | first }}
 
-  - alias: "Maybe display debug notification"
-    if:
-      - alias: "Confirm debug remote is active"
-        condition: template
-        value_template: !input debug_valid_events
-    then:
-      - alias: "Setup debug variables"
-        variables:
-          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
-          trigger_action: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data.command }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger.payload }}
-            {%- endif -%}
-          trigger_data: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger }}
-            {%- endif -%}
-
-      - alias: "Display debug notification with remote and event details"
-        action: persistent_notification.create
-        data:
-          notification_id: blueprint_debug__remote_ikea_rodret_somrig_tradfri_2_button
-          title: >-
-            {%- if device_model_id not in [ "", "none", none, null, false] -%}
-              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
-            {%- else -%}
-              {{ device_manufacturer + " " + device_model }}
-            {%- endif -%}
-          message: >-
-            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}
-            <br>
-            <br>_Remote ID_: {{ var_remote }}
-            <br>
-            <br>```{{ trigger_data }}```
-
   - alias: "Determine button event to execute"
     choose:
       - alias: "Button: On, Press"
@@ -389,6 +348,17 @@ actions:
               - trigger_on_single_press_zha
               - trigger_on_single_press_mqtt
         sequence:
+          - alias: "Maybe store debug info"
+            if:
+              - alias: "Confirm debug is active"
+                condition: template
+                value_template: !input debug_valid_events
+            then:
+              - service: system_log.write
+                data_template:
+                  level: info
+                  message: >
+                    Remote button pressed. Single press event triggered.
           - alias: "Determine event action to trigger"
             choose:
               - alias: "For On button press, manage light on/off state"
@@ -398,7 +368,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_type == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length == 0 }}"
@@ -425,7 +395,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                    value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_on_single
 
 
@@ -446,7 +416,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_type == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -480,7 +450,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                    value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_on_hold
 
 
@@ -501,7 +471,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_type == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -521,7 +491,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                    value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_off_single
 
 
@@ -542,7 +512,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_type == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_type == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -582,5 +552,5 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_type == 'Custom action' }}"
+                    value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_off_hold
