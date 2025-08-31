@@ -1,0 +1,719 @@
+# This blueprint uses a Philips Hue Tap Dial Remote Control connected through MQTT.
+# This blueprint allows you to run custom actions with the remote's buttons
+#
+# | Button Type | Interaction       | Action Choices      |
+# | ----------- | ----------------- | ------------------- |
+# | One Dot     | Press             | - Run custom action |
+# | One Dot     | Press & Hold      | - Run custom action |
+# | One Dot     | Release           | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
+# | Two Dots    | Press             | - Run custom action |
+# | Two Dots    | Press & Hold      | - Run custom action |
+# | Two Dots    | Release           | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
+# | Three Dots  | Press             | - Run custom action |
+# | Three Dots  | Press & Hold      | - Run custom action |
+# | Three Dots  | Release           | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
+# | Four Dots   | Press             | - Run custom action |
+# | Four Dots   | Press & Hold      | - Run custom action |
+# | Four Dots   | Release           | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
+# | Dial        | Rotate Left       | - Run custom action |
+# | Dial        | Rotate Right      | - Run custom action |
+# | ----------- | ----------------- | ------------------- |
+
+blueprint:
+  name: Philips Hue, Tap Dial Remote Control
+  description: Control devices with your Philips Hue Tap Dial remote.
+  author: Thomas Maxson
+  source_url: https://gist.github.com/thomasmaxson/730d83fa9971097dc66a60a77a02d28c
+  homeassistant:
+    min_version: 2024.6.0
+  domain: automation
+  input:
+    remote:
+      name: Philips Hue Tap Dial remote control
+      description: Philips Hue Tap Dial remote used to trigger actions.
+      selector:
+        device:
+          filter:
+            - integration: zha
+              manufacturer: Signify Netherlands B.V.
+              model: RDM002
+            - integration: mqtt
+              manufacturer: Philips
+              model: Hue Tap dial switch
+
+    last_pressed:
+      name: Last Pressed Input Text Helper
+      description: Select an input text helper to keep track of the last button pressed.
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - domain:
+                - input_text
+
+    configuration_dot_1:
+      name: Dot 1 Button Configuration
+      icon: mdi:numeric-1-box
+      collapsed: true
+      input:
+        event_dot_1:
+          name: Button Event Type
+          description: >-
+            Select the event you want the **Top Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Turn on light_: Turn on the light(s)
+            <br>&bull; _Turn off light_: Turn off the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "toggle"
+          selector:
+            select:
+              options:
+                - label: Toggle light
+                  value: toggle
+                - label: Turn on light
+                  value: light_on
+                - label: Turn off light
+                  value: light_off
+                - label: Custom action
+                  value: action
+
+        lights_dot_1:
+          name: Light(s)
+          description: Select the light(s) you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        brightness_dot_1:
+          name: Brightness Level When Light Turns on
+          description: >-
+            Level of brightness to set the light(s) to when turning on.
+            <br>&bull; Set 1-100 to use a specific brightness level
+            <br>&bull; Set to 0 to use the lights last brightness level
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 1.0
+          default: 0
+
+        action_press_dot_1:
+          name: Press Event
+          description: The action to perform on _press_.
+          default: []
+          selector:
+            action:
+
+        action_hold_dot_1:
+          name: Press and Hold Event
+          description: The action to perform on _press and hold_.
+          default: []
+          selector:
+            action:
+
+        action_dial_left_dot_1:
+          name: Left Spin Dial Event
+          description: >-
+            The action to perform on _left spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_left_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_left_fast_mqtt
+          default: []
+          selector:
+            action:
+
+        action_dial_right_dot_1:
+          name: Right Spin Dial Event
+          description: The action to perform on _right spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_right_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_right_fast_mqtt
+          default: []
+          selector:
+            action:
+
+    configuration_dot_2:
+      name: Dot 2 Button Configuration
+      icon: mdi:numeric-2-box
+      collapsed: true
+      input:
+        event_dot_2:
+          name: Button Event Type
+          description: >-
+            Select the event you want the **Top Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Turn on light_: Turn on the light(s)
+            <br>&bull; _Turn off light_: Turn off the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "toggle"
+          selector:
+            select:
+              options:
+                - label: Toggle light
+                  value: toggle
+                - label: Turn on light
+                  value: light_on
+                - label: Turn off light
+                  value: light_off
+                - label: Custom action
+                  value: action
+
+        lights_dot_2:
+          name: Light(s)
+          description: Select the light(s) you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        brightness_dot_2:
+          name: Brightness Level When Light Turns on
+          description: >-
+            Level of brightness to set the light(s) to when turning on.
+            <br>&bull; Set 1-100 to use a specific brightness level
+            <br>&bull; Set to 0 to use the lights last brightness level
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 1.0
+          default: 0
+
+        action_press_dot_2:
+          name: Press Event
+          description: The action to perform on _press_.
+          default: []
+          selector:
+            action:
+
+        action_hold_dot_2:
+          name: Press and Hold Event
+          description: The action to perform on _press and hold_.
+          default: []
+          selector:
+            action:
+
+        action_dial_left_dot_2:
+          name: Left Spin Dial Event
+          description: The action to perform on _left spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_left_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_left_fast_mqtt
+          default: []
+          selector:
+            action:
+
+        action_dial_right_dot_2:
+          name: Right Spin Dial Event
+          description: The action to perform on _right spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_right_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_right_fast_mqtt
+          default: []
+          selector:
+            action:
+
+    configuration_dot_3:
+      name: Dot 3 Button Configuration
+      icon: mdi:numeric-3-box
+      collapsed: true
+      input:
+        event_dot_3:
+          name: Button Event Type
+          description: >-
+            Select the event you want the **Top Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Turn on light_: Turn on the light(s)
+            <br>&bull; _Turn off light_: Turn off the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "toggle"
+          selector:
+            select:
+              options:
+                - label: Toggle light
+                  value: toggle
+                - label: Turn on light
+                  value: light_on
+                - label: Turn off light
+                  value: light_off
+                - label: Custom action
+                  value: action
+
+        lights_dot_3:
+          name: Light(s)
+          description: Select the light(s) you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        brightness_dot_3:
+          name: Brightness Level When Light Turns on
+          description: >-
+            Level of brightness to set the light(s) to when turning on.
+            <br>&bull; Set 1-100 to use a specific brightness level
+            <br>&bull; Set to 0 to use the lights last brightness level
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 1.0
+          default: 0
+
+        action_press_dot_3:
+          name: Press Event
+          description: The action to perform on _press_.
+          default: []
+          selector:
+            action:
+
+        action_hold_dot_3:
+          name: Press and Hold Event
+          description: The action to perform on _press and hold_.
+          default: []
+          selector:
+            action:
+
+        action_dial_left_dot_3:
+          name: Left Spin Dial Event
+          description: The action to perform on _left spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_left_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_left_fast_mqtt
+          default: []
+          selector:
+            action:
+
+        action_dial_right_dot_3:
+          name: Right Spin Dial Event
+          description: The action to perform on _right spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_right_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_right_fast_mqtt
+          default: []
+          selector:
+            action:
+
+    configuration_dot_4:
+      name: Dot 4 Button Configuration
+      icon: mdi:numeric-4-box
+      collapsed: true
+      input:
+        event_dot_4:
+          name: Button Event Type
+          description: >-
+            Select the event you want the **Top Button** to do.
+            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
+            <br>&bull; _Turn on light_: Turn on the light(s)
+            <br>&bull; _Turn off light_: Turn off the light(s)
+            <br>&bull; _Custom Action_: Trigger your own custom action
+          default: "toggle"
+          selector:
+            select:
+              options:
+                - label: Toggle light
+                  value: toggle
+                - label: Turn on light
+                  value: light_on
+                - label: Turn off light
+                  value: light_off
+                - label: Custom action
+                  value: action
+
+        lights_dot_4:
+          name: Light(s)
+          description: Select the light(s) you wish to control.
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                domain: light
+
+        brightness_dot_4:
+          name: Brightness Level When Light Turns on
+          description: >-
+            Level of brightness to set the light(s) to when turning on.
+            <br>&bull; Set 1-100 to use a specific brightness level
+            <br>&bull; Set to 0 to use the lights last brightness level
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: "%"
+              min: 0
+              max: 100.0
+              step: 1.0
+          default: 0
+
+        action_press_dot_4:
+          name: Press Event
+          description: The action to perform on _press_.
+          default: []
+          selector:
+            action:
+
+        action_hold_dot_4:
+          name: Press and Hold Event
+          description: The action to perform on _press and hold_.
+          default: []
+          selector:
+            action:
+
+        action_dial_left_dot_4:
+          name: Left Spin Dial Event
+          description: The action to perform on _left spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_left_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_left_fast_mqtt
+          default: []
+          selector:
+            action:
+
+        action_dial_right_dot_4:
+          name: Right Spin Dial Event
+          description: The action to perform on _right spin_ of the dial.
+            <br>Different spin speeds are available by targeting different trigger events:
+            <br>&bull; _Step_: trigger_dial_right_spin_mqtt
+            <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
+            <br>&bull; _Fast_: trigger_dial_right_fast_mqtt
+          default: []
+          selector:
+            action:
+
+mode: restart
+max: 10
+max_exceeded: silent
+
+variables:
+  var_remote: !input remote
+  var_last_pressed: !input last_pressed
+  var_data:
+    0: false
+    1:
+      "event": !input event_dot_1
+      "lights": !input lights_dot_1
+      "brightness": !input brightness_dot_1
+    2:
+      "event": !input event_dot_2
+      "lights": !input lights_dot_2
+      "brightness": !input brightness_dot_2
+    3:
+      "event": !input event_dot_3
+      "lights": !input lights_dot_3
+      "brightness": !input brightness_dot_3
+    4:
+      "event": !input event_dot_4
+      "lights": !input lights_dot_4
+      "brightness": !input brightness_dot_4
+
+triggers:
+  - alias: Dot 1 Single Button Press (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_1_press_release"
+    id: trigger_dot_1_single_press_mqtt
+  - alias: Dot 1 Single Button Press and Hold (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_1_hold_release"
+    id: trigger_dot_1_press_hold_mqtt
+
+  - alias: Dot 2 Single Button Press (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_2_press_release"
+    id: trigger_dot_2_single_press_mqtt
+  - alias: Dot 2 Single Button Press and Hold (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_2_hold_release"
+    id: trigger_dot_2_press_hold_mqtt
+
+  - alias: Dot 3 Single Button Press (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_3_press_release"
+    id: trigger_dot_3_single_press_mqtt
+  - alias: Dot 3 Single Button Press and Hold (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_3_hold_release"
+    id: trigger_dot_3_press_hold_mqtt
+
+  - alias: Dot 4 Single Button Press (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_4_press_release"
+    id: trigger_dot_4_single_press_mqtt
+  - alias: Dot 4 Single Button Press and Hold (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "button_4_hold_release"
+    id: trigger_dot_4_press_hold_mqtt
+
+  - alias: Step Dial Spin Left (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_left_step"
+    id: trigger_dial_left_spin_mqtt
+  - alias: Slow Dial Spin Left (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_left_slow"
+    id: trigger_dial_left_slow_mqtt
+  - alias: Fast Dial Spin Left (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_left_fast"
+    id: trigger_dial_left_fast_mqtt
+
+  - alias: Step Dial Spin Right (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_right_step"
+    id: trigger_dial_right_spin_mqtt
+  - alias: Slow Dial Spin Right (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_right_slow"
+    id: trigger_dial_right_slow_mqtt
+  - alias: Fast Dial Spin Right (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "dial_rotate_right_fast"
+    id: trigger_dial_right_fast_mqtt
+
+actions:
+  - alias: ""
+    choose:
+      - alias: "If button was pressed"
+        conditions:
+          - alias: "Check if triggered by button press"
+            condition: trigger
+            id:
+              - trigger_dot_1_single_press_mqtt
+              - trigger_dot_2_single_press_mqtt
+              - trigger_dot_3_single_press_mqtt
+              - trigger_dot_4_single_press_mqtt
+        sequence:
+          - variables:
+              var_dot: >-
+                {{ trigger.id | regex_findall_index( '\\d+', 0 ) | default( 0 ) | int }}
+              var_event: >-
+                {{ var_data[ var_dot ][ 'event' ] }}
+              var_lights: >-
+                {{ var_data[ var_dot ][ 'lights' ] }}
+              var_brightness: >-
+                {{ var_data[ var_dot ][ 'brightness' ] }}
+              var_lights_on: >-
+                {{ expand( var_lights ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
+
+          - alias: "Update last pressed helper value"
+            action: input_text.set_value
+            data:
+              value: "{{ var_dot }}"
+            target:
+              entity_id: "{{ var_last_pressed }}"
+
+          - alias: "Determine button event to execute"
+            choose:
+              - alias: "For button press, manage light state"
+                conditions:
+                  - condition: and
+                    conditions:
+                      - alias: "Check that light(s) are set to be managed"
+                        condition: template
+                        value_template: "{{ var_lights | length > 0 }}"
+                      - alias: "Check if should toggle light(s)"
+                        condition: template
+                        value_template: "{{ var_event in [ 'toggle', 'light_on', 'light_off' ] }}"
+
+                sequence:
+                  - alias: "Manage light(s) on state"
+                    if:
+                      - condition: or
+                        conditions:
+                          - alias: "Check if should turn on light(s)"
+                            condition: template
+                            value_template: "{{ var_event == 'light_on' }}"
+                          - condition: and
+                            conditions:
+                              - alias: "Check if should toggle light(s)"
+                                condition: template
+                                value_template: "{{ var_event == 'toggle' }}"
+                              - alias: "Check if light(s) are currently off"
+                                condition: template
+                                value_template: "{{ var_lights_on | length == 0 }}"
+                    then:
+                      - alias: "Check if should adjust brightness when turning on light(s)"
+                        if:
+                          - alias: "Check if light brightness option is greater than 0"
+                            condition: template
+                            value_template: "{{ var_brightness | int > 0 }}"
+                        then:
+                          - alias: "Turn on light(s) with the set brightness option"
+                            action: light.turn_on
+                            target:
+                              entity_id: "{{ var_lights }}"
+                            data:
+                              brightness_pct: "{{ var_brightness }}"
+                        else:
+                          - alias: "Turn on light(s)"
+                            action: light.turn_on
+                            target:
+                              entity_id: "{{ var_lights }}"
+
+                  - alias: "Manage light(s) off state"
+                    if:
+                      - condition: or
+                        conditions:
+                          - alias: "Check if should turn off light(s)"
+                            condition: template
+                            value_template: "{{ var_event == 'light_off' }}"
+                          - condition: and
+                            conditions:
+                              - alias: "Check if should toggle light(s)"
+                                condition: template
+                                value_template: "{{ var_event == 'toggle' }}"
+                              - alias: "Check if light(s) are currently on"
+                                condition: template
+                                value_template: "{{ var_lights_on | length > 0 }}"
+                    then:
+                      - alias: "Turn off light(s)"
+                        action: light.turn_off
+                        target:
+                          entity_id: "{{ var_lights }}"
+
+              - alias: "For button press, run custom action"
+                conditions:
+                  - alias: "Check if correct action choice is selected"
+                    condition: template
+                    value_template: "{{ var_event == 'action' }}"
+                sequence: 
+                  - alias: "Determine dial event to execute"
+                    choose:
+                      - conditions: 
+                          - condition: state
+                            entity_id: !input last_pressed
+                            state: "2"
+                        sequence: !input action_press_dot_2
+                      - conditions: 
+                          - condition: state
+                            entity_id: !input last_pressed
+                            state: "3"
+                        sequence: !input action_press_dot_3
+                      - conditions: 
+                          - condition: state
+                            entity_id: !input last_pressed
+                            state: "4"
+                        sequence: !input action_press_dot_4
+                    default: !input action_press_dot_1
+
+
+      - alias: "If dial was rotated left"
+        conditions:
+          - alias: "Check if triggered by left dial rotation"
+            condition: trigger
+            id:
+              - trigger_dial_left_spin_mqtt
+              - trigger_dial_left_slow_mqtt
+              - trigger_dial_left_fast_mqtt
+        sequence:
+          - alias: "Determine dial event to execute"
+            choose:
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "2"
+                sequence: !input action_dial_left_dot_2
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "3"
+                sequence: !input action_dial_left_dot_3
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "4"
+                sequence: !input action_dial_left_dot_4
+            default: !input action_dial_left_dot_1
+
+      - alias: "If dial was rotated right"
+        conditions:
+          - alias: "Check if triggered by right dial rotation"
+            condition: trigger
+            id:
+              - trigger_dial_right_spin_mqtt
+              - trigger_dial_right_slow_mqtt
+              - trigger_dial_right_fast_mqtt
+        sequence:
+          - alias: "Determine dial event to execute"
+            choose:
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "2"
+                sequence: !input action_dial_right_dot_2
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "3"
+                sequence: !input action_dial_right_dot_3
+              - conditions: 
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "4"
+                sequence: !input action_dial_right_dot_4
+            default: !input action_dial_right_dot_1
