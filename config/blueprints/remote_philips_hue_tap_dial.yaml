@@ -137,6 +137,7 @@ blueprint:
           name: Left Spin Dial Event
           description: >-
             The action to perform on _left spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_left_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
@@ -149,6 +150,7 @@ blueprint:
           name: Right Spin Dial Event
           description: >-
             The action to perform on _right spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_right_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
@@ -226,6 +228,7 @@ blueprint:
           name: Left Spin Dial Event
           description: >-
             The action to perform on _left spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_left_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
@@ -238,6 +241,7 @@ blueprint:
           name: Right Spin Dial Event
           description: >-
             The action to perform on _right spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_right_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
@@ -315,6 +319,7 @@ blueprint:
           name: Left Spin Dial Event
           description: >-
             The action to perform on _left spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_left_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
@@ -327,6 +332,7 @@ blueprint:
           name: Right Spin Dial Event
           description: >-
             The action to perform on _right spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_right_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
@@ -404,6 +410,7 @@ blueprint:
           name: Left Spin Dial Event
           description: >-
             The action to perform on _left spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_left_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_left_slow_mqtt
@@ -416,6 +423,7 @@ blueprint:
           name: Right Spin Dial Event
           description: >-
             The action to perform on _right spin_ of the dial.
+            <br>
             <br>Different spin speeds are available by targeting different trigger events:
             <br>&bull; _Step_: trigger_dial_right_spin_mqtt
             <br>&bull; _Slow_: trigger_dial_right_slow_mqtt
@@ -425,14 +433,14 @@ blueprint:
             action:
 
 mode: restart
-max: 10
+max: 3
 max_exceeded: silent
 
 variables:
   var_remote: !input remote
   var_last_pressed: !input last_pressed
   var_data:
-    0: false
+    0: []
     1:
       "event": !input event_dot_1
       "lights": !input lights_dot_1
