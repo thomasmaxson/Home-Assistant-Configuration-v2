@@ -286,13 +286,13 @@ actions:
       var_all_lights_off_single: >-
         {{ expand( var_light_press_single ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
       var_first_light_on_single: >-
-        {{ expand( var_light_press_single ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
+        {{ [] if ( var_light_press_single | length <= 0 ) else expand( var_light_press_single ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
       var_all_lights_on_double: >-
         {{ expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list }}
       var_all_lights_off_double: >-
         {{ expand( var_light_press_double ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
       var_first_light_on_double: >-
-        {{ expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
+        {{ [] if ( var_light_press_double | length <= 0 ) else expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
 
 
   - alias: "Maybe display debug notification"

@@ -670,7 +670,7 @@ actions:
       var_all_lights_off: >-
         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
       var_first_light_on: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
+        {{ [] if ( var_light | length <= 0 ) else expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
 
 
   - alias: "Maybe display debug notification"
