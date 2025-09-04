@@ -60,7 +60,9 @@ blueprint:
 
     last_pressed:
       name: Last Pressed Input Text Helper
-      description: Select an input text helper to keep track of the last button pressed.
+      description: >-
+        Select an input text helper to keep track of the last button pressed.
+        <br>You will have to manually create this text helper.
       selector:
         entity:
           multiple: false
@@ -564,6 +566,11 @@ triggers:
     id: trigger_dial_right_fast_mqtt
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+
   - alias: ""
     choose:
       - alias: "If button was pressed"
@@ -669,25 +676,66 @@ actions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
                     value_template: "{{ var_event == 'action' }}"
-                sequence: 
+                sequence:
                   - alias: "Determine dial event to execute"
                     choose:
-                      - conditions: 
+                      - conditions:
                           - condition: state
                             entity_id: !input last_pressed
                             state: "2"
                         sequence: !input action_press_dot_2
-                      - conditions: 
+                      - conditions:
                           - condition: state
                             entity_id: !input last_pressed
                             state: "3"
                         sequence: !input action_press_dot_3
-                      - conditions: 
+                      - conditions:
                           - condition: state
                             entity_id: !input last_pressed
                             state: "4"
                         sequence: !input action_press_dot_4
                     default: !input action_press_dot_1
+
+
+      - alias: "If button was pressed and held"
+        conditions:
+          - alias: "Check if triggered by button press and hold"
+            condition: trigger
+            id:
+              - trigger_dot_1_press_hold_mqtt
+              - trigger_dot_2_press_hold_mqtt
+              - trigger_dot_3_press_hold_mqtt
+              - trigger_dot_4_press_hold_mqtt
+        sequence:
+          - variables:
+              var_dot: >-
+                {{ trigger.id | regex_findall_index( '\\d+', 0 ) | default( 0 ) | int }}
+
+          - alias: "Update last pressed helper value"
+            action: input_text.set_value
+            data:
+              value: "{{ var_dot }}"
+            target:
+              entity_id: "{{ var_last_pressed }}"
+
+          - alias: "Determine dial event to execute"
+            choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "2"
+                sequence: !input action_hold_dot_2
+              - conditions:
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "3"
+                sequence: !input action_hold_dot_3
+              - conditions:
+                  - condition: state
+                    entity_id: !input last_pressed
+                    state: "4"
+                sequence: !input action_hold_dot_4
+            default: !input action_hold_dot_1
 
 
       - alias: "If dial was rotated left"
@@ -701,22 +749,23 @@ actions:
         sequence:
           - alias: "Determine dial event to execute"
             choose:
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "2"
                 sequence: !input action_dial_left_dot_2
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "3"
                 sequence: !input action_dial_left_dot_3
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "4"
                 sequence: !input action_dial_left_dot_4
             default: !input action_dial_left_dot_1
+
 
       - alias: "If dial was rotated right"
         conditions:
@@ -729,17 +778,17 @@ actions:
         sequence:
           - alias: "Determine dial event to execute"
             choose:
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "2"
                 sequence: !input action_dial_right_dot_2
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "3"
                 sequence: !input action_dial_right_dot_3
-              - conditions: 
+              - conditions:
                   - condition: state
                     entity_id: !input last_pressed
                     state: "4"
