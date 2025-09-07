@@ -409,13 +409,6 @@ blueprint:
               max: 15.0
               step: 1.0
 
-        debug_valid_events:
-          name: Debug Remote
-          description: Display a persistent notification, with remote and event details, if triggered.
-          default: false
-          selector:
-            boolean:
-
 
 mode: !input config_mode
 max: !input config_max_num
@@ -671,50 +664,6 @@ actions:
         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
       var_first_light_on: >-
         {{ [] if ( var_light | length <= 0 ) else expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
-
-
-  - alias: "Maybe display debug notification"
-    if:
-      - alias: "Confirm debug remote is active"
-        condition: template
-        value_template: !input debug_valid_events
-    then:
-      - alias: "Setup debug variables"
-        variables:
-          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
-          trigger_action: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data.command }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger.payload }}
-            {%- endif -%}
-          trigger_data: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger }}
-            {%- endif -%}
-
-      - alias: "Display debug notification with remote and event details"
-        action: persistent_notification.create
-        data:
-          notification_id: blueprint_debug__remote_ikea_tradfri_5_button
-          title: >-
-            {%- if device_model_id not in [ "", "none", none, null, false] -%}
-              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
-            {%- else -%}
-              {{ device_manufacturer + " " + device_model }}
-            {%- endif -%}
-          message: >-
-            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}  | Trigger ID: {{ trigger.id }}
-            <br>
-            <br>_Remote ID_: {{ var_remote }}
-            <br>
-            <br>```{{ trigger_data }}```
 
 
   - alias: "Determine button event to execute"

@@ -207,18 +207,9 @@ blueprint:
               max: 15.0
               step: 1.0
 
-        debug_valid_events:
-          name: Debug Remote
-          description: Display a persistent notification, with remote and event details, if triggered.
-          default: false
-          selector:
-            boolean:
-
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
-
 
 variables:
   var_remote: !input remote
@@ -229,7 +220,6 @@ variables:
   var_repeat_max_count: !input repeat_max_count
 
   var_event_button_type: !input event_button_type
-
 
 triggers:
   - alias: On (Dash, Line or 1 Dot) Button Press (via ZHA event)
@@ -277,7 +267,6 @@ triggers:
     subtype: "brightness_stop"
     id: trigger_on_release_mqtt
 
-
   - alias: Off (Circle or 2 Dots) Button Press (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -323,11 +312,9 @@ triggers:
     subtype: "brightness_stop"
     id: trigger_off_release_mqtt
 
-
 conditions:
   - condition: template
     value_template: "{{ var_remote | count > 0 }}"
-
 
 actions:
   - variables:
@@ -348,17 +335,6 @@ actions:
               - trigger_on_single_press_zha
               - trigger_on_single_press_mqtt
         sequence:
-          - alias: "Maybe store debug info"
-            if:
-              - alias: "Confirm debug is active"
-                condition: template
-                value_template: !input debug_valid_events
-            then:
-              - service: system_log.write
-                data_template:
-                  level: info
-                  message: >
-                    Remote button pressed. Single press event triggered.
           - alias: "Determine event action to trigger"
             choose:
               - alias: "For On button press, manage light on/off state"
@@ -397,7 +373,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_on_single
-
 
       - alias: "Button: On, Press and Hold"
         conditions:
@@ -453,7 +428,6 @@ actions:
                     value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_on_hold
 
-
       - alias: "Button: Off, Press"
         conditions:
           - alias: "Check if triggered by Off button press"
@@ -493,7 +467,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_button_type == 'action' }}"
                 sequence: !input event_button_press_off_single
-
 
       - alias: "Button: Off, Press and Hold"
         conditions:

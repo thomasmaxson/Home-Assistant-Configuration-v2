@@ -206,13 +206,6 @@ blueprint:
               max: 15.0
               step: 1.0
 
-        debug_valid_events:
-          name: Debug Remote
-          description: Display a persistent notification, with remote and event details, if triggered.
-          default: false
-          selector:
-            boolean:
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -269,35 +262,6 @@ conditions:
     value_template: "{{ var_remote | count > 0 }}"
 
 actions:
-  - variables:
-      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
-      trigger_action: "{{ trigger.event.data.button_type }}"
-      trigger_data: "{{ trigger.event.data }}"
-
-  - if:
-      - condition: template
-        value_template: !input debug_valid_events
-    then:
-      - action: persistent_notification.create
-        data:
-          notification_id: blueprint_debug__lutron_pico_3_button_rl
-          title: >-
-            {%- if device_model_id not in [ "", "none", none, null, false] -%}
-              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
-            {%- else -%}
-              {{ device_manufacturer + " " + device_model }}
-            {%- endif -%}
-          message: >-
-            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
-            <br>
-            <br>_Remote ID_: {{ var_remote }}
-            <br>
-            <br>```{{ trigger_data }}```
-
   - choose:
       # Button Press (ON)
       - conditions:
