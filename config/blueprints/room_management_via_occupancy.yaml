@@ -4,7 +4,6 @@ blueprint:
     Manage occupancy state via multiple sensors.
 
     - Control what happens when a door opens or occupancy is detected.
-
     - Control what happens when a door closes or occupancy is cleared.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/635084f3a7f8e1877542c210b39c6ed5
@@ -119,316 +118,330 @@ blueprint:
               filter:
                 domain: timer
 
-variables:
-  sensor_door: !input sensor_door
-  sensor_occupancy: !input sensor_occupancy
-  enable_door_action: !input enable_door_action
-  disable_door_action: !input disable_door_action
-  enable_occupancy_action_now: !input enable_occupancy_action_now
-  disable_occupancy_action_now: !input disable_occupancy_action_now
-  enable_action_wait_duration: !input enable_action_wait_duration
-  disable_action_wait_duration: !input disable_action_wait_duration
-  enable_occupancy_action_wait: !input enable_occupancy_action_wait
-  disable_occupancy_action_wait: !input disable_occupancy_action_wait
-  idle_timer: !input idle_timer
+# variables:
+#   sensor_door: !input sensor_door
+#   sensor_occupancy: !input sensor_occupancy
+#   enable_door_action: !input enable_door_action
+#   disable_door_action: !input disable_door_action
+#   enable_occupancy_action_now: !input enable_occupancy_action_now
+#   disable_occupancy_action_now: !input disable_occupancy_action_now
+#   enable_action_wait_duration: !input enable_action_wait_duration
+#   disable_action_wait_duration: !input disable_action_wait_duration
+#   enable_occupancy_action_wait: !input enable_occupancy_action_wait
+#   disable_occupancy_action_wait: !input disable_occupancy_action_wait
+#   idle_timer: !input idle_timer
 
 triggers:
-  # When door is OPENED - IMMEDIATE
-  - trigger: state
+  - alias: "When door is OPENED - IMMEDIATE"
+    trigger: state
+    entity_id: !input sensor_door
+    from: "off"
+    to: "on"
     id: event_now_door_open
+
+  - alias: "When door is OPENED - DELAYED"
+    trigger: state
     entity_id: !input sensor_door
     from: "off"
     to: "on"
-
-  # When door is OPENED - DELAYED
-  - trigger: state
+    for: !input enable_action_wait_duration
     id: event_wait_door_open
-    entity_id: !input sensor_door
-    from: "off"
-    to: "on"
-    for: !input enable_action_wait_duration
 
-  # When door is CLOSED - IMMEDIATE
-  - trigger: state
+  - alias: "When door is CLOSED - IMMEDIATE"
+    trigger: state
+    entity_id: !input sensor_door
+    from: "on"
+    to: "off"
     id: event_now_door_close
-    entity_id: !input sensor_door
-    from: "on"
-    to: "off"
 
-  # When door is CLOSED - DELAYED
-  - trigger: state
-    id: event_wait_door_close
+  - alias: "When door is CLOSED - DELAYED"
+    trigger: state
     entity_id: !input sensor_door
     from: "on"
     to: "off"
     for: !input disable_action_wait_duration
+    id: event_wait_door_close
 
-  # When motion is DETECTED - IMMEDIATE
-  - trigger: state
-    id: event_now_motion_detect
+  - alias: "When motion is DETECTED - IMMEDIATE"
+    trigger: state
     entity_id: !input sensor_occupancy
     from: "off"
     to: "on"
+    id: event_now_motion_detect
 
-  # When motion is DETECTED - DELAYED
-  - trigger: state
-    id: event_wait_motion_detect
+  - alias: "When motion is DETECTED - DELAYED"
+    trigger: state
     entity_id: !input sensor_occupancy
     from: "on"
     to: "off"
     for: !input enable_action_wait_duration
+    id: event_wait_motion_detect
 
-  # When motion is CLEARED - IMMEDIATE
-  - trigger: state
-    id: event_now_motion_clear
+  - alias: "When motion is CLEARED - IMMEDIATE"
+    trigger: state
     entity_id: !input sensor_occupancy
     from: "on"
     to: "off"
+    id: event_now_motion_clear
 
-  # When motion is CLEARED - DELAYED
-  - trigger: state
-    id: event_wait_motion_clear
+  - alias: "When motion is CLEARED - DELAYED"
+    trigger: state
     entity_id: !input sensor_occupancy
     from: "on"
     to: "off"
     for: !input disable_action_wait_duration
+    id: event_wait_motion_clear
 
-  # When idle timer ENDS - IMMEDIATE
-  - trigger: event
-    id: event_idle_timer_finished
+  - alias: "When idle timer ENDS - IMMEDIATE"
+    trigger: event
     event_type: timer.finished
     event_data:
       entity_id: !input idle_timer
+    id: event_idle_timer_finished
 
 actions:
-  - choose:
-      # Actions to perform if DOOR OPENED
-      - conditions:
-          - condition: trigger
+  - alias: "Choose actions to check and run"
+    choose:
+      - alias: "Actions to perform if DOOR OPENED"
+        conditions:
+          - alias: "Check if trigged by event"
+            condition: trigger
             id: event_now_door_open
-        sequence:
-          # If configured, RUN delayed enable ACTIONS
-          - if:
-              - condition: template
-                value_template: "{{ enable_door_action | length > 0 }}"
-            then: !input enable_door_action
+        sequence: !input enable_door_action
 
-      # Actions to perform if DOOR CLOSED
-      - conditions:
-          - condition: trigger
+      - alias: "Actions to perform if DOOR CLOSED"
+        conditions:
+          - alias: "Check if trigged by event"
+            condition: trigger
             id: event_now_door_close
-        sequence:
-          # If configured, RUN delayed enable ACTIONS
-          - if:
-              - condition: template
-                value_template: "{{ disable_door_action | length > 0 }}"
-            then: !input disable_door_action
+        sequence: !input disable_door_action
 
-      # Actions to perform if DOOR OPENED, and MOTION DETECTED
-      - conditions:
-          - condition: and
+      - alias: "Actions to perform if DOOR OPENED, and MOTION DETECTED"
+        conditions:
+          - alias: "Ensure all events are true"
+            condition: and
             conditions:
-              - condition: trigger
+              - alias: "Check if trigged by event"
+                condition: trigger
                 id: event_wait_door_open
-              - condition: state
+              - alias: "Check if occupancy is detected"
+                condition: state
                 entity_id: !input sensor_occupancy
                 state: "on"
-        sequence:
-          # If configured, RUN delayed enable ACTIONS
-          - if:
-              - condition: template
-                value_template: "{{ enable_occupancy_action_wait | length > 0 }}"
-            then: !input enable_occupancy_action_wait
+        sequence: !input enable_occupancy_action_wait
 
-      # Actions to perform if DOOR OPENED, and MOTION CLEAR
-      - conditions:
-          - condition: and
+      - alias: "Actions to perform if DOOR OPENED, and MOTION CLEAR"
+        conditions:
+          - alias: "Ensure all events are true"
+            condition: and
             conditions:
-              - condition: trigger
+              - alias: "Check if trigged by event"
+                condition: trigger
                 id: event_now_door_open
-              - condition: state
+              - alias: "Check if occupancy is not detected"
+                condition: state
                 entity_id: !input sensor_occupancy
                 state: "off"
         sequence:
-          # If configured, RUN immediate enable ACTIONS
-          # - if:
-          #     - condition: template
-          #       value_template: "{{ enable_occupancy_action_now | length > 0 }}"
-          #   then: !input enable_occupancy_action_now
-          # If configured, manage idle TIMER
-          - if:
-              - condition: template
+          - alias: "If configured, manage idle TIMER"
+            if:
+              - alias: "Confirm idle time is set"
+                condition: template
                 value_template: "{{ true if idle_timer != 'timer.undefined' }}"
+
             then:
-              # CANCEL idle TIMER
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 target:
                   entity_id: !input idle_timer
                 data: {}
-              # START idle TIMER
-              - action: timer.start
+
+              - alias: "Idle Timer, START"
+                action: timer.start
                 metadata: {}
                 data: {}
                 target:
                   entity_id: !input idle_timer
 
-      # Actions to perform if DOOR CLOSED, and MOTION CLEAR
       # Action: IMMEDIATE DISABLE
-      - conditions:
-          - condition: and
+      - alias: "Actions to perform if DOOR CLOSED, and MOTION CLEAR"
+        conditions:
+          - alias: "Ensure all events are true"
+            condition: and
             conditions:
-              - condition: trigger
+              - alias: "Check if trigged by event"
+                condition: trigger
                 id: event_now_door_close
-              - condition: state
+              - alias: "Check if occupancy is not detected"
+                condition: state
                 entity_id: !input sensor_occupancy
                 state: "off"
-        sequence:
-          # If configured, RUN immediate disable ACTIONS
-          - if:
-              - condition: template
-                value_template: "{{ disable_occupancy_action_now | length > 0 }}"
-            then: !input disable_occupancy_action_now
+        sequence: !input disable_occupancy_action_now
 
-      # Actions to perform when DOOR CLOSED, and MOTION CLEARED after delay
-      - conditions:
-          - condition: and
+      - alias: "Actions to perform when DOOR CLOSED, and MOTION CLEARED after delay"
+        conditions:
+          - alias: "Ensure all events are true"
+            condition: and
             conditions:
-              - condition: trigger
+              - alias: "Check if trigged by event"
+                condition: trigger
                 id: event_wait_door_close
-              - condition: state
+              - alias: "Check if occupancy is not detected"
+                condition: state
                 entity_id: !input sensor_occupancy
                 state: "off"
         sequence:
-          # If configured, RUN delayed disable ACTIONS
-          - if:
+          - alias: "If configured, RUN delayed disable ACTIONS"
+            if:
               - condition: template
                 value_template: "{{ disable_occupancy_action_wait | length > 0 }}"
             then: !input disable_occupancy_action_wait
-          # If configured, CANCEL idle TIMER
-          - if:
-              - condition: and
+
+          - alias: "If configured, CANCEL idle TIMER"
+            if:
+              - alias: "Ensure all events are true"
+                condition: and
                 conditions:
-                  - condition: template
+                  - alias: "Confirm idle time is set"
+                    condition: template
                     value_template: "{{ true if idle_timer != 'timer.undefined' }}"
-                  - condition: state
+                  - alias: "Check if idle time is running"
+                    condition: state
                     entity_id: !input idle_timer
                     state: active
+
             then:
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 data: {}
                 target:
                   entity_id: !input idle_timer
 
-      # Actions to perform when DOOR OPEN, and MOTION DETECTED
-      - conditions:
-          - condition: and
+      - alias: "Actions to perform when DOOR OPEN, and MOTION DETECTED"
+        conditions:
+          - alias: "Ensure all events are true"
+            condition: and
             conditions:
-              - condition: trigger
+              - alias: "Check if trigged by event"
+                condition: trigger
                 id: event_now_motion_detect
-              - condition: state
+              - alias: "Check if door is open"
+                condition: state
                 entity_id: !input sensor_door
                 state: "on"
         sequence:
-          # If configured, RUN immediate enable ACTIONS
-          - if:
+          - alias: "If configured, RUN immediate enable ACTIONS"
+            if:
               - condition: template
                 value_template: "{{ enable_occupancy_action_now | length > 0 }}"
             then: !input enable_occupancy_action_now
-          - if:
+
+          - alias: ""
+            if:
               - condition: template
                 value_template: "{{ enable_occupancy_action_wait | length > 0 }}"
             then: !input enable_occupancy_action_wait
-          # If configured, START idle TIMER
-          - if:
-              - condition: and
+
+          - alias: "If configured, START idle TIMER"
+            if:
+              - alias: "Ensure all events are true"
+                condition: and
                 conditions:
-                  - condition: template
+                  - alias: "Confirm idle time is set"
+                    condition: template
                     value_template: "{{ true if idle_timer != 'timer.undefined' }}"
-                  - condition: state
+                  - alias: "Check if idle timer is active"
+                    condition: state
                     entity_id: !input idle_timer
                     state: active
             then:
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 data: {}
                 target:
                   entity_id: !input idle_timer
 
-      # Actions to perform when MOTION CLEARED
-      - conditions:
-          - condition: and
-            conditions:
-              - condition: trigger
-                id: event_wait_motion_clear
+      - alias: "Actions to perform when MOTION CLEARED"
+        conditions:
+          - alias: "Check if trigged by event"
+            condition: trigger
+            id: event_wait_motion_clear
         sequence:
-          # If configured, RUN immediate disable ACTIONS
-          - if:
+          - alias: "If configured, RUN immediate disable ACTIONS"
+            if:
               - condition: template
                 value_template: "{{ disable_occupancy_action_now | length > 0 }}"
             then: !input disable_occupancy_action_now
+
           # - if:
           #     - condition: template
           #       value_template: "{{ disable_occupancy_action_wait | length > 0 }}"
           #   then: !input disable_occupancy_action_wait
-          # If DOOR is OPEN
-          - if:
-              - condition: and
+
+          - alias: "If DOOR is OPEN"
+            if:
+              - alias: "Ensure all events are true"
+                condition: and
                 conditions:
-                  - condition: template
+                  - alias: "Confirm idle time is set"
+                    condition: template
                     value_template: "{{ true if idle_timer != 'timer.undefined' }}"
-                  - condition: state
+                  - alias: "Check if door is open"
+                    condition: state
                     entity_id: !input sensor_door
                     state: "on"
             then:
-              # If configured, CANCEL idle TIMER
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 target:
                   entity_id: !input idle_timer
                 data: {}
-              # If configured, START idle TIMER
-              - action: timer.start
+
+              - alias: "Idle Timer, START"
+                action: timer.start
                 metadata: {}
                 data: {}
                 target:
                   entity_id: !input idle_timer
 
-      # Actions to perform when occupancy TIMER FINISHED
-      - conditions:
+      - alias: "Actions to perform when occupancy TIMER FINISHED"
+        conditions:
           - condition: trigger
             id: event_idle_timer_finished
         sequence:
           - if:
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity_id: !input sensor_door
-                    state: "off"
-                  - condition: state
-                    entity_id: !input sensor_occupancy
-                    state: "off"
+              - alias: "Check if occupancy is not detected"
+                condition: state
+                entity_id: !input sensor_occupancy
+                state: "off"
             then:
-              # CANCEL idle TIMER
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 data: {}
                 target:
                   entity_id: !input idle_timer
-              # If configured, RUN immediate disable ACTIONS
-              - if:
+
+              - alias: "If configured, RUN immediate disable ACTIONS"
+                if:
                   - condition: template
                     value_template: "{{ disable_occupancy_action_now | length > 0 }}"
                 then: !input disable_occupancy_action_now
-              # If configured, RUN delayed disable ACTIONS
-              - if:
+
+              - alias: "If configured, RUN delayed disable ACTIONS"
+                if:
                   - condition: template
                     value_template: "{{ disable_occupancy_action_wait | length > 0 }}"
                 then: !input disable_occupancy_action_wait
+
             else:
-              # CANCEL idle TIMER
-              - action: timer.cancel
+              - alias: "Idle Timer, RESET"
+                action: timer.cancel
                 data: {}
                 target:
                   entity_id: !input idle_timer
-              # START idle TIMER
-              - action: timer.start
+
+              - alias: "Idle Timer, START"
+                action: timer.start
                 metadata: {}
                 data: {}
                 target:
