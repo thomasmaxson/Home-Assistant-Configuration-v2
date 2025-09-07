@@ -1,6 +1,6 @@
 # This blueprint uses an IKEA TRÅDFRI 5 Button Remote Control connected through ZHA or MQTT.
 # This blueprint allows you to control lights and run custom actions with the remote's buttons
-# 
+#
 # | Button Type          | Interaction  | Action Choices                             |
 # | -------------------- | ------------ | ------------------------------------------ |
 # | Power                | Press        | - Toggle light(s) state                    |
@@ -83,8 +83,10 @@ blueprint:
           selector:
             select:
               options:
-                - Toggle light
-                - Custom action
+                - label: Toggle light
+                  value: toggle
+                - label: Custom action
+                  value: action
 
         brightness_on_percent:
           name: Brightness Level When Light Turns on
@@ -397,13 +399,6 @@ blueprint:
               max: 15.0
               step: 1.0
 
-        debug_valid_events:
-          name: Debug Remote
-          description: Display a persistent notification, with remote and event details, if triggered.
-          default: false
-          selector:
-            boolean:
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
@@ -431,7 +426,6 @@ variables:
 
   var_repeat_delay: !input repeat_delay
   var_repeat_max_count: !input repeat_max_count
-
 
 triggers:
   - alias: Power Button Press (via ZHA event)
@@ -645,50 +639,7 @@ actions:
       var_all_lights_off: >-
         {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
       var_first_light_on: >-
-        {{ [] if ( var_light | length <= 0 ) else expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
-
-  - alias: "Maybe display debug notification"
-    if:
-      - alias: "Confirm debug remote is active"
-        condition: template
-        value_template: !input debug_valid_events
-    then:
-      - alias: "Setup debug variables"
-        variables:
-          device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
-          device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
-          device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
-          device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
-          device_integration: "{{ device_identifiers[0][0] | string | lower }}"
-          trigger_action: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data.command }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger.payload }}
-            {%- endif -%}
-          trigger_data: >-
-            {%- if device_integration == "zha" -%}
-              {{ trigger.event.data }}
-            {%- elif device_integration == "mqtt" -%}
-              {{ trigger }}
-            {%- endif -%}
-
-      - alias: "Display debug notification with remote and event details"
-        action: persistent_notification.create
-        data:
-          notification_id: blueprint_debug__remote_ikea_tradfri_5_button
-          title: >-
-            {%- if device_model_id not in [ "", "none", none, null, false] -%}
-              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
-            {%- else -%}
-              {{ device_manufacturer + " " + device_model }}
-            {%- endif -%}
-          message: >-
-            <br>_Integration_: {{ device_integration }}  |  _Action_: {{ trigger_action }}  | Trigger ID: {{ trigger.id }}
-            <br>
-            <br>_Remote ID_: {{ var_remote }}
-            <br>
-            <br>```{{ trigger_data }}```
+        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
 
   - alias: "Determine button event to execute"
     choose:
@@ -709,7 +660,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_power == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_power == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_light | length > 0 }}"
@@ -742,14 +693,13 @@ actions:
                         action: light.turn_off
                         target:
                           entity_id: "{{ var_all_lights_on }}"
-            
+
               - alias: "For Power button press, run custom action"
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_power == 'Custom action' }}"
+                    value_template: "{{ var_event_button_power == 'action' }}"
                 sequence: !input action_button_press_power_toggle
-
 
       - alias: "Button: Increase Brightness, Press"
         conditions:
@@ -805,7 +755,6 @@ actions:
                     value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_raise_single
 
-
       - alias: "Button: Increase Brightness, Press and Hold"
         conditions:
           - alias: "Check if triggered by Brightness Increase button press and hold"
@@ -842,15 +791,15 @@ actions:
                         - alias: "Wait for button to be released"
                           condition: template
                           value_template: "{{ wait.trigger is not none }}"
-                      sequence: 
+                      sequence:
                         - alias: "Increase brightness for light(s) that are on"
                           action: light.turn_on
-                          target: 
+                          target:
                             entity_id: "{{ var_all_lights_on }}"
-                          data: 
+                          data:
                             brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
                         - alias: "Delay between brightness increase steps"
-                          delay: 
+                          delay:
                             hours: 0
                             minutes: 0
                             seconds: "{{ var_repeat_delay | float }}"
@@ -862,7 +811,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_raise_hold
-
 
       - alias: "Button: Decrease Brightness, Press"
         conditions:
@@ -899,7 +847,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_lower_single
-
 
       - alias: "Button: Decrease Brightness, Press and Hold"
         conditions:
@@ -945,7 +892,7 @@ actions:
                           data:
                             brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
                         - alias: "Delay between brightness decrease steps"
-                          delay: 
+                          delay:
                             hours: 0
                             minutes: 0
                             seconds: "{{ var_repeat_delay | float }}"
@@ -957,7 +904,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
                 sequence: !input action_button_press_lower_hold
-
 
       - alias: "Button: Left Arrow, Press"
         conditions:
@@ -1030,7 +976,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_left_single
-
 
       - alias: "Button: Left Arrow, Press and Hold"
         conditions:
@@ -1126,7 +1071,6 @@ actions:
                     value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_left_hold
 
-
       - alias: "Button: Right Arrow, Press"
         conditions:
           - alias: "Check if triggered by Right Arrow button press"
@@ -1197,7 +1141,6 @@ actions:
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
                 sequence: !input action_button_press_right_single
-
 
       - alias: "Button: Right Arrow, Press and Hold"
         conditions:
