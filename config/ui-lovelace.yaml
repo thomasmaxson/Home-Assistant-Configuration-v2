@@ -6,7 +6,7 @@ views:
     container_margins: false
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 0.5vw
+      grid-row-gap: 0.8vw
       grid-column-gap: 2vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
@@ -8559,7 +8559,7 @@ views:
               - type: custom:button-card
                 template: entity_card
                 name: Tom's Office
-                entity: binary_sensor.bedroom_4_group_all_occupancy
+                entity: binary_sensor.lnl_presence_bedroom_4_any_presense
                 variables:
                   icon_on_color: var( --green-color-rgb )
               - type: custom:button-card
@@ -8982,9 +8982,9 @@ views:
               - type: custom:button-card
                 template: entity_card
                 name: For Living Room Lights
-                entity: sensor.remote_living_room_for_living_room_lights_battery
+                entity: sensor.demo_remote_hue_tap_dial_battery
                 variables:
-                  data_entity: sensor.remote_living_room_for_living_room_lights_battery
+                  data_entity: sensor.demo_remote_hue_tap_dial_battery
                   data_type: battery
                   icon_type: battery_level
               - type: custom:button-card
@@ -9431,35 +9431,33 @@ views:
     path: page-helpers
     type: custom:horizontal-layout
     layout:
-      max_columns: 3
+      max_columns: 1
     cards:
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Notification Reminders
-            show_header_toggle: false
-            entities:
-              - entity: input_boolean.reminder_dishwasher_complete
-                name: Dishwasher Complete
-                icon: mdi:dishwasher
-              - entity: input_boolean.reminder_laundry_complete_washer
-                name: Washing Machine Complete
-                icon: mdi:washing-machine
-              - entity: input_boolean.reminder_laundry_complete_dryer
-                name: Tumble Dryer Complete
-                icon: mdi:tumble-dryer
-              - entity: input_boolean.reminder_waste_take_out_recycle
-                name: Recycling Reminder
-                icon: mdi:recycle
-              - entity: input_boolean.reminder_waste_bring_in_recycle
-                name: Recycling Dropoff
-                icon: mdi:recycle
-              - entity: input_boolean.reminder_waste_take_out_solid
-                name: Waste Bin Take Out
-                icon: mdi:trash-can
-              - entity: input_boolean.reminder_waste_bring_in_solid
-                name: Waste Bin Bring In
-                icon: mdi:trash-can
+      - type: entities
+        title: Notification Reminders
+        show_header_toggle: false
+        entities:
+          - entity: input_boolean.reminder_dishwasher_complete
+            name: Dishwasher Complete
+            icon: mdi:dishwasher
+          - entity: input_boolean.reminder_laundry_complete_washer
+            name: Washing Machine Complete
+            icon: mdi:washing-machine
+          - entity: input_boolean.reminder_laundry_complete_dryer
+            name: Tumble Dryer Complete
+            icon: mdi:tumble-dryer
+          - entity: input_boolean.reminder_waste_take_out_recycle
+            name: Recycling Reminder
+            icon: mdi:recycle
+          - entity: input_boolean.reminder_waste_bring_in_recycle
+            name: Recycling Dropoff
+            icon: mdi:recycle
+          - entity: input_boolean.reminder_waste_take_out_solid
+            name: Waste Bin Take Out
+            icon: mdi:trash-can
+          - entity: input_boolean.reminder_waste_bring_in_solid
+            name: Waste Bin Bring In
+            icon: mdi:trash-can
       - type: vertical-stack
         cards:
           - type: entities
@@ -9478,6 +9476,19 @@ views:
                 name: Waste, Bring In
               - entity: input_boolean.snooze_waste_reminder_take_out
                 name: Waste, Take Out
+          - type: entities
+            title: System Updates
+            show_header_toggle: false
+            entities:
+              - entity: input_button.esphome_device_update
+                name: Update ESPHome Devices
+                tap_action:
+                  action: call-service
+                  service: automation.trigger
+                  data:
+                    skip_condition: true
+                  target:
+                    entity_id: automation.esphome_update_all_devices
       - type: vertical-stack
         cards:
           - type: custom:decluttering-card
@@ -11324,6 +11335,8 @@ button_card_templates:
         position: relative;
         top: -.09em;
       }
+
+      .friendly_name { display: none !important;}
 
 
       @media screen and (max-width: 1200px) {

@@ -1485,26 +1485,14 @@
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
-- id: '1727117077347'
-  alias: Living Room, Light - Primary
-  description: Control primary lights in the living room via a IKEA TRADFRI 2 button
-    remote.
-  use_blueprint:
-    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
-    input:
-      remote: 773fcd7dc85227c001175b0744486dfa
-      light:
-      - light.living_room_corner_lamp
-      brightness_step: 10
-      brightness: 40
-      brightness_on_percent: 40
+      event_button_power: toggle
 - id: '1727117139279'
   alias: Garage, Wall Fan
   description: Control the fan in the garage via a IKEA TRADFRI 2 button remote.
   use_blueprint:
     path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
     input:
-      remote: 5c4c46dcb1d52a61015e2f96a4b93f48
+      remote: 773fcd7dc85227c001175b0744486dfa
       event_button_press_on_single:
       - action: light.turn_on
         metadata: {}
@@ -1517,6 +1505,7 @@
         data: {}
         target:
           entity_id: light.garage_fan
+      event_button_type: action
 - id: '1727129555803'
   alias: Bedroom 1, Closet Hallway
   description: ''
@@ -3024,118 +3013,26 @@
       hours: 0
       minutes: 0
       seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_ceiling_lights
-    to: 'off'
-    id: Lights Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_1
-    to: 'off'
-    id: Light 1 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_2
-    to: 'off'
-    id: Light 2 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_3
-    to: 'off'
-    id: Light 3 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_4
-    to: 'off'
-    id: Light 4 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_5
-    to: 'off'
-    id: Light 5 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
-  - trigger: state
-    entity_id:
-    - light.kitchen_light_6
-    to: 'off'
-    id: Light 6 Turned OFF
-    from: 'on'
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
   conditions: []
   actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - Lights Turned ON
-      sequence:
-      - if:
-        - condition: time
-          after: '23:00:00'
-          before: 07:00:00
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 30
-          target:
-            entity_id: light.kitchen_ceiling_lights
-        else:
-        - action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id: light.kitchen_ceiling_lights
-    - conditions:
-      - condition: trigger
-        id:
-        - Lights Turned OFF
-        - Light 1 Turned OFF
-        - Light 2 Turned OFF
-        - Light 3 Turned OFF
-        - Light 4 Turned OFF
-        - Light 5 Turned OFF
-        - Light 6 Turned OFF
-      sequence:
-      - action: light.turn_off
-        metadata: {}
-        target:
-          entity_id: light.kitchen_ceiling_lights
-        data: {}
+  - if:
+    - condition: time
+      after: '23:00:00'
+      before: 07:00:00
+    then:
+    - action: light.turn_on
+      metadata: {}
+      data:
+        brightness_pct: 30
+      target:
+        entity_id: light.kitchen_ceiling_lights
+    else:
+    - action: light.turn_on
+      metadata: {}
+      data:
+        brightness_pct: 100
+      target:
+        entity_id: light.kitchen_ceiling_lights
   mode: queued
   max: 10
 - id: '1728167906970'
@@ -3518,7 +3415,8 @@
       sensor_door: binary_sensor.door_bedroom_4
       sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
       enable_door_action:
-      - action: script.push_notification_to_ios_devices
+      - alias: Maybe send notification when door is opened
+        action: script.push_notification_to_ios_devices
         metadata: {}
         data:
           send_to:
@@ -3536,39 +3434,9 @@
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_4_group_occupancy_lights
-          enabled: true
-        - if:
-          - condition: not
-            conditions:
-            - condition: template
-              value_template: '{{ states.scene.snapshot_activity_bedroom_4_instant
-                != None }}'
-          then:
-          - action: scene.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id:
-              - scene.snapshot_activity_bedroom_4_instant
-          - action: scene.delete
-            metadata: {}
-            data: {}
-            target:
-              entity_id:
-              - scene.snapshot_activity_bedroom_4_instant
-          enabled: false
       disable_door_action:
-      - action: script.push_notification_to_ios_devices
+      - alias: Maybe send notification when door is closed
+        action: script.push_notification_to_ios_devices
         metadata: {}
         data:
           send_to:
@@ -3586,114 +3454,89 @@
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
-      enable_occupancy_action_now:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
+      delay_occupancy_detect_instant: 1
+      action_occupancy_detect_instant:
+      - alias: Check if can run custom actions
+        if:
+        - alias: Ensure all events are true
+          condition: and
+          conditions:
+          - alias: Confirm occupancy automations are allowed
+            condition: state
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+            state: 'on'
+          - condition: state
             entity_id: light.bedroom_4_group_occupancy_lights
-          enabled: true
+            state: 'off'
+        then:
         - if:
-          - condition: not
-            conditions:
-            - condition: template
-              value_template: '{{ states.scene.snapshot_activity_bedroom_4_instant
-                != None }}'
+          - condition: template
+            value_template: '{{ states( ''scene.bedroom_4_occupancy_detected'' ) !=
+              ''unknown'' }}'
           then:
-          - action: scene.turn_on
+          - alias: Activate scene (Instant)
+            action: scene.turn_on
             metadata: {}
             data: {}
             target:
               entity_id:
-              - scene.snapshot_activity_bedroom_4_instant
+              - scene.bedroom_4_occupancy_detected
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
           - action: scene.delete
             metadata: {}
             data: {}
             target:
-              entity_id:
-              - scene.snapshot_activity_bedroom_4_instant
-          enabled: false
-      disable_occupancy_action_now:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
+              entity_id: scene.bedroom_4_occupancy_detected
+          else:
+          - action: light.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.bedroom_4_group_occupancy_lights
+      delay_occupancy_clear_instant: 300
+      action_occupancy_clear_instant:
+      - alias: Check if can run custom actions
+        if:
+        - condition: and
+          conditions:
+          - alias: Confirm occupancy automations are allowed
+            condition: state
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+            state: 'on'
+          - condition: template
+            value_template: '{{ states( ''scene.bedroom_4_occupancy_detected'' ) ==
+              ''unknown'' }}'
         then:
-        - action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_4_group_lights_all
         - action: scene.create
           metadata: {}
           data:
-            scene_id: snapshot_activity_bedroom_4_instant
+            scene_id: bedroom_4_occupancy_detected
             snapshot_entities:
-            - light.ceiling_fan_bedroom_4
+            - fan.ceiling_bedroom_4
             - light.bedroom_4_accent_lamp_left
             - light.bedroom_4_accent_lamp_right
             - light.bedroom_4_lightstrip
             - light.bedroom_4_tie_fighter_lamp
-          enabled: false
-      enable_action_wait_duration: 30
-      enable_occupancy_action_wait:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: fan.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: fan.ceiling_bedroom_4
-          enabled: true
-        - if:
-          - condition: not
-            conditions:
-            - condition: template
-              value_template: '{{ states.scene.snapshot_activity_bedroom_4_delayed
-                != None }}'
-          then:
-          - action: scene.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id:
-              - scene.snapshot_activity_bedroom_4_delayed
-          - action: scene.delete
-            metadata: {}
-            data: {}
-            target:
-              entity_id:
-              - scene.snapshot_activity_bedroom_4_delayed
-          enabled: false
-      disable_action_wait_duration: 300
-      disable_occupancy_action_wait:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 3
+            milliseconds: 0
         - action: fan.turn_off
           metadata: {}
           data: {}
           target:
             entity_id: fan.ceiling_bedroom_4
-          enabled: true
-        - action: scene.create
+        - alias: Turn off lights in room
+          action: light.turn_off
           metadata: {}
-          data:
-            scene_id: snapshot_activity_bedroom_4_delayed
-            snapshot_entities:
-            - fan.ceiling_bedroom_4
-          enabled: false
-      idle_timer: timer.bedroom_4_automation_last_motion_idle_reset
+          data: {}
+          target:
+            entity_id: light.bedroom_4_group_lights_all
 - id: '1730055951025'
   alias: Bedroom 3, Room Occupancy
   description: ''
@@ -3703,7 +3546,8 @@
       sensor_door: binary_sensor.door_bedroom_3
       sensor_occupancy: binary_sensor.bedroom_3_group_all_occupancy
       enable_door_action:
-      - action: script.push_notification_to_ios_devices
+      - alias: Maybe send notification when door is opened
+        action: script.push_notification_to_ios_devices
         metadata: {}
         data:
           send_to:
@@ -3721,18 +3565,9 @@
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_3_group_occupancy_lights
       disable_door_action:
-      - action: script.push_notification_to_ios_devices
+      - alias: Maybe send notification when door is closed
+        action: script.push_notification_to_ios_devices
         metadata: {}
         data:
           send_to:
@@ -3750,53 +3585,87 @@
             - action: SNOOZE_HOUSEHOLD_ACTIVITY
               title: Snooze
               icon: sfsymbols:clock
-      enable_occupancy_action_now:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
+      delay_occupancy_detect_instant: 1
+      action_occupancy_detect_instant:
+      - alias: Check if can run custom actions
+        if:
+        - alias: Ensure all events are true
+          condition: and
+          conditions:
+          - alias: Confirm occupancy automations are allowed
+            condition: state
+            entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+            state: 'on'
+          - condition: state
             entity_id: light.bedroom_3_group_occupancy_lights
-      disable_occupancy_action_now:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
+            state: 'off'
         then:
-        - action: light.turn_off
+        - if:
+          - condition: template
+            value_template: '{{ states( ''scene.bedroom_3_occupancy_detected'' ) !=
+              ''unknown'' }}'
+          then:
+          - alias: Activate scene (Instant)
+            action: scene.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - scene.bedroom_3_occupancy_detected
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
+          - action: scene.delete
+            metadata: {}
+            data: {}
+            target:
+              entity_id: scene.bedroom_3_occupancy_detected
+          else:
+          - action: light.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.bedroom_3_group_occupancy_lights
+      delay_occupancy_clear_instant: 120
+      action_occupancy_clear_instant:
+      - alias: Check if can run custom actions
+        if:
+        - condition: and
+          conditions:
+          - alias: Confirm occupancy automations are allowed
+            condition: state
+            entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+            state: 'on'
+          - condition: template
+            value_template: '{{ states( ''scene.bedroom_3_occupancy_detected'' ) ==
+              ''unknown'' }}'
+        then:
+        - action: scene.create
           metadata: {}
-          data: {}
-          target:
-            entity_id: light.bedroom_3_group_lights_all
-      enable_action_wait_duration: 30
-      enable_occupancy_action_wait:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: fan.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: fan.ceiling_bedroom_3
-      disable_action_wait_duration: 300
-      disable_occupancy_action_wait:
-      - if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
-        then:
+          data:
+            scene_id: bedroom_3_occupancy_detected
+            snapshot_entities:
+            - fan.ceiling_bedroom_3
+            - light.bedroom_3_floor_lamp
+            - light.ceiling_fan_bedroom_3
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 3
+            milliseconds: 0
         - action: fan.turn_off
           metadata: {}
           data: {}
           target:
             entity_id: fan.ceiling_bedroom_3
-      idle_timer: timer.bedroom_3_automation_last_motion_idle_reset
+        - alias: Turn off lights in room
+          action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.bedroom_3_group_lights_all
 - id: '1730985202477'
   alias: Foyer, Light
   description: Control primary lights in the foyer via a SONOFF Wireless Switch device.
@@ -4317,7 +4186,7 @@
     path: maxson/remote_lutron_pico_3_button_rl.yaml
     input:
       remote: 42cf4e5eb7543eaffd4a0a285cefd6a9
-      button_on_single:
+      event_button_press_on_single:
       - action: fan.turn_on
         metadata: {}
         data: {}
@@ -6198,8 +6067,9 @@
         for {{ var_output_duration }}.'
   mode: single
 - id: '1756510816943'
-  alias: DEMO, Tap Dial Remote Control
-  description: ''
+  alias: Living Room, Light - Primary Couch
+  description: Controls various lights in the Living Room and backyard using the Philips
+    Hue Tap Dial remote, including brightness adjustment and on/off functions.
   use_blueprint:
     path: maxson/remote_philips_hue_tap_dial.yaml
     input:
@@ -6207,141 +6077,158 @@
       last_pressed: input_text.living_room_tap_dial_last_button_pressed
       lights_dot_1:
       - light.living_room_corner_lamp
+      action_dial_left_dot_1:
+      - if:
+        - condition: state
+          entity_id: light.living_room_corner_lamp
+          state: 'on'
+        then:
+        - choose:
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_spin_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: -5
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_slow_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: -10
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_fast_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: -20
+      action_dial_right_dot_1:
+      - if:
+        - condition: state
+          entity_id: light.living_room_corner_lamp
+          state: 'on'
+        then:
+        - choose:
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_spin_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: 5
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_slow_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: 10
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_fast_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_corner_lamp
+              data:
+                brightness_step_pct: 20
       lights_dot_2:
       - light.living_room_couch_lamp
+      action_dial_left_dot_2:
+      - if:
+        - condition: state
+          entity_id: light.living_room_couch_lamp
+          state: 'on'
+        then:
+        - choose:
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_spin_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: -5
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_slow_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: -10
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_left_fast_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: -20
+      action_dial_right_dot_2:
+      - if:
+        - condition: state
+          entity_id: light.living_room_couch_lamp
+          state: 'on'
+        then:
+        - choose:
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_spin_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: 5
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_slow_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: 10
+          - conditions:
+            - condition: trigger
+              id: trigger_dial_right_fast_mqtt
+            sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.living_room_couch_lamp
+              data:
+                brightness_step_pct: 20
       lights_dot_3:
       - light.christmas_tree
-      lights_dot_4:
-      - light.backyard_string_lights
-      action_dial_left_dot_1:
-      - choose:
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_spin_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: -5
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_slow_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: -10
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_fast_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: -20
-      action_dial_right_dot_1:
-      - choose:
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_spin_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: 5
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_slow_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: 10
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_fast_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_corner_lamp
-            data:
-              brightness_step_pct: 20
-      brightness_dot_1: 40
-      action_dial_left_dot_2:
-      - choose:
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_spin_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: -5
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_slow_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: -10
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_left_fast_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: -20
-      action_dial_right_dot_2:
-      - choose:
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_spin_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: 5
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_slow_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: 10
-        - conditions:
-          - condition: trigger
-            id: trigger_dial_right_fast_mqtt
-          sequence:
-          - action: light.turn_on
-            metadata: {}
-            target:
-              entity_id: light.living_room_couch_lamp
-            data:
-              brightness_step_pct: 20
       action_dial_left_dot_3:
       - action: light.turn_off
         metadata: {}
@@ -6349,11 +6236,18 @@
         target:
           entity_id: light.christmas_tree
       action_dial_right_dot_3:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
+      - if:
+        - condition: state
           entity_id: light.christmas_tree
+          state: 'on'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.christmas_tree
+      lights_dot_4:
+      - light.backyard_string_lights
       action_dial_left_dot_4:
       - action: light.turn_off
         metadata: {}
@@ -6361,8 +6255,13 @@
         target:
           entity_id: light.backyard_string_lights
       action_dial_right_dot_4:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
+      - if:
+        - condition: state
           entity_id: light.backyard_string_lights
+          state: 'on'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.backyard_string_lights

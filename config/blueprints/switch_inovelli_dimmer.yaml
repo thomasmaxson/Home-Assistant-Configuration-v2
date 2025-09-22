@@ -1,28 +1,31 @@
 # This blueprint uses an Inovelli Switch (2-in-1, dimmer, etc.)
 #
-# | Button | Duration        | Action        |
-# | ------ | --------------- | ------------- |
-# | On     | Single Press    | Custom action |
-# | On     | Double Press    | Custom action |
-# | On     | Triple Press    | Custom action |
-# | On     | Quadruple Press | Custom action |
-# | On     | Quintuple Press | Custom action |
-# | On     | Press and Hold  | Custom action |
-# | On     | Release         | Custom action |
-# | Off    | Single Press    | Custom action |
-# | Off    | Double Press    | Custom action |
-# | Off    | Triple Press    | Custom action |
-# | Off    | Quadruple Press | Custom action |
-# | Off    | Quintuple Press | Custom action |
-# | Off    | Press and Hold  | Custom action |
-# | Off    | Release         | Custom action |
-# | Config | Single Press    | Custom action |
-# | Config | Double Press    | Custom action |
-# | Config | Triple Press    | Custom action |
-# | Config | Quadruple Press | Custom action |
-# | Config | Quintuple Press | Custom action |
-# | Config | Press and Hold  | Custom action |
-# | Config | Release         | Custom action |
+# | Button Type | Interaction     | Action Choices      |
+# | ----------- | --------------- | ------------------- |
+# | On          | Single Press    | - Run custom action |
+# | On          | Double Press    | - Run custom action |
+# | On          | Triple Press    | - Run custom action |
+# | On          | Quadruple Press | - Run custom action |
+# | On          | Quintuple Press | - Run custom action |
+# | On          | Press and Hold  | - Run custom action |
+# | On          | Release         | - Run custom action |
+# | ----------- | --------------- | ------------------- |
+# | Off         | Single Press    | - Run custom action |
+# | Off         | Double Press    | - Run custom action |
+# | Off         | Triple Press    | - Run custom action |
+# | Off         | Quadruple Press | - Run custom action |
+# | Off         | Quintuple Press | - Run custom action |
+# | Off         | Press and Hold  | - Run custom action |
+# | Off         | Release         | - Run custom action |
+# | ----------- | --------------- | ------------------- |
+# | Config      | Single Press    | - Run custom action |
+# | Config      | Double Press    | - Run custom action |
+# | Config      | Triple Press    | - Run custom action |
+# | Config      | Quadruple Press | - Run custom action |
+# | Config      | Quintuple Press | - Run custom action |
+# | Config      | Press and Hold  | - Run custom action |
+# | Config      | Release         | - Run custom action |
+# | ----------- | --------------- | ------------------- |
 
 blueprint:
   name: Inovelli, Dimmer Switch
