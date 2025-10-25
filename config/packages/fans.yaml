@@ -22,25 +22,25 @@ fan:
             entity_id: light.garage_fan
         value_template: "{{ is_state( 'light.garage_fan', 'on' ) }}"
 
-      custom_ceiling_bedroom_1:
-        unique_id: "custom-ceiling-fan-001"
-        friendly_name: "Ceiling, Bedroom 1 (Custom)"
-        value_template: "{{ states( 'fan.ceiling_bedroom_1' ) }}"
+      bedroom_1_ceiling_for_alexa:
+        unique_id: "fan-bedroom-ceiling-for-alexa-001"
+        friendly_name: "Fan, Bedroom 1 (for Alexa)"
+        value_template: "{{ states( 'fan.bedroom_1_ceiling' ) }}"
         turn_on:
           - action: fan.turn_on
             target:
-              entity_id: fan.ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
         turn_off:
           - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
         percentage_template: >
-          {{ state_attr( 'fan.ceiling_bedroom_1', 'percentage' ) }}
+          {{ state_attr( 'fan.bedroom_1_ceiling', 'percentage' ) }}
         speed_count: 3
         set_percentage:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
             data:
               percentage: "{{ percentage }}"
         preset_modes:
@@ -49,10 +49,10 @@ fan:
           - "medium"
           - "high"
         preset_mode_template: >
-          {% if is_state( 'fan.ceiling_bedroom_1', 'on' ) %}
-            {% if state_attr( 'fan.ceiling_bedroom_1', 'percentage' ) >= 100  %}
+          {% if is_state( 'fan.bedroom_1_ceiling', 'on' ) %}
+            {% if state_attr( 'fan.bedroom_1_ceiling', 'percentage' ) >= 100  %}
               high
-            {% elif state_attr( 'fan.ceiling_bedroom_1', 'percentage' ) >= 66 %}
+            {% elif state_attr( 'fan.bedroom_1_ceiling', 'percentage' ) >= 66 %}
               medium
             {% else %}
               low
@@ -63,7 +63,7 @@ fan:
         set_preset_mode:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
             data:
               percentage: >-
                 {% if preset_mode == 'high' %}
@@ -76,25 +76,25 @@ fan:
                   0
                 {% endif %}
 
-      custom_ceiling_bedroom_2:
-        unique_id: "custom-ceiling-fan-002"
-        friendly_name: "Ceiling, Bedroom 2 (Custom)"
-        value_template: "{{ states( 'fan.ceiling_bedroom_2' ) }}"
+      bedroom_2_ceiling_for_alexa:
+        unique_id: "fan-bedroom-ceiling-for-alexa-002"
+        friendly_name: "Fan, Bedroom 2 (for Alexa)"
+        value_template: "{{ states( 'fan.bedroom_2_ceiling' ) }}"
         turn_on:
           - action: fan.turn_on
             target:
-              entity_id: fan.ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
         turn_off:
           - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
         percentage_template: >
-          {{ state_attr( 'fan.ceiling_bedroom_2', 'percentage' ) }}
+          {{ state_attr( 'fan.bedroom_2_ceiling', 'percentage' ) }}
         speed_count: 3
         set_percentage:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
             data:
               percentage: "{{ percentage }}"
         preset_modes:
@@ -103,10 +103,10 @@ fan:
           - "medium"
           - "high"
         preset_mode_template: >
-          {% if is_state( 'fan.ceiling_bedroom_2', 'on' ) %}
-            {% if state_attr( 'fan.ceiling_bedroom_2', 'percentage' ) >= 100  %}
+          {% if is_state( 'fan.bedroom_2_ceiling', 'on' ) %}
+            {% if state_attr( 'fan.bedroom_2_ceiling', 'percentage' ) >= 100  %}
               high
-            {% elif state_attr( 'fan.ceiling_bedroom_2', 'percentage' ) >= 66 %}
+            {% elif state_attr( 'fan.bedroom_2_ceiling', 'percentage' ) >= 66 %}
               medium
             {% else %}
               low
@@ -117,7 +117,7 @@ fan:
         set_preset_mode:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
             data:
               percentage: >-
                 {% if preset_mode == 'high' %}
@@ -130,25 +130,25 @@ fan:
                   0
                 {% endif %}
 
-      custom_ceiling_bedroom_3:
-        unique_id: "custom-ceiling-fan-003"
-        friendly_name: "Ceiling, Bedroom 3 (Custom)"
-        value_template: "{{ states( 'fan.ceiling_bedroom_3' ) }}"
+      bedroom_3_ceiling_for_alexa:
+        unique_id: "fan-bedroom-ceiling-for-alexa-003"
+        friendly_name: "Fan, Bedroom 3 (for Alexa)"
+        value_template: "{{ states( 'fan.bedroom_3_ceiling' ) }}"
         turn_on:
           - action: fan.turn_on
             target:
-              entity_id: fan.ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
         turn_off:
           - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
         percentage_template: >
-          {{ state_attr( 'fan.ceiling_bedroom_3', 'percentage' ) }}
+          {{ state_attr( 'fan.bedroom_3_ceiling', 'percentage' ) }}
         speed_count: 3
         set_percentage:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
             data:
               percentage: "{{ percentage }}"
         preset_modes:
@@ -157,10 +157,10 @@ fan:
           - "medium"
           - "high"
         preset_mode_template: >
-          {% if is_state( 'fan.ceiling_bedroom_3', 'on' ) %}
-            {% if state_attr( 'fan.ceiling_bedroom_3', 'percentage' ) >= 100  %}
+          {% if is_state( 'fan.bedroom_3_ceiling', 'on' ) %}
+            {% if state_attr( 'fan.bedroom_3_ceiling', 'percentage' ) >= 100  %}
               high
-            {% elif state_attr( 'fan.ceiling_bedroom_3', 'percentage' ) >= 66 %}
+            {% elif state_attr( 'fan.bedroom_3_ceiling', 'percentage' ) >= 66 %}
               medium
             {% else %}
               low
@@ -171,7 +171,7 @@ fan:
         set_preset_mode:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
             data:
               percentage: >-
                 {% if preset_mode == 'high' %}
@@ -184,25 +184,25 @@ fan:
                   0
                 {% endif %}
 
-      custom_ceiling_bedroom_4:
-        unique_id: "custom-ceiling-fan-004"
-        friendly_name: "Ceiling, Bedroom 4 (Custom)"
+      bedroom_4_ceiling_for_alexa:
+        unique_id: "fan-bedroom-ceiling-for-alexa-004"
+        friendly_name: "Fan, Bedroom 4 (for Alexa)"
         value_template: "{{ states( 'fan.ceiling_bedroom_4' ) }}"
         turn_on:
           - action: fan.turn_on
             target:
-              entity_id: fan.ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
         turn_off:
           - action: fan.turn_off
             target:
-              entity_id: fan.ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
         percentage_template: >
-          {{ state_attr( 'fan.ceiling_bedroom_4', 'percentage' ) }}
+          {{ state_attr( 'fan.bedroom_4_ceiling', 'percentage' ) }}
         speed_count: 3
         set_percentage:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
             data:
               percentage: "{{ percentage }}"
         preset_modes:
@@ -211,10 +211,10 @@ fan:
           - "medium"
           - "high"
         preset_mode_template: >
-          {% if is_state( 'fan.ceiling_bedroom_4', 'on' ) %}
-            {% if state_attr( 'fan.ceiling_bedroom_4', 'percentage' ) == 100  %}
+          {% if is_state( 'fan.bedroom_4_ceiling', 'on' ) %}
+            {% if state_attr( 'fan.bedroom_4_ceiling', 'percentage' ) == 100  %}
               high
-            {% elif state_attr( 'fan.ceiling_bedroom_4', 'percentage' ) == 66 %}
+            {% elif state_attr( 'fan.bedroom_4_ceiling', 'percentage' ) == 66 %}
               medium
             {% else %}
               low
@@ -225,7 +225,7 @@ fan:
         set_preset_mode:
           - action: fan.set_percentage
             target:
-              entity_id: fan.ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
             data:
               percentage: >-
                 {% if preset_mode == 'high' %}
