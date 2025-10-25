@@ -38,7 +38,6 @@
       milliseconds: 0
   - alias: Reload Alexa Media Player integration - Kitchen
     data: {}
-    enabled: true
     target:
       entity_id: media_player.echo_kitchen
     action: homeassistant.reload_config_entry
@@ -1478,6 +1477,26 @@
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
+      - if:
+        - condition: state
+          entity_id: input_select.bedroom_4_scenes
+          state: Daily
+        then:
+        - action: switch.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - switch.circadian_lighting_light_accent_lamp_left_circadian
+            - switch.circadian_lighting_light_accent_lamp_right_circadian
+        else:
+        - action: switch.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - switch.circadian_lighting_light_accent_lamp_left_circadian
+            - switch.circadian_lighting_light_accent_lamp_right_circadian
       action_button_press_right_single:
       - action: input_select.select_next
         metadata: {}
@@ -1485,6 +1504,26 @@
           cycle: true
         target:
           entity_id: input_select.bedroom_4_scenes
+      - if:
+        - condition: state
+          entity_id: input_select.bedroom_4_scenes
+          state: Daily
+        then:
+        - action: switch.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - switch.circadian_lighting_light_accent_lamp_left_circadian
+            - switch.circadian_lighting_light_accent_lamp_right_circadian
+        else:
+        - action: switch.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - switch.circadian_lighting_light_accent_lamp_left_circadian
+            - switch.circadian_lighting_light_accent_lamp_right_circadian
       event_button_power: toggle
 - id: '1727117139279'
   alias: Garage, Wall Fan
@@ -1841,7 +1880,6 @@
       - condition: trigger
         id:
         - Door Did OPEN
-        enabled: true
       sequence:
       - action: script.push_notification_to_ios_devices
         metadata: {}
@@ -1906,7 +1944,6 @@
           data: {}
           target:
             entity_id: light.bedroom_2_group_lights_all
-        enabled: true
       alias: When Door is CLOSED
   mode: restart
   max: 10
@@ -1938,7 +1975,6 @@
       - condition: trigger
         id:
         - Door Did OPEN
-        enabled: true
       sequence:
       - action: script.push_notification_to_ios_devices
         metadata: {}
@@ -2004,7 +2040,6 @@
             - light.bedroom_1_group_lights_all
           data: {}
           alias: Turn OFF, Immediately
-        enabled: true
       alias: When Door is CLOSED
   mode: queued
   max: 10
@@ -3329,7 +3364,6 @@
       - condition: trigger
         id:
         - His Closet Door Did OPEN
-        enabled: true
       sequence:
       - action: light.turn_on
         metadata: {}
@@ -3341,7 +3375,6 @@
       - condition: trigger
         id:
         - His Closet Door Did CLOSE
-        enabled: true
       sequence:
       - action: light.turn_off
         target:
@@ -3355,7 +3388,6 @@
         - condition: trigger
           id:
           - His Closet Door Left OPEN
-          enabled: true
         - condition: state
           entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
           state: 'on'
@@ -3369,7 +3401,6 @@
       - condition: trigger
         id:
         - Her Closet Door Did OPEN
-        enabled: true
       sequence:
       - action: light.turn_on
         metadata: {}
@@ -3381,7 +3412,6 @@
       - condition: trigger
         id:
         - Her Closet Door Did CLOSE
-        enabled: true
       sequence:
       - action: light.turn_off
         data: {}
@@ -3394,7 +3424,6 @@
         - condition: trigger
           id:
           - Her Closet Door Left OPEN
-          enabled: true
         - condition: state
           entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
           state: 'on'
@@ -3491,12 +3520,6 @@
             data: {}
             target:
               entity_id: scene.bedroom_4_occupancy_detected
-          else:
-          - action: light.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id: light.bedroom_4_group_occupancy_lights
       delay_occupancy_clear_instant: 300
       action_occupancy_clear_instant:
       - alias: Check if can run custom actions
@@ -3510,13 +3533,15 @@
           - condition: template
             value_template: '{{ states( ''scene.bedroom_4_occupancy_detected'' ) ==
               ''unknown'' }}'
+            enabled: false
         then:
         - action: scene.create
           metadata: {}
           data:
             scene_id: bedroom_4_occupancy_detected
             snapshot_entities:
-            - fan.ceiling_bedroom_4
+            - fan.bedroom_4_ceiling
+            - light.bedroom_4_ceiling_fan
             - light.bedroom_4_accent_lamp_left
             - light.bedroom_4_accent_lamp_right
             - light.bedroom_4_lightstrip
@@ -3530,13 +3555,18 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_bedroom_4
+            entity_id: fan.bedroom_4_ceiling
         - alias: Turn off lights in room
           action: light.turn_off
           metadata: {}
           data: {}
           target:
-            entity_id: light.bedroom_4_group_lights_all
+            entity_id:
+            - light.bedroom_4_ceiling_fan
+            - light.bedroom_4_accent_lamp_left
+            - light.bedroom_4_accent_lamp_right
+            - light.bedroom_4_lightstrip
+            - light.bedroom_4_tie_fighter_lamp
 - id: '1730055951025'
   alias: Bedroom 3, Room Occupancy
   description: ''
@@ -3622,13 +3652,7 @@
             data: {}
             target:
               entity_id: scene.bedroom_3_occupancy_detected
-          else:
-          - action: light.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id: light.bedroom_3_group_occupancy_lights
-      delay_occupancy_clear_instant: 120
+      delay_occupancy_clear_instant: 300
       action_occupancy_clear_instant:
       - alias: Check if can run custom actions
         if:
@@ -3647,9 +3671,9 @@
           data:
             scene_id: bedroom_3_occupancy_detected
             snapshot_entities:
-            - fan.ceiling_bedroom_3
+            - fan.bedroom_3_ceiling
+            - light.bedroom_3_ceiling_fan
             - light.bedroom_3_floor_lamp
-            - light.ceiling_fan_bedroom_3
         - delay:
             hours: 0
             minutes: 0
@@ -3659,13 +3683,15 @@
           metadata: {}
           data: {}
           target:
-            entity_id: fan.ceiling_bedroom_3
+            entity_id: fan.bedroom_3_ceiling
         - alias: Turn off lights in room
           action: light.turn_off
           metadata: {}
           data: {}
           target:
-            entity_id: light.bedroom_3_group_lights_all
+            entity_id:
+            - light.bedroom_3_ceiling_fan
+            - light.bedroom_3_floor_lamp
 - id: '1730985202477'
   alias: Foyer, Light
   description: Control primary lights in the foyer via a SONOFF Wireless Switch device.
@@ -3721,12 +3747,12 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_3
+          entity_id: fan.bedroom_3_ceiling
       event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_3
+            entity_id: fan.bedroom_3_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -3734,11 +3760,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, Off to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.set_percentage
@@ -3746,11 +3772,11 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, Low to Medium
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -3758,16 +3784,16 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, Medium to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
             data: {}
           alias: Ceiling Fan, High to Off
       event_button_press_preset_single:
@@ -3803,7 +3829,7 @@
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_3
+            entity_id: fan.bedroom_3_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -3811,21 +3837,21 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, Off to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
             data: {}
           alias: Ceiling Fan, Low to Off
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -3833,11 +3859,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, Medium to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_3'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_3_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.set_percentage
@@ -3845,14 +3871,14 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_3
+              entity_id: fan.bedroom_3_ceiling
           alias: Ceiling Fan, High to Medium
       event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_3
+          entity_id: fan.bedroom_3_ceiling
 - id: '1737052831738'
   alias: Bedroom 4, Fan
   description: Control the ceiling fan in Tom's office via the Lutron 3BRL fan remote.
@@ -3865,12 +3891,12 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_4
+          entity_id: fan.bedroom_4_ceiling
       event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_4
+            entity_id: fan.bedroom_4_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -3878,11 +3904,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, Off to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.set_percentage
@@ -3890,11 +3916,11 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, Low to Medium
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -3902,16 +3928,16 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, Medium to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
             data: {}
           alias: Ceiling Fan, High to Off
       event_button_press_preset_single:
@@ -3947,7 +3973,7 @@
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_4
+            entity_id: fan.bedroom_4_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -3955,21 +3981,21 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, Off to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
             data: {}
           alias: Ceiling Fan, Low to Off
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -3977,11 +4003,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, Medium to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_4'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_4_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.set_percentage
@@ -3989,26 +4015,26 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_4
+              entity_id: fan.bedroom_4_ceiling
           alias: Ceiling Fan, High to Medium
       event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_4
+          entity_id: fan.bedroom_4_ceiling
       event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_4
+          entity_id: light.bedroom_4_ceiling_fan
       event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_4
+          entity_id: light.bedroom_4_ceiling_fan
 - id: '1737055241030'
   alias: Bedroom 2, Fan
   description: Control the ceiling fan in the guest bedroom via the Lutron 3BRL fan
@@ -4022,12 +4048,12 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_2
+          entity_id: fan.bedroom_2_ceiling
       event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_2
+            entity_id: fan.bedroom_2_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -4035,11 +4061,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, Off to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.set_percentage
@@ -4047,11 +4073,11 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, Low to Medium
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -4059,16 +4085,16 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, Medium to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
             data: {}
           alias: Ceiling Fan, High to Off
       event_button_press_preset_single:
@@ -4104,7 +4130,7 @@
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_2
+            entity_id: fan.bedroom_2_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -4112,21 +4138,21 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, Off to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
             data: {}
           alias: Ceiling Fan, Low to Off
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -4134,11 +4160,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, Medium to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_2'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_2_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.set_percentage
@@ -4146,26 +4172,26 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_2
+              entity_id: fan.bedroom_2_ceiling
           alias: Ceiling Fan, High to Medium
       event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_2
+          entity_id: fan.bedroom_2_ceiling
       event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_2
+          entity_id: light.bedroom_2_ceiling_fan
       event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_2
+          entity_id: light.bedroom_2_ceiling_fan
       event_button_press_on_hold:
       - action: cover.open_cover_tilt
         metadata: {}
@@ -4191,12 +4217,12 @@
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_1
+          entity_id: fan.bedroom_1_ceiling
       event_button_press_raise_single:
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_1
+            entity_id: fan.bedroom_1_ceiling
             state: 'off'
           sequence:
           - action: fan.set_percentage
@@ -4204,11 +4230,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, Off to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.set_percentage
@@ -4216,11 +4242,11 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, Low to Medium
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -4228,16 +4254,16 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, Medium to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
             data: {}
           alias: Ceiling Fan, High to Off
       event_button_press_preset_single:
@@ -4273,7 +4299,7 @@
       - choose:
         - conditions:
           - condition: state
-            entity_id: fan.custom_ceiling_bedroom_1
+            entity_id: fan.bedroom_1_ceiling
             state: 'off'
           sequence:
           - action: fan.turn_on
@@ -4281,21 +4307,21 @@
             data:
               percentage: 100
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, Off to High
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 33.333333333333336 }}'
           sequence:
           - action: fan.turn_off
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
             data: {}
           alias: Ceiling Fan, Low to Off
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 66.6666666667 }}'
           sequence:
           - action: fan.set_percentage
@@ -4303,11 +4329,11 @@
             data:
               percentage: 33.333333333333336
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, Medium to Low
         - conditions:
           - condition: template
-            value_template: '{{ state_attr( ''fan.custom_ceiling_bedroom_1'', ''percentage''
+            value_template: '{{ state_attr( ''fan.bedroom_1_ceiling'', ''percentage''
               ) | float <= 100 }}'
           sequence:
           - action: fan.set_percentage
@@ -4315,26 +4341,26 @@
             data:
               percentage: 66.6666666667
             target:
-              entity_id: fan.custom_ceiling_bedroom_1
+              entity_id: fan.bedroom_1_ceiling
           alias: Ceiling Fan, High to Medium
       event_button_press_off_single:
       - action: fan.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: fan.custom_ceiling_bedroom_1
+          entity_id: fan.bedroom_1_ceiling
       event_button_press_on_double:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_1
+          entity_id: light.bedroom_1_ceiling_fan
       event_button_press_off_double:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_1
+          entity_id: light.bedroom_1_ceiling_fan
 - id: '1737061838951'
   alias: Bedroom 3, Light - Ceiling Fan
   description: Control the ceiling fan light in the Jess' office via a Lutron paddle
@@ -4348,13 +4374,13 @@
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_3
+          entity_id: light.bedroom_3_ceiling_fan
       event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_3
+          entity_id: light.bedroom_3_ceiling_fan
 - id: '1737061883401'
   alias: Bedroom 2, Light - Primary
   description: Control the ceiling fan light in the guest bedroom via a Lutron paddle
@@ -4402,13 +4428,13 @@
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_1
+          entity_id: light.bedroom_1_ceiling_fan
       event_button_press_off_single:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: light.ceiling_fan_bedroom_1
+          entity_id: light.bedroom_1_ceiling_fan
 - id: '1737062260641'
   alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a Lutron paddle remote.
@@ -4589,7 +4615,7 @@
       - action: input_text.set_value
         metadata: {}
         data:
-          value: '{{ states( ''sensor.laundry_washing_time_remaining'' ) }}'
+          value: '{{ states( ''sensor.laundry_washer_time_remaining'' ) }}'
         target:
           entity_id: input_text.laundry_washer_original_duration
       action_single_finish:
@@ -5100,7 +5126,6 @@
       minutes: 30
       seconds: 0
     above: 32
-    enabled: true
   conditions: []
   actions:
   - parallel:
@@ -5152,7 +5177,6 @@
       minutes: 30
       seconds: 0
     above: 65
-    enabled: true
   - entity_id:
     - sensor.temperature_wine_cooler_top
     trigger: numeric_state
@@ -5162,7 +5186,6 @@
       minutes: 30
       seconds: 0
     above: 75
-    enabled: true
   conditions: []
   actions:
   - choose:
@@ -5301,7 +5324,6 @@
             interruption_level: critical
             notification_type: type_critical
             message: The firearm safe is open!
-          enabled: true
         - action: persistent_notification.create
           metadata: {}
           data:
@@ -5317,10 +5339,10 @@
             duration: Forever
             brightness_level: 100
             entity_ids:
-            - light.ceiling_fan_switch_bedroom_1
-            - light.ceiling_fan_switch_bedroom_2
-            - light.ceiling_fan_switch_bedroom_3
-            - light.ceiling_fan_switch_bedroom_4
+            - light.bedroom_1_ceiling_fan_switch
+            - light.bedroom_2_ceiling_fan_switch
+            - light.bedroom_3_ceiling_fan_switch
+            - light.bedroom_4_ceiling_fan_switch
     - conditions:
       - condition: trigger
         id:
@@ -5351,7 +5373,6 @@
             interruption_level: critical
             notification_type: type_critical
             message: The firearm safe has been open for 5 minutes.
-          enabled: true
         - action: persistent_notification.create
           metadata: {}
           data:
@@ -5370,10 +5391,10 @@
           effect: 'Off'
           duration: Forever
           entity_ids:
-          - light.ceiling_fan_switch_bedroom_1
-          - light.ceiling_fan_switch_bedroom_2
-          - light.ceiling_fan_switch_bedroom_3
-          - light.ceiling_fan_switch_bedroom_4
+          - light.bedroom_1_ceiling_fan_switch
+          - light.bedroom_2_ceiling_fan_switch
+          - light.bedroom_3_ceiling_fan_switch
+          - light.bedroom_4_ceiling_fan_switch
   mode: queued
   max: 10
 - id: '1752148183680'
@@ -5395,7 +5416,17 @@
     type: turned_off
     trigger: device
     id: Television Turns OFF
-    enabled: false
+  - alias: Television Turns OFF DELAYED
+    device_id: 35987879623aec43c30ca84a7bf0eaed
+    domain: media_player
+    entity_id: c33af2cdda6cb7fc0d928210959ff909
+    type: turned_off
+    trigger: device
+    id: Television Turns OFF DELAYED
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
   - trigger: state
     entity_id:
     - switch.sync_box_power
@@ -5435,20 +5466,30 @@
     - conditions:
       - condition: trigger
         id:
-        - Television Turns OFF
+        - Television Turns OFF DELAYED
       sequence:
-      - action: switch.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - switch.sync_box_light_sync
-      - action: switch.turn_off
-        metadata: {}
-        data: {}
-        target:
+      - if:
+        - condition: state
+          entity_id: switch.sync_box_light_sync
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - switch.sync_box_light_sync
+      - if:
+        - condition: state
           entity_id: switch.sync_box_power
-      alias: Television Turns OFF
+          state: 'on'
+        then:
+        - action: switch.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: switch.sync_box_power
+      alias: Television Turns OFF DELAYED
   mode: single
 - id: '1752192490585'
   alias: Living Room, Movie Mode
@@ -5474,7 +5515,6 @@
     - condition: time
       after: sensor.sun_next_dusk
       before: sensor.sun_next_dawn
-      enabled: true
   actions:
   - choose:
     - conditions:
@@ -5483,12 +5523,9 @@
         - condition: trigger
           id:
           - AppleTV is PAUSED
-          enabled: true
         - condition: state
           entity_id: switch.sync_box_light_sync
           state: 'on'
-          enabled: true
-        enabled: true
       sequence:
       - action: scene.create
         metadata: {}
@@ -5514,7 +5551,6 @@
         data: {}
         target:
           entity_id: switch.sync_box_light_sync
-        enabled: true
       - delay:
           hours: 0
           minutes: 0
@@ -5546,8 +5582,6 @@
         - condition: state
           entity_id: switch.sync_box_light_sync
           state: 'off'
-          enabled: true
-        enabled: true
       sequence:
       - action: scene.turn_on
         metadata: {}
@@ -5595,9 +5629,7 @@
             target:
               entity_id:
               - switch.sync_box_light_sync
-            enabled: true
           alias: Toggle Hue Sync Box Light Sync
-        enabled: true
       event_buttons_brightness: Custom action
       action_button_press_raise_single:
       - if:
@@ -5639,14 +5671,12 @@
           entity_id: number.sync_box_brightness
         data:
           amount: 5
-        enabled: true
       action_button_press_lower_hold:
       - action: number.decrement
         target:
           entity_id: number.sync_box_brightness
         data:
           amount: 5
-        enabled: true
 - id: '1753529430836'
   alias: Bedroom 4, Input Select - Cycle Scenes
   description: ''
@@ -5832,7 +5862,7 @@
             brightness_pct: 100
           target:
             entity_id:
-            - light.ceiling_fan_bedroom_1
+            - light.bedroom_1_ceiling_fan
             - light.bedroom_1_lamp_hers
             - light.bedroom_1_lamp_his
             - light.closet_hallway_ceiling_light
@@ -5845,7 +5875,7 @@
             brightness_pct: 100
           target:
             entity_id:
-            - light.ceiling_fan_bedroom_2
+            - light.bedroom_2_ceiling_fan
             - light.bedroom_2_lamp_left
             - light.bedroom_2_lamp_right
         - alias: Lights On - Bedroom 3
@@ -5855,7 +5885,7 @@
             brightness_pct: 100
           target:
             entity_id:
-            - light.ceiling_fan_bedroom_3
+            - light.bedroom_3_ceiling_fan
             - light.bedroom_3_floor_lamp
         - alias: Lights On - Bedroom 4
           action: light.turn_on
@@ -5864,7 +5894,7 @@
             brightness_pct: 100
           target:
             entity_id:
-            - light.ceiling_fan_bedroom_4
+            - light.bedroom_4_ceiling_fan
             - light.bedroom_4_accent_lamp_right
             - light.bedroom_4_lightstrip
         - alias: Lights On - Other
@@ -5949,32 +5979,32 @@
   use_blueprint:
     path: maxson/canopy_inovelli_ceiling_fan_speed_change.yaml
     input:
-      ceiling_fan: fan.ceiling_bedroom_4
-      light_switch: light.ceiling_fan_switch_bedroom_4
+      ceiling_fan: fan.bedroom_4_ceiling
+      light_switch: light.bedroom_4_ceiling_fan_switch
 - id: '1755114566442'
   alias: Bedroom 3, Fan Speed Change
   description: ''
   use_blueprint:
     path: maxson/canopy_inovelli_ceiling_fan_speed_change.yaml
     input:
-      ceiling_fan: fan.ceiling_bedroom_3
-      light_switch: light.ceiling_fan_switch_bedroom_3
+      ceiling_fan: fan.bedroom_3_ceiling
+      light_switch: light.bedroom_3_ceiling_fan_switch
 - id: '1755114632043'
   alias: Bedroom 2, Fan Speed Change
   description: ''
   use_blueprint:
     path: maxson/canopy_inovelli_ceiling_fan_speed_change.yaml
     input:
-      ceiling_fan: fan.ceiling_bedroom_2
-      light_switch: light.ceiling_fan_switch_bedroom_2
+      ceiling_fan: fan.bedroom_2_ceiling
+      light_switch: light.bedroom_2_ceiling_fan_switch
 - id: '1755114670109'
   alias: Bedroom 1, Fan Speed Change
   description: ''
   use_blueprint:
     path: maxson/canopy_inovelli_ceiling_fan_speed_change.yaml
     input:
-      ceiling_fan: fan.ceiling_bedroom_1
-      light_switch: light.ceiling_fan_switch_bedroom_1
+      ceiling_fan: fan.bedroom_1_ceiling
+      light_switch: light.bedroom_1_ceiling_fan_switch
 - id: '1755652272480'
   alias: Dehumidifier – Cycle Tracking
   description: ''
