@@ -1,5 +1,5 @@
 substitutions:
-  name: esp32-upsy-desk-76db20
+  name: esp32-bluetooth-proxy-5b1d78
   friendly_name: Bluetooth Proxy, Bedroom 4
 
 packages:
