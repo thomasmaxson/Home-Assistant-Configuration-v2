@@ -605,30 +605,6 @@ views:
                     entity: binary_sensor.all_leak_sensors_kitchen
           - type: vertical-stack
             cards:
-              - type: custom:decluttering-card
-                template: room_popup__grid
-                variables:
-                  - cards:
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_kitchen
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_kitchen
-                          name: Amazon Echo
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
-          - type: vertical-stack
-            cards:
               - type: custom:mushroom-title-card
                 title: ''
                 subtitle: Devices
@@ -1183,30 +1159,6 @@ views:
                     entity: light.all_lights_dining_room
           - type: vertical-stack
             cards:
-              - type: custom:decluttering-card
-                template: room_popup__grid
-                variables:
-                  - cards:
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_dining_room
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_dining_room
-                          name: Amazon Echo Dot
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
-          - type: vertical-stack
-            cards:
               - type: custom:mushroom-title-card
                 title: ''
                 subtitle: Lights
@@ -1317,24 +1269,6 @@ views:
                           type: custom:mini-media-player
                           entity: media_player.appletv_bedroom_1
                           name: AppleTV
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_bedroom_1
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_bedroom_1
-                          name: Amazon Echo Dot
                           artwork: cover
                           hide:
                             icon: true
@@ -1576,24 +1510,6 @@ views:
                             source: true
                             volume: true
                             info: true
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_bedroom_2
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_bedroom_2
-                          name: Amazon Echo Dot
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -1811,24 +1727,6 @@ views:
                             source: true
                             volume: true
                             info: true
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_bedroom_3
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_bedroom_3
-                          name: Amazon Echo Dot
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2001,24 +1899,6 @@ views:
                             source: true
                             volume: true
                             info: true
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_bedroom_4
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_bedroom_4
-                          name: Amazon Echo Dot
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2360,24 +2240,6 @@ views:
                           type: custom:mini-media-player
                           entity: media_player.appletv_bedroom_1
                           name: AppleTV
-                          artwork: cover
-                          hide:
-                            icon: true
-                            source: true
-                            volume: true
-                      - type: conditional
-                        conditions:
-                          - condition: or
-                            conditions:
-                              - condition: state
-                                entity: media_player.echo_dot_bedroom_1
-                                state:
-                                  - playing
-                                  - paused
-                        card:
-                          type: custom:mini-media-player
-                          entity: media_player.echo_dot_bedroom_1
-                          name: Amazon Echo Dot
                           artwork: cover
                           hide:
                             icon: true
@@ -3946,7 +3808,10 @@ views:
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
               {% set the_entity = 'cover.curtains_large_window_bedroom_1' %}
-              --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+              --maxson-floorplan--color-curtains-lg--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.curtains_small_window_bedroom_1' %}
+              --maxson-floorplan--color-curtains-sm--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4124,6 +3989,16 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
+            entity: fan.bedroom_1_ceiling
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 19%
+              left: 15%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
+          - type: state-icon
             entity: light.bedroom_1_ceiling_fan
             state_color: false
             tap_action:
@@ -4139,30 +4014,40 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 19%
-              left: 14%
+              top: 29%
+              left: 18%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
-          - type: state-icon
-            entity: fan.bedroom_1_ceiling
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 30%
-              left: 14%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
             entity: cover.curtains_large_window_bedroom_1
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 30%
-              left: 21%
+              top: 25%
+              left: 6%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-lg--bedroom-1 ) )
+          - type: state-icon
+            entity: cover.curtains_small_window_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 6%
+              left: 26.25%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-sm--bedroom-1 ) )
+          - type: state-icon
+            entity: fan.bedroom_2_ceiling
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 75%
+              left: 82%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: light.bedroom_2_ceiling_fan
             state_color: false
@@ -4170,7 +4055,7 @@ views:
               action: toggle
             style:
               top: 75%
-              left: 87%
+              left: 88%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
           - type: state-icon
@@ -4179,20 +4064,10 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 75%
-              left: 82%
+              top: 84%
+              left: 85%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
-          - type: state-icon
-            entity: fan.bedroom_2_ceiling
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 84%
-              left: 82%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_2
             state_color: false
@@ -4203,18 +4078,28 @@ views:
               target:
                 entity_id: cover.blinds_bedroom_2
             style:
-              top: 84%
-              left: 87%
+              top: 79%
+              left: 96%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
+          - type: state-icon
+            entity: fan.bedroom_3_ceiling
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 19%
+              left: 55.5%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_ceiling_fan
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 18%
-              left: 61%
+              top: 19%
+              left: 61.5%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
@@ -4223,30 +4108,30 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 18%
-              left: 56%
+              top: 28%
+              left: 58.5%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
                 ) )
           - type: state-icon
-            entity: fan.bedroom_3_ceiling
+            entity: fan.bedroom_4_ceiling
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 27%
-              left: 58.5%
+              top: 75%
+              left: 53%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: light.bedroom_4_ceiling_fan
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 73%
-              left: 56.25%
+              top: 75%
+              left: 59%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
           - type: state-icon
@@ -4255,8 +4140,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 77%
-              left: 52%
+              top: 84%
+              left: 53%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
           - type: state-icon
@@ -4265,22 +4150,12 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 77%
-              left: 60%
+              top: 84%
+              left: 59%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
-          - type: state-icon
-            entity: fan.bedroom_4_ceiling
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 84%
-              left: 53.5%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
             entity: cover.blinds_bedroom_4
             state_color: false
@@ -4291,8 +4166,8 @@ views:
               target:
                 entity_id: cover.blinds_bedroom_4
             style:
-              top: 84%
-              left: 58.5%
+              top: 94%
+              left: 59.5%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
           - type: state-icon
@@ -4305,7 +4180,7 @@ views:
               target:
                 entity_id: cover.blinds_kitchen
             style:
-              top: 86.5%
+              top: 94%
               left: 41.25%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
@@ -4372,8 +4247,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 79%
-              left: 16.5%
+              top: 68%
+              left: 23%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bar-ceiling ) )
           - type: state-icon
@@ -4382,8 +4257,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 79%
-              left: 20.5%
+              top: 68%
+              left: 17%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bar-ceiling ) )
           - type: state-icon
@@ -4624,7 +4499,7 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 79%
+              top: 70%
               left: 96%
               border-radius: 100%
               '--state-icon-color': >-
@@ -6283,46 +6158,20 @@ views:
             ha-card {
               --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
 
-              {% set the_entity = 'media_player.echo_kitchen' %}
-              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
               {% set the_entity = 'media_player.appletv_living_room' %}
               --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              {% set the_entity = 'media_player.echo_dot_dining_room' %}
-              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
 
               {% set the_entity = 'media_player.appletv_bedroom_1' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_2' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_3' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_4' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
-              {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
-              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.sony_bravia_tv' %}
@@ -6336,19 +6185,6 @@ views:
             }
         elements:
           - type: state-icon
-            entity: media_player.echo_kitchen
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 67%
-              left: 25%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var( --maxson-floorplan--color-media-player-echo-kitchen )
-                )
-          - type: state-icon
             entity: media_player.appletv_living_room
             state_color: false
             tap_action:
@@ -6361,57 +6197,17 @@ views:
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-living-room ) )
           - type: state-icon
-            entity: media_player.echo_dot_dining_room
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 48%
-              left: 36%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
-          - type: state-icon
             entity: media_player.appletv_bedroom_1
             state_color: false
             tap_action:
               action: more-info
             style:
-              top: 25%
-              left: 15%
+              top: 24%
+              left: 19%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-1 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_1
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 25%
-              left: 23%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-1 ) )
-          - type: state-icon
-            entity: media_player.echo_pop_main_bathroom
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 22.5%
-              left: 45%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-pop-bathroom-main )
-                )
           - type: state-icon
             entity: media_player.appletv_bedroom_2
             state_color: false
@@ -6419,24 +6215,11 @@ views:
               action: more-info
             style:
               top: 79%
-              left: 82%
+              left: 84.75%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-2 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_2
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 79%
-              left: 87%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-2 ) )
           - type: state-icon
             entity: media_player.appletv_bedroom_3
             state_color: false
@@ -6444,24 +6227,11 @@ views:
               action: more-info
             style:
               top: 23%
-              left: 56%
+              left: 59%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-3 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_3
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 23%
-              left: 62%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-3 ) )
           - type: state-icon
             entity: media_player.appletv_bedroom_4
             state_color: false
@@ -6469,24 +6239,11 @@ views:
               action: more-info
             style:
               top: 79%
-              left: 53%
+              left: 56.5%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-4 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_4
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 79%
-              left: 59%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-4 ) )
           - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
@@ -6546,46 +6303,20 @@ views:
             ha-card {
               --state-unavailable-color: var( --map-icon--sensor-unavail ) !important;
 
-              {% set the_entity = 'media_player.echo_kitchen' %}
-              --maxson-floorplan--color-media-player-echo-kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
               {% set the_entity = 'media_player.appletv_living_room' %}
               --maxson-floorplan--color-media-player-appletv-living-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              {% set the_entity = 'media_player.echo_dot_dining_room' %}
-              --maxson-floorplan--color-media-player-echo-dot-dining-room: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
 
               {% set the_entity = 'media_player.appletv_bedroom_1' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_1' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_2' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_2' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_3' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
-              {% set the_entity = 'media_player.echo_dot_bedroom_3' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
               {% set the_entity = 'media_player.appletv_bedroom_4' %}
               --maxson-floorplan--color-media-player-appletv-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              {% set the_entity = 'media_player.echo_dot_bedroom_4' %}
-              --maxson-floorplan--color-media-player-echo-dot-bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
-
-              
-              {% set the_entity = 'media_player.echo_pop_main_bathroom' %}
-              --maxson-floorplan--color-media-player-echo-pop-bathroom-main: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-media-unavail ) {% elif( states( the_entity ) == 'playing' ) %} var( --map-icon--sensor-media-on ) {% else %} var( --map-icon--sensor-media-off ) {% endif %};
 
               
               {% set the_entity = 'media_player.sony_bravia_tv' %}
@@ -6599,19 +6330,6 @@ views:
             }
         elements:
           - type: state-icon
-            entity: media_player.echo_kitchen
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 26%
-              left: 33.5%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var( --maxson-floorplan--color-media-player-echo-kitchen )
-                )
-          - type: state-icon
             entity: media_player.appletv_living_room
             state_color: false
             tap_action:
@@ -6624,82 +6342,29 @@ views:
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-living-room ) )
           - type: state-icon
-            entity: media_player.echo_dot_dining_room
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 38%
-              left: 54%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-dining-room ) )
-          - type: state-icon
             entity: media_player.appletv_bedroom_1
             state_color: false
             tap_action:
               action: more-info
             style:
-              top: 16%
+              top: 19%
               left: 76%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-1 ) )
           - type: state-icon
-            entity: media_player.echo_dot_bedroom_1
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 23%
-              left: 76%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-1 ) )
-          - type: state-icon
-            entity: media_player.echo_pop_main_bathroom
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 44.5%
-              left: 77.5%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-pop-bathroom-main )
-                )
-          - type: state-icon
             entity: media_player.appletv_bedroom_2
             state_color: false
             tap_action:
               action: more-info
             style:
-              top: 81.5%
+              top: 84%
               left: 20.5%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-2 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_2
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 87.5%
-              left: 20.5%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-2 ) )
           - type: state-icon
             entity: media_player.appletv_bedroom_3
             state_color: false
@@ -6707,49 +6372,23 @@ views:
               action: more-info
             style:
               top: 58%
-              left: 72.5%
+              left: 76%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-3 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_3
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 58%
-              left: 81.5%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-3 ) )
           - type: state-icon
             entity: media_player.appletv_bedroom_4
             state_color: false
             tap_action:
               action: more-info
             style:
-              top: 53%
+              top: 55.5%
               left: 20.5%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-media-player-appletv-bedroom-4 ) )
-          - type: state-icon
-            entity: media_player.echo_dot_bedroom_4
-            icon: mdi:spotify
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 59%
-              left: 20.5%
-              border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-media-player-echo-dot-bedroom-4 ) )
           - type: state-icon
             entity: media_player.sony_bravia_tv
             state_color: false
@@ -9433,33 +9072,33 @@ views:
     layout:
       max_columns: 1
     cards:
-      - type: entities
-        title: Notification Reminders
-        show_header_toggle: false
-        entities:
-          - entity: input_boolean.reminder_dishwasher_complete
-            name: Dishwasher Complete
-            icon: mdi:dishwasher
-          - entity: input_boolean.reminder_laundry_complete_washer
-            name: Washing Machine Complete
-            icon: mdi:washing-machine
-          - entity: input_boolean.reminder_laundry_complete_dryer
-            name: Tumble Dryer Complete
-            icon: mdi:tumble-dryer
-          - entity: input_boolean.reminder_waste_take_out_recycle
-            name: Recycling Reminder
-            icon: mdi:recycle
-          - entity: input_boolean.reminder_waste_bring_in_recycle
-            name: Recycling Dropoff
-            icon: mdi:recycle
-          - entity: input_boolean.reminder_waste_take_out_solid
-            name: Waste Bin Take Out
-            icon: mdi:trash-can
-          - entity: input_boolean.reminder_waste_bring_in_solid
-            name: Waste Bin Bring In
-            icon: mdi:trash-can
       - type: vertical-stack
         cards:
+          - type: entities
+            title: Active Notifications
+            show_header_toggle: false
+            entities:
+              - entity: input_boolean.reminder_dishwasher_complete
+                name: Dishwasher Complete
+                icon: mdi:dishwasher
+              - entity: input_boolean.reminder_laundry_complete_washer
+                name: Washing Machine Complete
+                icon: mdi:washing-machine
+              - entity: input_boolean.reminder_laundry_complete_dryer
+                name: Tumble Dryer Complete
+                icon: mdi:tumble-dryer
+              - entity: input_boolean.reminder_waste_take_out_recycle
+                name: Recycling Reminder
+                icon: mdi:recycle
+              - entity: input_boolean.reminder_waste_bring_in_recycle
+                name: Recycling Dropoff
+                icon: mdi:recycle
+              - entity: input_boolean.reminder_waste_take_out_solid
+                name: Waste Bin Take Out
+                icon: mdi:trash-can
+              - entity: input_boolean.reminder_waste_bring_in_solid
+                name: Waste Bin Bring In
+                icon: mdi:trash-can
           - type: entities
             title: iOS Snoozed Push Notifications
             show_header_toggle: false
@@ -9491,149 +9130,119 @@ views:
                     entity_id: automation.esphome_update_all_devices
       - type: vertical-stack
         cards:
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Sunrise Automations
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: sensor.time_next_sunrise
-                            name: Next Sunrise
-                          - entity: input_boolean.sunrise_automations_run
-                            name: Enable
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunrise_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_number.sunrise_automations_offset
-                              name: Offset
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunrise_automations_run
-                                state: 'on'
-                            row:
-                              entity: sensor.status_automations_sunrise
-                              name: Runs at
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunrise_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_button.trigger_sunrise_automations_run
-                              name: Trigger
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Noon Automations
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: input_boolean.noon_automations_run
-                            name: Enable
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.noon_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_button.trigger_noon_automations_run
-                              name: Trigger
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Sunset Automations
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: sensor.time_next_sunset
-                            name: Next Sunset
-                          - entity: input_boolean.sunset_automations_run
-                            name: Enable
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunset_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_number.sunset_automations_offset
-                              name: Offset
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunset_automations_run
-                                state: 'on'
-                            row:
-                              entity: sensor.status_automations_sunset
-                              name: Runs at
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunset_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_button.trigger_sunset_automations_run
-                              name: Trigger
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.sunset_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_boolean.sunset_automations_active
-                              name: Active
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Bedtime Automations
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: input_boolean.bedtime_automations_run
-                            name: Enable
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.bedtime_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_button.trigger_bedtime_automations_run
-                              name: Trigger
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.bedtime_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_datetime.bedtime_automations_time_manual
-                              name: Latest Time
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.bedtime_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_number.bedtime_automations_offset
-                              name: Run After Sunset by
-          - type: custom:decluttering-card
-            template: room_popup__expander
-            variables:
-              - title: Midnight Automations
-              - cards:
-                  - type: custom:decluttering-card
-                    template: room_popup__entities
-                    variables:
-                      - entities:
-                          - entity: input_boolean.midnight_automations_run
-                            name: Enable
-                          - type: conditional
-                            conditions:
-                              - entity: input_boolean.midnight_automations_run
-                                state: 'on'
-                            row:
-                              entity: input_button.trigger_midnight_automations_run
-                              name: Trigger
+          - type: entities
+            title: Sunrise Automations
+            entities:
+              - entity: sensor.time_next_sunrise
+                name: Next Sunrise
+              - entity: input_boolean.sunrise_automations_run
+                name: Allow Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunrise_automations_run
+                    state: 'on'
+                row:
+                  entity: input_button.trigger_sunrise_automations_run
+                  name: Trigger Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunrise_automations_run
+                    state: 'on'
+                row:
+                  entity: input_number.sunrise_automations_offset
+                  name: Offset
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunrise_automations_run
+                    state: 'on'
+                row:
+                  entity: sensor.status_automations_sunrise
+                  name: Runs at
+          - type: entities
+            title: Noon Automations
+            entities:
+              - entity: input_boolean.noon_automations_run
+                name: Allow Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.noon_automations_run
+                    state: 'on'
+                row:
+                  entity: input_button.trigger_noon_automations_run
+                  name: Trigger Automation
+          - type: entities
+            title: Sunset Automations
+            entities:
+              - entity: sensor.time_next_sunset
+                name: Next Sunset
+              - entity: input_boolean.sunset_automations_run
+                name: Allow Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunset_automations_run
+                    state: 'on'
+                row:
+                  entity: input_button.trigger_sunset_automations_run
+                  name: Trigger Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunset_automations_run
+                    state: 'on'
+                row:
+                  entity: input_number.sunset_automations_offset
+                  name: Offset
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunset_automations_run
+                    state: 'on'
+                row:
+                  entity: sensor.status_automations_sunset
+                  name: Runs at
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.sunset_automations_run
+                    state: 'on'
+                row:
+                  entity: input_boolean.sunset_automations_active
+                  name: Active
+          - type: entities
+            title: Bedtime Automations
+            entities:
+              - entity: input_boolean.bedtime_automations_run
+                name: Allow Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.bedtime_automations_run
+                    state: 'on'
+                row:
+                  entity: input_button.trigger_bedtime_automations_run
+                  name: Trigger Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.bedtime_automations_run
+                    state: 'on'
+                row:
+                  entity: input_datetime.bedtime_automations_time_manual
+                  name: Latest Time
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.bedtime_automations_run
+                    state: 'on'
+                row:
+                  entity: input_number.bedtime_automations_offset
+                  name: Run After Sunset by
+          - type: entities
+            title: Midnight Automations
+            entities:
+              - entity: input_boolean.midnight_automations_run
+                name: Allow Automation
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.midnight_automations_run
+                    state: 'on'
+                row:
+                  entity: input_button.trigger_midnight_automations_run
+                  name: Trigger Automation
     subview: true
 button_card_templates:
   button_data_setup:

@@ -5757,13 +5757,13 @@
         data: {}
         target:
           entity_id:
-          - switch.echo_kitchen_do_not_disturb_switch
-          - switch.echo_dot_dining_room_do_not_disturb_switch
-          - switch.echo_dot_bedroom_1_do_not_disturb_switch
-          - switch.echo_dot_bedroom_2_do_not_disturb_switch
-          - switch.echo_dot_bedroom_3_do_not_disturb_switch
-          - switch.echo_dot_bedroom_4_do_not_disturb_switch
-          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+          - switch.echo_kitchen_do_not_disturb
+          - switch.echo_dot_dining_room_do_not_disturb
+          - switch.echo_dot_bedroom_1_do_not_disturb
+          - switch.echo_dot_bedroom_2_do_not_disturb
+          - switch.echo_dot_bedroom_3_do_not_disturb
+          - switch.echo_dot_bedroom_4_do_not_disturb
+          - switch.echo_pop_main_bathroom_do_not_disturb
         alias: ENABLE Amazon Devices
       - action: scene.turn_on
         metadata: {}
@@ -5790,13 +5790,13 @@
         data: {}
         target:
           entity_id:
-          - switch.echo_kitchen_do_not_disturb_switch
-          - switch.echo_dot_dining_room_do_not_disturb_switch
-          - switch.echo_dot_bedroom_1_do_not_disturb_switch
-          - switch.echo_dot_bedroom_2_do_not_disturb_switch
-          - switch.echo_dot_bedroom_3_do_not_disturb_switch
-          - switch.echo_dot_bedroom_4_do_not_disturb_switch
-          - switch.echo_pop_main_bathroom_do_not_disturb_switch
+          - switch.echo_kitchen_do_not_disturb
+          - switch.echo_dot_dining_room_do_not_disturb
+          - switch.echo_dot_bedroom_1_do_not_disturb
+          - switch.echo_dot_bedroom_2_do_not_disturb
+          - switch.echo_dot_bedroom_3_do_not_disturb
+          - switch.echo_dot_bedroom_4_do_not_disturb
+          - switch.echo_pop_main_bathroom_do_not_disturb
       - action: scene.create
         metadata: {}
         data:

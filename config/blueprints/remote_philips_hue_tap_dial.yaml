@@ -696,7 +696,6 @@ actions:
                         sequence: !input action_press_dot_4
                     default: !input action_press_dot_1
 
-
       - alias: "If button was pressed and held"
         conditions:
           - alias: "Check if triggered by button press and hold"
@@ -737,7 +736,6 @@ actions:
                 sequence: !input action_hold_dot_4
             default: !input action_hold_dot_1
 
-
       - alias: "If dial was rotated left"
         conditions:
           - alias: "Check if triggered by left dial rotation"
@@ -765,7 +763,6 @@ actions:
                     state: "4"
                 sequence: !input action_dial_left_dot_4
             default: !input action_dial_left_dot_1
-
 
       - alias: "If dial was rotated right"
         conditions:

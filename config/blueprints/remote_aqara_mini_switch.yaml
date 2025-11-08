@@ -78,7 +78,6 @@ blueprint:
           selector:
             action: null
 
-
     button_double_press_config:
       name: Double Press Configuration
       icon: mdi:gesture-double-tap
@@ -114,7 +113,6 @@ blueprint:
           selector:
             action: null
 
-
     button_other_events:
       name: Other Button Events
       icon: mdi:gesture-tap
@@ -142,7 +140,6 @@ blueprint:
           default: []
           selector:
             action:
-
 
     automation_config:
       name: Configuration
@@ -181,7 +178,6 @@ mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
 
-
 variables:
   var_remote: !input remote
 
@@ -193,7 +189,6 @@ variables:
   var_action_button_press_hold: !input action_button_press_hold
   var_action_button_press_release: !input action_button_press_release
   var_action_device_shake: !input action_device_shake
-
 
 triggers:
   - alias: Button Press Once (via ZHA event)
@@ -211,7 +206,6 @@ triggers:
     subtype: single
     id: trigger_press_single_mqtt
 
-
   - alias: Button Press Twice (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -227,7 +221,6 @@ triggers:
     subtype: double
     id: trigger_press_double_mqtt
 
-
   - alias: Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -242,7 +235,6 @@ triggers:
     type: action
     subtype: hold
     id: trigger_hold_mqtt
-
 
   - alias: Button Release (via ZHA event)
     trigger: event
@@ -271,7 +263,6 @@ conditions:
   - condition: template
     value_template: "{{ var_remote | count > 0 }}"
 
-
 actions:
   - variables:
       var_all_lights_on_single: >-
@@ -287,14 +278,13 @@ actions:
       var_first_light_on_double: >-
         {{ [] if ( var_light_press_double | length <= 0 ) else expand( var_light_press_double ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
 
-
   - choose:
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_press_single_zha
               - trigger_press_single_mqtt
-        sequence: 
+        sequence:
           - alias: "Determine event action to trigger"
             choose:
               - alias: "For Single button press, toggle light state"
@@ -334,10 +324,10 @@ actions:
 
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_press_double_zha
               - trigger_press_double_mqtt
-        sequence: 
+        sequence:
           - alias: "Determine event action to trigger"
             choose:
               - alias: "For Double button press, manage light on/off state"
@@ -377,21 +367,21 @@ actions:
 
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_hold_zha
               - trigger_hold_mqtt
         sequence: !input action_button_press_hold
 
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_release_zha
               - trigger_release_mqtt
         sequence: !input action_button_press_release
 
       - conditions:
           - condition: trigger
-            id: 
+            id:
               - trigger_shake_zha
               - trigger_shake_mqtt
         sequence: !input action_device_shake

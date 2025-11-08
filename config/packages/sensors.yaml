@@ -31,30 +31,37 @@ sensor:
               { 
                 'key': 'kitchen', 
                 'player': 'media_player.echo_kitchen', 
+                'announce': 'notify.echo_kitchen_announce', 
                 'permission': 'input_boolean.household_notify_kitchen'
               }, { 
                 'key': 'dining_room', 
                 'player': 'media_player.echo_dot_dining_room', 
+                'announce': 'notify.echo_dot_dining_room_announce', 
                 'permission': 'input_boolean.household_notify_dining_room'
               }, { 
                 'key': 'bedroom_1', 
                 'player': 'media_player.echo_dot_bedroom_1', 
+                'announce': 'notify.echo_dot_bedroom_1_announce', 
                 'permission': 'input_boolean.household_notify_bedroom_1'
               }, { 
                 'key': 'bedroom_2', 
                 'player': 'media_player.echo_dot_bedroom_2', 
+                'announce': 'notify.echo_dot_bedroom_2_announce', 
                 'permission': 'input_boolean.household_notify_bedroom_2'
               }, { 
                 'key': 'bedroom_3', 
                 'player': 'media_player.echo_dot_bedroom_3', 
+                'announce': 'notify.echo_dot_bedroom_3_announce', 
                 'permission': 'input_boolean.household_notify_bedroom_3'
               }, { 
                 'key': 'bedroom_4', 
                 'player': 'media_player.echo_dot_bedroom_4', 
+                'announce': 'notify.echo_dot_bedroom_4_announce', 
                 'permission': 'input_boolean.household_notify_bedroom_4'
               }, { 
                 'key': 'bathroom_1', 
                 'player': 'media_player.echo_pop_main_bathroom', 
+                'announce': 'notify.echo_pop_main_bathroom_announce', 
                 'permission': 'input_boolean.household_notify_bathroom_1'
               }
             ] -%}

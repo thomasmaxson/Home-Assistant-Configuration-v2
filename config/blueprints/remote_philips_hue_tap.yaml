@@ -1,16 +1,12 @@
 # This blueprint uses a Philips Hue Tap Remote Control connected through MQTT.
 # This blueprint allows you to run custom actions with the remote's buttons
 #
-# | Button Type | Interaction       | Action Choices      |
-# | ----------- | ----------------- | ------------------- |
-# | One Dot     | Press             | - Run custom action |
-# | ----------- | ----------------- | ------------------- |
-# | Two Dots    | Press             | - Run custom action |
-# | ----------- | ----------------- | ------------------- |
-# | Three Dots  | Press             | - Run custom action |
-# | ----------- | ----------------- | ------------------- |
-# | Four Dots   | Press             | - Run custom action |
-# | ----------- | ----------------- | ------------------- |
+# | Button     | Duration | Action        |
+# | ---------- | -------- | ------------- |
+# | One Dot    | Press    | Custom action |
+# | Two Dots   | Press    | Custom action |
+# | Three Dots | Press    | Custom action |
+# | Four Dots  | Press    | Custom action |
 
 blueprint:
   name: Philips Hue, Tap Remote Control
@@ -37,66 +33,127 @@ blueprint:
       icon: mdi:gesture-tap
       collapsed: false
       input:
-        action_press_dot_1:
+        event_button_press_1_dot_single:
           name: 1 Dot Button Press Event
           description: The action to perform on _press_ of the **1 Dot Button**.
           default: []
           selector:
             action: null
-
-        action_press_dot_2:
+        event_button_press_2_dots_single:
           name: 2 Dots Button Press Event
           description: The action to perform on _press_ of the **2 Dots Button**.
           default: []
           selector:
             action: null
-
-        action_press_dot_3:
+        event_button_press_3_dots_single:
           name: 3 Dots Button Press Event
           description: The action to perform on _press_ of the **3 Dots Button**.
           default: []
           selector:
             action: null
-
-        action_press_dot_4:
+        event_button_press_4_dots_single:
           name: 4 Dots Button Press Event
           description: The action to perform on _press_ of the **4 Dots Button**.
           default: []
           selector:
             action: null
 
+    automation_config:
+      name: Configuration
+      icon: mdi:cog
+      collapsed: true
+      input:
+        config_mode:
+          name: Automation Mode
+          description: Mode that automation runs in.
+          default: restart
+          selector:
+            select:
+              options:
+                - single
+                - restart
+                - queued
+                - parallel
+              custom_value: false
+              multiple: false
 
-mode: restart
-max: 3
+        config_max_num:
+          name: Mode Max
+          description: >
+            Maximum number of runs that can be executed or queued at a time.
+            <br>Ignored by _Single_ and _Restart_ Modes.
+          default: 10
+          selector:
+            number:
+              mode: slider
+              unit_of_measurement: runs
+              min: 1.0
+              max: 15.0
+              step: 1.0
+
+        debug_valid_events:
+          name: Debug Remote
+          description: Display a persistent notification, with remote and event details, if triggered.
+          default: false
+          selector:
+            boolean:
+
+mode: !input config_mode
+max: !input config_max_num
 max_exceeded: silent
-
 
 variables:
   trigger_command: "{{ trigger.to_state.state }}"
-
 
 triggers:
   - trigger: state
     entity_id: !input "remote"
     attribute: action
 
-
 conditions:
   - condition: template
     value_template: "{{ var_remote | count > 0 }}"
-    
 
 actions:
+  - variables:
+      device_manufacturer: "{{ device_attr( var_remote, 'manufacturer' ) | string }}"
+      device_model: "{{ device_attr( var_remote, 'model' ) | string }}"
+      device_model_id: "{{ device_attr( var_remote, 'model_id' ) | string }}"
+      device_identifiers: "{{ device_attr( var_remote, 'identifiers' ) | list }}"
+      integration_type: "{{ device_identifiers[0][0] | string | lower }}"
+      trigger_action: "{{ trigger.payload }}"
+      trigger_data: "{{ trigger }}"
+
+  - if:
+      - condition: template
+        value_template: !input debug_valid_events
+    then:
+      - action: persistent_notification.create
+        data:
+          notification_id: blueprint_debug__remote_hue_tap
+          title: >-
+            {%- if device_model_id not in [ "", "none", none, null, false] -%}
+              {{ device_manufacturer + " " + device_model }} ({{ device_model_id }})
+            {%- else -%}
+              {{ device_manufacturer + " " + device_model }}
+            {%- endif -%}
+          message: >-
+            <br>_Integration_: {{ integration_type }}  |  _Action_: {{ trigger_action }}
+            <br>
+            <br>_Remote ID_: {{ var_remote }}
+            <br>
+            <br>```{{ trigger_data }}```
+
   - choose:
       - conditions:
           - "{{ trigger_command == 'press_1' }}"
-        sequence: !input action_press_dot_1
+        sequence: !input event_button_press_1_dot_single
       - conditions:
           - "{{ trigger_command == 'press_2' }}"
-        sequence: !input action_press_dot_2
+        sequence: !input event_button_press_2_dots_single
       - conditions:
           - "{{ trigger_command == 'press_3' }}"
-        sequence: !input action_press_dot_3
+        sequence: !input event_button_press_3_dots_single
       - conditions:
           - "{{ trigger_command == 'press_4' }}"
-        sequence: !input action_press_dot_4
+        sequence: !input event_button_press_4_dots_single
