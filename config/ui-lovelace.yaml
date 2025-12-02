@@ -141,6 +141,14 @@ views:
         style:
           hui-vertical-stack-card$: |
             #root { gap: 0 !important;}
+        card_mod:
+          style: |
+            ha-card {
+              background: none;
+              box-shadow: none;
+              border: none;
+              transition: none;
+            }
         card:
           type: vertical-stack
           cards:
@@ -823,7 +831,7 @@ views:
                           show_color_control: true
                           use_light_color: true
           - type: custom:decluttering-card
-            template: room_popup__grid
+            template: room_popup__grid_2_columns
             variables:
               - cards:
                   - type: vertical-stack
@@ -831,10 +839,12 @@ views:
                       - type: custom:mushroom-title-card
                         title: ''
                         subtitle: Window
-                      - type: custom:decluttering-card
-                        template: mushroom__control_blinds__horizontal
-                        variables:
-                          - entity: cover.blinds_kitchen
+                      - type: custom:mushroom-cover-card
+                        name: Window Blinds
+                        entity: cover.blinds_kitchen
+                        layout: vertical
+                        collapsible_controls: true
+                        show_percentage_control: true
           - type: custom:decluttering-card
             template: room_popup__expander
             variables:
@@ -1644,6 +1654,7 @@ views:
           path: '#details-bedroom-3'
           icon_on: mdi:note
           icon_off: mdi:note-outline
+          data_blinds: cover.blinds_bedroom_3
           data_door: binary_sensor.door_bedroom_3
           data_lightOn: light.bedroom_3_lights
           data_temperature: sensor.temperature_bedroom_3
@@ -1698,6 +1709,9 @@ views:
                   - type: custom:button-card
                     template: chip_detail__fan
                     entity: fan.bedroom_3_ceiling
+                  - type: custom:button-card
+                    template: chip_detail__blind
+                    entity: cover.blinds_bedroom_3
           - type: vertical-stack
             cards:
               - type: custom:decluttering-card
@@ -1758,6 +1772,17 @@ views:
                       - type: custom:mushroom-fan-card
                         name: Ceiling Fan
                         entity: fan.bedroom_3_ceiling
+                        layout: vertical
+                        collapsible_controls: true
+                        show_percentage_control: true
+                  - type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-title-card
+                        title: ''
+                        subtitle: Window
+                      - type: custom:mushroom-cover-card
+                        name: Window Blinds
+                        entity: cover.blinds_bedroom_3
                         layout: vertical
                         collapsible_controls: true
                         show_percentage_control: true
@@ -2891,18 +2916,24 @@ views:
       - type: custom:mod-card
         view_layout:
           grid-area: tileMisc
-        style:
-          hui-vertical-stack-card$: |
-            #root { 
-              justify-content: space-between;
-            }
-          .: |
-            ha-card { 
-              --layout-height: 100%;
-              --vertical-stack-card-gap: 0;
-              justify-content: space-between;
-              height: 100%;
-            }
+        card_mod:
+          style:
+            hui-vertical-stack-card$: |
+              #root { 
+                justify-content: space-between;
+              }
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 0;
+                justify-content: space-between;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                height: 100%;
+                width: 100%;
+                transition: none;
+              }
         card:
           type: vertical-stack
           cards:
@@ -3807,12 +3838,6 @@ views:
               {% set the_entity = 'fan.bedroom_1_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
-              {% set the_entity = 'cover.curtains_large_window_bedroom_1' %}
-              --maxson-floorplan--color-curtains-lg--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
-
-              {% set the_entity = 'cover.curtains_small_window_bedroom_1' %}
-              --maxson-floorplan--color-curtains-sm--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
-
               {% set the_entity = 'light.bedroom_1_group_occupancy_lights' %}
               --maxson-floorplan--color-light--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
@@ -3828,9 +3853,6 @@ views:
               {% set the_entity = 'light.closet_hallway_light_his' %}
               --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'cover.blinds_bedroom_2' %}
-              --maxson-floorplan--color-blinds--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'fan.bedroom_2_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
@@ -3853,9 +3875,6 @@ views:
               --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
-              {% set the_entity = 'cover.blinds_bedroom_4' %}
-              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
-
               {% set the_entity = 'fan.bedroom_4_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
@@ -3868,9 +3887,6 @@ views:
               {% set the_entity = 'light.bedroom_4_tie_fighter_lamp' %}
               --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'cover.blinds_kitchen' %}
-              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_ceiling_lights' %}
               --maxson-floorplan--color-light--kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4019,26 +4035,6 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
-            entity: cover.curtains_large_window_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 25%
-              left: 6%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-lg--bedroom-1 ) )
-          - type: state-icon
-            entity: cover.curtains_small_window_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 6%
-              left: 26.25%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-sm--bedroom-1 ) )
-          - type: state-icon
             entity: fan.bedroom_2_ceiling
             state_color: false
             tap_action:
@@ -4068,20 +4064,6 @@ views:
               left: 85%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
-          - type: state-icon
-            entity: cover.blinds_bedroom_2
-            state_color: false
-            tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_bedroom_2
-            style:
-              top: 79%
-              left: 96%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
           - type: state-icon
             entity: fan.bedroom_3_ceiling
             state_color: false
@@ -4156,34 +4138,6 @@ views:
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--bedroom-4--tie-fighter-lamp ) )
-          - type: state-icon
-            entity: cover.blinds_bedroom_4
-            state_color: false
-            tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_bedroom_4
-            style:
-              top: 94%
-              left: 59.5%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
-          - type: state-icon
-            entity: cover.blinds_kitchen
-            state_color: false
-            tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_kitchen
-            style:
-              top: 94%
-              left: 41.25%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -4499,8 +4453,8 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 70%
-              left: 96%
+              top: 79%
+              left: 95%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
@@ -4553,9 +4507,6 @@ views:
               --maxson-floorplan--color-lock--front-door: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-lock-unavail ) {% elif( states( the_entity ) in ['unlocked', 'unlocking'] ) %} var( --map-icon--sensor-lock-on ) {% else %} var( --map-icon--sensor-lock-off ) {% endif %};
 
 
-              {% set the_entity = 'cover.curtains_bedroom_1' %}
-              --maxson-floorplan--color-curtains--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
-
               {% set the_entity = 'fan.bedroom_1_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-1-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
@@ -4574,9 +4525,6 @@ views:
               {% set the_entity = 'light.closet_hallway_light_his' %}
               --maxson-floorplan--color-light--closet-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'cover.blinds_bedroom_2' %}
-              --maxson-floorplan--color-blinds--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'fan.bedroom_2_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-2-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
@@ -4599,9 +4547,6 @@ views:
               --maxson-floorplan--color-light--bedroom-3-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
 
-              {% set the_entity = 'cover.blinds_bedroom_4' %}
-              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
-
               {% set the_entity = 'fan.bedroom_4_ceiling' %}
               --maxson-floorplan--color-fan--bedroom-4-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-fan-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-fan-on ) {% else %} var( --map-icon--sensor-fan-off ) {% endif %};
 
@@ -4614,9 +4559,6 @@ views:
               {% set the_entity = 'light.bedroom_4_tie_fighter_lamp' %}
               --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
-
-              {% set the_entity = 'cover.blinds_kitchen' %}
-              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
 
               {% set the_entity = 'light.kitchen_ceiling_lights' %}
               --maxson-floorplan--color-light--kitchen-ceiling: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4735,7 +4677,7 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-lock--front-door ) )
           - type: state-icon
-            entity: light.bedroom_1_group_occupancy_lights
+            entity: fan.bedroom_1_ceiling
             state_color: false
             tap_action:
               action: toggle
@@ -4743,7 +4685,7 @@ views:
               top: 16%
               left: 72%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
           - type: state-icon
             entity: light.bedroom_1_ceiling_fan
             state_color: false
@@ -4755,35 +4697,25 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1-ceiling ) )
           - type: state-icon
-            entity: fan.bedroom_1_ceiling
+            entity: light.bedroom_1_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
             style:
               top: 22%
-              left: 72%
+              left: 76%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-1-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-1 ) )
           - type: state-icon
-            entity: cover.curtains_bedroom_1
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 22%
-              left: 80%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains--bedroom-1 ) )
-          - type: state-icon
-            entity: light.bedroom_2_group_occupancy_lights
+            entity: fan.bedroom_2_ceiling
             state_color: false
             tap_action:
               action: toggle
             style:
               top: 82%
-              left: 17%
+              left: 16%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
           - type: state-icon
             entity: light.bedroom_2_ceiling_fan
             state_color: false
@@ -4791,35 +4723,21 @@ views:
               action: toggle
             style:
               top: 82%
-              left: 25.5%
+              left: 25%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2-ceiling ) )
           - type: state-icon
-            entity: fan.bedroom_2_ceiling
+            entity: light.bedroom_2_group_occupancy_lights
             state_color: false
             tap_action:
               action: toggle
             style:
               top: 87%
-              left: 17%
+              left: 21%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-2-ceiling ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-2 ) )
           - type: state-icon
-            entity: cover.blinds_bedroom_2
-            state_color: false
-            tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_bedroom_2
-            style:
-              top: 87%
-              left: 25.5%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
-          - type: state-icon
-            entity: light.bedroom_3_floor_lamp
+            entity: fan.bedroom_3_ceiling
             state_color: false
             tap_action:
               action: toggle
@@ -4827,9 +4745,7 @@ views:
               top: 56%
               left: 72.5%
               border-radius: 100%
-              '--state-icon-color': >-
-                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
-                ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
           - type: state-icon
             entity: light.bedroom_3_ceiling_fan
             state_color: false
@@ -4841,7 +4757,7 @@ views:
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-3-ceiling ) )
           - type: state-icon
-            entity: fan.bedroom_3_ceiling
+            entity: light.bedroom_3_floor_lamp
             state_color: false
             tap_action:
               action: toggle
@@ -4849,77 +4765,51 @@ views:
               top: 61%
               left: 76.5%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-3-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_group_occupancy_lights
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 55%
-              left: 15%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
-          - type: state-icon
-            entity: light.bedroom_4_ceiling_fan
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 51.5%
-              left: 21%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
-          - type: state-icon
-            entity: light.bedroom_4_tie_fighter_lamp
-            state_color: false
-            tap_action:
-              action: toggle
-            style:
-              top: 55%
-              left: 27%
-              border-radius: 100%
               '--state-icon-color': >-
-                rgb( var(
-                --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
+                rgb( var( --maxson-floorplan--color-light--bedroom-3--floor-lamp
+                ) )
           - type: state-icon
             entity: fan.bedroom_4_ceiling
             state_color: false
             tap_action:
               action: toggle
             style:
-              top: 59.5%
-              left: 17.5%
+              top: 53%
+              left: 16.5%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-fan--bedroom-4-ceiling ) )
           - type: state-icon
-            entity: cover.blinds_bedroom_4
+            entity: light.bedroom_4_ceiling_fan
             state_color: false
             tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_bedroom_4
+              action: toggle
             style:
-              top: 59.5%
-              left: 24.5%
+              top: 53%
+              left: 25.5%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4-ceiling ) )
           - type: state-icon
-            entity: cover.blinds_kitchen
+            entity: light.bedroom_4_group_occupancy_lights
             state_color: false
             tap_action:
-              action: call-service
-              haptic: success
-              service: cover.toggle_cover_tilt
-              target:
-                entity_id: cover.blinds_kitchen
+              action: toggle
             style:
-              top: 41%
-              left: 14%
+              top: 59%
+              left: 16.5%
               border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-light--bedroom-4 ) )
+          - type: state-icon
+            entity: light.bedroom_4_tie_fighter_lamp
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 59%
+              left: 25.5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--bedroom-4-tie-fighter-lamp ) )
           - type: state-icon
             entity: light.kitchen_ceiling_lights
             state_color: false
@@ -5248,7 +5138,7 @@ views:
               action: toggle
             style:
               top: 6%
-              left: 46%
+              left: 49.75%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
@@ -5332,6 +5222,26 @@ views:
               {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
+              
+              {% set the_entity = 'cover.curtains_large_window_bedroom_1' %}
+              --maxson-floorplan--color-curtains-lg--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.curtains_small_window_bedroom_1' %}
+              --maxson-floorplan--color-curtains-sm--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_2' %}
+              --maxson-floorplan--color-blinds--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_3' %}
+              --maxson-floorplan--color-blinds--bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_4' %}
+              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_kitchen' %}
+              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              
               {% set the_entity = 'binary_sensor.bedroom_3_group_all_occupancy' %}
               --maxson-floorplan--color-occupancy-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
@@ -5427,7 +5337,7 @@ views:
               action: more-info
             style:
               top: 50%
-              left: 5%
+              left: 12%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
           - type: state-icon
@@ -5470,6 +5380,82 @@ views:
               left: 34%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: state-icon
+            entity: cover.curtains_large_window_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 25%
+              left: 6%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-lg--bedroom-1 ) )
+          - type: state-icon
+            entity: cover.curtains_small_window_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 6%
+              left: 26.25%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-sm--bedroom-1 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_2
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_2
+            style:
+              top: 79%
+              left: 95%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-2 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_3
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_3
+            style:
+              top: 6%
+              left: 55.5%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-3 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_4
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_4
+            style:
+              top: 94%
+              left: 59.5%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+          - type: state-icon
+            entity: cover.blinds_kitchen
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_kitchen
+            style:
+              top: 94%
+              left: 41.25%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-label
             entity: sensor.temperature_bedroom_1
             tap_action:
@@ -5547,7 +5533,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 22%
+              top: 47%
               left: 4%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5556,7 +5542,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 28%
+              top: 53%
               left: 4%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
@@ -5603,24 +5589,6 @@ views:
             style:
               top: 75%
               left: 44%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_top
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 84%
-              left: 12%
-              color: rgb( var( --maxson-floorplan--color-temperature-text ) )
-          - type: state-label
-            entity: sensor.temperature_wine_cooler_bottom
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 87%
-              left: 12%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-icon
             entity: binary_sensor.bedroom_3_group_all_occupancy
@@ -5758,6 +5726,26 @@ views:
               {% set the_entity = 'binary_sensor.door_closet_hallway_his' %}
               --maxson-floorplan--color-door-closet-hallway-his: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-door-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-door-on ) {% else %} var( --map-icon--sensor-door-off ) {% endif %};
 
+
+              {% set the_entity = 'cover.curtains_large_window_bedroom_1' %}
+              --maxson-floorplan--color-curtains-lg--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.curtains_small_window_bedroom_1' %}
+              --maxson-floorplan--color-curtains-sm--bedroom-1: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_2' %}
+              --maxson-floorplan--color-blinds--bedroom-2: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_3' %}
+              --maxson-floorplan--color-blinds--bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_bedroom_4' %}
+              --maxson-floorplan--color-blinds--bedroom-4: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+              {% set the_entity = 'cover.blinds_kitchen' %}
+              --maxson-floorplan--color-blinds--kitchen: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-cover-unavail ) {% elif( states( the_entity ) in ['open', 'opening'] ) %} var( --map-icon--sensor-cover-on ) {% else %} var( --map-icon--sensor-cover-off ) {% endif %};
+
+
               {% set the_entity = 'binary_sensor.bedroom_3_group_all_occupancy' %}
               --maxson-floorplan--color-occupancy-bedroom-3: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-presence-on ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
@@ -5852,7 +5840,7 @@ views:
             tap_action:
               action: more-info
             style:
-              top: 6%
+              top: 11%
               left: 49%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
@@ -5896,6 +5884,82 @@ views:
               left: 67%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: state-icon
+            entity: cover.curtains_large_window_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 6%
+              left: 76%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-lg--bedroom-1 ) )
+          - type: state-icon
+            entity: cover.curtains_small_window_bedroom_1
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 26.5%
+              left: 94%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-curtains-sm--bedroom-1 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_2
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_2
+            style:
+              top: 95%
+              left: 21%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_3
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_3
+            style:
+              top: 56%
+              left: 94%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-3 ) )
+          - type: state-icon
+            entity: cover.blinds_bedroom_4
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_bedroom_4
+            style:
+              top: 59.5%
+              left: 6%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--bedroom-4 ) )
+          - type: state-icon
+            entity: cover.blinds_kitchen
+            state_color: false
+            tap_action:
+              action: call-service
+              haptic: success
+              service: cover.toggle_cover_tilt
+              target:
+                entity_id: cover.blinds_kitchen
+            style:
+              top: 41%
+              left: 6%
+              border-radius: 100%
+              '--state-icon-color': rgb( var( --maxson-floorplan--color-blinds--kitchen ) )
           - type: state-label
             entity: sensor.temperature_attic_humidity
             state_color: false
@@ -5984,7 +6048,7 @@ views:
               action: more-info
             style:
               top: 5.5%
-              left: 71%
+              left: 43%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_outside_humidity
@@ -5993,7 +6057,7 @@ views:
               action: more-info
             style:
               top: 5.5%
-              left: 82%
+              left: 57%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
             entity: sensor.temperature_attic
@@ -7221,820 +7285,877 @@ views:
       max_columns: 4
     subview: true
     cards:
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Foyer
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Foyer
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_entryway_ceiling
-                  name: Ceiling Lights
+                  #states { padding: 0;}
+              entities:
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sync_foyer_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    entity: light.foyer_entryway_ceiling
+                    name: Ceiling Lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sync_foyer_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    entity: light.foyer_entryway_ceiling
+                    name: Entryway
+                    collapsible_controls: true
+                    show_brightness_control: true
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sync_foyer_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    entity: light.foyer_hallway_ceiling
+                    name: Hallway
+                    collapsible_controls: true
+                    show_brightness_control: true
+                - type: custom:mushroom-light-card
+                  entity: light.foyer_ceiling_ledge
+                  name: Upper Ledge
                   collapsible_controls: true
                   show_brightness_control: true
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_entryway_ceiling
-                  name: Entryway
+                  show_color_control: true
+                  use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.foyer_under_table
+                  name: Under Table
                   collapsible_controls: true
                   show_brightness_control: true
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sync_foyer_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.foyer_hallway_ceiling
+                  show_color_control: true
+                  use_light_color: true
+            - type: entities
+              title: Kitchen
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-cover-card
+                  entity: cover.blinds_kitchen
+                  name: Window Blinds
+                  show_position_control: false
+                  show_tilt_position_control: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Recessed Ceiling Lights
+                    entity: light.kitchen_ceiling_lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #1'
+                    entity: light.kitchen_light_1
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #2'
+                    entity: light.kitchen_light_2
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #3'
+                    entity: light.kitchen_light_3
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #4'
+                    entity: light.kitchen_light_4
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #5'
+                    entity: light.kitchen_light_5
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_kitchen_ceiling_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: 'Recessed Light #6'
+                    entity: light.kitchen_light_6
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Cabinet Up Lights
+                    entity: light.cabinet_upper_lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Coffee Bar Up Lights
+                    entity: light.kitchen_cabinet_upper_coffee_bar
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_cabinet_above_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Range/Oven Up Lights
+                    entity: light.kitchen_cabinet_upper_range
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+            - type: entities
+              title: Living Room
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.living_room_corner_lamp
+                  name: Corner Lamp
+                  collapsible_controls: true
+                  show_brightness_control: true
+                  show_color_control: true
+                  use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.living_room_couch_lamp
+                  name: Couch Lamp
+                  collapsible_controls: true
+                  show_brightness_control: true
+                  show_color_control: false
+                  use_light_color: true
+            - type: entities
+              title: Dining Room
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.dining_room_chandelier
+                  name: Chandelier
+                  collapsible_controls: true
+                  show_brightness_control: true
+                  show_color_control: true
+            - type: entities
+              title: Bar
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: conditional
+                  conditions:
+                    - condition: and
+                      conditions:
+                        - entity: light.christmas_tree
+                          state_not: unavailable
+                        - entity: light.christmas_tree
+                          state_not: unknown
+                  row:
+                    type: custom:mushroom-light-card
+                    entity: light.christmas_tree
+                    name: Christmas Tree
+                    collapsible_controls: true
+                    show_brightness_control: true
+                - type: custom:mushroom-fan-card
+                  entity: fan.ceiling_bar
+                  name: Ceiling Fan
+                  collapsible_controls: true
+                  show_percentage_control: true
+                - type: custom:mushroom-light-card
+                  entity: light.ceiling_fan_bar
+                  name: Ceiling Fan Light
+                  collapsible_controls: true
+                  show_brightness_control: true
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Main Bedroom
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-fan-card
+                  name: Ceiling Fan
+                  entity: fan.bedroom_1_ceiling
+                  collapsible_controls: false
+                  show_percentage_control: true
+                - type: custom:mushroom-cover-card
+                  entity: cover.curtains_large_window_bedroom_1
+                  name: Curtains, Large Window
+                  show_position_control: true
+                - type: custom:mushroom-cover-card
+                  entity: cover.curtains_small_window_bedroom_1
+                  name: Curtains, Small Window
+                  show_position_control: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Bedside Lamps
+                    entity: light.bedroom_1_group_occupancy_lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Jess' Bedside Lamp
+                    entity: light.bedroom_1_lamp_hers
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_1_sync_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Tom's Bedside Lamp
+                    entity: light.bedroom_1_lamp_his
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_1_ceiling_fan
+                  name: Ceiling Fan Light
+                - type: custom:mushroom-light-card
+                  entity: light.closet_hallway_ceiling_light
                   name: Hallway
                   collapsible_controls: true
                   show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.foyer_ceiling_ledge
-                name: Upper Ledge
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.foyer_under_table
-                name: Under Table
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
-          - type: entities
-            title: Kitchen
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+                - type: custom:mushroom-light-card
+                  entity: light.closet_hallway_light_hers
+                  name: Jess' Closet
+                  collapsible_controls: true
+                  show_brightness_control: true
+                - type: custom:mushroom-light-card
+                  entity: light.closet_hallway_light_his
+                  name: Tom's Closet
+                  collapsible_controls: true
+                  show_brightness_control: true
+            - type: entities
+              title: Main Bathroom
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-cover-card
-                entity: cover.blinds_kitchen
-                name: Window Blinds
-                show_position_control: false
-                show_tilt_position_control: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Recessed Ceiling Lights
-                  entity: light.kitchen_ceiling_lights
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.switch_1_bathroom_main_light
+                  name: Ceiling
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #1'
-                  entity: light.kitchen_light_1
+                - type: custom:mushroom-light-card
+                  entity: light.switch_2_bathroom_main_light
+                  name: Vanity
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #2'
-                  entity: light.kitchen_light_2
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #3'
-                  entity: light.kitchen_light_3
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #4'
-                  entity: light.kitchen_light_4
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #5'
-                  entity: light.kitchen_light_5
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_kitchen_ceiling_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: 'Recessed Light #6'
-                  entity: light.kitchen_light_6
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Cabinet Up Lights
-                  entity: light.cabinet_upper_lights
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Coffee Bar Up Lights
-                  entity: light.kitchen_cabinet_upper_coffee_bar
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_cabinet_above_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Range/Oven Up Lights
-                  entity: light.kitchen_cabinet_upper_range
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-          - type: entities
-            title: Living Room
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+            - type: entities
+              title: Guest Bedroom
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.living_room_corner_lamp
-                name: Corner Lamp
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.living_room_couch_lamp
-                name: Couch Lamp
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: false
-                use_light_color: true
-          - type: entities
-            title: Dining Room
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.dining_room_chandelier
-                name: Chandelier
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-          - type: entities
-            title: Bar
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: conditional
-                conditions:
-                  - condition: and
-                    conditions:
-                      - entity: light.christmas_tree
-                        state_not: unavailable
-                      - entity: light.christmas_tree
-                        state_not: unknown
-                row:
-                  type: custom:mushroom-light-card
-                  entity: light.christmas_tree
-                  name: Christmas Tree
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-fan-card
+                  name: Ceiling Fan
+                  entity: fan.bedroom_2_ceiling
                   collapsible_controls: true
-                  show_brightness_control: true
-              - type: custom:mushroom-fan-card
-                entity: fan.ceiling_bar
-                name: Ceiling Fan
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-light-card
-                entity: light.ceiling_fan_bar
-                name: Ceiling Fan Light
-                collapsible_controls: true
-                show_brightness_control: true
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Main Bedroom
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                name: Ceiling Fan
-                entity: fan.bedroom_1_ceiling
-                collapsible_controls: false
-                show_percentage_control: true
-              - type: custom:mushroom-cover-card
-                entity: cover.curtains_large_window_bedroom_1
-                name: Curtains, Large Window
-                show_position_control: true
-              - type: custom:mushroom-cover-card
-                entity: cover.curtains_small_window_bedroom_1
-                name: Curtains, Small Window
-                show_position_control: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
+                  show_percentage_control: true
+                - type: custom:mushroom-cover-card
+                  entity: cover.blinds_bedroom_4
+                  name: Window Blinds
+                  show_position_control: false
+                  show_tilt_position_control: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Bedside Lamps
+                    entity: light.bedroom_2_bedside_lamps
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Left Side Bedside Lamp
+                    entity: light.bedroom_2_lamp_left
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Right Side Bedside Lamp
+                    entity: light.bedroom_2_lamp_right
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_2_group_occupancy_lights
                   name: Bedside Lamps
-                  entity: light.bedroom_1_group_occupancy_lights
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Jess' Bedside Lamp
-                  entity: light.bedroom_1_lamp_hers
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_2_ceiling_fan
+                  name: Ceiling Fan Light
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_1_sync_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Tom's Bedside Lamp
-                  entity: light.bedroom_1_lamp_his
-                  collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_1_ceiling_fan
-                name: Ceiling Fan Light
-              - type: custom:mushroom-light-card
-                entity: light.closet_hallway_ceiling_light
-                name: Hallway
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.closet_hallway_light_hers
-                name: Jess' Closet
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.closet_hallway_light_his
-                name: Tom's Closet
-                collapsible_controls: true
-                show_brightness_control: true
-          - type: entities
-            title: Main Bathroom
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Jess' Office
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.switch_1_bathroom_main_light
-                name: Ceiling
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.switch_2_bathroom_main_light
-                name: Vanity
-                collapsible_controls: true
-          - type: entities
-            title: Guest Bedroom
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-fan-card
+                  name: Ceiling Fan
+                  entity: fan.bedroom_3_ceiling
+                  collapsible_controls: true
+                  show_percentage_control: true
+                - type: custom:mushroom-cover-card
+                  entity: cover.blinds_bedroom_3
+                  name: Window Blinds
+                  show_position_control: false
+                  show_tilt_position_control: true
+                - type: custom:mushroom-light-card
+                  name: Floor Lamp
+                  entity: light.bedroom_3_floor_lamp
+                  collapsible_controls: true
+                  show_brightness_control: true
+                  show_color_control: true
+                  use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_3_ceiling_fan
+                  name: Ceiling Fan Light
+            - type: entities
+              title: Tom's Office
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                name: Ceiling Fan
-                entity: fan.bedroom_2_ceiling
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-cover-card
-                entity: cover.blinds_bedroom_4
-                name: Window Blinds
-                show_position_control: false
-                show_tilt_position_control: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Bedside Lamps
-                  entity: light.bedroom_2_bedside_lamps
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-fan-card
+                  name: Ceiling Fan
+                  entity: fan.bedroom_4_ceiling
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Left Side Bedside Lamp
-                  entity: light.bedroom_2_lamp_left
+                  show_percentage_control: true
+                - type: custom:mushroom-cover-card
+                  entity: cover.blinds_bedroom_4
+                  name: Window Blinds
+                  show_position_control: false
+                  show_tilt_position_control: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Office Lights
+                    entity: light.bedroom_4_group_occupancy_lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state: 'off'
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state: 'on'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Accent Lamps
+                    entity: light.bedroom_4_group_accent_lights
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state: 'off'
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Accent Lamp (Left)
+                    entity: light.bedroom_4_accent_lamp_left
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state: 'off'
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_accent_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Accent Lamp (Right)
+                    entity: light.bedroom_4_accent_lamp_right
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.bedroom_4_sync_lights
+                      state: 'off'
+                  row:
+                    type: custom:mushroom-light-card
+                    name: Corner Lightstrip
+                    entity: light.bedroom_4_lightstrip
+                    collapsible_controls: true
+                    show_brightness_control: true
+                    show_color_control: true
+                    use_light_color: true
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_4_ceiling_fan
+                  name: Ceiling Fan Light
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.sync_bedroom_2_bedside_lamps
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Right Side Bedside Lamp
-                  entity: light.bedroom_2_lamp_right
+                - type: custom:mushroom-light-card
+                  entity: light.bedroom_4_tie_fighter_lamp
+                  name: TIE Fighter Lamp
                   collapsible_controls: true
-                  show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_2_group_occupancy_lights
-                name: Bedside Lamps
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_2_ceiling_fan
-                name: Ceiling Fan Light
-                collapsible_controls: true
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Jess' Office
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Hallways
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                name: Ceiling Fan
-                entity: fan.bedroom_3_ceiling
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-light-card
-                name: Floor Lamp
-                entity: light.bedroom_3_floor_lamp
-                collapsible_controls: true
-                show_brightness_control: true
-                show_color_control: true
-                use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_3_ceiling_fan
-                name: Ceiling Fan Light
-          - type: entities
-            title: Tom's Office
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-fan-card
-                name: Ceiling Fan
-                entity: fan.bedroom_4_ceiling
-                collapsible_controls: true
-                show_percentage_control: true
-              - type: custom:mushroom-cover-card
-                entity: cover.blinds_bedroom_4
-                name: Window Blinds
-                show_position_control: false
-                show_tilt_position_control: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Office Lights
-                  entity: light.bedroom_4_group_occupancy_lights
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.guest_hallway_light
+                  name: Guest Hallway
                   collapsible_controls: true
                   show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state: 'off'
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state: 'on'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Accent Lamps
-                  entity: light.bedroom_4_group_accent_lights
+                - type: custom:mushroom-light-card
+                  entity: light.laundry_hallway_light
+                  name: Laundry Hallway
                   collapsible_controls: true
                   show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state: 'off'
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Accent Lamp (Left)
-                  entity: light.bedroom_4_accent_lamp_left
+            - type: entities
+              title: Laundry Room
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.laundry_ceiling_light
+                  name: Ceiling
                   collapsible_controls: true
                   show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state: 'off'
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_accent_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Accent Lamp (Right)
-                  entity: light.bedroom_4_accent_lamp_right
+            - type: entities
+              title: Garage
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.garage_door_light
+                  name: Opener
+                  collapsible_controls: true
+                - type: custom:mushroom-light-card
+                  entity: light.garage_ceiling
+                  name: Ceiling
+                  collapsible_controls: true
+                - type: custom:mushroom-fan-card
+                  entity: fan.custom_garage_fan
+                  name: Fan
+                  collapsible_controls: true
+            - type: entities
+              title: Outside
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-bottom: 18px;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:mushroom-light-card
+                  entity: light.garage_exterior
+                  name: Garage Exterior Sconces
                   collapsible_controls: true
                   show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: conditional
-                conditions:
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state_not: unavailable
-                  - condition: state
-                    entity: input_boolean.bedroom_4_sync_lights
-                    state: 'off'
-                row:
-                  type: custom:mushroom-light-card
-                  name: Corner Lightstrip
-                  entity: light.bedroom_4_lightstrip
+                - type: custom:mushroom-light-card
+                  entity: light.foyer_exterior_entryway
+                  name: Front Door Entryway
                   collapsible_controls: true
                   show_brightness_control: true
-                  show_color_control: true
-                  use_light_color: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_4_ceiling_fan
-                name: Ceiling Fan Light
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.bedroom_4_tie_fighter_lamp
-                name: TIE Fighter Lamp
-                collapsible_controls: true
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Hallways
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.guest_hallway_light
-                name: Guest Hallway
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.laundry_hallway_light
-                name: Laundry Hallway
-                collapsible_controls: true
-                show_brightness_control: true
-          - type: entities
-            title: Laundry Room
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.laundry_ceiling_light
-                name: Ceiling
-                collapsible_controls: true
-                show_brightness_control: true
-          - type: entities
-            title: Garage
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.garage_door_light
-                name: Opener
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.garage_ceiling
-                name: Ceiling
-                collapsible_controls: true
-              - type: custom:mushroom-fan-card
-                entity: fan.custom_garage_fan
-                name: Fan
-                collapsible_controls: true
-          - type: entities
-            title: Outside
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-bottom: 18px;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:mushroom-light-card
-                entity: light.garage_exterior
-                name: Garage Exterior Sconces
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.foyer_exterior_entryway
-                name: Front Door Entryway
-                collapsible_controls: true
-                show_brightness_control: true
-              - type: custom:mushroom-light-card
-                entity: light.backyard_string_lights
-                name: Backyard String Lights
-                collapsible_controls: true
-              - type: custom:mushroom-light-card
-                entity: light.front_yard_garden_lights
-                name: Front Yard Garden Lights
-                collapsible_controls: true
+                - type: custom:mushroom-light-card
+                  entity: light.backyard_string_lights
+                  name: Backyard String Lights
+                  collapsible_controls: true
+                - type: custom:mushroom-light-card
+                  entity: light.front_yard_garden_lights
+                  name: Front Yard Garden Lights
+                  collapsible_controls: true
   - title: Overview
     path: page-overview
     layout:
@@ -8043,409 +8164,27 @@ views:
     theme: casamaxson
     subview: true
     cards:
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Door Sensors
-            show_header_toggle: false
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Front Door (Primary)
-                entity: binary_sensor.door_front_primary
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_front_primary_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Front Door (Secondary)
-                entity: binary_sensor.door_front_secondary
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_front_secondary_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Garage Door (Interior)
-                entity: binary_sensor.door_garage_interior
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_garage_interior_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Living Room Door
-                entity: binary_sensor.door_living
-                variables:
-                  icon_on: mdi:door-sliding-open
-                  icon_off: mdi:door-sliding
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_living_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Main Bedroom Door
-                entity: binary_sensor.door_bedroom_1
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_bedroom_1_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Guest Bedroom Door
-                entity: binary_sensor.door_bedroom_2
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_bedroom_2_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Jess' Office Door
-                entity: binary_sensor.door_bedroom_3
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_bedroom_3_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Office Door
-                entity: binary_sensor.door_bedroom_4
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_bedroom_4_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Laundry Room Door
-                entity: binary_sensor.door_laundry
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_laundry_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Jess' Closet Door
-                entity: binary_sensor.door_closet_hallway_hers
-                variables:
-                  icon_on: mdi:door-sliding-open
-                  icon_off: mdi:door-sliding
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_closet_hallway_hers_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Closet Door
-                entity: binary_sensor.door_closet_hallway_his
-                variables:
-                  icon_on: mdi:door-sliding-open
-                  icon_off: mdi:door-sliding
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_closet_hallway_his_battery
-                  data_type: battery
-              - type: custom:button-card
-                template: entity_card
-                name: Dishwasher Door
-                entity: binary_sensor.door_dishwasher
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-                  data_entity: sensor.door_closet_hallway_his_battery
-                  data_type: battery
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-          - type: entities
-            title: Presense Sensors
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Living Room
-                entity: binary_sensor.presence_living_room
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Jess' Office
-                entity: binary_sensor.lnl_presence_bedroom_3_any_presense
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Office
-                entity: binary_sensor.lnl_presence_bedroom_4_any_presense
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Garage
-                entity: binary_sensor.presence_garage
-                variables:
-                  icon_on_color: var( --green-color-rgb )
-          - type: entities
-            title: Motion Sensors
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Laundry Room
-                entity: binary_sensor.motion_laundry_room
-                variables:
-                  data_entity: sensor.motion_laundry_room_battery
-                  data_type: battery
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Jess' Office
-                entity: binary_sensor.motion_bedroom_3
-                variables:
-                  data_entity: sensor.motion_bedroom_3_battery
-                  data_type: battery
-                  icon_on_color: var( --green-color-rgb )
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Office
-                entity: binary_sensor.motion_bedroom_4
-                variables:
-                  data_entity: sensor.motion_bedroom_4_battery
-                  data_type: battery
-                  icon_on_color: var( --green-color-rgb )
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Leak Sensors
-            show_header_toggle: false
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Air Conditioner
-                entity: binary_sensor.leak_air_conditioner
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_air_conditioner_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Dish Washer
-                entity: binary_sensor.leak_dishwasher
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_dishwasher_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Sink, Guest Bathroom
-                entity: binary_sensor.leak_sink_bathroom_guest
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_sink_bathroom_guest_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Sink, Half Bathroom
-                entity: binary_sensor.leak_sink_bathroom_half
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_sink_bathroom_half_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Sink, Main Bathroom - Left
-                entity: binary_sensor.leak_sink_bathroom_main_hers
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_sink_bathroom_main_hers_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Sink, Main Bathroom - Right
-                entity: binary_sensor.leak_sink_bathroom_main_his
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_sink_bathroom_main_his_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Sink, Kitchen
-                entity: binary_sensor.leak_sink_kitchen
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_sink_kitchen_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Toilet, Guest Bathroom
-                entity: binary_sensor.leak_toilet_bathroom_guest
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_toilet_bathroom_guest_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Toilet, Half Bathroom
-                entity: binary_sensor.leak_toilet_bathroom_half
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_toilet_bathroom_half_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Toilet, Main Bathroom
-                entity: binary_sensor.leak_toilet_bathroom_main
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_toilet_bathroom_main_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Washing Machine
-                entity: binary_sensor.leak_washing_machine
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_washing_machine_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Wine Cooler
-                entity: binary_sensor.leak_wine_cooler
-                variables:
-                  icon_on_color: var( --red-color-rgb )
-                  data_entity: sensor.leak_wine_cooler_battery
-                  data_type: battery
-                  icon_type: battery_level
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-          - type: entities
-            title: Power Outlets
-            show_header_toggle: false
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Foyer, Dehumidifier Override
-                entity: switch.plug_repeater_switch
-              - type: custom:button-card
-                template: entity_card
-                name: Kitchen, Above Coffee Bar
-                entity: switch.plug_kitchen_cabinets_upper_coffee_bar
-              - type: custom:button-card
-                template: entity_card
-                name: Kitchen, Above Range
-                entity: switch.plug_kitchen_cabinets_upper_range
-              - type: custom:button-card
-                template: entity_card
-                entity: switch.plug_dishwasher
-                name: Kitchen, Dishwasher
-              - type: custom:button-card
-                template: entity_card
-                name: Kitchen, Tablet
-                entity: light.tablet_plug
-              - type: custom:button-card
-                template: entity_card
-                name: Garage, Fan
-                entity: light.garage_fan
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Office, Television Media
-                entity: light.plug_bedroom_4_media
-              - type: custom:button-card
-                template: entity_card
-                name: Tom's Office, Computer Peripherals
-                entity: light.plug_bedroom_4_computer_peripherals
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
-
-                #states { padding: 0;}
-      - type: vertical-stack
-        cards:
-          - type: conditional
-            conditions:
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity: lock.front_door
-                    state_not: unavailable
-                  - condition: state
-                    entity: lock.front_door
-                    state_not: unknown
-            card:
-              type: entities
-              title: Locks
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Door Sensors
               show_header_toggle: false
               card_mod:
                 style: |
-                  ha-card.type-entities { 
+                  ha-card { 
                     --ha-card-border-color: transparent;
                     --ha-card-border-width: 0;
                     --ha-card-border-radius: 0;
@@ -8460,210 +8199,631 @@ views:
               entities:
                 - type: custom:button-card
                   template: entity_card
-                  name: Front Door
-                  entity: lock.front_door
+                  name: Front Door (Primary)
+                  entity: binary_sensor.door_front_primary
                   variables:
-                    data_entity: sensor.front_door_battery
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_front_primary_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Front Door (Secondary)
+                  entity: binary_sensor.door_front_secondary
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_front_secondary_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Garage Door (Interior)
+                  entity: binary_sensor.door_garage_interior
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_garage_interior_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Living Room Door
+                  entity: binary_sensor.door_living
+                  variables:
+                    icon_on: mdi:door-sliding-open
+                    icon_off: mdi:door-sliding
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_living_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Main Bedroom Door
+                  entity: binary_sensor.door_bedroom_1
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_bedroom_1_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Guest Bedroom Door
+                  entity: binary_sensor.door_bedroom_2
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_bedroom_2_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Jess' Office Door
+                  entity: binary_sensor.door_bedroom_3
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_bedroom_3_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Office Door
+                  entity: binary_sensor.door_bedroom_4
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_bedroom_4_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Laundry Room Door
+                  entity: binary_sensor.door_laundry
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_laundry_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Jess' Closet Door
+                  entity: binary_sensor.door_closet_hallway_hers
+                  variables:
+                    icon_on: mdi:door-sliding-open
+                    icon_off: mdi:door-sliding
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_closet_hallway_hers_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Closet Door
+                  entity: binary_sensor.door_closet_hallway_his
+                  variables:
+                    icon_on: mdi:door-sliding-open
+                    icon_off: mdi:door-sliding
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_closet_hallway_his_battery
+                    data_type: battery
+                - type: custom:button-card
+                  template: entity_card
+                  name: Dishwasher Door
+                  entity: binary_sensor.door_dishwasher
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                    data_entity: sensor.door_closet_hallway_his_battery
+                    data_type: battery
+            - type: entities
+              title: Presense Sensors
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Living Room
+                  entity: binary_sensor.presence_living_room
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                - type: custom:button-card
+                  template: entity_card
+                  name: Jess' Office
+                  entity: binary_sensor.lnl_presence_bedroom_3_any_presense
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Office
+                  entity: binary_sensor.lnl_presence_bedroom_4_any_presense
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+                - type: custom:button-card
+                  template: entity_card
+                  name: Garage
+                  entity: binary_sensor.presence_garage
+                  variables:
+                    icon_on_color: var( --green-color-rgb )
+            - type: entities
+              title: Motion Sensors
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Laundry Room
+                  entity: binary_sensor.motion_laundry_room
+                  variables:
+                    data_entity: sensor.motion_laundry_room_battery
+                    data_type: battery
+                    icon_on_color: var( --green-color-rgb )
+                - type: custom:button-card
+                  template: entity_card
+                  name: Jess' Office
+                  entity: binary_sensor.motion_bedroom_3
+                  variables:
+                    data_entity: sensor.motion_bedroom_3_battery
+                    data_type: battery
+                    icon_on_color: var( --green-color-rgb )
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Office
+                  entity: binary_sensor.motion_bedroom_4
+                  variables:
+                    data_entity: sensor.motion_bedroom_4_battery
+                    data_type: battery
+                    icon_on_color: var( --green-color-rgb )
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Leak Sensors
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Air Conditioner
+                  entity: binary_sensor.leak_air_conditioner
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_air_conditioner_battery
                     data_type: battery
                     icon_type: battery_level
-          - type: entities
-            title: Temperature Sensors
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+                - type: custom:button-card
+                  template: entity_card
+                  name: Dish Washer
+                  entity: binary_sensor.leak_dishwasher
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_dishwasher_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Sink, Guest Bathroom
+                  entity: binary_sensor.leak_sink_bathroom_guest
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_sink_bathroom_guest_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Sink, Half Bathroom
+                  entity: binary_sensor.leak_sink_bathroom_half
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_sink_bathroom_half_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Sink, Main Bathroom - Left
+                  entity: binary_sensor.leak_sink_bathroom_main_hers
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_sink_bathroom_main_hers_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Sink, Main Bathroom - Right
+                  entity: binary_sensor.leak_sink_bathroom_main_his
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_sink_bathroom_main_his_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Sink, Kitchen
+                  entity: binary_sensor.leak_sink_kitchen
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_sink_kitchen_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Toilet, Guest Bathroom
+                  entity: binary_sensor.leak_toilet_bathroom_guest
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_toilet_bathroom_guest_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Toilet, Half Bathroom
+                  entity: binary_sensor.leak_toilet_bathroom_half
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_toilet_bathroom_half_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Toilet, Main Bathroom
+                  entity: binary_sensor.leak_toilet_bathroom_main
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_toilet_bathroom_main_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Washing Machine
+                  entity: binary_sensor.leak_washing_machine
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_washing_machine_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Wine Cooler
+                  entity: binary_sensor.leak_wine_cooler
+                  variables:
+                    icon_on_color: var( --red-color-rgb )
+                    data_entity: sensor.leak_wine_cooler_battery
+                    data_type: battery
+                    icon_type: battery_level
+            - type: entities
+              title: Power Outlets
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Attic
-                entity: sensor.temperature_attic
-                variables:
-                  data_entity: sensor.temperature_attic_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Garage
-                entity: sensor.temperature_garage
-                variables:
-                  data_entity: sensor.temperature_garage_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Outside
-                entity: sensor.temperature_outside
-                variables:
-                  data_entity: sensor.temperature_outside_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Wine Cooler (Top)
-                entity: sensor.temperature_wine_cooler_top
-                variables:
-                  data_entity: sensor.temperature_wine_cooler_top
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Wine Cooler (Bottom)
-                entity: sensor.temperature_wine_cooler_bottom
-                variables:
-                  data_entity: sensor.temperature_wine_cooler_bottom
-                  data_type: battery
-                  icon_type: battery_level
-          - type: entities
-            title: Windows Treatments
-            show_header_toggle: false
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: Curtain (Large, Left), Main Bedroom
-                entity: cover.curtain_large_left_bedroom_1
-                variables:
-                  data_entity: sensor.curtain_large_left_bedroom_1_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Curtain (Large, Right), Main Bedroom
-                entity: cover.curtain_large_right_bedroom_1
-                variables:
-                  data_entity: sensor.curtain_large_right_bedroom_1_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Curtain (Small, Left), Main Bedroom
-                entity: cover.curtain_small_left_bedroom_1
-                variables:
-                  data_entity: sensor.curtain_small_left_bedroom_1_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Curtain (Small, Right), Main Bedroom
-                entity: cover.curtain_small_right_bedroom_1
-                variables:
-                  data_entity: sensor.curtain_small_right_bedroom_1_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Blinds, Kitchen
-                entity: cover.blinds_kitchen
-                variables:
-                  data_entity: sensor.blinds_kitchen_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Blinds, Tom's Office
-                entity: cover.blinds_bedroom_4
-                variables:
-                  data_entity: sensor.blinds_bedroom_4_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: Blinds, Guest Bedroom
-                entity: cover.blinds_bedroom_2
-                variables:
-                  data_entity: sensor.blinds_bedroom_2_battery
-                  data_type: battery
-                  icon_type: battery_level
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Foyer, Dehumidifier Override
+                  entity: switch.plug_repeater_switch
+                - type: custom:button-card
+                  template: entity_card
+                  name: Kitchen, Above Coffee Bar
+                  entity: switch.plug_kitchen_cabinets_upper_coffee_bar
+                - type: custom:button-card
+                  template: entity_card
+                  name: Kitchen, Above Range
+                  entity: switch.plug_kitchen_cabinets_upper_range
+                - type: custom:button-card
+                  template: entity_card
+                  entity: switch.plug_dishwasher
+                  name: Kitchen, Dishwasher
+                - type: custom:button-card
+                  template: entity_card
+                  name: Kitchen, Tablet
+                  entity: light.tablet_plug
+                - type: custom:button-card
+                  template: entity_card
+                  name: Garage, Fan
+                  entity: light.garage_fan
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Office, Television Media
+                  entity: light.plug_bedroom_4_media
+                - type: custom:button-card
+                  template: entity_card
+                  name: Tom's Office, Computer Peripherals
+                  entity: light.plug_bedroom_4_computer_peripherals
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: conditional
+              conditions:
+                - condition: and
+                  conditions:
+                    - condition: state
+                      entity: lock.front_door
+                      state_not: unavailable
+                    - condition: state
+                      entity: lock.front_door
+                      state_not: unknown
+              card:
+                type: entities
+                title: Locks
+                show_header_toggle: false
+                card_mod:
+                  style: |
+                    ha-card { 
+                      --ha-card-border-color: transparent;
+                      --ha-card-border-width: 0;
+                      --ha-card-border-radius: 0;
+                      --ha-card-background: transparent;
+                      padding-right: 0;
+                      padding-bottom: 18px;
+                      padding-left: 0;
+                      border-bottom: 1px solid var( --divider-color );
+                    }
 
-                #states { padding: 0;}
-          - type: entities
-            title: Remotes
-            show_header_toggle: false
-            entities:
-              - type: custom:button-card
-                template: entity_card
-                name: For Garage Door
-                entity: sensor.remote_kitchen_for_garage_door_battery
-                variables:
-                  data_entity: sensor.remote_kitchen_for_garage_door_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: For Garage Fan
-                entity: sensor.remote_garage_for_garage_fan_battery
-                variables:
-                  data_entity: sensor.remote_garage_for_garage_fan_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: For Living Room Lights
-                entity: sensor.demo_remote_hue_tap_dial_battery
-                variables:
-                  data_entity: sensor.demo_remote_hue_tap_dial_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: For Main Bedroom Lights
-                entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
-                variables:
-                  data_entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: For Tom's Office Lights
-                entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
-                variables:
-                  data_entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
-                  data_type: battery
-                  icon_type: battery_level
-              - type: custom:button-card
-                template: entity_card
-                name: For Safe Security
-                entity: sensor.remote_firesafe_security_battery
-                variables:
-                  data_entity: sensor.remote_firesafe_security_battery
-                  data_type: battery
-                  icon_type: battery_level
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-bottom: 18px;
-                  padding-left: 0;
-                  border-bottom: 1px solid var( --divider-color );
-                }
+                    #states { padding: 0;}
+                entities:
+                  - type: custom:button-card
+                    template: entity_card
+                    name: Front Door
+                    entity: lock.front_door
+                    variables:
+                      data_entity: sensor.front_door_battery
+                      data_type: battery
+                      icon_type: battery_level
+            - type: entities
+              title: Temperature Sensors
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
 
-                #states { padding: 0;}
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Attic
+                  entity: sensor.temperature_attic
+                  variables:
+                    data_entity: sensor.temperature_attic_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Garage
+                  entity: sensor.temperature_garage
+                  variables:
+                    data_entity: sensor.temperature_garage_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Outside
+                  entity: sensor.temperature_outside
+                  variables:
+                    data_entity: sensor.temperature_outside_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Wine Cooler (Top)
+                  entity: sensor.temperature_wine_cooler_top
+                  variables:
+                    data_entity: sensor.temperature_wine_cooler_top
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Wine Cooler (Bottom)
+                  entity: sensor.temperature_wine_cooler_bottom
+                  variables:
+                    data_entity: sensor.temperature_wine_cooler_bottom
+                    data_type: battery
+                    icon_type: battery_level
+            - type: entities
+              title: Windows Treatments
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: Curtain (Large, Left), Main Bedroom
+                  entity: cover.curtain_large_left_bedroom_1
+                  variables:
+                    data_entity: sensor.curtain_large_left_bedroom_1_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Curtain (Large, Right), Main Bedroom
+                  entity: cover.curtain_large_right_bedroom_1
+                  variables:
+                    data_entity: sensor.curtain_large_right_bedroom_1_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Curtain (Small, Left), Main Bedroom
+                  entity: cover.curtain_small_left_bedroom_1
+                  variables:
+                    data_entity: sensor.curtain_small_left_bedroom_1_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Curtain (Small, Right), Main Bedroom
+                  entity: cover.curtain_small_right_bedroom_1
+                  variables:
+                    data_entity: sensor.curtain_small_right_bedroom_1_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Blinds, Kitchen
+                  entity: cover.blinds_kitchen
+                  variables:
+                    data_entity: sensor.blinds_kitchen_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Blinds, Tom's Office
+                  entity: cover.blinds_bedroom_4
+                  variables:
+                    data_entity: sensor.blinds_bedroom_4_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: Blinds, Guest Bedroom
+                  entity: cover.blinds_bedroom_2
+                  variables:
+                    data_entity: sensor.blinds_bedroom_2_battery
+                    data_type: battery
+                    icon_type: battery_level
+            - type: entities
+              title: Remotes
+              show_header_toggle: false
+              card_mod:
+                style: |
+                  ha-card { 
+                    --ha-card-border-color: transparent;
+                    --ha-card-border-width: 0;
+                    --ha-card-border-radius: 0;
+                    --ha-card-background: transparent;
+                    padding-right: 0;
+                    padding-bottom: 18px;
+                    padding-left: 0;
+                    border-bottom: 1px solid var( --divider-color );
+                  }
+
+                  #states { padding: 0;}
+              entities:
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Garage Door
+                  entity: sensor.remote_kitchen_for_garage_door_battery
+                  variables:
+                    data_entity: sensor.remote_kitchen_for_garage_door_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Garage Fan
+                  entity: sensor.remote_garage_for_garage_fan_battery
+                  variables:
+                    data_entity: sensor.remote_garage_for_garage_fan_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Living Room Lights
+                  entity: sensor.demo_remote_hue_tap_dial_battery
+                  variables:
+                    data_entity: sensor.demo_remote_hue_tap_dial_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Main Bedroom Lights
+                  entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
+                  variables:
+                    data_entity: sensor.remote_bedroom_1_for_bedroom_1_lights_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Tom's Office Lights
+                  entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
+                  variables:
+                    data_entity: sensor.remote_bedroom_4_for_bedroom_4_lights_battery
+                    data_type: battery
+                    icon_type: battery_level
+                - type: custom:button-card
+                  template: entity_card
+                  name: For Safe Security
+                  entity: sensor.remote_firesafe_security_battery
+                  variables:
+                    data_entity: sensor.remote_firesafe_security_battery
+                    data_type: battery
+                    icon_type: battery_level
   - title: Residents
     path: page-residents
     theme: casamaxson
@@ -9072,177 +9232,206 @@ views:
     layout:
       max_columns: 1
     cards:
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Active Notifications
-            show_header_toggle: false
-            entities:
-              - entity: input_boolean.reminder_dishwasher_complete
-                name: Dishwasher Complete
-                icon: mdi:dishwasher
-              - entity: input_boolean.reminder_laundry_complete_washer
-                name: Washing Machine Complete
-                icon: mdi:washing-machine
-              - entity: input_boolean.reminder_laundry_complete_dryer
-                name: Tumble Dryer Complete
-                icon: mdi:tumble-dryer
-              - entity: input_boolean.reminder_waste_take_out_recycle
-                name: Recycling Reminder
-                icon: mdi:recycle
-              - entity: input_boolean.reminder_waste_bring_in_recycle
-                name: Recycling Dropoff
-                icon: mdi:recycle
-              - entity: input_boolean.reminder_waste_take_out_solid
-                name: Waste Bin Take Out
-                icon: mdi:trash-can
-              - entity: input_boolean.reminder_waste_bring_in_solid
-                name: Waste Bin Bring In
-                icon: mdi:trash-can
-          - type: entities
-            title: iOS Snoozed Push Notifications
-            show_header_toggle: false
-            entities:
-              - entity: input_boolean.snooze_notify_household_activity
-                name: Household Activities
-              - entity: input_boolean.snooze_notify_garage_open
-                name: Garage Door Open
-              - entity: input_boolean.snooze_notify_front_door_unlocked
-                name: Front Door Unlocked
-              - entity: input_boolean.snooze_notify_doorbell_motion
-                name: Doorbell Motion Activites
-              - entity: input_boolean.snooze_waste_reminder_bring_in
-                name: Waste, Bring In
-              - entity: input_boolean.snooze_waste_reminder_take_out
-                name: Waste, Take Out
-          - type: entities
-            title: System Updates
-            show_header_toggle: false
-            entities:
-              - entity: input_button.esphome_device_update
-                name: Update ESPHome Devices
-                tap_action:
-                  action: call-service
-                  service: automation.trigger
-                  data:
-                    skip_condition: true
-                  target:
-                    entity_id: automation.esphome_update_all_devices
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Sunrise Automations
-            entities:
-              - entity: sensor.time_next_sunrise
-                name: Next Sunrise
-              - entity: input_boolean.sunrise_automations_run
-                name: Allow Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunrise_automations_run
-                    state: 'on'
-                row:
-                  entity: input_button.trigger_sunrise_automations_run
-                  name: Trigger Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunrise_automations_run
-                    state: 'on'
-                row:
-                  entity: input_number.sunrise_automations_offset
-                  name: Offset
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunrise_automations_run
-                    state: 'on'
-                row:
-                  entity: sensor.status_automations_sunrise
-                  name: Runs at
-          - type: entities
-            title: Noon Automations
-            entities:
-              - entity: input_boolean.noon_automations_run
-                name: Allow Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.noon_automations_run
-                    state: 'on'
-                row:
-                  entity: input_button.trigger_noon_automations_run
-                  name: Trigger Automation
-          - type: entities
-            title: Sunset Automations
-            entities:
-              - entity: sensor.time_next_sunset
-                name: Next Sunset
-              - entity: input_boolean.sunset_automations_run
-                name: Allow Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunset_automations_run
-                    state: 'on'
-                row:
-                  entity: input_button.trigger_sunset_automations_run
-                  name: Trigger Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunset_automations_run
-                    state: 'on'
-                row:
-                  entity: input_number.sunset_automations_offset
-                  name: Offset
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunset_automations_run
-                    state: 'on'
-                row:
-                  entity: sensor.status_automations_sunset
-                  name: Runs at
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.sunset_automations_run
-                    state: 'on'
-                row:
-                  entity: input_boolean.sunset_automations_active
-                  name: Active
-          - type: entities
-            title: Bedtime Automations
-            entities:
-              - entity: input_boolean.bedtime_automations_run
-                name: Allow Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.bedtime_automations_run
-                    state: 'on'
-                row:
-                  entity: input_button.trigger_bedtime_automations_run
-                  name: Trigger Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.bedtime_automations_run
-                    state: 'on'
-                row:
-                  entity: input_datetime.bedtime_automations_time_manual
-                  name: Latest Time
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.bedtime_automations_run
-                    state: 'on'
-                row:
-                  entity: input_number.bedtime_automations_offset
-                  name: Run After Sunset by
-          - type: entities
-            title: Midnight Automations
-            entities:
-              - entity: input_boolean.midnight_automations_run
-                name: Allow Automation
-              - type: conditional
-                conditions:
-                  - entity: input_boolean.midnight_automations_run
-                    state: 'on'
-                row:
-                  entity: input_button.trigger_midnight_automations_run
-                  name: Trigger Automation
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Active Notifications
+              show_header_toggle: false
+              entities:
+                - entity: input_boolean.reminder_dishwasher_complete
+                  name: Dishwasher Complete
+                  icon: mdi:dishwasher
+                - entity: input_boolean.reminder_laundry_complete_washer
+                  name: Washing Machine Complete
+                  icon: mdi:washing-machine
+                - entity: input_boolean.reminder_laundry_complete_dryer
+                  name: Tumble Dryer Complete
+                  icon: mdi:tumble-dryer
+                - entity: input_boolean.reminder_waste_take_out_recycle
+                  name: Recycling Reminder
+                  icon: mdi:recycle
+                - entity: input_boolean.reminder_waste_bring_in_recycle
+                  name: Recycling Dropoff
+                  icon: mdi:recycle
+                - entity: input_boolean.reminder_waste_take_out_solid
+                  name: Waste Bin Take Out
+                  icon: mdi:trash-can
+                - entity: input_boolean.reminder_waste_bring_in_solid
+                  name: Waste Bin Bring In
+                  icon: mdi:trash-can
+            - type: entities
+              title: iOS Snoozed Push Notifications
+              show_header_toggle: false
+              entities:
+                - entity: input_boolean.snooze_notify_household_activity
+                  name: Household Activities
+                - entity: input_boolean.snooze_notify_garage_open
+                  name: Garage Door Open
+                - entity: input_boolean.snooze_notify_front_door_unlocked
+                  name: Front Door Unlocked
+                - entity: input_boolean.snooze_notify_doorbell_motion
+                  name: Doorbell Motion Activites
+                - entity: input_boolean.snooze_waste_reminder_bring_in
+                  name: Waste, Bring In
+                - entity: input_boolean.snooze_waste_reminder_take_out
+                  name: Waste, Take Out
+            - type: entities
+              title: System Updates
+              show_header_toggle: false
+              entities:
+                - entity: input_button.esphome_device_update
+                  name: Update ESPHome Devices
+                  tap_action:
+                    action: call-service
+                    service: automation.trigger
+                    data:
+                      skip_condition: true
+                    target:
+                      entity_id: automation.esphome_update_all_devices
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              title: Sunrise Automations
+              entities:
+                - entity: sensor.time_next_sunrise
+                  name: Next Sunrise
+                - entity: input_boolean.sunrise_automations_allow
+                  name: Allow Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunrise_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_button.sunrise_automations_trigger
+                    name: Trigger Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunrise_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.sunrise_automations_offset
+                    name: Offset
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunrise_automations_allow
+                      state: 'on'
+                  row:
+                    entity: sensor.status_automations_sunrise
+                    name: Runs at
+            - type: entities
+              title: Noon Automations
+              entities:
+                - entity: input_boolean.noon_automations_allow
+                  name: Allow Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.noon_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_button.noon_automations_trigger
+                    name: Trigger Automation
+            - type: entities
+              title: Sunset Automations
+              entities:
+                - entity: sensor.time_next_sunset
+                  name: Next Sunset
+                - entity: input_boolean.sunset_automations_allow
+                  name: Allow Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunset_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_button.sunset_automations_trigger
+                    name: Trigger Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunset_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.sunset_automations_offset
+                    name: Offset
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunset_automations_allow
+                      state: 'on'
+                  row:
+                    entity: sensor.status_automations_sunset
+                    name: Runs at
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunset_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_boolean.evening_mode_active
+                    name: Evening Mode Active
+            - type: entities
+              title: Bedtime Automations
+              entities:
+                - entity: sensor.status_automations_bedtime
+                  name: Next Bedtime
+                  icon: mdi:bed
+                - entity: input_boolean.bedtime_automations_allow
+                  name: Allow Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.bedtime_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_button.bedtime_automations_trigger
+                    name: Trigger Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.bedtime_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_datetime.bedtime_automations_time_manual
+                    name: Latest Time
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.bedtime_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.bedtime_automations_offset
+                    name: Run After Sunset by
+            - type: entities
+              title: Midnight Automations
+              entities:
+                - entity: input_boolean.midnight_automations_allow
+                  name: Allow Automations
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.midnight_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_button.midnight_automations_trigger
+                    name: Trigger Automation
     subview: true
 button_card_templates:
   button_data_setup:
@@ -9922,6 +10111,9 @@ button_card_templates:
               - background-color: transparent
               - box-shadow: none
               - z-index: 2
+              - '--button-card-ripple-color': transparent
+              - '--button-card-ripple-hover-color': transparent
+              - '--button-card-ripple-color': transparent
             img_cell:
               - align-items: start
               - justify-content: end
@@ -10906,6 +11098,9 @@ button_card_templates:
         - '--ha-card-border-width': 0
         - '--ha-card-border-radius': 0
         - '--ha-card-background': transparent
+        - '--button-card-ripple-color': transparent
+        - '--button-card-ripple-hover-color': transparent
+        - '--button-card-ripple-color': transparent
         - padding: 0
       name:
         - display: flex

@@ -55,16 +55,6 @@ blueprint:
               manufacturer: IKEA of Sweden
               model: Remote Control N2
 
-    target_lights:
-      name: Light(s)
-      description: Select the light entities you wish to control.
-      default: []
-      selector:
-        target:
-          entity:
-            - domain:
-                - light
-
     light:
       name: Light(s)
       description: Select the light entities you wish to control.
@@ -412,7 +402,6 @@ max_exceeded: silent
 variables:
   var_remote: !input remote
   var_light: !input light
-  var_target_lights: !input target_lights
 
   var_event_button_power: !input event_button_power
   var_event_buttons_brightness: !input event_buttons_brightness
@@ -626,26 +615,6 @@ conditions:
 
 actions:
   - variables:
-      # var_area_entities: >-
-
-      #   {%- if var_target_lights.area_id is defined and var_target_lights.area_id is iterable -%}
-      #     {%- set devices = [ var_target_lights.area_id ] if var_target_lights.area_id is string else var_target_lights.area_id -%}
-
-      #     {{ devices | map( 'area_entities' ) | sum( start = [] ) | list }}
-      #   {%- else -%}
-      #     {{ [] }}
-      #   {%- endif -%}
-      # var_device_entities: >-
-
-      #   {%- if var_target_lights.device_id is defined and var_target_lights.device_id is iterable -%}
-      #     {%- set devices = [ var_target_lights.device_id ] if var_target_lights.device_id is string else var_target_lights.device_id -%}
-
-      #     {{ devices | map( 'device_entities' ) | sum( start = [] ) | list }}
-      #   {%- else -%}
-      #     {{ [] }}
-      #   {%- endif -%}
-      # var_all_lights: >-
-      #   {{ var_area_entities var_device_entities | select( 'match', 'light.' ) | unique | list }}
       var_all_lights_on: >-
         {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list }}
       var_all_lights_off: >-
