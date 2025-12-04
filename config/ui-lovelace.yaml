@@ -2454,8 +2454,8 @@ views:
         trigger_update:
           - light.laundry_room_group_lights_all
           - binary_sensor.door_laundry
-          - sensor.status_laundry_washer_machine_custom
-          - sensor.status_laundry_dryer_machine_custom
+          - sensor.status_laundry_washing_machine_custom
+          - sensor.status_laundry_tumble_dryer_custom
           - input_boolean.reminder_laundry_complete_washer
           - input_boolean.reminder_laundry_complete_dryer
         variables:
@@ -2481,11 +2481,11 @@ views:
             [[[
               let badgeIcon = '';
 
-              if( states['sensor.status_laundry_washer_machine_custom'].state == 'on' )
+              if( states['sensor.status_laundry_washing_machine_custom'].state == 'on' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:washing-machine"></ha-icon>';
 
-              } else if( states['sensor.status_laundry_dryer_machine_custom'].state == 'on' )
+              } else if( states['sensor.status_laundry_tumble_dryer_custom'].state == 'on' )
               { 
                 badgeIcon = '<ha-icon icon="mdi:tumble-dryer"></ha-icon>';
 
@@ -2572,9 +2572,9 @@ views:
                       - type: custom:button-card
                         template: laundry_card
                         name: Washing Machine
-                        entity: sensor.status_laundry_washer_machine_custom
+                        entity: sensor.status_laundry_washing_machine_custom
                         trigger_update:
-                          - sensor.status_laundry_washer_machine_custom
+                          - sensor.status_laundry_washing_machine_custom
                           - sensor.laundry_washer_combined_details
                         tap_action:
                           action: navigate
@@ -2590,9 +2590,9 @@ views:
                       - type: custom:button-card
                         template: laundry_card
                         name: Tumble Dryer
-                        entity: sensor.status_laundry_dryer_machine_custom
+                        entity: sensor.status_laundry_tumble_dryer_custom
                         trigger_update:
-                          - sensor.status_laundry_dryer_machine_custom
+                          - sensor.status_laundry_tumble_dryer_custom
                           - sensor.laundry_dryer_combined_details
                         tap_action:
                           action: navigate
@@ -2604,7 +2604,7 @@ views:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
                         variables:
-                          details: sensor.laundry_dryer_combined_details
+                          details: sensor.status_laundry_tumble_dryer_custom
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -5260,10 +5260,10 @@ views:
               {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_washer_machine_custom' %}
+              {% set the_entity = 'sensor.status_laundry_washing_machine_custom' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
+              {% set the_entity = 'sensor.status_laundry_tumble_dryer_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
@@ -5764,10 +5764,10 @@ views:
               {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_washer_machine_custom' %}
+              {% set the_entity = 'sensor.status_laundry_washing_machine_custom' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_dryer_machine_custom' %}
+              {% set the_entity = 'sensor.status_laundry_tumble_dryer_custom' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
@@ -7206,10 +7206,10 @@ views:
           - type: custom:button-card
             template: laundry_card
             name: Washing Machine
-            entity: sensor.status_laundry_washer_machine_custom
+            entity: sensor.status_laundry_washing_machine_custom
             trigger_update:
               - sensor.laundry_washer_combined_details
-              - sensor.status_laundry_washer_machine_custom
+              - sensor.status_laundry_washing_machine_custom
               - input_boolean.reminder_laundry_complete_washer
             variables:
               details: sensor.laundry_washer_combined_details
@@ -7244,10 +7244,10 @@ views:
           - type: custom:button-card
             template: laundry_card
             name: Tumble Dryer
-            entity: sensor.status_laundry_dryer_machine_custom
+            entity: sensor.status_laundry_tumble_dryer_custom
             trigger_update:
               - sensor.laundry_dryer_combined_details
-              - sensor.status_laundry_dryer_machine_custom
+              - sensor.status_laundry_tumble_dryer_custom
               - input_boolean.reminder_laundry_complete_dryer
             variables:
               details: sensor.laundry_dryer_combined_details
