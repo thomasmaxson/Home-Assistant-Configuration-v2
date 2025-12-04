@@ -639,7 +639,7 @@ views:
                           points: false
                         animate: true
                         decimals: 0
-                        line_color: var( --grey-color-hex )
+                        line_color: var( --blue-color-hex )
                         tap_action:
                           action: none
                         entities:
