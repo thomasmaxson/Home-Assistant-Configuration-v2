@@ -6,13 +6,11 @@
 #
 ################################################################################
 
-sensor:
-  - platform: template
-    sensors:
-      media_player_parameters:
-        friendly_name: "Media Player Data Parameters"
-        icon_template: mdi:database-cog
-        value_template: >-
+template:
+  - sensor:
+      - name: "Media Player Data Parameters"
+        unique_id: media_player_parameters
+        state: >-
           {% set media_devices = [
             states.media_player.echo_kitchen, 
             states.media_player.echo_dot_dining_room, 
@@ -25,7 +23,7 @@ sensor:
 
           {{ media_devices | selectattr( 'state', 'in', ['playing', 'paused', 'on'] ) | list | count }}
 
-        attribute_templates:
+        attributes:
           data_array: >-
             {%- set data = [
               { 
@@ -68,9 +66,10 @@ sensor:
 
             {{ data }}
 
-      esphome_board_updates:
-        value_template: "{{ states( 'update.esphome_update' ) }}"
-        attribute_templates:
+      - name: "ESPHome Board Update"
+        unique_id: esphome_board_updates
+        state: "{{ states( 'update.esphome_update' ) }}"
+        attributes:
           entity_id: >-
             {%- set ns = namespace( entities = [] ) -%}
             {%- for s in states.update | rejectattr( 'attributes.title', 'undefined' ) -%}
@@ -81,21 +80,9 @@ sensor:
 
             {{ ns.entities }}
 
-      status_laundry_dryer_machine_custom:
-        friendly_name: "Status, Laundry - Tumble Dryer (Custom)"
-        icon_template: >-
-          {%- set value_on = [ 'On', 'Run' ] -%}
-          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
-          {%- set state = states( 'sensor.laundry_dryer_machine_state' ) %}
-
-          {%- if state in value_on -%}
-            mdi:tumble-dryer
-          {%- elif state in value_off -%}
-            mdi:tumble-dryer
-          {%- else -%}
-            mdi:cloud-question
-          {%- endif -%}
-        value_template: >-
+      - name: "Status, Laundry - Tumble Dryer (Custom)"
+        unique_id: status_laundry_tumble_dryer_machine_custom
+        state: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
           {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_dryer_machine_state' ) %}
@@ -107,22 +94,22 @@ sensor:
           {%- else -%}
             unavailable
           {%- endif -%}
-
-      status_laundry_washer_machine_custom:
-        friendly_name: "Status, Laundry - Washing Machine (Custom)"
-        icon_template: >-
+        icon: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
           {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
-          {%- set state = states( 'sensor.laundry_washer_machine_state' ) %}
+          {%- set state = states( 'sensor.laundry_dryer_machine_state' ) %}
 
           {%- if state in value_on -%}
-            mdi:washing-machine
+            mdi:tumble-dryer
           {%- elif state in value_off -%}
-            mdi:washing-machine
+            mdi:tumble-dryer
           {%- else -%}
             mdi:cloud-question
           {%- endif -%}
-        value_template: >-
+
+      - name: "Status, Laundry - Washing Machine (Custom)"
+        unique_id: status_laundry_washing_machine_custom
+        state: >-
           {%- set value_on = [ 'On', 'Run' ] -%}
           {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
           {%- set state = states( 'sensor.laundry_washer_machine_state' ) %}
@@ -134,18 +121,30 @@ sensor:
           {%- else -%}
             unavailable
           {%- endif -%}
+        icon: >-
+          {%- set value_on = [ 'On', 'Run' ] -%}
+          {%- set value_off = [ 'Off', 'Standby', 'Finished' ] -%}
+          {%- set state = states( 'sensor.laundry_washer_machine_state' ) %}
 
-      status_dishwasher_custom:
-        friendly_name: "Status, Dishwasher (Custom)"
-        icon_template: >-
-          {%- set value_on = [ 'On', 'Running' ] -%}
-          {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
-          {%- set state = states( 'input_select.status_dishwasher_options' ) %}
+          {%- if state in value_on -%}
+            mdi:washing-machine
+          {%- elif state in value_off -%}
+            mdi:washing-machine
+          {%- else -%}
+            mdi:cloud-question
+          {%- endif -%}
 
-          {{ 'mdi:dishwasher' if state in value_on else 'mdi:dishwasher' if state in value_off else 'mdi:cloud-question' }}
-        value_template: >-
+      - name: "Status, Dishwasher (Custom)"
+        unique_id: status_dishwasher_custom
+        state: >-
           {%- set value_on = [ 'On', 'Running' ] -%}
           {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
           {%- set state = states( 'input_select.status_dishwasher_options' ) %}
 
           {{ 'on' if state in value_on else 'off' if state in value_off else 'unavailable' }}
+        icon: >-
+          {%- set value_on = [ 'On', 'Running' ] -%}
+          {%- set value_off = [ 'Off', 'Idle', 'Complete', 'Finished' ] -%}
+          {%- set state = states( 'input_select.status_dishwasher_options' ) %}
+
+          {{ 'mdi:dishwasher' if state in value_on else 'mdi:dishwasher' if state in value_off else 'mdi:cloud-question' }}

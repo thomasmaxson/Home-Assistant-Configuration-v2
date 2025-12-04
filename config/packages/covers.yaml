@@ -6,20 +6,12 @@
 #
 ################################################################################
 
-cover:
-  - platform: template
-    covers:
-      blinds_bedroom_4_for_homekit:
+template:
+  - cover:
+      - name: "Blinds, Tom's Office (Homekit)"
+        unique_id: blinds_bedroom_4_for_homekit
         device_class: blind
-        friendly_name: Blinds, Tom's Office (Homekit)
-        icon_template: >
-          {% if is_state_attr( 'cover.blinds_bedroom_4', 'current_tilt_position', 100 ) %}
-            mdi:blinds-open
-          {% else %}
-            mdi:blinds
-          {% endif %}
-        # Reflect the open/closed state
-        value_template: >-
+        state: >-
           {% set state = ( state_attr( 'cover.blinds_bedroom_4', 'current_tilt_position' ) | int ) %}
 
           {% if ( state >= 0 ) and ( state <= 5 ) %}
@@ -29,6 +21,13 @@ cover:
           {% else %}
             Open
           {% endif %}
+        icon: >
+          {% if is_state_attr( 'cover.blinds_bedroom_4', 'current_tilt_position', 100 ) %}
+            mdi:blinds-open
+          {% else %}
+            mdi:blinds
+          {% endif %}
+
         optimistic: false
 
         open_cover:
@@ -50,8 +49,7 @@ cover:
           target:
             entity_id: cover.blinds_bedroom_4
 
-        # Invert the reported position
-        position_template: >
+        position: >
           {%- if state_attr( 'cover.blinds_bedroom_4', 'current_tilt_position' ) <= 50 -%}
             {{ ( 100 + ( int( state_attr( 'cover.blinds_bedroom_4', 'current_tilt_position' ) ) - 50 ) * 2 ) | round( -1 ) }}
           {%- else -%}
