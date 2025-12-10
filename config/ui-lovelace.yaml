@@ -3497,8 +3497,6 @@ views:
                       - type: divider
                       - entity: sensor.home_assistant_v2_db_size
                         name: Database Size
-                      - entity: sensor.home_assistant_log_size
-                        name: Log Size
                   - type: entities
                     title: Last Restart
                     show_header_toggle: false
