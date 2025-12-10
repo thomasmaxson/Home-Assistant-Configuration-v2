@@ -5258,10 +5258,10 @@ views:
               {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_washing_machine_custom' %}
+              {% set the_entity = 'sensor.laundry_washer_machine_state' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_tumble_dryer_custom' %}
+              {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
@@ -5762,10 +5762,10 @@ views:
               {% set the_entity = 'sensor.status_dishwasher_custom' %}
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_washing_machine_custom' %}
+              {% set the_entity = 'sensor.laundry_washer_machine_state' %}
               --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
-              {% set the_entity = 'sensor.status_laundry_tumble_dryer_custom' %}
+              {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
               --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
@@ -7199,82 +7199,84 @@ views:
       max_cols: 3
     subview: true
     cards:
-      - type: vertical-stack
-        cards:
-          - type: custom:button-card
-            template: laundry_card
-            name: Washing Machine
-            entity: sensor.status_laundry_washing_machine_custom
-            trigger_update:
-              - sensor.laundry_washer_combined_details
-              - sensor.status_laundry_washing_machine_custom
-              - input_boolean.reminder_laundry_complete_washer
-            variables:
-              details: sensor.laundry_washer_combined_details
-            styles:
-              name:
-                - font-size: 20px
-              state:
-                - font-size: 18px
-          - type: entities
-            show_header_toggle: false
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-left: 0;
-                }
-
-                #states { padding: 0;}
-            entities:
-              - entity: sensor.laundry_washer_sub_cycle
-                name: Sub-Cycle
-              - entity: sensor.laundry_washer_cycle
-                name: Cycle
-              - entity: binary_sensor.laundry_washer_door
-                name: Door Position
-      - type: vertical-stack
-        cards:
-          - type: custom:button-card
-            template: laundry_card
-            name: Tumble Dryer
-            entity: sensor.status_laundry_tumble_dryer_custom
-            trigger_update:
-              - sensor.laundry_dryer_combined_details
-              - sensor.status_laundry_tumble_dryer_custom
-              - input_boolean.reminder_laundry_complete_dryer
-            variables:
-              details: sensor.laundry_dryer_combined_details
-            styles:
-              name:
-                - font-size: 20px
-              state:
-                - font-size: 18px
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: sensor.laundry_dryer_sub_cycle
-                name: Sub-Cycle
-              - entity: sensor.laundry_dryer_cycle
-                name: Cycle
-              - entity: binary_sensor.laundry_dryer_door
-                name: Door Position
-            card_mod:
-              style: |
-                ha-card.type-entities { 
-                  --ha-card-border-color: transparent;
-                  --ha-card-border-width: 0;
-                  --ha-card-border-radius: 0;
-                  --ha-card-background: transparent;
-                  padding-right: 0;
-                  padding-left: 0;
-                }
-
-                #states { padding: 0;}
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              template: laundry_card
+              name: Washing Machine
+              entity: sensor.status_laundry_washing_machine_custom
+              trigger_update:
+                - sensor.laundry_washer_combined_details
+                - sensor.status_laundry_washing_machine_custom
+                - input_boolean.reminder_laundry_complete_washer
+              variables:
+                details: sensor.laundry_washer_combined_details
+              styles:
+                name:
+                  - font-size: 20px
+                state:
+                  - font-size: 18px
+            - type: entities
+              show_header_toggle: false
+              entities:
+                - entity: sensor.laundry_washer_sub_cycle
+                  name: Sub-Cycle
+                - entity: sensor.laundry_washer_cycle
+                  name: Cycle
+                - entity: binary_sensor.laundry_washer_door
+                  name: Door Position
+      - type: custom:mod-card
+        card_mod:
+          style:
+            .: |
+              ha-card { 
+                --vertical-stack-card-gap: 8px;
+                background: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                transition: none;
+              }
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              template: laundry_card
+              name: Tumble Dryer
+              entity: sensor.status_laundry_tumble_dryer_custom
+              trigger_update:
+                - sensor.laundry_dryer_combined_details
+                - sensor.status_laundry_tumble_dryer_custom
+                - input_boolean.reminder_laundry_complete_dryer
+              variables:
+                details: sensor.laundry_dryer_combined_details
+              styles:
+                name:
+                  - font-size: 20px
+                state:
+                  - font-size: 18px
+            - type: entities
+              show_header_toggle: false
+              entities:
+                - entity: sensor.laundry_dryer_sub_cycle
+                  name: Sub-Cycle
+                - entity: sensor.laundry_dryer_cycle
+                  name: Cycle
+                - entity: binary_sensor.laundry_dryer_door
+                  name: Door Position
   - title: Devices
     path: page-devices
     theme: casamaxson
