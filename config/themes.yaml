@@ -44,6 +44,11 @@ themes:
     layout--grid-column-gap: "4vw"
     layout--grid-row-gap: "2vw"
 
+    # ha-card-background: "transparent"
+    # ha-card-border-color: "transparent"
+
+    vertical-stack-card-gap: "0px"
+
     # Styles: Tile Card
     tile-card--padding: "20px"
     tile-card--border-width: "2px"
