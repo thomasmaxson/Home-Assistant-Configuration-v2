@@ -627,7 +627,7 @@ views:
                           points: false
                         animate: true
                         decimals: 0
-                        line_color: var( --blue-color-hex )
+                        line_color: var(--primary-color)
                         tap_action:
                           action: none
                         entities:
@@ -639,7 +639,7 @@ views:
                           points: false
                         animate: true
                         decimals: 0
-                        line_color: var( --blue-color-hex )
+                        line_color: var(--primary-color)
                         tap_action:
                           action: none
                         entities:
