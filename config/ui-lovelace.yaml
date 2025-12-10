@@ -2345,6 +2345,11 @@ views:
                         name: Hallway
                         collapsible_controls: true
                         show_brightness_control: true
+                      - type: custom:mushroom-light-card
+                        entity: light.motion_night_light
+                        name: Night Light
+                        collapsible_controls: true
+                        show_brightness_control: true
           - type: custom:decluttering-card
             template: room_popup__grid_2_columns
             variables:
@@ -7741,6 +7746,11 @@ views:
                 - type: custom:mushroom-light-card
                   entity: light.closet_hallway_light_his
                   name: Tom's Closet
+                  collapsible_controls: true
+                  show_brightness_control: true
+                - type: custom:mushroom-light-card
+                  entity: light.motion_night_light
+                  name: Night Light
                   collapsible_controls: true
                   show_brightness_control: true
             - type: entities
