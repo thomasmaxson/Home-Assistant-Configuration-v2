@@ -253,7 +253,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -261,6 +261,7 @@ amazon_echo_announcement:
               - notify.echo_kitchen_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - delay:
               hours: 0
               minutes: 0
@@ -294,7 +295,7 @@ amazon_echo_announcement:
             data:
               scene_id: alexa_media_state_dining_room
               snapshot_entities:
-              - media_player.all_media_dining_room
+              - media_player.e
           - alias: Set Volume for Announcement
             action: media_player.volume_set
             data:
@@ -307,7 +308,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -315,6 +316,7 @@ amazon_echo_announcement:
               - notify.echo_dot_dining_room_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - delay:
               hours: 0
               minutes: 0
@@ -346,7 +348,7 @@ amazon_echo_announcement:
             data:
               scene_id: alexa_media_state_bathroom_main
               snapshot_entities:
-              - media_player.all_media_bathroom_main
+              - media_player.echo_pop_main_bathroom
           - alias: Set Volume for Announcement
             action: media_player.volume_set
             data:
@@ -359,7 +361,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -367,6 +369,7 @@ amazon_echo_announcement:
               - notify.echo_pop_main_bathroom_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - delay:
               hours: 0
               minutes: 0
@@ -411,7 +414,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -419,6 +422,7 @@ amazon_echo_announcement:
               - notify.echo_dot_bedroom_1_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - alias: Enable Light Switch LEDs
             action: script.update_inovelli_light_switch_led_s
             metadata: {}
@@ -474,7 +478,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -482,6 +486,7 @@ amazon_echo_announcement:
               - notify.echo_dot_bedroom_2_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - alias: Enable Light Switch LEDs
             action: script.update_inovelli_light_switch_led_s
             metadata: {}
@@ -537,7 +542,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -545,6 +550,7 @@ amazon_echo_announcement:
               - notify.echo_dot_bedroom_3_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - alias: Enable Light Switch LEDs
             action: script.update_inovelli_light_switch_led_s
             metadata: {}
@@ -587,7 +593,7 @@ amazon_echo_announcement:
             data:
               scene_id: alexa_media_state_bedroom_4
               snapshot_entities:
-              - media_player.all_media_dining_room
+              - media_player.echo_dot_dining_room
           - alias: Set Volume for Announcement
             action: media_player.volume_set
             data:
@@ -600,7 +606,7 @@ amazon_echo_announcement:
               data:
                 type: announce
               message: '{{ message }}'
-            enabled: false
+            enabled: true
           - alias: Announce the Message – AD
             action: notify.send_message
             target:
@@ -608,6 +614,7 @@ amazon_echo_announcement:
               - notify.echo_dot_bedroom_4_announce
             data:
               message: '{{ message }}'
+            enabled: false
           - alias: Enable Light Switch LEDs
             action: script.update_inovelli_light_switch_led_s
             metadata: {}
