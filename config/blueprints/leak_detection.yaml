@@ -11,7 +11,6 @@ blueprint:
       description: "The Aqara water leak sensor that is being monitored."
       selector:
         device:
-          multiple: true
           filter:
             - integration: zha
               manufacturer: LUMI
@@ -25,7 +24,7 @@ blueprint:
         action:
 
     automation_config:
-      name: Configuration
+      name: Automation Configuration
       icon: mdi:cog
       collapsed: true
       input:
@@ -47,7 +46,7 @@ blueprint:
           name: Max Number of Runs
           description: >
             Maximum number of runs that can be executed or queued at a time.
-            <br>Ignored by _Single_ and _Restart_ Modes.
+            (ignored by Single and Restart Modes)
           default: 10
           selector:
             number:
@@ -70,7 +69,6 @@ triggers:
 actions:
   - variables:
       device_state: "{{ trigger.event.data.new_state.state }}"
-
   - choose:
       - conditions:
           - '{{ device_state == "on" }}'
