@@ -60,25 +60,92 @@
     at: 04:30:00
   - trigger: state
     entity_id:
-    - input_button.trigger_bedtime_automations_run
+    - input_button.bedtime_automations_trigger
+  - trigger: state
+    entity_id:
+    - input_boolean.bedtime_automations_run
+    from:
+    - 'off'
+    to:
+    - 'on'
   conditions:
   - condition: state
-    entity_id: input_boolean.bedtime_automations_run
-    state: 'on'
+    entity_id: input_boolean.bedtime_automations_allow
+    state:
+    - 'on'
   actions:
   - action: input_boolean.turn_off
     metadata: {}
     data: {}
     target:
-      entity_id: input_boolean.sunset_automations_active
-  - action: cover.set_cover_tilt_position
-    target:
       entity_id:
-      - cover.blinds_kitchen
-      - cover.blinds_bedroom_2
-      - cover.blinds_bedroom_4
-    data:
-      tilt_position: 100
+      - input_boolean.evening_mode_active
+  - parallel:
+    - if:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: cover.blinds_kitchen
+          state:
+          - '100'
+          attribute: current_tilt_position
+      then:
+      - action: cover.set_cover_tilt_position
+        target:
+          entity_id:
+          - cover.blinds_kitchen
+        data:
+          tilt_position: 100
+      alias: Maybe Close Blinds, Kitchen
+    - if:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: cover.blinds_bedroom_2
+          state:
+          - '100'
+          attribute: current_tilt_position
+      then:
+      - action: cover.set_cover_tilt_position
+        target:
+          entity_id:
+          - cover.blinds_bedroom_2
+        data:
+          tilt_position: 100
+      alias: Maybe Close Blinds, Bedroom 2
+    - if:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: cover.blinds_bedroom_3
+          state:
+          - '100'
+          attribute: current_tilt_position
+      then:
+      - action: cover.set_cover_tilt_position
+        target:
+          entity_id:
+          - cover.blinds_bedroom_3
+        data:
+          tilt_position: 100
+      alias: Maybe Close Blinds, Bedroom 3
+    - if:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: cover.blinds_bedroom_4
+          state:
+          - '100'
+          attribute: current_tilt_position
+      then:
+      - action: cover.set_cover_tilt_position
+        target:
+          entity_id:
+          - cover.blinds_bedroom_4
+        data:
+          tilt_position: 100
+      alias: Maybe Close Blinds, Bedroom 4
+    alias: Maybe Close Blinds
   - if:
     - condition: state
       entity_id: binary_sensor.presence_living_room
@@ -119,33 +186,37 @@
     to: Now
   - trigger: state
     entity_id:
-    - input_button.trigger_sunset_automations_run
+    - input_button.sunset_automations_trigger
+  - trigger: state
+    entity_id:
+    - input_boolean.sunset_automations_run
+    from:
+    - 'off'
+    - 'on'
   conditions:
-  - condition: state
-    entity_id: input_boolean.sunset_automations_run
-    state: 'on'
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.sunset_automations_allow
+      state:
+      - 'on'
+    - condition: state
+      entity_id: input_boolean.evening_mode_active
+      state:
+      - 'off'
   actions:
-  - action: input_boolean.turn_on
-    target:
-      entity_id:
-      - input_boolean.sunset_automations_active
-    data: {}
-    alias: Flag ACTIVATE
   - parallel:
+    - alias: Flag ACTIVATE
+      action: input_boolean.turn_on
+      data: {}
+      target:
+        entity_id: input_boolean.evening_mode_active
     - action: light.turn_on
       metadata: {}
       data: {}
       target:
         entity_id: light.front_yard_garden_lights
       alias: Front Garden Lights Turn ON
-    - alias: Blinds CLOSE
-      action: cover.set_cover_tilt_position
-      target:
-        entity_id:
-        - cover.blinds_kitchen
-        - cover.blinds_bedroom_2
-      data:
-        tilt_position: 100
     - alias: Exterior Garage Lights Fade ON
       action: light.turn_on
       metadata: {}
@@ -253,6 +324,21 @@
             brightness_pct: 10
           target:
             entity_id: light.foyer_under_table
+  - delay:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - alias: Blinds CLOSE
+    action: cover.set_cover_tilt_position
+    target:
+      entity_id:
+      - cover.blinds_kitchen
+      - cover.blinds_bedroom_2
+      - cover.blinds_bedroom_3
+      - cover.blinds_bedroom_4
+    data:
+      tilt_position: 100
   mode: queued
   max: 10
 - id: '1726489353796'
@@ -273,12 +359,19 @@
     id: Time is 4:30 AM
   - trigger: state
     entity_id:
-    - input_button.trigger_midnight_automations_run
+    - input_button.midnight_automations_trigger
     id: Manually Triggered
+  - trigger: state
+    entity_id:
+    - input_boolean.midnight_automations_run
+    from:
+    - 'off'
+    - 'on'
   conditions:
   - condition: state
-    entity_id: input_boolean.midnight_automations_run
-    state: 'on'
+    entity_id: input_boolean.midnight_automations_allow
+    state:
+    - 'on'
   actions:
   - alias: Garage Lights Turn OFF
     if:
@@ -416,7 +509,8 @@
           - action: SNOOZE_HOUSEHOLD_ACTIVITY
             title: Snooze
             icon: sfsymbols:clock
-      - if:
+      - alias: If Allowed Run Automations
+        if:
         - condition: state
           entity_id: input_boolean.living_room_automation_door_night_lights
           state: 'on'
@@ -424,15 +518,15 @@
           before: sunrise
           after: sunset
         - condition: state
-          entity_id: input_boolean.sunset_automations_active
-          state: 'off'
+          entity_id: input_boolean.evening_mode_active
+          state:
+          - 'off'
         then:
         - action: light.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: light.backyard_string_lights
-        alias: If Allowed Run Automations
       alias: When Door is OPENED
     - conditions:
       - condition: trigger
@@ -473,8 +567,9 @@
           before: sunrise
           after: sunset
         - condition: state
-          entity_id: input_boolean.sunset_automations_active
-          state: 'off'
+          entity_id: input_boolean.evening_mode_active
+          state:
+          - 'off'
         then:
         - action: light.turn_off
           target:
@@ -1329,12 +1424,19 @@
     - sensor.status_automations_sunrise
     to: Now
   - entity_id:
-    - input_button.trigger_sunrise_automations_run
+    - input_button.sunrise_automations_trigger
     trigger: state
+  - trigger: state
+    entity_id:
+    - input_boolean.sunrise_automations_run
+    from:
+    - 'off'
+    - 'on'
   conditions:
   - condition: state
-    entity_id: input_boolean.sunrise_automations_run
-    state: 'on'
+    entity_id: input_boolean.sunrise_automations_allow
+    state:
+    - 'on'
   actions:
   - parallel:
     - alias: Lights Turn OFF
@@ -1362,51 +1464,45 @@
           entity_id:
           - cover.blinds_kitchen
         data: {}
-      - alias: OPEN Bedroom 4 Blinds
+      - alias: Maybe OPEN Bedroom 2 Blinds
         if:
         - condition: and
           conditions:
           - condition: state
-            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+            entity_id: input_boolean.bedroom_2_automation_allow_occupancy
             state: 'on'
           - condition: state
-            entity_id: binary_sensor.door_bedroom_4
-            state: 'on'
+            entity_id: input_boolean.guests_home
+            state: 'off'
+            alias: If Guests are Not Home
+        then:
+        - alias: OPEN Bedroom 2 Blinds
+          action: cover.open_cover_tilt
+          data: {}
+          target:
+            entity_id: cover.blinds_bedroom_2
+      - alias: Maybe OPEN Bedroom 3 Blinds
+        if:
+        - condition: state
+          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+          state: 'on'
+        then:
+        - action: cover.open_cover_tilt
+          target:
+            entity_id:
+            - cover.blinds_bedroom_3
+          data: {}
+      - alias: Maybe OPEN Bedroom 4 Blinds
+        if:
+        - condition: state
+          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+          state: 'on'
         then:
         - action: cover.open_cover_tilt
           target:
             entity_id:
             - cover.blinds_bedroom_4
           data: {}
-    - alias: If Residents are HOME and Guests are NOT HOME
-      if:
-      - condition: and
-        conditions:
-        - alias: If Residents are HOME and Guests are NOT HOME
-          condition: and
-          conditions:
-          - condition: state
-            entity_id: group.residents
-            state: home
-            alias: If Residents are Home
-          - condition: state
-            entity_id: input_boolean.guests_home
-            state: 'off'
-            alias: If Guests are Not Home
-        - condition: state
-          entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-          state: 'on'
-      then:
-      - alias: OPEN Bedroom 2 Blinds
-        action: cover.open_cover_tilt
-        data: {}
-        target:
-          entity_id: cover.blinds_bedroom_2
-    - alias: Flag ACTIVATE
-      action: input_boolean.turn_on
-      data: {}
-      target:
-        entity_id: input_boolean.sunrise_automations_run
   mode: queued
   max: 10
 - id: '1727015013289'
@@ -1712,7 +1808,7 @@
           before: sunrise
           after: sunset
         - condition: state
-          entity_id: input_boolean.sunset_automations_active
+          entity_id: input_boolean.evening_mode_active
           state: 'off'
         then:
         - action: light.turn_on
@@ -1758,7 +1854,7 @@
           before: sunrise
           after: sunset
         - condition: state
-          entity_id: input_boolean.sunset_automations_active
+          entity_id: input_boolean.evening_mode_active
           state: 'off'
       sequence:
       - action: light.turn_off
@@ -2909,8 +3005,7 @@
   - at: 01:00:00
     trigger: time
   - entity_id:
-    - input_button.trigger_midnight_automations_run
-    enabled: false
+    - input_button.midnight_automations_trigger
     trigger: state
   conditions: []
   actions:
@@ -5737,6 +5832,9 @@
   - trigger: template
     value_template: '{{ integration_entities( ''esphome'' ) | select( ''match'', ''update.''
       ) | select( ''is_state'', ''on'' ) | list | count > 0 }}'
+  - trigger: state
+    entity_id:
+    - input_button.esphome_device_update
   conditions: []
   actions:
   - action: script.update_all_esphome_devices
@@ -6295,3 +6393,81 @@
           data: {}
           target:
             entity_id: light.backyard_string_lights
+- id: '1764179007163'
+  alias: Bedroom 3, Blinds Open/Close
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.door_bedroom_3
+    from: 'off'
+    to: 'on'
+    id: Door did OPEN
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+  - trigger: state
+    entity_id:
+    - binary_sensor.door_bedroom_3
+    from: 'on'
+    to: 'off'
+    id: Door did CLOSE
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  conditions:
+  - condition: state
+    entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - Door did OPEN
+        - condition: time
+          after: 00:00:00
+          before: '15:59:59'
+      sequence:
+      - action: cover.open_cover_tilt
+        target:
+          entity_id:
+          - cover.blinds_bedroom_3
+        data: {}
+      alias: OPEN Blinds
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - Door did CLOSE
+        - condition: time
+          after: '16:00:00'
+          before: '23:59:59'
+      sequence:
+      - action: cover.set_cover_tilt_position
+        target:
+          entity_id:
+          - cover.blinds_bedroom_3
+        data:
+          tilt_position: 100
+      alias: CLOSE Blinds
+  mode: single
+- id: '1764805411788'
+  alias: Night Light
+  description: ''
+  use_blueprint:
+    path: thaynes43/multi-function-night-light.yaml
+    input:
+      motion_sensors:
+      - binary_sensor.motion_night_light_motion
+      illuminance_sensor: sensor.motion_night_light_illuminance
+      light_target:
+        entity_id: light.motion_night_light
+      duration: 20
+      brightness: 5
+      color_preset: '[0.1355, 0.0399]'
