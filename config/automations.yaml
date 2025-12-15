@@ -53,11 +53,15 @@
   - trigger: time
     at: 00:00:00
   - trigger: time
-    at: 01:30:00
+    at: 01:00:00
+  - trigger: time
+    at: 02:00:00
   - trigger: time
     at: 03:00:00
   - trigger: time
-    at: 04:30:00
+    at: 04:00:00
+  - trigger: time
+    at: 05:00:00
   - trigger: state
     entity_id:
     - input_button.bedtime_automations_trigger
@@ -211,12 +215,12 @@
       data: {}
       target:
         entity_id: input_boolean.evening_mode_active
-    - action: light.turn_on
+    - alias: Front Garden Lights Turn ON
+      action: light.turn_on
       metadata: {}
       data: {}
       target:
         entity_id: light.front_yard_garden_lights
-      alias: Front Garden Lights Turn ON
     - alias: Exterior Garage Lights Fade ON
       action: light.turn_on
       metadata: {}
@@ -240,7 +244,7 @@
           entity_id: input_boolean.guests_home
           state: 'on'
       then:
-      - alias: Fade ON Foyer Upper Ledge
+      - alias: Foyer Upper Ledge Fade ON
         action: light.turn_on
         metadata: {}
         data:
@@ -290,7 +294,8 @@
             target:
               entity_id: light.living_room_corner_lamp
           enabled: false
-        - if:
+        - alias: Christmas Tree Turn ON
+          if:
           - condition: and
             conditions:
             - condition: not
@@ -309,7 +314,6 @@
             data: {}
             target:
               entity_id: light.christmas_tree
-          alias: Christmas Tree Turn ON
       - alias: If Guests are VISITING
         if:
         - condition: state
@@ -349,13 +353,19 @@
     at: 00:00:00
     id: Time is 12:00 AM
   - trigger: time
-    at: 01:30:00
+    at: 01:00:00
     id: Time is 1:30 AM
+  - trigger: time
+    at: 02:00:00
+    id: Time is 3:00 AM
   - trigger: time
     at: 03:00:00
     id: Time is 3:00 AM
   - trigger: time
-    at: 04:30:00
+    at: 04:00:00
+    id: Time is 4:30 AM
+  - trigger: time
+    at: 05:00:00
     id: Time is 4:30 AM
   - trigger: state
     entity_id:
@@ -417,6 +427,7 @@
       target:
         entity_id: button.galaxy_tab_a9_restart_device
     alias: Restart Galaxy A9 Tablet
+    enabled: false
   mode: queued
   max: 10
 - id: '1726492043983'
@@ -1458,51 +1469,52 @@
         state: Home
         alias: If Any Residents are Home
       then:
-      - alias: OPEN Kitchen Blinds
-        action: cover.open_cover_tilt
-        target:
-          entity_id:
-          - cover.blinds_kitchen
-        data: {}
-      - alias: Maybe OPEN Bedroom 2 Blinds
-        if:
-        - condition: and
-          conditions:
-          - condition: state
-            entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.guests_home
-            state: 'off'
-            alias: If Guests are Not Home
-        then:
-        - alias: OPEN Bedroom 2 Blinds
+      - parallel:
+        - alias: OPEN Kitchen Blinds
           action: cover.open_cover_tilt
-          data: {}
-          target:
-            entity_id: cover.blinds_bedroom_2
-      - alias: Maybe OPEN Bedroom 3 Blinds
-        if:
-        - condition: state
-          entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: cover.open_cover_tilt
           target:
             entity_id:
-            - cover.blinds_bedroom_3
+            - cover.blinds_kitchen
           data: {}
-      - alias: Maybe OPEN Bedroom 4 Blinds
-        if:
-        - condition: state
-          entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-          state: 'on'
-        then:
-        - action: cover.open_cover_tilt
-          target:
-            entity_id:
-            - cover.blinds_bedroom_4
-          data: {}
+        - alias: Maybe OPEN Bedroom 2 Blinds
+          if:
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+              state: 'on'
+            - condition: state
+              entity_id: input_boolean.guests_home
+              state: 'off'
+              alias: If Guests are Not Home
+          then:
+          - alias: OPEN Bedroom 2 Blinds
+            action: cover.open_cover_tilt
+            data: {}
+            target:
+              entity_id: cover.blinds_bedroom_2
+        - alias: Maybe OPEN Bedroom 3 Blinds
+          if:
+          - condition: state
+            entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+            state: 'on'
+          then:
+          - action: cover.open_cover_tilt
+            target:
+              entity_id:
+              - cover.blinds_bedroom_3
+            data: {}
+        - alias: Maybe OPEN Bedroom 4 Blinds
+          if:
+          - condition: state
+            entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+            state: 'on'
+          then:
+          - action: cover.open_cover_tilt
+            target:
+              entity_id:
+              - cover.blinds_bedroom_4
+            data: {}
   mode: queued
   max: 10
 - id: '1727015013289'
@@ -4456,26 +4468,6 @@
         data: {}
         target:
           entity_id: light.bedroom_1_ceiling_fan
-- id: '1737061838951'
-  alias: Bedroom 3, Light - Ceiling Fan
-  description: Control the ceiling fan light in the Jess' office via a Lutron paddle
-    remote.
-  use_blueprint:
-    path: maxson/remote_lutron_pico_paddle.yaml
-    input:
-      remote: afe69d52a42055addce27abac118675a
-      event_button_press_on_single:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_3_ceiling_fan
-      event_button_press_off_single:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_3_ceiling_fan
 - id: '1737061883401'
   alias: Bedroom 2, Light - Primary
   description: Control the ceiling fan light in the guest bedroom via a Lutron paddle
@@ -4510,26 +4502,6 @@
         target:
           entity_id: cover.blinds_bedroom_2
       duration_hold: 2000
-- id: '1737061982300'
-  alias: Bedroom 1, Light - Ceiling Fan
-  description: Control the ceiling fan light in the main bedroom via a Lutron paddle
-    remote.
-  use_blueprint:
-    path: maxson/remote_lutron_pico_paddle.yaml
-    input:
-      remote: da8f06c90863b596980eda95dd6754ae
-      event_button_press_on_single:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_1_ceiling_fan
-      event_button_press_off_single:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.bedroom_1_ceiling_fan
 - id: '1737062260641'
   alias: Bedroom 4, Light - Primary
   description: Control primary lights in Tom's office via a Lutron paddle remote.
