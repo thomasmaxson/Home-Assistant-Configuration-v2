@@ -627,7 +627,11 @@ views:
                           points: false
                         animate: true
                         decimals: 0
-                        line_color: var(--primary-color)
+                        color_thresholds:
+                          - value: 0
+                            color: '#3D5AFE'
+                          - value: 35
+                            color: '#009ac7'
                         tap_action:
                           action: none
                         entities:
@@ -639,7 +643,11 @@ views:
                           points: false
                         animate: true
                         decimals: 0
-                        line_color: var(--primary-color)
+                        color_thresholds:
+                          - value: 0
+                            color: '#3D5AFE'
+                          - value: 35
+                            color: '#009ac7'
                         tap_action:
                           action: none
                         entities:
@@ -2331,6 +2339,11 @@ views:
                         name: Ceiling Fan Light
                         entity: light.bedroom_1_ceiling_fan
                       - type: custom:mushroom-light-card
+                        entity: light.closet_hallway_ceiling_light
+                        name: Closet Hallway
+                        collapsible_controls: true
+                        show_brightness_control: true
+                      - type: custom:mushroom-light-card
                         entity: light.closet_hallway_light_hers
                         name: Jess' Closet
                         collapsible_controls: true
@@ -2338,11 +2351,6 @@ views:
                       - type: custom:mushroom-light-card
                         entity: light.closet_hallway_light_his
                         name: Tom's Closet
-                        collapsible_controls: true
-                        show_brightness_control: true
-                      - type: custom:mushroom-light-card
-                        entity: light.closet_hallway_ceiling_light
-                        name: Hallway
                         collapsible_controls: true
                         show_brightness_control: true
                       - type: custom:mushroom-light-card
@@ -8923,19 +8931,8 @@ views:
                             show_header_toggle: false
                             card_mod:
                               style: |
-                                ha-card.type-entities { 
-                                  --ha-card-border-color: transparent;
-                                  --ha-card-border-width: 0;
-                                  --ha-card-border-radius: 0;
-                                  --ha-card-background: transparent;
-                                  padding-top: 12px;
-                                  padding-right: 0;
-                                  padding-left: 0;
-                                }
-
                                 #states { 
                                   --list-indent-size: 45px;
-                                  padding: 0;
                                 }
 
                                 #states > div:nth-child( 2 ), 
@@ -9091,19 +9088,8 @@ views:
                             show_header_toggle: false
                             card_mod:
                               style: |
-                                ha-card.type-entities { 
-                                  --ha-card-border-color: transparent;
-                                  --ha-card-border-width: 0;
-                                  --ha-card-border-radius: 0;
-                                  --ha-card-background: transparent;
-                                  padding-top: 12px;
-                                  padding-right: 0;
-                                  padding-left: 0;
-                                }
-
                                 #states { 
                                   --list-indent-size: 45px;
-                                  padding: 0;
                                 }
 
                                 #states > div:nth-child( 2 ), 
