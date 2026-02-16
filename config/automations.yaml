@@ -5853,7 +5853,7 @@
       - action: script.turn_on
         metadata: {}
         target:
-          entity_id: script.security_lights_active
+          entity_id: script.security_generate
         data: {}
         alias: Run Script, Security ACTIVATE
       event_button_press_off_single:
@@ -5862,7 +5862,7 @@
         metadata: {}
         data: {}
         target:
-          entity_id: script.security_lights_restore
+          entity_id: script.security_restore
 - id: '1755112656424'
   alias: Bedroom 4, Fan Speed Change
   description: ''
@@ -6305,7 +6305,7 @@
       - action: script.turn_on
         metadata: {}
         target:
-          entity_id: script.security_lights_active
+          entity_id: script.security_generate
         data: {}
         alias: Run Script, Security ACTIVATE
       event_button_press_off_single:
@@ -6314,7 +6314,7 @@
         metadata: {}
         data: {}
         target:
-          entity_id: script.security_lights_restore
+          entity_id: script.security_restore
 - id: '1768139848733'
   alias: Outside, Backyard String Lights
   description: Control the backyard string lights via a Lutron paddle remote.

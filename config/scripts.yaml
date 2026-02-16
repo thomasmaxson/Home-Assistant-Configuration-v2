@@ -1553,7 +1553,7 @@ lights_security_all_on:
       - input_boolean.enable_exterior_camera_recording
       - input_boolean.enable_interior_camera_recording
       - input_boolean.enable_motion_camera_recording
-  alias: Security, Lights ACTIVE
+  alias: Security, GENERATE
   description: ''
 security_lights_restore:
   sequence:
@@ -1600,5 +1600,5 @@ security_lights_restore:
       - scene.snapshot_house_switches
       - scene.snapshot_house_security_privacy
       - scene.snapshot_house_security_recording
-  alias: Security, Lights RESTORE
+  alias: Security, RESTORE
   description: ''
