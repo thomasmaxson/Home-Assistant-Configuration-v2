@@ -84,6 +84,41 @@
     target:
       entity_id:
       - input_boolean.evening_mode_active
+  - action: light.turn_off
+    metadata: {}
+    data:
+      transition: 300
+    target:
+      entity_id:
+      - light.foyer_exterior_entryway
+      - light.backyard_string_lights
+  - if:
+    - condition: state
+      entity_id: binary_sensor.presence_living_room
+      state: 'off'
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data:
+        transition: 300
+      target:
+        entity_id:
+        - light.patio_string_lights
+        - light.living_room_corner_lamp
+        - light.living_room_couch_lamp
+        - light.foyer_ceiling_ledge
+        - light.cabinet_upper_lights
+  - if:
+    - condition: state
+      entity_id: input_boolean.guests_home
+      state: 'on'
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: light.front_yard_garden_lights
+    alias: If Guests are Home, Turn off Front Garden Lights
   - parallel:
     - if:
       - condition: not
@@ -150,34 +185,6 @@
           tilt_position: 100
       alias: Maybe Close Blinds, Bedroom 4
     alias: Maybe Close Blinds
-  - if:
-    - condition: state
-      entity_id: binary_sensor.presence_living_room
-      state: 'off'
-    then:
-    - action: light.turn_off
-      metadata: {}
-      data:
-        transition: 300
-      target:
-        entity_id:
-        - light.foyer_exterior_entryway
-        - light.backyard_string_lights
-        - light.living_room_corner_lamp
-        - light.living_room_couch_lamp
-        - light.foyer_ceiling_ledge
-        - light.cabinet_upper_lights
-  - if:
-    - condition: state
-      entity_id: input_boolean.guests_home
-      state: 'on'
-    then:
-    - action: light.turn_off
-      metadata: {}
-      data: {}
-      target:
-        entity_id: light.front_yard_garden_lights
-    alias: If Guests are Home, Turn off Front Garden Lights
   mode: queued
   max: 10
 - id: '1726488231167'
@@ -270,6 +277,7 @@
           data: {}
           target:
             entity_id:
+            - light.patio_string_lights
             - light.backyard_string_lights
         - alias: Fade IN Exterior
           action: light.turn_on
@@ -383,6 +391,11 @@
     state:
     - 'on'
   actions:
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id: light.front_yard_garden_lights
+    data: {}
   - alias: Garage Lights Turn OFF
     if:
     - condition: state
@@ -416,18 +429,6 @@
       target:
         entity_id: light.christmas_tree
     alias: Christmas Tree Turn OFF
-  - if:
-    - condition: trigger
-      id:
-      - Time is 4:30 AM
-    then:
-    - action: button.press
-      metadata: {}
-      data: {}
-      target:
-        entity_id: button.galaxy_tab_a9_restart_device
-    alias: Restart Galaxy A9 Tablet
-    enabled: false
   mode: queued
   max: 10
 - id: '1726492043983'
@@ -537,7 +538,9 @@
           metadata: {}
           data: {}
           target:
-            entity_id: light.backyard_string_lights
+            entity_id:
+            - light.patio_string_lights
+            - light.backyard_string_lights
       alias: When Door is OPENED
     - conditions:
       - condition: trigger
@@ -585,6 +588,7 @@
         - action: light.turn_off
           target:
             entity_id:
+            - light.patio_string_lights
             - light.backyard_string_lights
           data: {}
       alias: When Door Has Been CLOSED
@@ -828,7 +832,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Always
+          option: always
         target:
           entity_id:
           - select.camera_ext_backyard_northeast_recording_mode
@@ -848,7 +852,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Never
+          option: never
         target:
           entity_id:
           - select.camera_ext_backyard_northeast_recording_mode
@@ -892,7 +896,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Always
+          option: always
         target:
           entity_id: select.camera_ext_garage_recording_mode
       alias: Recording ENABLE
@@ -904,7 +908,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Detections
+          option: detections
         target:
           entity_id: select.camera_ext_garage_recording_mode
       alias: Recording DISABLE
@@ -940,7 +944,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Always
+          option: always
         target:
           entity_id:
           - select.camera_int_foyer_entry_recording_mode
@@ -959,7 +963,7 @@
       - action: select.select_option
         metadata: {}
         data:
-          option: Never
+          option: never
         target:
           entity_id:
           - select.camera_int_foyer_entry_recording_mode
@@ -1457,6 +1461,7 @@
         entity_id:
         - light.garage_exterior
         - light.backyard_string_lights
+        - light.patio_string_lights
         - light.foyer_exterior_entryway
         - light.foyer_ceiling_ledge
         - light.foyer_under_table
@@ -1812,23 +1817,27 @@
             title: Snooze
             icon: sfsymbols:clock
           interruption_level: active
-      - if:
-        - condition: state
-          entity_id: input_boolean.foyer_automation_door_night_lights
-          state: 'on'
-        - condition: sun
-          before: sunrise
-          after: sunset
-        - condition: state
-          entity_id: input_boolean.evening_mode_active
-          state: 'off'
+      - alias: If Allowed Run Automations
+        if:
+        - condition: and
+          conditions:
+          - condition: state
+            entity_id: input_boolean.foyer_automation_door_night_lights
+            state: 'on'
+          - condition: state
+            entity_id: light.garage_exterior
+            state:
+            - 'on'
+          - condition: state
+            entity_id: light.foyer_exterior_entryway
+            state:
+            - 'off'
         then:
         - action: light.turn_on
           metadata: {}
           data: {}
           target:
             entity_id: light.foyer_exterior_entryway
-        alias: If Allowed Run Automations
       alias: When Primary Door is OPENED
     - conditions:
       - condition: trigger
@@ -2425,7 +2434,9 @@
       sequence:
       - action: light.turn_off
         target:
-          entity_id: light.backyard_string_lights
+          entity_id:
+          - light.backyard_string_lights
+          - light.patio_string_lights
         data: {}
     - conditions:
       - condition: trigger
@@ -2836,8 +2847,8 @@
       - sensor.blinds_bedroom_4_battery
       - sensor.toothbrush_j_battery
       - sensor.toothbrush_t_battery
-      - sensor.toms_iphone_battery_level
-      - sensor.toms_iphone_watch_battery
+      - sensor.tom_iphone_battery_level
+      - sensor.tom_iphone_watch_battery_level
       - sensor.jess_iphone_battery_level
       - sensor.jess_iphone_watch_battery
       - sensor.leo_personal_iphone_battery_level
@@ -3597,6 +3608,10 @@
         - alias: Ensure all events are true
           condition: and
           conditions:
+          - condition: state
+            entity_id: group.residents
+            state:
+            - home
           - alias: Confirm occupancy automations are allowed
             condition: state
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
@@ -3633,6 +3648,10 @@
         if:
         - condition: and
           conditions:
+          - condition: state
+            entity_id: group.residents
+            state:
+            - home
           - alias: Confirm occupancy automations are allowed
             condition: state
             entity_id: input_boolean.bedroom_4_automation_allow_occupancy
@@ -3729,6 +3748,10 @@
         - alias: Ensure all events are true
           condition: and
           conditions:
+          - condition: state
+            entity_id: group.residents
+            state:
+            - home
           - alias: Confirm occupancy automations are allowed
             condition: state
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
@@ -3765,6 +3788,10 @@
         if:
         - condition: and
           conditions:
+          - condition: state
+            entity_id: group.residents
+            state:
+            - home
           - alias: Confirm occupancy automations are allowed
             condition: state
             entity_id: input_boolean.bedroom_3_automation_allow_occupancy
@@ -5814,235 +5841,28 @@
     data: {}
   mode: single
 - id: '1754749195182'
-  alias: Security Control, All Home
+  alias: Security Control, All Home (from Safe)
   description: Manage house lights and devices, controls camera privacy and recording
-    modes using an IKEA 2-button remote.
+    modes.
   use_blueprint:
     path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
     input:
       remote: f45e2cf26f5fb3cf99fd5f874ca22d18
-      event_button_press_off_single:
-      - action: switch.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - switch.echo_kitchen_do_not_disturb
-          - switch.echo_dot_dining_room_do_not_disturb
-          - switch.echo_dot_bedroom_1_do_not_disturb
-          - switch.echo_dot_bedroom_2_do_not_disturb
-          - switch.echo_dot_bedroom_3_do_not_disturb
-          - switch.echo_dot_bedroom_4_do_not_disturb
-          - switch.echo_pop_main_bathroom_do_not_disturb
-        alias: ENABLE Amazon Devices
-      - action: scene.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - scene.snapshot_house_lights
-          - scene.snapshot_house_security_privacy
-          - scene.snapshot_house_security_recording
-        alias: ACTIVATE Scene(s)
-      - action: scene.delete
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - scene.snapshot_house_lights
-          - scene.snapshot_house_security_privacy
-          - scene.snapshot_house_security_recording
-        alias: DELETE Scene(s)
-      event_button_press_on_single:
-      - action: switch.turn_on
-        alias: DISABLE Amazon Devices
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - switch.echo_kitchen_do_not_disturb
-          - switch.echo_dot_dining_room_do_not_disturb
-          - switch.echo_dot_bedroom_1_do_not_disturb
-          - switch.echo_dot_bedroom_2_do_not_disturb
-          - switch.echo_dot_bedroom_3_do_not_disturb
-          - switch.echo_dot_bedroom_4_do_not_disturb
-          - switch.echo_pop_main_bathroom_do_not_disturb
-      - action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_lights
-          snapshot_entities:
-          - light.kitchen_light_1
-          - light.kitchen_light_2
-          - light.kitchen_light_3
-          - light.kitchen_light_4
-          - light.kitchen_light_5
-          - light.kitchen_light_6
-          - light.kitchen_cabinet_upper_range
-          - light.kitchen_cabinet_upper_coffee_bar
-          - light.dining_room_chandelier
-          - light.living_room_corner_lamp
-          - light.living_room_couch_lamp
-          - light.foyer_ceiling_ledge
-          - light.foyer_under_table
-          - light.foyer_entryway_ceiling
-          - light.foyer_exterior_entryway
-          - light.ceiling_fan_bedroom_1
-          - light.bedroom_1_lamp_hers
-          - light.bedroom_1_lamp_his
-          - light.closet_hallway_ceiling_light
-          - light.closet_hallway_light_hers
-          - light.closet_hallway_light_his
-          - light.switch_1_bathroom_main_light
-          - light.switch_2_bathroom_main_light
-          - light.ceiling_fan_bedroom_2
-          - light.bedroom_2_lamp_left
-          - light.bedroom_2_lamp_right
-          - light.ceiling_fan_bedroom_3
-          - light.bedroom_3_floor_lamp
-          - light.ceiling_fan_bedroom_4
-          - light.bedroom_4_accent_lamp_right
-          - light.bedroom_4_lightstrip
-          - light.bedroom_4_tie_fighter_lamp
-          - light.laundry_hallway_light
-          - light.laundry_ceiling_light
-          - light.guest_hallway_light
-          - light.garage_ceiling
-          - light.christmas_tree
-        alias: CREATE Scene – Household Lights
-      - parallel:
-        - alias: Lights On - Common Areas
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.kitchen_ceiling_lights
-            - light.kitchen_cabinet_upper_coffee_bar
-            - light.kitchen_cabinet_upper_range
-            - light.dining_room_chandelier
-            - light.living_room_corner_lamp
-            - light.living_room_couch_lamp
-            - light.foyer_entryway_ceiling
-        - alias: Lights On - Bedroom 1
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.bedroom_1_ceiling_fan
-            - light.bedroom_1_lamp_hers
-            - light.bedroom_1_lamp_his
-            - light.closet_hallway_ceiling_light
-            - light.switch_1_bathroom_main_light
-            - light.switch_2_bathroom_main_light
-        - alias: Lights On - Bedroom 2
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.bedroom_2_ceiling_fan
-            - light.bedroom_2_lamp_left
-            - light.bedroom_2_lamp_right
-        - alias: Lights On - Bedroom 3
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.bedroom_3_ceiling_fan
-            - light.bedroom_3_floor_lamp
-        - alias: Lights On - Bedroom 4
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.bedroom_4_ceiling_fan
-            - light.bedroom_4_accent_lamp_right
-            - light.bedroom_4_lightstrip
-        - alias: Lights On - Other
-          action: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 100
-          target:
-            entity_id:
-            - light.foyer_hallway_ceiling
-            - light.guest_hallway_light
-            - light.laundry_hallway_light
-            - light.laundry_ceiling_light
-        alias: Turn ON Lights
-      - alias: Create Scene – Security, Privacy Mode
-        action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_security_privacy
-          snapshot_entities:
-          - input_boolean.camera_int_privacy_mode
-          - switch.camera_ext_backyard_northeast_privacy_mode
-          - switch.camera_ext_backyard_southeast_privacy_mode
-          - switch.camera_ext_doorbell_privacy_mode
-          - switch.camera_ext_front_yard_northeast_privacy_mode
-          - switch.camera_ext_front_yard_southeast_privacy_mode
-          - switch.camera_ext_side_yard_north_east_privacy_mode
-          - switch.camera_ext_side_yard_north_west_privacy_mode
-          - switch.camera_ext_side_yard_south_east_privacy_mode
-          - select.camera_ext_garage_privacy_mode
-          - switch.camera_int_bdr1_privacy_mode
-          - switch.camera_int_bdr3_privacy_mode
-          - switch.camera_int_bdr4_privacy_mode
-          - switch.camera_int_foyer_entry_privacy_mode
-          - switch.camera_int_dining_room_privacy_mode
-          - switch.camera_int_kitchen_privacy_mode
-          - switch.camera_int_living_room_privacy_mode
-      - alias: Create Scene – Security, Recording Mode
-        action: scene.create
-        metadata: {}
-        data:
-          scene_id: snapshot_house_security_recording
-          snapshot_entities:
-          - input_boolean.enable_exterior_camera_recording
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-          - select.camera_ext_backyard_northeast_recording_mode
-          - select.camera_ext_backyard_southeast_recording_mode
-          - select.camera_ext_doorbell_recording_mode
-          - select.camera_ext_front_yard_northeast_recording_mode
-          - select.camera_ext_front_yard_southeast_recording_mode
-          - select.camera_ext_side_yard_north_east_recording_mode
-          - select.camera_ext_side_yard_north_west_recording_mode
-          - select.camera_ext_side_yard_south_east_recording_mode
-          - select.camera_ext_garage_recording_mode
-          - select.camera_int_bdr1_recording_mode
-          - select.camera_int_bdr3_recording_mode
-          - select.camera_int_bdr4_recording_mode
-          - select.camera_int_foyer_entry_recording_mode
-          - select.camera_int_dining_room_recording_mode
-          - select.camera_int_kitchen_recording_mode
-          - select.camera_int_living_room_recording_mode
-      - action: input_boolean.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.camera_int_privacy_mode
-        alias: DISABLED Interior Privacy Mode
-      - action: input_boolean.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id:
-          - input_boolean.enable_exterior_camera_recording
-          - input_boolean.enable_interior_camera_recording
-          - input_boolean.enable_motion_camera_recording
-        alias: ENABLE Recording for All Cameras
       event_button_type: action
+      event_button_press_on_single:
+      - action: script.turn_on
+        metadata: {}
+        target:
+          entity_id: script.security_lights_active
+        data: {}
+        alias: Run Script, Security ACTIVATE
+      event_button_press_off_single:
+      - alias: Run Script, Security RESTORE
+        action: script.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: script.security_lights_restore
 - id: '1755112656424'
   alias: Bedroom 4, Fan Speed Change
   description: ''
@@ -6327,15 +6147,63 @@
                 entity_id: light.living_room_couch_lamp
               data:
                 brightness_step_pct: 20
-      lights_dot_3:
+      event_dot_3: action
+      action_press_dot_3:
+      - if:
+        - condition: and
+          conditions:
+          - condition: state
+            entity_id: light.backyard_string_lights
+            state:
+            - 'off'
+          - condition: state
+            entity_id: light.patio_string_lights
+            state:
+            - 'off'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - light.backyard_string_lights
+            - light.patio_string_lights
+        else:
+        - if:
+          - condition: and
+            conditions:
+            - condition: state
+              entity_id: light.backyard_string_lights
+              state:
+              - 'on'
+            - condition: state
+              entity_id: light.patio_string_lights
+              state:
+              - 'on'
+          then:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - light.backyard_string_lights
+          else:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - light.backyard_string_lights
+              - light.patio_string_lights
+      lights_dot_4:
       - light.christmas_tree
-      action_dial_left_dot_3:
+      action_dial_left_dot_4:
       - action: light.turn_off
         metadata: {}
         data: {}
         target:
           entity_id: light.christmas_tree
-      action_dial_right_dot_3:
+      action_dial_right_dot_4:
       - if:
         - condition: state
           entity_id: light.christmas_tree
@@ -6346,25 +6214,6 @@
           data: {}
           target:
             entity_id: light.christmas_tree
-      lights_dot_4:
-      - light.backyard_string_lights
-      action_dial_left_dot_4:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.backyard_string_lights
-      action_dial_right_dot_4:
-      - if:
-        - condition: state
-          entity_id: light.backyard_string_lights
-          state: 'on'
-        then:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.backyard_string_lights
 - id: '1764179007163'
   alias: Bedroom 3, Blinds Open/Close
   description: ''
@@ -6430,7 +6279,7 @@
       alias: CLOSE Blinds
   mode: single
 - id: '1764805411788'
-  alias: Night Light
+  alias: Bedroom 1, Night Light
   description: ''
   use_blueprint:
     path: thaynes43/multi-function-night-light.yaml
@@ -6443,3 +6292,112 @@
       duration: 20
       brightness: 5
       color_preset: '[0.1355, 0.0399]'
+- id: '1767369804352'
+  alias: Security Control, All Home (from Foyer)
+  description: Manage house lights and devices, controls camera privacy and recording
+    modes.
+  use_blueprint:
+    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
+    input:
+      remote: 40f20e1ce82540f050a373b1a0c233ab
+      event_button_type: action
+      event_button_press_on_single:
+      - action: script.turn_on
+        metadata: {}
+        target:
+          entity_id: script.security_lights_active
+        data: {}
+        alias: Run Script, Security ACTIVATE
+      event_button_press_off_single:
+      - alias: Run Script, Security RESTORE
+        action: script.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: script.security_lights_restore
+- id: '1768139848733'
+  alias: Outside, Backyard String Lights
+  description: Control the backyard string lights via a Lutron paddle remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: 991427f18203154eaca3efc0f74143c2
+      event_button_press_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.backyard_string_lights
+      event_button_press_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.backyard_string_lights
+      event_button_press_on_hold: []
+      event_button_press_off_hold: []
+      duration_hold: 2000
+- id: '1768139965599'
+  alias: Outside, Patio String Light
+  description: Control the patio string lights via a Lutron paddle remote.
+  use_blueprint:
+    path: maxson/remote_lutron_pico_paddle.yaml
+    input:
+      remote: e366c7488a281b3f18c64943717ec321
+      event_button_press_on_single:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.patio_string_lights
+      event_button_press_off_single:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.patio_string_lights
+      event_button_press_on_hold: []
+      event_button_press_off_hold: []
+      duration_hold: 2000
+- id: '1769874486479'
+  alias: Sony Bravia, Retain Source Automatically
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - media_player.sony_bravia_tv
+    attribute: source
+    to:
+    - HDMI 1
+  - trigger: state
+    entity_id:
+    - media_player.sony_bravia_tv
+    attribute: source
+    to:
+    - HDMI 2
+  - trigger: state
+    entity_id:
+    - media_player.sony_bravia_tv
+    attribute: source
+    to:
+    - HDMI 4
+  - trigger: state
+    entity_id:
+    - media_player.sony_bravia_tv
+    attribute: source
+    to:
+    - Video
+  conditions: []
+  actions:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - action: media_player.select_source
+    metadata: {}
+    target:
+      entity_id: media_player.sony_bravia_tv
+    data:
+      source: HDMI 3
+  mode: single

@@ -979,6 +979,8 @@ views:
                     variables:
                       text_state_on: Door
                       text_state_off: Door
+                      icon_state_on: mdi:door-sliding-open
+                      icon_state_off: mdi:door-sliding
                   - type: custom:button-card
                     template: chip_detail__occupancy
                     entity: binary_sensor.presence_living_room
@@ -2545,6 +2547,10 @@ views:
                 border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
                 background-color: var( --popup--background-color ) !important;
               }
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
           - type: custom:decluttering-card
             template: room_popup__header
             variables:
@@ -2587,8 +2593,9 @@ views:
                         name: Washing Machine
                         entity: sensor.status_laundry_washing_machine_custom
                         trigger_update:
-                          - sensor.status_laundry_washing_machine_custom
                           - sensor.laundry_washer_combined_details
+                          - sensor.status_laundry_washing_machine_custom
+                          - input_boolean.reminder_laundry_complete_washer
                         tap_action:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
@@ -2601,12 +2608,13 @@ views:
                         variables:
                           details: sensor.laundry_washer_combined_details
                       - type: custom:button-card
+                        entity: sensor.status_laundry_tumble_dryer_custom
                         template: laundry_card
                         name: Tumble Dryer
-                        entity: sensor.status_laundry_tumble_dryer_custom
                         trigger_update:
-                          - sensor.status_laundry_tumble_dryer_custom
                           - sensor.laundry_dryer_combined_details
+                          - sensor.status_laundry_tumble_dryer_custom
+                          - input_boolean.reminder_laundry_complete_dryer
                         tap_action:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
@@ -2617,7 +2625,7 @@ views:
                           action: navigate
                           navigation_path: /lovelace/page-laundry
                         variables:
-                          details: sensor.status_laundry_tumble_dryer_custom
+                          details: sensor.laundry_dryer_combined_details
           - type: vertical-stack
             cards:
               - type: custom:mushroom-title-card
@@ -2844,7 +2852,7 @@ views:
           path: '#details-outside'
           icon: mdi:palm-tree
           data_door: false
-          data_lightOn: light.backyard_string_lights
+          data_lightOn: light.patio_string_lights
           data_temperature: sensor.temperature_outside
       - type: vertical-stack
         cards:
@@ -2921,8 +2929,12 @@ views:
                 variables:
                   - cards:
                       - type: custom:mushroom-light-card
-                        name: String Lights
+                        name: Backyard Lights
                         entity: light.backyard_string_lights
+                        collapsible_controls: true
+                      - type: custom:mushroom-light-card
+                        name: Patio Lights
+                        entity: light.patio_string_lights
                         collapsible_controls: true
         view_layout:
           grid-area: modalOut
@@ -3816,7 +3828,6 @@ views:
     theme: casamaxson
   - title: Devices
     path: map-devices
-    theme: casamaxson
     type: custom:grid-layout
     layout:
       grid-gap: 0
@@ -3990,6 +4001,9 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.patio_string_lights' %}
+              --maxson-floorplan--color-light--patio-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.front_yard_garden_lights' %}
               --maxson-floorplan--color-light--front-yard-garden-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -4476,12 +4490,36 @@ views:
             tap_action:
               action: toggle
             style:
-              top: 50%
+              top: 25%
               left: 5%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
+          - type: state-icon
+            entity: light.backyard_string_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 75%
+              left: 5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--backyard-string-lights ) )
+          - type: state-icon
+            entity: light.patio_string_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 50%
+              left: 5%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--patio-string-lights )
+                )
           - type: conditional
             conditions:
               - condition: state
@@ -4662,6 +4700,9 @@ views:
 
               {% set the_entity = 'light.backyard_string_lights' %}
               --maxson-floorplan--color-light--backyard-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
+
+              {% set the_entity = 'light.patio_string_lights' %}
+              --maxson-floorplan--color-light--patio-string-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
 
               {% set the_entity = 'light.front_yard_garden_lights' %}
               --maxson-floorplan--color-light--front-yard-garden-lights: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-light-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-light-on ) {% else %} var( --map-icon--sensor-light-off ) {% endif %};
@@ -5149,11 +5190,35 @@ views:
               action: toggle
             style:
               top: 6%
-              left: 49.75%
+              left: 24%
               border-radius: 100%
               '--state-icon-color': >-
                 rgb( var(
                 --maxson-floorplan--color-light--backyard-string-lights ) )
+          - type: state-icon
+            entity: light.backyard_string_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 6%
+              left: 76%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var(
+                --maxson-floorplan--color-light--backyard-string-lights ) )
+          - type: state-icon
+            entity: light.patio_string_lights
+            state_color: false
+            tap_action:
+              action: toggle
+            style:
+              top: 6%
+              left: 49.75%
+              border-radius: 100%
+              '--state-icon-color': >-
+                rgb( var( --maxson-floorplan--color-light--patio-string-lights )
+                )
           - type: conditional
             conditions:
               - condition: state
@@ -5272,10 +5337,10 @@ views:
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'sensor.laundry_washer_machine_state' %}
-              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'Run' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
-              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'Run' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
               --maxson-floorplan--color-status-dehumidifier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'On' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
@@ -5341,16 +5406,42 @@ views:
               left: 73%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
-          - type: state-icon
-            entity: binary_sensor.door_living
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 50%
-              left: 12%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_living
+                state_not: unavailable
+              - entity: binary_sensor.door_living
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_living
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 50%
+                  left: 12%
+                  border-radius: 100%
+                  '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_living
+                state_not: unavailable
+              - entity: binary_sensor.door_living
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_living
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 50%
+                  left: 12%
+                  border-radius: 100%
+                  '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
           - type: state-icon
             entity: binary_sensor.door_laundry
             state_color: false
@@ -5371,26 +5462,86 @@ views:
               left: 76%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_hers
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 16%
-              left: 34%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_his
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 33%
-              left: 34%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_hers
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_hers
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_hers
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 16%
+                  left: 34%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-hers
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_hers
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_hers
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_hers
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 16%
+                  left: 34%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-hers
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_his
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_his
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_his
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 33%
+                  left: 34%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-his
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_his
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_his
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_his
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 33%
+                  left: 34%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-his
+                    ) )
           - type: state-icon
             entity: cover.curtains_large_window_bedroom_1
             state_color: false
@@ -5776,10 +5927,10 @@ views:
               --maxson-floorplan--color-status-dishwasher: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'sensor.laundry_washer_machine_state' %}
-              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-status-washer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'Run' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'sensor.laundry_dryer_machine_state' %}
-              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
+              --maxson-floorplan--color-status-dryer-machine: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'Run' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
 
               {% set the_entity = 'input_select.status_dehumidifier_options' %}
               --maxson-floorplan--color-status-dehumidifier: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-presence-unavail ) {% elif( states( the_entity ) == 'On' ) %} var( --blue-color-rgb ) {% else %} var( --map-icon--sensor-presence-off ) {% endif %};
@@ -5845,16 +5996,42 @@ views:
               left: 37%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-front-secondary ) )
-          - type: state-icon
-            entity: binary_sensor.door_living
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 11%
-              left: 49%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_living
+                state_not: unavailable
+              - entity: binary_sensor.door_living
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_living
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 11%
+                  left: 49%
+                  border-radius: 100%
+                  '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_living
+                state_not: unavailable
+              - entity: binary_sensor.door_living
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_living
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 11%
+                  left: 49%
+                  border-radius: 100%
+                  '--state-icon-color': rgb( var( --maxson-floorplan--color-door-living ) )
           - type: state-icon
             entity: binary_sensor.door_laundry
             state_color: false
@@ -5875,26 +6052,86 @@ views:
               left: 65%
               border-radius: 100%
               '--state-icon-color': rgb( var( --maxson-floorplan--color-door-garage ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_hers
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 34%
-              left: 84%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-hers ) )
-          - type: state-icon
-            entity: binary_sensor.door_closet_hallway_his
-            state_color: false
-            tap_action:
-              action: more-info
-            style:
-              top: 34%
-              left: 67%
-              border-radius: 100%
-              '--state-icon-color': rgb( var( --maxson-floorplan--color-door-closet-hallway-his ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_hers
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_hers
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_hers
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 34%
+                  left: 84%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-hers
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_hers
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_hers
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_hers
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 34%
+                  left: 84%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-hers
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_his
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_his
+                state: 'off'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_his
+                icon: mdi:door-sliding
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 34%
+                  left: 67%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-his
+                    ) )
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.door_closet_hallway_his
+                state_not: unavailable
+              - entity: binary_sensor.door_closet_hallway_his
+                state: 'on'
+            elements:
+              - type: state-icon
+                entity: binary_sensor.door_closet_hallway_his
+                icon: mdi:door-sliding-open
+                state_color: false
+                tap_action:
+                  action: more-info
+                style:
+                  top: 34%
+                  left: 67%
+                  border-radius: 100%
+                  '--state-icon-color': >-
+                    rgb( var( --maxson-floorplan--color-door-closet-hallway-his
+                    ) )
           - type: state-icon
             entity: cover.curtains_large_window_bedroom_1
             state_color: false
@@ -6586,13 +6823,13 @@ views:
               --maxson-floorplan--color-leak-wine-cooler: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
               {% set the_entity = 'valve.front_yard_east' %}
-              --maxson-floorplan--color-valve-front-yard-east: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-front-yard-east: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
 
               {% set the_entity = 'valve.side_yard_north' %}
-              --maxson-floorplan--color-valve-side-yard-north: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-side-yard-north: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
 
               {% set the_entity = 'valve.side_yard_south' %}
-              --maxson-floorplan--color-valve-side-yard-south: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-side-yard-south: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -6796,13 +7033,13 @@ views:
               --maxson-floorplan--color-leak-wine-cooler: {% if( states( the_entity ) == 'unavailable' ) %} var( --maxsonmap-icon--sensor-leak-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-leak-on ) {% else %} var( --map-icon--sensor-leak-off ) {% endif %};
 
               {% set the_entity = 'valve.front_yard_east' %}
-              --maxson-floorplan--color-valve-front-yard-east: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-front-yard-east: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
 
               {% set the_entity = 'valve.side_yard_north' %}
-              --maxson-floorplan--color-valve-side-yard-north: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-side-yard-north: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
 
               {% set the_entity = 'valve.side_yard_south' %}
-              --maxson-floorplan--color-valve-side-yard-south: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'on' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
+              --maxson-floorplan--color-valve-side-yard-south: {% if( states( the_entity ) == 'unavailable' ) %} var( --map-icon--sensor-valve-unavail ) {% elif( states( the_entity ) == 'open' ) %} var( --map-icon--sensor-valve-on ) {% else %} var( --map-icon--sensor-valve-off ) {% endif %};
             }
         elements:
           - type: state-icon
@@ -7026,18 +7263,6 @@ views:
                     name: Record on Interior Cameras
                   - entity: input_boolean.enable_motion_camera_recording
                     name: Record on Motion Cameras
-                card_mod:
-                  style: |
-                    ha-card.type-entities { 
-                      --ha-card-border-color: transparent;
-                      --ha-card-border-width: 0;
-                      --ha-card-border-radius: 0;
-                      --ha-card-background: transparent;
-                      padding-right: 0;
-                      padding-left: 0;
-                    }
-
-                    #states { padding: 0;}
       - type: vertical-stack
         cards:
           - type: custom:mushroom-title-card
@@ -7106,18 +7331,6 @@ views:
                         name: Side Yard, North (facing west)
                       - entity: camera.ext_side_yard_south_east_high
                         name: Side Yard, South (facing east)
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          --ha-card-border-color: transparent;
-                          --ha-card-border-width: 0;
-                          --ha-card-border-radius: 0;
-                          --ha-card-background: transparent;
-                          padding-right: 0;
-                          padding-left: 0;
-                        }
-
-                        #states { padding: 0;}
               Interior:
                 type: vertical-stack
                 cards:
@@ -7136,20 +7349,6 @@ views:
                       - entity: camera.int_living_room_high
                         secondary_info: none
                         name: Living Room
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          --ha-card-border-color: transparent;
-                          --ha-card-border-width: 0;
-                          --ha-card-border-radius: 0;
-                          --ha-card-background: transparent;
-                          padding-right: 0;
-                          padding-bottom: 18px;
-                          padding-left: 0;
-                          border-bottom: 1px solid var( --divider-color );
-                        }
-
-                        #states { padding: 0;}
                   - type: entities
                     title: Private Interior Cameras
                     show_header_toggle: false
@@ -7162,20 +7361,6 @@ views:
                         name: Office, Jess
                       - entity: camera.int_bdr4_high
                         name: Office, Tom
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          --ha-card-border-color: transparent;
-                          --ha-card-border-width: 0;
-                          --ha-card-border-radius: 0;
-                          --ha-card-background: transparent;
-                          padding-right: 0;
-                          padding-bottom: 18px;
-                          padding-left: 0;
-                          border-bottom: 1px solid var( --divider-color );
-                        }
-
-                        #states { padding: 0;}
               Motion:
                 type: vertical-stack
                 cards:
@@ -7185,18 +7370,6 @@ views:
                     entities:
                       - entity: camera.ext_garage_high
                         name: Garage
-                    card_mod:
-                      style: |
-                        ha-card.type-entities { 
-                          --ha-card-border-color: transparent;
-                          --ha-card-border-width: 0;
-                          --ha-card-border-radius: 0;
-                          --ha-card-background: transparent;
-                          padding-right: 0;
-                          padding-left: 0;
-                        }
-
-                        #states { padding: 0;}
     layout: {}
     visible:
       - user: e1643ac2dd974ccfa68c25e246677c19
@@ -8167,7 +8340,7 @@ views:
                   collapsible_controls: true
                   show_brightness_control: true
                 - type: custom:mushroom-light-card
-                  entity: light.backyard_string_lights
+                  entity: light.patio_string_lights
                   name: Backyard String Lights
                   collapsible_controls: true
                 - type: custom:mushroom-light-card
@@ -9331,8 +9504,15 @@ views:
                     - entity: input_boolean.sunrise_automations_allow
                       state: 'on'
                   row:
-                    entity: input_number.sunrise_automations_offset
-                    name: Offset
+                    entity: input_number.sunrise_automations_offset_before
+                    name: Time Offset, Before
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunrise_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.sunrise_automations_offset_after
+                    name: Time Offset, After
                 - type: conditional
                   conditions:
                     - entity: input_boolean.sunrise_automations_allow
@@ -9371,8 +9551,15 @@ views:
                     - entity: input_boolean.sunset_automations_allow
                       state: 'on'
                   row:
-                    entity: input_number.sunset_automations_offset
-                    name: Offset
+                    entity: input_number.sunset_automations_offset_before
+                    name: Time Offset, Before
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.sunset_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.sunset_automations_offset_after
+                    name: Time Offset, After
                 - type: conditional
                   conditions:
                     - entity: input_boolean.sunset_automations_allow
@@ -9390,9 +9577,6 @@ views:
             - type: entities
               title: Bedtime Automations
               entities:
-                - entity: sensor.status_automations_bedtime
-                  name: Next Bedtime
-                  icon: mdi:bed
                 - entity: input_boolean.bedtime_automations_allow
                   name: Allow Automations
                 - type: conditional
@@ -9408,14 +9592,28 @@ views:
                       state: 'on'
                   row:
                     entity: input_datetime.bedtime_automations_time_manual
-                    name: Latest Time
+                    name: Latest Run Time
                 - type: conditional
                   conditions:
                     - entity: input_boolean.bedtime_automations_allow
                       state: 'on'
                   row:
-                    entity: input_number.bedtime_automations_offset
-                    name: Run After Sunset by
+                    entity: input_number.bedtime_automations_offset_before
+                    name: Time Offset, Before
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.bedtime_automations_allow
+                      state: 'on'
+                  row:
+                    entity: input_number.bedtime_automations_offset_after
+                    name: Time Offset, After
+                - type: conditional
+                  conditions:
+                    - entity: input_boolean.bedtime_automations_allow
+                      state: 'on'
+                  row:
+                    entity: sensor.status_automations_bedtime
+                    name: Runs At
             - type: entities
               title: Midnight Automations
               entities:
@@ -9575,6 +9773,7 @@ button_card_templates:
         - '--ha-card-border-color': var( --tile-card--border-color )
         - '--ha-card-border-radius': var( --tile-card--border-radius )
         - '--ha-card-background': var( --tile-card--background-color )
+        - '--ha-card-box-shadow': var( --tile-card--box-shadow )
         - '--mdc-ripple-color': var( --tile-card--ripple-color )
         - '-webkit-tap-highlight-color': var( --tile-card--tap-highlight-color )
         - padding: var( --tile-card--padding )
@@ -9716,7 +9915,7 @@ button_card_templates:
         - border-radius: 12px
         - margin-bottom: 4px
         - height: 40px
-        - box-shadow: none
+        - box-shadow: var( --tile-card-box-shadow )
         - cursor: |
             [[[ 
               return ( variables.is_disabled == true )

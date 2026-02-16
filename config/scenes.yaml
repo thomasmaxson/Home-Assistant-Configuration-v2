@@ -1,5 +1,5 @@
 - id: '1753531118280'
-  name: Accent Lights - Daily
+  name: Bedroom 4, Accent Lights - Daily
   entities:
     light.bedroom_4_accent_lamp_left:
       min_color_temp_kelvin: 2000
@@ -123,7 +123,7 @@
       entity_only: true
   icon: hue:wellness
 - id: '1753531400959'
-  name: Accent Lights - Streaming
+  name: Bedroom 4, Accent Lights - Streaming
   entities:
     light.bedroom_4_accent_lamp_left:
       min_color_temp_kelvin: 2000
@@ -243,7 +243,7 @@
     input_boolean.bedroom_4_sync_accent_lights:
       entity_only: true
 - id: '1754324162511'
-  name: Accent Lights - Reverse Streaming
+  name: Bedroom 4, Accent Lights - Reverse Streaming
   entities:
     light.bedroom_4_accent_lamp_left:
       min_color_temp_kelvin: 2000

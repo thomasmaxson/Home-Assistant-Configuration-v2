@@ -36,14 +36,14 @@ template:
         state: >-
           {{ states( 'sensor.laundry_washer_machine_state' ) }}
         attributes:
-          original_time: >-
-            {{ states( 'input_text.laundry_washer_original_duration' ) }}
           time_remaining: >-
-            {{ states( 'sensor.laundry_washer_time_remaining' ) }}
+            {{ states( 'sensor.laundry_washer_time_remaining' ) | int( 0 ) | timestamp_custom( '%H:%M', false ) }}
           cycle_type: >-
             {{ states( 'sensor.laundry_washer_sub_cycle' ) | string }}
           cycle_end: >-
             {{ states( 'binary_sensor.laundry_washer_end_of_cycle' ) }}
+          door: >-
+            {{ states( 'binary_sensor.laundry_washer_door' ) }}
 
   - trigger:
       # Update on Home Assistant startup
@@ -61,11 +61,11 @@ template:
         state: >-
           {{ states( 'sensor.laundry_dryer_machine_state' ) }}
         attributes:
-          original_time: >-
-            {{ states( 'input_text.laundry_dryer_original_duration' ) }}
           time_remaining: >-
-            {{ states( 'sensor.laundry_dryer_time_remaining' ) }}
+            {{ states( 'sensor.laundry_dryer_time_remaining' ) | int( 0 ) | timestamp_custom( '%H:%M', false ) }}
           cycle_type: >-
             {{ states( 'sensor.laundry_dryer_sub_cycle' ) | string }}
           cycle_end: >-
             {{ states( 'binary_sensor.laundry_dryer_end_of_cycle' ) }}
+          door: >-
+            {{ states( 'binary_sensor.laundry_dryer_door' ) }}
