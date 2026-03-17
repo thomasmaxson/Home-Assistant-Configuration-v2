@@ -3,8 +3,10 @@ blueprint:
   description: >-
     Manage occupancy state via multiple sensors.
 
-    - Control what happens when a door opens or occupancy is detected.
-    - Control what happens when a door closes or occupancy is cleared.
+    - Control what happens when a is door opened.
+    - Control what happens when is door closed.
+    - Control what happens when occupancy is detected.
+    - Control what happens when occupancy is cleared.
   author: Thomas Maxson
   source_url: https://gist.github.com/thomasmaxson/635084f3a7f8e1877542c210b39c6ed5
   homeassistant:
@@ -27,7 +29,6 @@ blueprint:
           filter:
             domain: binary_sensor
 
-
     group_door_specific_actions:
       name: Door Actions
       icon: mdi:door
@@ -47,20 +48,19 @@ blueprint:
           selector:
             action:
 
-
     group_occupancy_specific_actions:
       name: Occupancy Actions
       icon: mdi:account
       collapsed: true
       input:
-        action_occupancy_detect_instant:
+        action_occupancy_detect:
           name: Occupancy Detected Action(s)
           description: Action(s) to perform when occupancy is detected.
           default: []
           selector:
             action:
 
-        delay_occupancy_detect_instant:
+        delay_occupancy_detect:
           name: Occupancy Detected Delay
           description: The amount of time to wait until occupancy detected actions are triggered.
           default: 0
@@ -72,14 +72,14 @@ blueprint:
               max: 3600.0
               step: 1.0
 
-        action_occupancy_clear_instant:
+        action_occupancy_clear:
           name: Occupancy Cleared Action(s)
           description: Action(s) to perform when occupancy is cleared.
           default: []
           selector:
             action:
 
-        delay_occupancy_clear_instant:
+        delay_occupancy_clear:
           name: Occupancy Cleared Delay
           description: The amount of time to wait until occupancy cleared actions are triggered.
           default: 0
@@ -91,17 +91,15 @@ blueprint:
               max: 3600.0
               step: 1.0
 
-
 variables:
   var_enable_door_action: !input enable_door_action
   var_disable_door_action: !input disable_door_action
 
-  var_action_occupancy_detect_instant: !input action_occupancy_detect_instant
-  var_delay_occupancy_detect_instant: !input delay_occupancy_detect_instant
+  var_action_occupancy_detect: !input action_occupancy_detect
+  var_delay_occupancy_detect: !input delay_occupancy_detect
 
-  var_action_occupancy_clear_instant: !input action_occupancy_clear_instant
-  var_delay_occupancy_clear_instant: !input delay_occupancy_clear_instant
-
+  var_action_occupancy_clear: !input action_occupancy_clear
+  var_delay_occupancy_clear: !input delay_occupancy_clear
 
 triggers:
   - alias: "When door is OPENED"
@@ -123,10 +121,10 @@ triggers:
     entity_id: !input sensor_occupancy
     from: "off"
     to: "on"
-    for: 
+    for:
       hours: 0
       minutes: 0
-      seconds: !input delay_occupancy_detect_instant
+      seconds: !input delay_occupancy_detect
     id: trigger_motion_detect
 
   - alias: "When motion is CLEARED"
@@ -134,12 +132,11 @@ triggers:
     entity_id: !input sensor_occupancy
     from: "on"
     to: "off"
-    for: 
+    for:
       hours: 0
       minutes: 0
-      seconds: !input delay_occupancy_clear_instant
+      seconds: !input delay_occupancy_clear
     id: trigger_motion_clear
-
 
 actions:
   - alias: "Choose actions to check and run"
@@ -155,7 +152,6 @@ actions:
                 value_template: "{{ var_enable_door_action is defined }}"
         sequence: !input enable_door_action
 
-
       - alias: "Actions to perform if DOOR CLOSED"
         conditions:
           - condition: and
@@ -167,7 +163,6 @@ actions:
                 condition: template
                 value_template: "{{ var_disable_door_action is defined }}"
         sequence: !input disable_door_action
-
 
       - alias: "Actions to perform when MOTION DETECTED"
         conditions:
@@ -182,9 +177,8 @@ actions:
                 value_template: "{{ trigger.to_state.state == 'on' }}"
               - alias: "Check if custom action is defined"
                 condition: template
-                value_template: "{{ var_action_occupancy_detect_instant is defined }}"
-        sequence: !input action_occupancy_detect_instant
-
+                value_template: "{{ var_action_occupancy_detect is defined }}"
+        sequence: !input action_occupancy_detect
 
       - alias: "Actions to perform when MOTION CLEARED"
         conditions:
@@ -199,9 +193,8 @@ actions:
                 value_template: "{{ trigger.to_state.state == 'off' }}"
               - alias: "Check if custom action is defined"
                 condition: template
-                value_template: "{{ var_action_occupancy_clear_instant is defined }}"
-        sequence: !input action_occupancy_clear_instant
-
+                value_template: "{{ var_action_occupancy_clear is defined }}"
+        sequence: !input action_occupancy_clear
 
 mode: restart
 max_exceeded: silent
