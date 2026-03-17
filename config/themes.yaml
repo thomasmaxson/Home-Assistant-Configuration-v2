@@ -7,7 +7,7 @@
 ################################################################################
 
 extra_module_url:
-  - /hacsfiles/lovelace-card-mod/card-mod.js
+  # - /hacsfiles/lovelace-card-mod/card-mod.js
   - /hacsfiles/hass-bha-icons/hass-bha-icons.js
   - /hacsfiles/hass-hue-icons/hass-hue-icons.js
 
@@ -142,14 +142,18 @@ themes:
 
     modes:
       dark:
-        tile-card--background-color: "rgb( 28, 28, 28 )"
-        tile-card--border-color: "transparent"
+        tile-card--background-color: "rgba( 30, 32, 36, 0.6 )"
+        tile-card--border-color: "rgba( 255, 255, 255, 0.05 )"
+        tile-card--border-color-top: "rgba( 255, 255, 255, 0.15 )"
+        tile-card--border-color-bottom: "rgba( 0, 0, 0, 0.4 )"
+        tile-card--box-shadow: "0 10px 20px -5px rgba( 0, 0, 0, 0.5 ), 0 2px 4px rgba( 0, 0, 0, 0.3 )"
         tile-card--ripple-color: "rgba( 255, 255, 255, 0.3 )"
         tile-card--tap-highlight-color: "var( --tile-card--ripple-color )"
         tile-card--icon-color: "rgba( 255, 255, 255, 0.3 )"
-        tile-card--name-color: "rgba( 255, 255, 255, 0.7 )"
+        tile-card--name-color: "rgba( 255, 255, 255, 0.85 )"
         tile-card--state-color: "var( --tile-card--icon-color )"
         tile-card--label-color: "var( --tile-card--icon-color )"
+        tile-card--backdrop-filter-blur: "12px"
 
         tile-card-control--background-color: "rgba( 225, 225, 225, 0.05 )"
         tile-card-control--icon-color: "#e1e1e1"
@@ -157,13 +161,24 @@ themes:
         tile-card-control--icon-color--disabled: "rgb( 111, 111, 111 )"
 
         tile-card--background-color--inverse: "rgb( 207, 207, 207 )"
+        # tile-card--background-color--inverse: "rgba( 20, 20, 20, 0.6 )"
         tile-card--border-color--inverse: "transparent"
+        tile-card--border-color-top--inverse: "var( --tile-card--border-color-top )"
+        # tile-card--border-color-top--inverse: "rgba( 0, 0, 0, 0.1 )"
+        tile-card--border-color-bottom--inverse: "var( --tile-card--border-color-bottom )"
+        # tile-card--border-color-bottom--inverse: "rgba( 255, 255, 255, 0.05 )"
+        tile-card--box-shadow--inverse: "var( --tile-card--box-shadow )"
+        # tile-card--box-shadow--inverse: "inset 2px 2px 5px rgba( 0, 0, 0, 0.8 ), inset -1px -1px 2px rgba( 255, 255, 255, 0.1 )"
         tile-card--ripple-color--inverse: "rgba( 28, 28, 28, 0.3 )"
         tile-card--tap-highlight-color--inverse: "var( --tile-card--ripple-color--inverse )"
         tile-card--icon-color--inverse: "rgb( var( --blue-color-rgb ) )"
+        tile-card--icon-shadow-blur--inverse: "1px"
         tile-card--name-color--inverse: "rgba( 0, 0, 0, 0.90 )"
+        # tile-card--name-color--inverse: "var( --tile-card--name-color )"
         tile-card--state-color--inverse: "rgba( 0, 0, 0, 0.65 )"
+        # tile-card--state-color--inverse: "var( --tile-card--state-color )"
         tile-card--label-color--inverse: "var( --tile-card--state-color--inverse )"
+        # tile-card--label-color--inverse: "var( --tile-card--label-color )"
 
         tile-card--icon-color--unavail--inverse: "var( --grey-color-rgb )"
 
@@ -171,11 +186,12 @@ themes:
         tile-card-btn--border-color: "rgba( 225, 225, 225, 0.25 )"
         tile-card-btn--icon-color: "var( --tile-card-btn--border-color )"
 
-        tile-card-btn--background-color--inverse: transparent
+        tile-card-btn--background-color--inverse: "transparent"
         tile-card-btn--border-color--inverse: "rgba( 0, 0, 0, 0.25 )"
+        # tile-card-btn--border-color--inverse: "var( --tile-card-btn--border-color )"
         tile-card-btn--icon-color--inverse: "var( --tile-card-btn--border-color--inverse )"
 
-        tile-card-badge--background-color: "var( --tile-card--background-color )"
+        tile-card-badge--background-color: "rgba( 30, 32, 36, 1.0 )"
         tile-card-badge--border-color: "var( --tile-card-btn--border-color )"
         tile-card-badge--icon-color: "var( --tile-card-btn--border-color )"
 
