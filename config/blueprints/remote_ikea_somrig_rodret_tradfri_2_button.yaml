@@ -59,8 +59,8 @@ blueprint:
       description: >-
         Select the event you want the remote to do.
         <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-        <br>&bull; _Custom Action_: Trigger your own custom action
-      default: "toggle"
+        <br>&bull; _Custom action_: Trigger your own custom action
+      default: toggle
       selector:
         select:
           options:

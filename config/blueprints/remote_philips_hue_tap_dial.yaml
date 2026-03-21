@@ -82,7 +82,7 @@ blueprint:
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
             <br>&bull; _Turn on light_: Turn on the light(s)
             <br>&bull; _Turn off light_: Turn off the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "toggle"
           selector:
             select:
@@ -173,7 +173,7 @@ blueprint:
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
             <br>&bull; _Turn on light_: Turn on the light(s)
             <br>&bull; _Turn off light_: Turn off the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "toggle"
           selector:
             select:
@@ -264,7 +264,7 @@ blueprint:
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
             <br>&bull; _Turn on light_: Turn on the light(s)
             <br>&bull; _Turn off light_: Turn off the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "toggle"
           selector:
             select:
@@ -355,7 +355,7 @@ blueprint:
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
             <br>&bull; _Turn on light_: Turn on the light(s)
             <br>&bull; _Turn off light_: Turn off the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action
           default: "toggle"
           selector:
             select:

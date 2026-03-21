@@ -53,13 +53,15 @@ blueprint:
           description: >-
             Select the event you want the **Button** to do.
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
-          default: "Toggle light"
+            <br>&bull; _Custom action_: Trigger your own custom action
+          default: toggle
           selector:
             select:
               options:
-                - Toggle light
-                - Custom action
+                - label: Toggle light
+                  value: toggle
+                - label: Custom action
+                  value: action
 
         light_press_single:
           name: Single Press Light(s)
@@ -88,13 +90,15 @@ blueprint:
           description: >-
             Select the event you want the **Button** to do.
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
-          default: "Toggle light"
+            <br>&bull; _Custom action_: Trigger your own custom action
+          default: toggle
           selector:
             select:
               options:
-                - Toggle light
-                - Custom action
+                - label: Toggle light
+                  value: toggle
+                - label: Custom action
+                  value: action
 
         light_press_double:
           name: Double Press Light(s)
@@ -294,7 +298,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_press_single == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_press_single == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_light_press_single | length > 0 }}"
@@ -319,7 +323,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_press_single == 'Custom action' }}"
+                    value_template: "{{ var_event_button_press_single == 'action' }}"
                 sequence: !input action_button_press_single
 
       - conditions:
@@ -337,7 +341,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_press_double == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_press_double == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_light_press_double | length > 0 }}"
@@ -362,7 +366,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_press_double == 'Custom action' }}"
+                    value_template: "{{ var_event_button_press_double == 'action' }}"
                 sequence: !input action_button_press_double
 
       - conditions:

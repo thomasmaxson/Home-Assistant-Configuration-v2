@@ -211,6 +211,13 @@ blueprint:
       icon: mdi:cog
       collapsed: true
       input:
+        do_debug:
+          name: Debug Events
+          description: Display a persistent notification when triggered.
+          default: false
+          selector:
+            boolean:
+
         config_mode:
           name: Automation Mode
           description: Mode that automation runs in.
@@ -254,6 +261,7 @@ variables:
   var_to_medium_led_color: !input to_medium_led_color
   var_to_high_led_color: !input to_high_led_color
   var_to_off_led_color: !input to_off_led_color
+  var_do_debug: !input do_debug
 
 triggers:
   - alias: Fan speed changes from on to off (at any speed)
@@ -384,6 +392,7 @@ actions:
               effect: Solid
               duration: 1 Second
               brightness_level: "{{ var_to_high_led_brightness | default(100) | int }}"
+              debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
           - choose: []
             default: !input event_to_high_speed
 
@@ -408,6 +417,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+                  debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
               - alias: "Provide feedback via Inovelli light switch #2 LED"
                 action: script.update_inovelli_light_switch_led_s
                 metadata: {}
@@ -419,6 +429,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+                  # debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
               - alias: "Provide feedback via Inovelli light switch #3 LED"
                 action: script.update_inovelli_light_switch_led_s
                 metadata: {}
@@ -430,6 +441,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+                  # debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
               - alias: "Provide feedback via Inovelli light switch #4 LED"
                 action: script.update_inovelli_light_switch_led_s
                 metadata: {}
@@ -441,6 +453,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_medium_led_brightness | default(100) | int }}"
+                  # debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
           - choose: []
             default: !input event_to_medium_speed
 
@@ -466,6 +479,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_low_led_brightness | default(100) | int }}"
+                  debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
               - alias: "Provide feedback via Inovelli light switch #2 LED"
                 action: script.update_inovelli_light_switch_led_s
                 metadata: {}
@@ -477,6 +491,7 @@ actions:
                   effect: Solid
                   duration: 1 Second
                   brightness_level: "{{ var_to_low_led_brightness | default(100) | int }}"
+                  # debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
           - choose: []
             default: !input event_to_low_speed
 
@@ -501,5 +516,6 @@ actions:
               effect: Solid
               duration: 1 Second
               brightness_level: "{{ var_to_off_led_brightness | default(100) | int }}"
+              debug: "{{ iif( var_do_debug == true, 'true', 'false' ) }}"
           - choose: []
             default: !input event_to_off_speed

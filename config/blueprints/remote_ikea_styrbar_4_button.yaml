@@ -75,13 +75,15 @@ blueprint:
           description: >-
             Select the event you want the **Power Buttons** to do.
             <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom Action_: Trigger your own custom action
-          default: "Toggle light"
+            <br>&bull; _Custom action_: Trigger your own custom action
+          default: toggle
           selector:
             select:
               options:
-                - Toggle light
-                - Custom action
+                - label: Toggle light
+                  value: toggle
+                - label: Custom action
+                  value: action
 
         brightness_on_percent:
           name: Brightness Level When Light Turns on
@@ -123,12 +125,14 @@ blueprint:
             Select the event you want the **Brightness Buttons** to do.
             <br>&bull; _Adjust brightness_: Increase/Decrease brightness of the light(s)
             <br>&bull; _Custom action_: Trigger your own custom action
-          default: "Adjust brightness"
+          default: brightness
           selector:
             select:
               options:
-                - Adjust brightness
-                - Custom action
+                - label: Adjust brightness
+                  value: brightness
+                - label: Custom action
+                  value: action
 
         brightness_step:
           name: Brightness Step
@@ -179,13 +183,16 @@ blueprint:
             <br>&bull; Right arrow increases your light(s) color temperature
             <br>
             <br>_Custom action_: Trigger your own custom actions
-          default: "Adjust light hue and saturation"
+          default: hue_saturation
           selector:
             select:
               options:
-                - Adjust color temperature
-                - Adjust light hue and saturation
-                - Custom action
+                - label: Adjust color temperature
+                  value: temperature
+                - label: Adjust light hue and saturation
+                  value: hue_saturation
+                - label: Custom action
+                  value: action
 
         kelvin_temp_min:
           name: Color Temperature, Minimum
@@ -641,7 +648,7 @@ actions:
                     conditions:
                       - alias: "Check if should toggle light(s)"
                         condition: template
-                        value_template: "{{ var_event_button_power == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_power == 'toggle' }}"
                       - alias: "Check if the light(s) are currently off"
                         condition: template
                         value_template: "{{ var_all_lights_on | length == 0 }}"
@@ -668,7 +675,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_power == 'Custom action' }}"
+                    value_template: "{{ var_event_button_power == 'action' }}"
                 sequence: !input action_button_press_raise_single
 
       - alias: "Button: Increase Brightness, Press and Hold"
@@ -688,7 +695,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -725,7 +732,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_raise_hold
 
       - alias: "Button: Power Off, Press"
@@ -745,7 +752,7 @@ actions:
                     conditions:
                       - alias: "Check if should manage light state"
                         condition: template
-                        value_template: "{{ var_event_button_power == 'Toggle light' }}"
+                        value_template: "{{ var_event_button_power == 'toggle' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -759,7 +766,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_button_power == 'Custom action' }}"
+                    value_template: "{{ var_event_button_power == 'action' }}"
                 sequence: !input action_button_press_lower_single
 
       - alias: "Button: Decrease Brightness, Press and Hold"
@@ -779,7 +786,7 @@ actions:
                     conditions:
                       - alias: "Check if should adjust brightness"
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'Adjust brightness' }}"
+                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -816,7 +823,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_buttons_brightness == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_lower_hold
 
       - alias: "Button: Left Arrow, Press"
@@ -839,10 +846,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -862,7 +869,7 @@ actions:
                               {%- set current_light = var_first_light_on -%}
                             {%- endif -%}
 
-                            {%- if event_buttons_arrows == "Adjust light hue and saturation" -%}
+                            {%- if event_buttons_arrows == "hue_saturation" -%}
                               {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
                               {%- set current_hue = hue_sat_values[0] -%}
                               {%- set current_sat = hue_sat_values[1] -%}
@@ -873,7 +880,7 @@ actions:
 
                               {{ dict( **{ 'hs_color' : [ current_hue, updated_sat ] } ) }}
 
-                            {%- elif event_buttons_arrows == "Adjust color temperature" -%}
+                            {%- elif event_buttons_arrows == "temperature" -%}
                               {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
                               {%- set min_temp = var_kelvin_temp_min | float -%}
                               {%- set max_temp = var_kelvin_temp_max | float -%}
@@ -888,7 +895,7 @@ actions:
                 conditions:
                   - alias: "Check if button press should trigger custom events"
                     condition: template
-                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_left_single
 
       - alias: "Button: Left Arrow, Press and Hold"
@@ -911,10 +918,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -949,7 +956,7 @@ actions:
                                     {%- set current_light = var_first_light_on -%}
                                   {%- endif -%}
 
-                                  {%- if event_buttons_arrows == "Adjust light hue and saturation" -%}
+                                  {%- if event_buttons_arrows == "hue_saturation" -%}
                                     {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
                                     {%- set current_hue = hue_sat_values[0] -%}
                                     {%- set current_sat = hue_sat_values[1] -%}
@@ -960,7 +967,7 @@ actions:
 
                                     {{ dict( **{ 'hs_color' : [ current_hue, updated_sat ] } ) }}
 
-                                  {%- elif event_buttons_arrows == "Adjust color temperature" -%}
+                                  {%- elif event_buttons_arrows == "temperature" -%}
                                     {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
                                     {%- set min_temp = var_kelvin_temp_min | float -%}
                                     {%- set max_temp = var_kelvin_temp_max | float -%}
@@ -982,7 +989,7 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_left_hold
 
       - alias: "Button: Right Arrow, Press"
@@ -1005,10 +1012,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1028,7 +1035,7 @@ actions:
                               {%- set current_light = var_first_light_on -%}
                             {%- endif -%}
 
-                            {%- if event_buttons_arrows == "Adjust light hue and saturation" -%}
+                            {%- if event_buttons_arrows == "hue_saturation" -%}
                               {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
                               {%- set current_hue = hue_sat_values[0] -%}
                               {%- set current_sat = hue_sat_values[1] -%}
@@ -1038,7 +1045,7 @@ actions:
 
                               {{ dict( **{ 'hs_color' : [ updated_hue, current_sat ] } ) }}
 
-                            {%- elif event_buttons_arrows == "Adjust color temperature" -%}
+                            {%- elif event_buttons_arrows == "temperature" -%}
                               {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
                               {%- set min_temp = var_kelvin_temp_min | float -%}
                               {%- set max_temp = var_kelvin_temp_max | float -%}
@@ -1053,7 +1060,7 @@ actions:
                 conditions:
                   - alias: "Check if button press should trigger custom events"
                     condition: template
-                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_right_single
 
       - alias: "Button: Right Arrow, Press and Hold"
@@ -1076,10 +1083,10 @@ actions:
                         conditions:
                           - alias: "Check if should adjust light color temperature"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust color temperature' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
                           - alias: "Check if should adjust light hue and saturation"
                             condition: template
-                            value_template: "{{ var_event_buttons_arrows == 'Adjust light hue and saturation' }}"
+                            value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
                       - alias: "Check if light(s) to be controlled are set"
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
@@ -1114,7 +1121,7 @@ actions:
                                     {%- set current_light = var_first_light_on -%}
                                   {%- endif -%}
 
-                                  {%- if event_buttons_arrows == "Adjust light hue and saturation" -%}
+                                  {%- if event_buttons_arrows == "hue_saturation" -%}
                                     {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
                                     {%- set current_hue = hue_sat_values[0] -%}
                                     {%- set current_sat = hue_sat_values[1] -%}
@@ -1124,7 +1131,7 @@ actions:
 
                                     {{ dict( **{ 'hs_color' : [ updated_hue, current_sat ] } ) }}
 
-                                  {%- elif event_buttons_arrows == "Adjust color temperature" -%}
+                                  {%- elif event_buttons_arrows == "temperature" -%}
                                     {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
                                     {%- set min_temp = var_kelvin_temp_min | float -%}
                                     {%- set max_temp = var_kelvin_temp_max | float -%}
@@ -1146,5 +1153,5 @@ actions:
                 conditions:
                   - alias: "Check if correct action choice is selected"
                     condition: template
-                    value_template: "{{ var_event_buttons_arrows == 'Custom action' }}"
+                    value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_right_hold
