@@ -33,7 +33,9 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [SAMSUNG 970 EVO Plus SSD 1TB NVMe M.2](https://www.amazon.com/dp/B07MFZY2F2/)
 * [ESPHome Bluetooth Proxy](https://esphome.io/components/bluetooth_proxy.html)
 * [Home Assistant Connect ZBT-1 (Sky Connect)](https://www.home-assistant.io/connectzbt1/)
-* [Home Assistant Connect ZBT-2 (Sky Connect)](https://www.home-assistant.io/connect/zbt-2)
+* [Home Assistant Connect ZBT-2](https://www.home-assistant.io/connect/zbt-2)
+* [Home Assistant Connect ZWA-2](https://www.home-assistant.io/connect/zwa-2/)
+* [Home Assistant Preview Edition](https://www.home-assistant.io/voice-pe/)
 
 <hr>
 
@@ -68,6 +70,7 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Shelly 1 Relay Switch](https://www.amazon.com/gp/product/B07NQNLDTD/)
 * [Shelly 2.5 Relay Switch](https://www.amazon.com/gp/product/B07Z623J8Z/)
 * Aqara FP1 Presence Sensor
+* [Aqara FP2 Presence Sensor](https://www.amazon.com/gp/product/B0BXWZMQJ3/)
 
 ##### Remotes
 * [Aqara Wireless Mini Switch](https://www.amazon.com/gp/product/B07D19YXND/)
@@ -117,7 +120,6 @@ Make sure that you :star: this repo, so that you can get updates right in your n
 * [Shelly](https://www.home-assistant.io/integrations/shelly)
 * [Switchbot](https://www.home-assistant.io/integrations/switchbot)
 * [UniFi Protect](https://www.home-assistant.io/integrations/unifiprotect)
-* [WLED](https://www.home-assistant.io/integrations/wled)
 * [Zigbee2MQTT](https://www.zigbee2mqtt.io/)
 * [Zigbee Home Automation](https://www.home-assistant.io/integrations/zha/)
 
