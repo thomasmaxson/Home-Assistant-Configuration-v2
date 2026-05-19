@@ -63,14 +63,9 @@ blueprint:
         delay_occupancy_detect:
           name: Occupancy Detected Delay
           description: The amount of time to wait until occupancy detected actions are triggered.
-          default: 0
+          default: "00:00:00"
           selector:
-            number:
-              mode: box
-              unit_of_measurement: seconds
-              min: 0.0
-              max: 3600.0
-              step: 1.0
+            duration:
 
         action_occupancy_clear:
           name: Occupancy Cleared Action(s)
@@ -82,14 +77,9 @@ blueprint:
         delay_occupancy_clear:
           name: Occupancy Cleared Delay
           description: The amount of time to wait until occupancy cleared actions are triggered.
-          default: 0
+          default: "00:00:00"
           selector:
-            number:
-              mode: box
-              unit_of_measurement: seconds
-              min: 0.0
-              max: 3600.0
-              step: 1.0
+            duration:
 
 variables:
   var_enable_door_action: !input enable_door_action
@@ -102,6 +92,11 @@ variables:
   var_delay_occupancy_clear: !input delay_occupancy_clear
 
 triggers:
+  - alias: "Check every 15 minutes"
+    platform: time_pattern
+    minutes: "/15"
+    id: trigger_time_check
+
   - alias: "When door is OPENED"
     trigger: state
     entity_id: !input sensor_door
@@ -121,10 +116,7 @@ triggers:
     entity_id: !input sensor_occupancy
     from: "off"
     to: "on"
-    for:
-      hours: 0
-      minutes: 0
-      seconds: !input delay_occupancy_detect
+    for: !input delay_occupancy_detect
     id: trigger_motion_detect
 
   - alias: "When motion is CLEARED"
@@ -132,10 +124,7 @@ triggers:
     entity_id: !input sensor_occupancy
     from: "on"
     to: "off"
-    for:
-      hours: 0
-      minutes: 0
-      seconds: !input delay_occupancy_clear
+    for: !input delay_occupancy_clear
     id: trigger_motion_clear
 
 actions:
@@ -171,10 +160,6 @@ actions:
               - alias: "Check if trigged by event"
                 condition: trigger
                 id: trigger_motion_detect
-              - condition: template
-                value_template: "{{ trigger.from_state.state == 'off' }}"
-              - condition: template
-                value_template: "{{ trigger.to_state.state == 'on' }}"
               - alias: "Check if custom action is defined"
                 condition: template
                 value_template: "{{ var_action_occupancy_detect is defined }}"
@@ -187,10 +172,27 @@ actions:
               - alias: "Check if trigged by event"
                 condition: trigger
                 id: trigger_motion_clear
-              - condition: template
-                value_template: "{{ trigger.from_state.state == 'on' }}"
-              - condition: template
-                value_template: "{{ trigger.to_state.state == 'off' }}"
+              - alias: "Check if custom action is defined"
+                condition: template
+                value_template: "{{ var_action_occupancy_clear is defined }}"
+        sequence: !input action_occupancy_clear
+
+      - alias: "Actions to perform when TIME CHECK"
+        conditions:
+          - condition: and
+            conditions:
+              - alias: "Check if trigged by event"
+                condition: trigger
+                id: trigger_time_check
+              - alias: "Check if occupancy is cleared for set duration"
+                condition: state
+                entity_id: !input sensor_occupancy
+                state:
+                  - "off"
+                for:
+                  hours: 0
+                  minutes: 5
+                  seconds: 0
               - alias: "Check if custom action is defined"
                 condition: template
                 value_template: "{{ var_action_occupancy_clear is defined }}"
