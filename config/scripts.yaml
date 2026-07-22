@@ -403,7 +403,7 @@ amazon_echo_announcement:
                       data:
                         scene_id: alexa_media_state_bedroom_1
                         snapshot_entities:
-                          - media_player.echo_kitchen
+                          - media_player.echo_dot_bedroom_1
                     - alias: Set Volume for Announcement
                       action: media_player.volume_set
                       data:
@@ -467,7 +467,7 @@ amazon_echo_announcement:
                       data:
                         scene_id: alexa_media_state_bedroom_2
                         snapshot_entities:
-                          - media_player.echo_kitchen
+                          - media_player.echo_dot_bedroom_2
                     - alias: Set Volume for Announcement
                       action: media_player.volume_set
                       data:
@@ -531,7 +531,7 @@ amazon_echo_announcement:
                       data:
                         scene_id: alexa_media_state_bedroom_3
                         snapshot_entities:
-                          - media_player.echo_kitchen
+                          - media_player.echo_dot_bedroom_3
                     - alias: Set Volume for Announcement
                       action: media_player.volume_set
                       data:
@@ -595,7 +595,7 @@ amazon_echo_announcement:
                       data:
                         scene_id: alexa_media_state_bedroom_4
                         snapshot_entities:
-                          - media_player.echo_dot_dining_room
+                          - media_player.echo_dot_bedroom_4
                     - alias: Set Volume for Announcement
                       action: media_player.volume_set
                       data:
@@ -1392,12 +1392,12 @@ lights_security_all_on:
         color: Red
         effect: Fast Blink
         duration: Forever
-        brightness_level: 100
-        entity_ids:
-          - light.bedroom_1_ceiling_fan_switch
-          - light.bedroom_2_ceiling_fan_switch
-          - light.bedroom_3_ceiling_fan_switch
-          - light.bedroom_4_ceiling_fan_switch
+      level: 100
+      entity_ids:
+        - light.bedroom_1_ceiling_fan_switch
+        - light.bedroom_2_ceiling_fan_switch
+        - light.bedroom_3_ceiling_fan_switch
+        - light.bedroom_4_ceiling_fan_switch
     - alias: CREATE Scene – Household Lights
       action: scene.create
       metadata: {}
@@ -1622,3 +1622,26 @@ security_lights_restore:
           - scene.snapshot_house_security_recording
   alias: Security, RESTORE
   description: ""
+toggle_cover_tilt_position:
+  alias: Toggle Blinds (Closed Up / Fully Open)
+  description:
+    Toggles a cover between fully open (50%) and closed tilting upward
+    (100%).
+  fields:
+    target_entity:
+      name: Target Entity
+      description: The entity ID of the cover to control.
+      example: cover.bedroom_1_blinds
+      required: true
+      selector:
+        entity:
+          domain: cover
+  sequence:
+    - action: cover.set_cover_tilt_position
+      target:
+        entity_id: "{{ target_entity }}"
+      data:
+        tilt_position:
+          "{% set current_tilt = state_attr(target_entity, 'current_tilt_position')
+          | int(0) %} {% if current_tilt >= 95 %}\n  50\n{% else %}\n  100\n{% endif
+          %}\n"

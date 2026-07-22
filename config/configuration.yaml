@@ -15,10 +15,15 @@ homeassistant:
     - /config
     - /config/www/snapshots
     - /config/www/chime_tones
+    - /config/www/bubble
 
 # If you remove this, YOU WILL HAVE A BAD TIME
 # Home Assistant will not run properly on restart
 default_config:
+
+# Purge recorder data older than 10 days
+recorder:
+  purge_keep_days: 10
 
 automation: !include automations.yaml
 scene: !include scenes.yaml

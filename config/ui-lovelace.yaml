@@ -7,7 +7,7 @@ views:
     background: center / cover no-repeat url( '/local/uploads/background.png' ) fixed
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 0.8vw
+      grid-row-gap: 0.4vw
       grid-column-gap: 2vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
@@ -47,7 +47,7 @@ views:
             ".  overflow3   overflow4  ."
             ".  modalSys    modalConf  ."
         "(max-width: 992px)":
-          grid-row-gap: 0.5vw
+          grid-row-gap: 0.25vw
           grid-column-gap: 3vw
           grid-auto-rows: min-content
           grid-template-columns: 1vw repeat( 6, 1fr ) 1vw
@@ -606,7 +606,7 @@ views:
                             tap_action:
                               action: none
                             entities:
-                              - entity: sensor.temperature_refrigerator
+                              - entity: sensor.temperature_refrigerator_custom
                           - type: custom:mini-graph-card
                             name: Freezer
                             show:
@@ -847,6 +847,9 @@ views:
                               - type: custom:mushroom-light-card
                                 name: Above Range
                                 entity: switch.plug_kitchen_cabinets_upper_range
+                              - type: custom:mushroom-light-card
+                                name: Refigerator Backup
+                                entity: switch.kitchen_plug_refrigerator
                               - type: custom:mushroom-light-card
                                 name: Tablet Power
                                 entity: light.tablet_plug
@@ -1796,24 +1799,6 @@ views:
                               - entity: >-
                                   input_boolean.bedroom_3_automation_allow_occupancy
                                 name: Allow Room Occupancy Automations
-      - type: custom:button-card
-        view_layout:
-          grid-area: tileBdr4
-        template: room_tile
-        name: Tom's Office
-        entity: light.bedroom_4_group_lights_all
-        triggers_update:
-          - cover.blinds_bedroom_4
-          - light.bedroom_4_group_lights_all
-          - binary_sensor.door_bedroom_4
-        variables:
-          path: "#details-bedroom-4"
-          icon_on: mdi:desk-lamp-on
-          icon_off: mdi:desk-lamp
-          data_blinds: cover.blinds_bedroom_4
-          data_door: binary_sensor.door_bedroom_4
-          data_lightOn: light.bedroom_4_group_occupancy_lights
-          data_temperature: sensor.temperature_bedroom_4
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr4
@@ -3255,8 +3240,7 @@ views:
 
 
                             #states > div:nth-child( 9 ), #states >
-                            div:nth-child( 11 ){ padding-left: 45px
-                            !important;}
+                            div:nth-child( 11 ){ padding-left: 45px !important;}
                         entities:
                           - type: section
                             label: Run Daily at
@@ -5307,7 +5291,7 @@ views:
               left: 67%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
-            entity: sensor.temperature_refrigerator
+            entity: sensor.temperature_refrigerator_custom
             state_color: false
             tap_action:
               action: more-info
@@ -5911,7 +5895,7 @@ views:
               left: 36%
               color: rgb( var( --maxson-floorplan--color-temperature-text ) )
           - type: state-label
-            entity: sensor.temperature_refrigerator
+            entity: sensor.temperature_refrigerator_custom
             state_color: false
             tap_action:
               action: more-info
@@ -8725,14 +8709,6 @@ views:
                     icon_type: battery_level
                 - type: custom:button-card
                   template: entity_card
-                  name: For Garage Fan
-                  entity: sensor.remote_garage_for_garage_fan_battery
-                  variables:
-                    data_entity: sensor.remote_garage_for_garage_fan_battery
-                    data_type: battery
-                    icon_type: battery_level
-                - type: custom:button-card
-                  template: entity_card
                   name: For Living Room Lights
                   entity: sensor.demo_remote_hue_tap_dial_battery
                   variables:
@@ -11182,11 +11158,18 @@ decluttering_templates:
       bg_opacity: "90"
       bg_blur: "6"
       styles: |-
-        #root {
+        #root { 
           border: var( --popup--border-width ) solid var( --popup--border-color ) !important;
           background-color: var( --popup--background-color ) !important;
           height: 100% !important;
         }
+      card_mod:
+        style: |
+          :host { 
+            --layout-margin: 0;
+
+            line-height: 0;
+          }
       button_type: name
       sub_button:
         main: []

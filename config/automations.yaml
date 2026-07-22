@@ -301,7 +301,6 @@
                           metadata: {}
                           data:
                             transition: 120
-                            brightness_pct: 40
                           target:
                             entity_id: light.living_room_corner_lamp
                       enabled: true
@@ -338,6 +337,7 @@
                       data: {}
                       target:
                         entity_id: light.christmas_tree
+                  enabled: false
     - delay:
         hours: 0
         minutes: 5
@@ -1472,10 +1472,16 @@
               - light.front_yard_garden_lights
         - alias: If Residents are HOME or Guests are HOME
           if:
-            - condition: state
-              entity_id: sensor.any_resident_home
-              state: Home
-              alias: If Any Residents are Home
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: sensor.any_resident_home
+                  state: Home
+                  alias: If Any Residents are Home
+                - condition: state
+                  entity_id: automation.guest_home_away_room_occupancy_status
+                  state:
+                    - "on"
           then:
             - parallel:
                 - alias: OPEN Kitchen Blinds
@@ -1532,7 +1538,7 @@
     path: maxson/remote_aqara_mini_switch.yaml
     input:
       remote: 47d5b025f28a07acda4690b87b00c9ed
-      event_button_press_single: Custom action
+      event_button_press_single: action
       action_button_press_single:
         - action: cover.open_cover
           alias: OPEN the Garage Door
@@ -1540,7 +1546,7 @@
           data: {}
           target:
             entity_id: cover.garage_door
-      event_button_press_double: Custom action
+      event_button_press_double: action
       action_button_press_double:
         - action: cover.close_cover
           alias: CLOSE the Garage Door
@@ -1588,7 +1594,7 @@
         - light.bedroom_4_lightstrip
       event_buttons_brightness: Adjust brightness
       brightness_step: 20
-      event_buttons_arrows: Custom action
+      event_buttons_arrows: action
       action_button_press_left_single:
         - action: input_select.select_previous
           metadata: {}
@@ -1644,26 +1650,6 @@
                   - switch.circadian_lighting_light_accent_lamp_left_circadian
                   - switch.circadian_lighting_light_accent_lamp_right_circadian
       event_button_power: toggle
-- id: "1727117139279"
-  alias: Garage, Wall Fan
-  description: Control the fan in the garage via a IKEA TRADFRI 2 button remote.
-  use_blueprint:
-    path: maxson/remote_ikea_somrig_rodret_tradfri_2_button.yaml
-    input:
-      remote: 773fcd7dc85227c001175b0744486dfa
-      event_button_press_on_single:
-        - action: light.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.garage_fan
-      event_button_press_off_single:
-        - action: light.turn_off
-          metadata: {}
-          data: {}
-          target:
-            entity_id: light.garage_fan
-      event_button_type: action
 - id: "1727129555803"
   alias: Bedroom 1, Closet Hallway
   description: ""
@@ -1976,102 +1962,7 @@
   mode: queued
   max: 10
 - id: "1727460698990"
-  alias: Bedroom 2, Door Open/Close
-  description: ""
-  triggers:
-    - entity_id:
-        - binary_sensor.door_bedroom_2
-      from: "off"
-      to: "on"
-      id: Door Did OPEN
-      trigger: state
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 0
-    - entity_id:
-        - binary_sensor.door_bedroom_2
-      from: "on"
-      to: "off"
-      id: Door Did CLOSE
-      trigger: state
-  conditions: []
-  actions:
-    - alias: Room Activity Actions
-      choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - Door Did OPEN
-          sequence:
-            - action: script.push_notification_to_ios_devices
-              metadata: {}
-              data:
-                send_to:
-                  - jessica
-                  - thomas
-                message: The Guest Bedroom door was opened.
-                notification_type: type_activity_door_interior
-                interruption_level: active
-                notification_actions:
-                  - action: OPEN_APP_UNIFI_PROTECT
-                    title: Open Camera App
-                    url: unifi-protect://
-                    icon: sfsymbols:video
-                  - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                    title: Snooze
-                    icon: sfsymbols:clock
-            - alias: If Allowed Run Automations
-              if:
-                - condition: state
-                  entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-                  state: "on"
-              then:
-                - alias: Turn ON, Immediately
-                  action: light.turn_on
-                  metadata: {}
-                  data: {}
-                  target:
-                    entity_id: light.bedroom_2_group_occupancy_lights
-          alias: When Door is OPENED
-        - conditions:
-            - condition: trigger
-              id:
-                - Door Did CLOSE
-          sequence:
-            - action: script.push_notification_to_ios_devices
-              metadata: {}
-              data:
-                send_to:
-                  - jessica
-                  - thomas
-                message: The Guest Bedroom door was closed.
-                notification_type: type_activity_door_interior
-                interruption_level: active
-                notification_actions:
-                  - action: OPEN_APP_UNIFI_PROTECT
-                    title: Open Camera App
-                    url: unifi-protect://
-                    icon: sfsymbols:video
-                  - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                    title: Snooze
-                    icon: sfsymbols:clock
-            - alias: If Allowed Run Automations
-              if:
-                - condition: state
-                  entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-                  state: "on"
-              then:
-                - alias: Turn OFF, Immediately
-                  action: light.turn_off
-                  data: {}
-                  target:
-                    entity_id: light.bedroom_2_group_lights_all
-          alias: When Door is CLOSED
-  mode: restart
-  max: 10
-- id: "1727465525056"
-  alias: Bedroom 1, Door Open/Close
+  alias: Bedroom 1, Door Open/Close – OLD
   description: ""
   triggers:
     - entity_id:
@@ -2122,12 +2013,12 @@
                   entity_id: input_boolean.bedroom_1_automation_allow_occupancy
                   state: "on"
               then:
-                - action: light.turn_on
+                - alias: Turn ON, Immediately
+                  action: light.turn_on
                   metadata: {}
                   data: {}
                   target:
                     entity_id: light.bedroom_1_group_occupancy_lights
-                  alias: Turn ON, Immediately
           alias: When Door is OPENED
         - conditions:
             - condition: trigger
@@ -2157,17 +2048,16 @@
                   entity_id: input_boolean.bedroom_1_automation_allow_occupancy
                   state: "on"
               then:
-                - action: light.turn_off
-                  target:
-                    entity_id:
-                      - light.bedroom_1_group_lights_all
+                - alias: Turn OFF, Immediately
+                  action: light.turn_off
                   data: {}
-                  alias: Turn OFF, Immediately
+                  target:
+                    entity_id: light.bedroom_1_group_lights_all
           alias: When Door is CLOSED
-  mode: queued
+  mode: restart
   max: 10
 - id: "1727466621446"
-  alias: Temperature Detection, Refrigerator
+  alias: Refrigerator – Temperature Alert & Announcements
   description: ""
   triggers:
     - entity_id:
@@ -2219,7 +2109,7 @@
               | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
               allowed.
   mode: queued
-  max: 10
+  max: 0
 - id: "1727539745399"
   alias: iOS Notification Events
   description: ""
@@ -2989,6 +2879,14 @@
                 entity_id:
                   - input_boolean.reminder_dishwasher_complete
               data: {}
+            - action: script.push_notification_to_ios_devices
+              metadata: {}
+              data:
+                send_to:
+                  - thomas
+                interruption_level: active
+                notification_type: type_info
+                message: The dishes are clean and are ready to be put away.
             - if:
                 - condition: time
                   after: 07:00:00
@@ -3371,72 +3269,8 @@
             title: Snooze
             icon: sfsymbols:clock
   mode: single
-- id: "1729641293123"
-  alias: Bedroom 4, Blinds Open/Close
-  description: ""
-  triggers:
-    - trigger: state
-      entity_id:
-        - binary_sensor.door_bedroom_4
-      from: "off"
-      to: "on"
-      id: Door did OPEN
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 30
-    - trigger: state
-      entity_id:
-        - binary_sensor.door_bedroom_4
-      from: "on"
-      to: "off"
-      id: Door did CLOSE
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-  conditions:
-    - condition: state
-      entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-      state: "on"
-  actions:
-    - choose:
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - Door did OPEN
-                - condition: time
-                  after: 00:00:00
-                  before: "15:59:59"
-          sequence:
-            - action: cover.open_cover_tilt
-              target:
-                entity_id:
-                  - cover.blinds_bedroom_4
-              data: {}
-          alias: OPEN Blinds
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - Door did CLOSE
-                - condition: time
-                  after: "16:00:00"
-                  before: "23:59:59"
-          sequence:
-            - action: cover.set_cover_tilt_position
-              target:
-                entity_id:
-                  - cover.blinds_bedroom_4
-              data:
-                tilt_position: 100
-          alias: CLOSE Blinds
-  mode: single
 - id: "1729642126008"
-  alias: Bedroom 1, Closet Doors Open/Close
+  alias: Bedroom 1, Closet Doors Open/Close – OLD
   description: ""
   triggers:
     - entity_id:
@@ -3561,158 +3395,7 @@
                 entity_id: light.closet_hallway_light_hers
           alias: When Her Closet Door was left OPEN
   mode: queued
-  max: 10
-- id: "1730055755910"
-  alias: Bedroom 4, Room Occupancy
-  description: ""
-  use_blueprint:
-    path: maxson/room_management_via_occupancy.yaml
-    input:
-      sensor_door: binary_sensor.door_bedroom_4
-      sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
-      enable_door_action:
-        - alias: Maybe send notification when door is opened
-          action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-              - thomas
-              - jessica
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            message: Tom's Office door was opened.
-            notification_actions:
-              notification_actions:
-                - action: OPEN_APP_UNIFI_PROTECT
-                  title: Open Camera App
-                  url: unifi-protect://
-                  icon: sfsymbols:video
-                - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                  title: Snooze
-                  icon: sfsymbols:clock
-      disable_door_action:
-        - alias: Maybe send notification when door is closed
-          action: script.push_notification_to_ios_devices
-          metadata: {}
-          data:
-            send_to:
-              - thomas
-              - jessica
-            notification_type: type_activity_door_interior
-            interruption_level: active
-            message: Tom's Office door was closed.
-            notification_actions:
-              notification_actions:
-                - action: OPEN_APP_UNIFI_PROTECT
-                  title: Open Camera App
-                  url: unifi-protect://
-                  icon: sfsymbols:video
-                - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                  title: Snooze
-                  icon: sfsymbols:clock
-      delay_occupancy_detect: 0
-      action_occupancy_detect:
-        - alias: Check if can run custom actions
-          if:
-            - alias: Ensure all events are true
-              condition: and
-              conditions:
-                - condition: state
-                  entity_id: group.residents
-                  state:
-                    - home
-                - alias: Confirm occupancy automations are allowed
-                  condition: state
-                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-                  state: "on"
-                - condition: state
-                  entity_id: light.bedroom_4_group_occupancy_lights
-                  state: "off"
-                - alias: Confirm generated scene exists
-                  condition: template
-                  value_template:
-                    "{{ states.scene.bedroom_4_occupancy_state_management
-                    != None }}"
-          then:
-            - alias: Activate generated scene
-              action: scene.turn_on
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - scene.bedroom_4_occupancy_state_management
-            - delay:
-                hours: 0
-                minutes: 0
-                seconds: 5
-                milliseconds: 0
-            - alias: Delete generated scene
-              action: scene.delete
-              metadata: {}
-              data: {}
-              target:
-                entity_id: scene.bedroom_4_occupancy_state_management
-          else:
-            - alias: Turn on occupancy lights
-              action: light.turn_on
-              metadata: {}
-              target:
-                entity_id: light.bedroom_4_group_occupancy_lights
-              data: {}
-      delay_occupancy_clear: 60
-      action_occupancy_clear:
-        - alias: Check if can run custom actions
-          if:
-            - condition: and
-              conditions:
-                - condition: state
-                  entity_id: group.residents
-                  state:
-                    - home
-                - alias: Confirm occupancy automations are allowed
-                  condition: state
-                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
-                  state: "on"
-                - alias: Confirm generated scene exists
-                  condition: template
-                  value_template:
-                    "{{ states.scene.bedroom_4_occupancy_state_management
-                    == None }}"
-          then:
-            - alias: Generate scene
-              action: scene.create
-              metadata: {}
-              data:
-                scene_id: bedroom_4_occupancy_state_management
-                snapshot_entities:
-                  - fan.bedroom_4_ceiling
-                  - light.bedroom_4_ceiling_fan
-                  - light.bedroom_4_accent_lamp_left
-                  - light.bedroom_4_accent_lamp_right
-                  - light.bedroom_4_lightstrip
-                  - light.bedroom_4_tie_fighter_lamp
-            - delay:
-                hours: 0
-                minutes: 0
-                seconds: 3
-                milliseconds: 0
-            - alias: Turn off fan
-              action: fan.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id: fan.bedroom_4_ceiling
-            - alias: Turn off lights
-              action: light.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - light.bedroom_4_ceiling_fan
-                  - light.bedroom_4_accent_lamp_left
-                  - light.bedroom_4_accent_lamp_right
-                  - light.bedroom_4_lightstrip
-                  - light.bedroom_4_tie_fighter_lamp
+  max: 0
 - id: "1730055951025"
   alias: Bedroom 3, Room Occupancy
   description: ""
@@ -3733,14 +3416,13 @@
             interruption_level: active
             message: Jess' Office door was opened.
             notification_actions:
-              notification_actions:
-                - action: OPEN_APP_UNIFI_PROTECT
-                  title: Open Camera App
-                  url: unifi-protect://
-                  icon: sfsymbols:video
-                - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                  title: Snooze
-                  icon: sfsymbols:clock
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
       disable_door_action:
         - alias: Maybe send notification when door is closed
           action: script.push_notification_to_ios_devices
@@ -3753,15 +3435,13 @@
             interruption_level: active
             message: Jess' Office door was closed.
             notification_actions:
-              notification_actions:
-                - action: OPEN_APP_UNIFI_PROTECT
-                  title: Open Camera App
-                  url: unifi-protect://
-                  icon: sfsymbols:video
-                - action: SNOOZE_HOUSEHOLD_ACTIVITY
-                  title: Snooze
-                  icon: sfsymbols:clock
-      delay_occupancy_detect: 0
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
       action_occupancy_detect:
         - alias: Check if can run custom actions
           if:
@@ -3779,38 +3459,42 @@
                 - condition: state
                   entity_id: light.bedroom_3_group_occupancy_lights
                   state: "off"
-                - alias: Confirm generated scene exists
-                  condition: template
+          then:
+            - if:
+                - condition: template
                   value_template:
                     "{{ states.scene.bedroom_3_occupancy_state_management
                     != None }}"
-          then:
-            - alias: Activate generated scene
-              action: scene.turn_on
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - scene.bedroom_3_occupancy_state_management
-            - delay:
-                hours: 0
-                minutes: 0
-                seconds: 5
-                milliseconds: 0
-            - alias: Delete generated scene
-              action: scene.delete
-              metadata: {}
-              data: {}
-              target:
-                entity_id: scene.bedroom_3_occupancy_state_management
-          else:
-            - alias: Turn on occupancy lights
-              action: light.turn_on
-              metadata: {}
-              target:
-                entity_id: light.bedroom_3_group_occupancy_lights
-              data: {}
-      delay_occupancy_clear: 60
+              then:
+                - alias: Activate generated scene
+                  action: scene.turn_on
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - scene.bedroom_3_occupancy_state_management
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 5
+                    milliseconds: 0
+                - alias: Delete generated scene
+                  action: scene.delete
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: scene.bedroom_3_occupancy_state_management
+              else:
+                - alias: Turn on occupancy lights
+                  action: light.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: light.bedroom_3_group_occupancy_lights
+                  data: {}
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -3824,11 +3508,6 @@
                   condition: state
                   entity_id: input_boolean.bedroom_3_automation_allow_occupancy
                   state: "on"
-                - alias: Confirm generated scene exists
-                  condition: template
-                  value_template:
-                    "{{ states.scene.bedroom_3_occupancy_state_management
-                    == None }}"
           then:
             - alias: Generate scene
               action: scene.create
@@ -5122,7 +4801,7 @@
                 notification_type: type_critical
                 interruption_level: critical
                 subtitle: Warning
-                message: Water has been detected in the Guest Bathroom behind the toilet.
+                message: Water has been detected in the Half Bathroom behind the toilet.
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -5143,7 +4822,7 @@
               metadata: {}
               data:
                 title: Warning
-                message: Water has been detected in the Guest Bathroom behind the toilet.
+                message: Water has been detected in the Half Bathroom behind the toilet.
 - id: "1737516955801"
   alias: Water Leak, Toilet - Guest Bathroom
   description: ""
@@ -5301,7 +4980,7 @@
                 title: Warning
                 message: Water has been detected in the Bar under the wine cooler.
 - id: "1737936432191"
-  alias: Temperature Detection, Freezer
+  alias: Freezer – Temperature Alert & Announcements
   description: ""
   triggers:
     - entity_id:
@@ -5692,7 +5371,7 @@
     path: maxson/remote_philips_hue_dimmer.yaml
     input:
       remote: b3eb7611f388f72165a6b0e2f915af85
-      event_button_top: Custom action
+      event_button_top: action
       action_button_press_top_single:
         - if:
             - condition: state
@@ -5718,7 +5397,7 @@
                     entity_id:
                       - switch.sync_box_light_sync
               alias: Toggle Hue Sync Box Light Sync
-      event_buttons_brightness: Custom action
+      event_buttons_brightness: action
       action_button_press_raise_single:
         - if:
             - condition: state
@@ -5741,7 +5420,7 @@
                 entity_id: number.sync_box_brightness
               data:
                 amount: 5
-      event_button_bottom: Custom action
+      event_button_bottom: action
       action_button_press_bottom_single:
         - if:
             - condition: state
@@ -5941,55 +5620,6 @@
                 option: "Off"
               target:
                 entity_id: input_select.status_dehumidifier_options
-  mode: single
-- id: "1756206763098"
-  alias: Duration Notification Test
-  description: ""
-  triggers:
-    - trigger: state
-      entity_id:
-        - light.living_room_corner_lamp
-      from: unavailable
-      to: unknown
-  conditions: []
-  actions:
-    - variables:
-        var_start_timestamp: "{{ now().timestamp() }}"
-        var_start_time: "{{ now().strftime( '%I:%M %p' ) }}"
-        var_start_date: "{{ now().strftime( '%m/%d/%Y' ) }}"
-    - delay:
-        hours: 0
-        minutes: 2
-        seconds: 0
-        milliseconds: 0
-    - variables:
-        var_end_timestamp: "{{ now().timestamp() }}"
-        var_duration:
-          "{{ ( var_end_timestamp ) - ( var_start_timestamp ) | relative_time
-          | int }}"
-        var_duration_days: "{{ ( var_duration // 86400 ) | int }}"
-        var_duration_minutes: "{{ ( ( var_duration % 3600 ) // 60 ) | int }}"
-        var_duration_hours: "{{ ( ( var_duration % 86400 ) // 3600 ) | int }}"
-        var_output_days:
-          "{{ ' {} days'.format( var_duration_days ) if var_duration_days
-          > 0 else '' }}"
-        var_output_hours:
-          "{{ ' {} hours'.format( var_duration_hours ) if var_duration_hours
-          > 0 else '' }}"
-        var_output_minutes:
-          "{{ ' {} minutes'.format( var_duration_minutes ) if var_duration_minutes
-          > 0 else '' }}"
-        var_output_duration:
-          "{{ var_output_days + var_output_hours + var_output_minutes
-          }}"
-    - action: persistent_notification.create
-      metadata: {}
-      data:
-        title: Time Count Test
-        message:
-          "Days: {{ var_duration_days }} <br> <br>Hours: {{ var_duration_hours
-          }} <br> <br>Minutes: {{ var_duration_minutes }} <br> <br>This process ran
-          for {{ var_output_duration }}."
   mode: single
 - id: "1756510816943"
   alias: Living Room, Light - Primary Couch
@@ -6220,70 +5850,6 @@
               data: {}
               target:
                 entity_id: light.christmas_tree
-- id: "1764179007163"
-  alias: Bedroom 3, Blinds Open/Close
-  description: ""
-  triggers:
-    - trigger: state
-      entity_id:
-        - binary_sensor.door_bedroom_3
-      from: "off"
-      to: "on"
-      id: Door did OPEN
-      for:
-        hours: 0
-        minutes: 0
-        seconds: 30
-    - trigger: state
-      entity_id:
-        - binary_sensor.door_bedroom_3
-      from: "on"
-      to: "off"
-      id: Door did CLOSE
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-  conditions:
-    - condition: state
-      entity_id: input_boolean.bedroom_3_automation_allow_occupancy
-      state: "on"
-  actions:
-    - choose:
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - Door did OPEN
-                - condition: time
-                  after: 00:00:00
-                  before: "15:59:59"
-          sequence:
-            - action: cover.open_cover_tilt
-              target:
-                entity_id:
-                  - cover.blinds_bedroom_3
-              data: {}
-          alias: OPEN Blinds
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - Door did CLOSE
-                - condition: time
-                  after: "16:00:00"
-                  before: "23:59:59"
-          sequence:
-            - action: cover.set_cover_tilt_position
-              target:
-                entity_id:
-                  - cover.blinds_bedroom_3
-              data:
-                tilt_position: 100
-          alias: CLOSE Blinds
-  mode: single
 - id: "1764805411788"
   alias: Bedroom 1, Night Light
   description: ""
@@ -6440,7 +6006,7 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
         - conditions:
             - condition: trigger
               id:
@@ -6450,5 +6016,590 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
+  mode: single
+- id: "1774020964484"
+  alias: Security Control, All Home (from Bedroom 1, His)
+  description:
+    Manage house lights and devices, controls camera privacy and recording
+    modes.
+  use_blueprint:
+    path: maxson/remote_ikea_tradfri_1_button.yaml
+    input:
+      remote: 36836f88c9425a45649d5dfee57e05e4
+      light_press_single: []
+      light_press_double: []
+      event_button_press_single: action
+      action_button_press_single:
+        - action: script.turn_on
+          metadata: {}
+          target:
+            entity_id: script.security_generate
+          data: {}
+          alias: Run Script, Security ACTIVATE
+      event_button_press_double: action
+      action_button_press_double:
+        - alias: Run Script, Security RESTORE
+          action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: script.security_restore
+- id: "1774793477935"
+  alias: Bedroom 4, Room Occupancy
+  description: ""
+  use_blueprint:
+    path: maxson/room_management_via_occupancy.yaml
+    input:
+      sensor_door: binary_sensor.door_bedroom_4
+      sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
+      enable_door_action:
+        - alias: Maybe send notification when door is opened
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Tom's Office door was opened.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      disable_door_action:
+        - alias: Maybe send notification when door is closed
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Tom's Office door was closed.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      action_occupancy_detect:
+        - alias: Check if can run custom actions
+          if:
+            - alias: Ensure all events are true
+              condition: and
+              conditions:
+                - condition: state
+                  entity_id: group.residents
+                  state:
+                    - home
+                - alias: Confirm occupancy automations are allowed
+                  condition: state
+                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                  state: "on"
+                - condition: state
+                  entity_id: light.bedroom_4_group_occupancy_lights
+                  state: "off"
+          then:
+            - if:
+                - condition: template
+                  value_template:
+                    "{{ states.scene.bedroom_4_occupancy_state_management
+                    != None }}"
+              then:
+                - alias: Activate generated scene
+                  action: scene.turn_on
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - scene.bedroom_4_occupancy_state_management
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 5
+                    milliseconds: 0
+                - alias: Delete generated scene
+                  action: scene.delete
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: scene.bedroom_4_occupancy_state_management
+              else:
+                - alias: Turn on occupancy lights
+                  action: light.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: light.bedroom_4_group_occupancy_lights
+                  data: {}
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      action_occupancy_clear:
+        - alias: Check if can run custom actions
+          if:
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: group.residents
+                  state:
+                    - home
+                - alias: Confirm occupancy automations are allowed
+                  condition: state
+                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                  state: "on"
+          then:
+            - alias: Generate scene
+              action: scene.create
+              metadata: {}
+              data:
+                scene_id: bedroom_4_occupancy_state_management
+                snapshot_entities:
+                  - fan.bedroom_4_ceiling
+                  - light.bedroom_4_ceiling_fan
+                  - light.bedroom_4_accent_lamp_left
+                  - light.bedroom_4_accent_lamp_right
+                  - light.bedroom_4_lightstrip
+                  - light.bedroom_4_tie_fighter_lamp
+            - delay:
+                hours: 0
+                minutes: 0
+                seconds: 3
+                milliseconds: 0
+            - alias: Turn off fan
+              action: fan.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: fan.bedroom_4_ceiling
+            - alias: Turn off lights
+              action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id:
+                  - light.bedroom_4_ceiling_fan
+                  - light.bedroom_4_accent_lamp_left
+                  - light.bedroom_4_accent_lamp_right
+                  - light.bedroom_4_lightstrip
+                  - light.bedroom_4_tie_fighter_lamp
+- id: "1776429120813"
+  alias: Bedroom 2, Room Occupancy
+  description: ""
+  use_blueprint:
+    path: maxson/room_management_via_occupancy.yaml
+    input:
+      sensor_door: binary_sensor.door_bedroom_2
+      sensor_occupancy: binary_sensor.bedroom_2_group_all_occupancy
+      enable_door_action:
+        - alias: Maybe send notification when door is opened
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Guest Bedroom door was opened.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      disable_door_action:
+        - alias: Maybe send notification when door is closed
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Guest Bedroom door was closed.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      action_occupancy_detect:
+        - alias: Check if can run custom actions
+          if:
+            - alias: Ensure all events are true
+              condition: and
+              conditions:
+                - condition: state
+                  entity_id: group.residents
+                  state:
+                    - home
+                - alias: Confirm occupancy automations are allowed
+                  condition: state
+                  entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
+                  state: "on"
+                - condition: state
+                  entity_id: light.bedroom_2_group_occupancy_lights
+                  state: "off"
+          then:
+            - if:
+                - condition: template
+                  value_template:
+                    "{{ states.scene.bedroom_2_occupancy_state_management
+                    != None }}"
+              then:
+                - alias: Activate generated scene
+                  action: scene.turn_on
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - scene.bedroom_2_occupancy_state_management
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 5
+                    milliseconds: 0
+                - alias: Delete generated scene
+                  action: scene.delete
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: scene.bedroom_2_occupancy_state_management
+              else:
+                - alias: Turn on occupancy lights
+                  action: light.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: light.bedroom_2_group_occupancy_lights
+                  data: {}
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      action_occupancy_clear:
+        - alias: Check if can run custom actions
+          if:
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: group.residents
+                  state:
+                    - home
+                - alias: Confirm occupancy automations are allowed
+                  condition: state
+                  entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
+                  state: "on"
+          then:
+            - alias: Generate scene
+              action: scene.create
+              metadata: {}
+              data:
+                scene_id: bedroom_2_occupancy_state_management
+                snapshot_entities:
+                  - fan.bedroom_2_ceiling
+                  - light.bedroom_2_ceiling_fan
+                  - light.bedroom_2_lamp_left
+                  - light.bedroom_2_lamp_right
+            - delay:
+                hours: 0
+                minutes: 0
+                seconds: 3
+                milliseconds: 0
+            - alias: Turn off fan
+              action: fan.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: fan.bedroom_2_ceiling
+            - alias: Turn off lights
+              action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id:
+                  - light.bedroom_2_ceiling_fan
+                  - light.bedroom_2_lamp_left
+                  - light.bedroom_2_lamp_right
+- id: "1776429827326"
+  alias: Bedroom 1, Room Occupancy
+  description: ""
+  use_blueprint:
+    path: maxson/room_management_via_occupancy.yaml
+    input:
+      sensor_door: binary_sensor.door_bedroom_1
+      enable_door_action:
+        - alias: Maybe send notification when door is opened
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Main Bedroom door was opened.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      disable_door_action:
+        - alias: Maybe send notification when door is closed
+          action: script.push_notification_to_ios_devices
+          metadata: {}
+          data:
+            send_to:
+              - thomas
+              - jessica
+            notification_type: type_activity_door_interior
+            interruption_level: active
+            message: Main Bedroom door was closed.
+            notification_actions:
+              - action: OPEN_APP_UNIFI_PROTECT
+                title: Open Camera App
+                url: unifi-protect://
+                icon: sfsymbols:video
+              - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                title: Snooze
+                icon: sfsymbols:clock
+      sensor_occupancy: binary_sensor.bedroom_1_group_all_occupancy
+- id: "1783261217609"
+  alias: Bedroom 1, Closet Doors Open/Close
+  description:
+    Automates hallway closet lights based on door state, including automatic
+    shut-off if doors remain open for more than 10 minutes.
+  triggers:
+    - trigger: door.opened
+      target:
+        entity_id: binary_sensor.door_closet_hallway_his
+      options:
+        for: 00:00:00
+      id: HIS Closet Door OPENED
+      alias: When HIS Closet Door OPENED
+    - trigger: door.closed
+      target:
+        entity_id: binary_sensor.door_closet_hallway_his
+      options:
+        for: 00:00:00
+      id: HIS Closet Door CLOSED
+      alias: When HIS Closet Door CLOSED
+    - alias: When HIS Closet Door Remained OPEN
+      trigger: door.opened
+      target:
+        entity_id: binary_sensor.door_closet_hallway_his
+      options:
+        for:
+          hours: 0
+          minutes: 10
+          seconds: 0
+      id: HIS Closet Door Remained OPEN
+    - alias: When HER Closet Door OPENED
+      trigger: door.opened
+      target:
+        entity_id: binary_sensor.door_closet_hallway_hers
+      options:
+        for: 00:00:00
+      id: HER Closet Door OPENED
+    - alias: When HER Closet Door CLOSED
+      trigger: door.closed
+      target:
+        entity_id: binary_sensor.door_closet_hallway_hers
+      options:
+        for: 00:00:00
+      id: HER Closet Door CLOSED
+    - alias: When HER Closet Door Remained OPEN
+      trigger: door.opened
+      target:
+        entity_id: binary_sensor.door_closet_hallway_hers
+      options:
+        for:
+          hours: 0
+          minutes: 10
+          seconds: 0
+      id: HER Closet Door Remained OPEN
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - HIS Closet Door OPENED
+          sequence:
+            - action: light.turn_on
+              metadata: {}
+              data: {}
+              target:
+                entity_id: light.closet_hallway_light_his
+          alias: If triggered by HIS Closet Door is OPENED
+        - conditions:
+            - condition: trigger
+              id:
+                - HIS Closet Door CLOSED
+          sequence:
+            - action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: light.closet_hallway_light_his
+          alias: If triggered by HIS Closet Door is CLOSED
+        - conditions:
+            - condition: and
+              conditions:
+                - condition: trigger
+                  id:
+                    - HIS Closet Door Remained OPEN
+        - condition: state
+          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
+          state: "on"
+          sequence:
+            - action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: light.closet_hallway_light_his
+          alias: If triggered by HIS Closet Door LEFT OPEN
+        - conditions:
+            - condition: trigger
+              id:
+                - HER Closet Door OPENED
+          sequence:
+            - action: light.turn_on
+              metadata: {}
+              target:
+                entity_id: light.closet_hallway_light_hers
+              data: {}
+          alias: If triggered by HER Closet Door is OPENED
+        - conditions:
+            - condition: trigger
+              id:
+                - HER Closet Door CLOSED
+          sequence:
+            - action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: light.closet_hallway_light_hers
+          alias: If triggered by HER Closet Door is CLOSED
+        - conditions:
+            - condition: and
+              conditions:
+                - condition: trigger
+                  id:
+                    - HER Closet Door Remained OPEN
+        - condition: state
+          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
+          state: "on"
+          sequence:
+            - action: light.turn_off
+              metadata: {}
+              data: {}
+              target:
+                entity_id: light.closet_hallway_light_hers
+          alias: If triggered by HIS Closet Door LEFT OPEN
+  mode: single
+- id: "1783262234415"
+  alias: Bedroom 1, Door Open/Close
+  description:
+    Sends an iOS notification when the Main Bedroom door is opened or closed,
+    and toggles occupancy lights if automated control is enabled.
+  triggers:
+    - trigger: door.opened
+      target:
+        entity_id: binary_sensor.door_bedroom_1
+      options:
+        behavior: each
+      id: Door OPENED
+    - trigger: door.closed
+      target:
+        entity_id: binary_sensor.door_bedroom_1
+      options:
+        behavior: each
+      id: Door CLOSED
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - Door OPENED
+          sequence:
+            - action: script.push_notification_to_ios_devices
+              metadata: {}
+              data:
+                send_to:
+                  - jessica
+                  - thomas
+                message: The Main Bedroom door was opened.
+                notification_type: type_activity_door_interior
+                interruption_level: active
+                notification_actions:
+                  - action: OPEN_APP_UNIFI_PROTECT
+                    title: Open Camera App
+                    url: unifi-protect://
+                    icon: sfsymbols:video
+                  - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                    title: Snooze
+                    icon: sfsymbols:clock
+            - alias: If Allowed Run Automations
+              if:
+                - condition: state
+                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                  state: "on"
+              then:
+                - action: light.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: light.bedroom_1_group_occupancy_lights
+                  data: {}
+        - conditions:
+            - condition: trigger
+              id:
+                - Door CLOSED
+          sequence:
+            - action: script.push_notification_to_ios_devices
+              metadata: {}
+              data:
+                send_to:
+                  - jessica
+                  - thomas
+                message: The Main Bedroom door was closed.
+                notification_type: type_activity_door_interior
+                interruption_level: active
+                notification_actions:
+                  - action: OPEN_APP_UNIFI_PROTECT
+                    title: Open Camera App
+                    url: unifi-protect://
+                    icon: sfsymbols:video
+                  - action: SNOOZE_HOUSEHOLD_ACTIVITY
+                    title: Snooze
+                    icon: sfsymbols:clock
+            - alias: If Allowed Run Automations
+              if:
+                - condition: state
+                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                  state: "on"
+              then:
+                - action: light.turn_off
+                  metadata: {}
+                  target:
+                    entity_id: light.bedroom_1_group_occupancy_lights
+                  data: {}
   mode: single

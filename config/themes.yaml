@@ -29,8 +29,11 @@ themes:
     # grey-color-rgb: "187, 187, 187"
     grey-color-hex: "#999999"
     grey-color-rgb: "153, 153, 153"
+    cyan-color-hex: "#009ac7"
+    cyan-color-rgb: "0, 154, 199"
 
-    dark-grey-color: "#606060"
+    dark-grey-hex: "#606060"
+    dark-grey-rgb: "86, 96, 96"
     black-color-hex: "#000000"
     black-color-rgb: "35, 35, 35"
     white-color-hex: "#ffffff"
