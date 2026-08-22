@@ -11166,8 +11166,6 @@ decluttering_templates:
         style: |
           :host { 
             --layout-margin: 0;
-
-            line-height: 0;
           }
       button_type: name
       sub_button:
