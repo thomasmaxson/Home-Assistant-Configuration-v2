@@ -493,7 +493,6 @@ views:
                               - entity: >-
                                   input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
                                 name: Toggle lights when doorbell is pressed
-                title-card-clickable: true
       - type: custom:button-card
         view_layout:
           grid-area: tileKit
