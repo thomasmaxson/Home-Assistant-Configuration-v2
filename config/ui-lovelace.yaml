@@ -7,7 +7,7 @@ views:
     background: center / cover no-repeat url( '/local/uploads/background.png' ) fixed
     layout:
       margin: 2.75vw 0 0 0
-      grid-row-gap: 0.4vw
+      grid-row-gap: 1.1vw
       grid-column-gap: 2vw
       grid-auto-rows: min-content
       grid-template-columns: 2vw 25% repeat( 4, 1fr ) 2vw
@@ -1661,15 +1661,6 @@ views:
                       - type: custom:button-card
                         template: chip_detail__door
                         entity: binary_sensor.door_bedroom_3
-                      - type: custom:button-card
-                        template: chip_detail__occupancy
-                        entity: binary_sensor.bedroom_3_group_all_occupancy
-                        tap_action:
-                          action: call-service
-                          service: button.press
-                          target:
-                            entity_id: button.presence_bedroom_3_reset_nopresence_status
-                          data: {}
               - type: custom:decluttering-card
                 template: room_popup__chips
                 variables:
