@@ -2109,7 +2109,7 @@
               | round }}°, which is above the {{ trigger.above | round }}° maximum temperature
               allowed.
   mode: queued
-  max: 0
+  max: 2
 - id: "1727539745399"
   alias: iOS Notification Events
   description: ""
@@ -3269,133 +3269,6 @@
             title: Snooze
             icon: sfsymbols:clock
   mode: single
-- id: "1729642126008"
-  alias: Bedroom 1, Closet Doors Open/Close – OLD
-  description: ""
-  triggers:
-    - entity_id:
-        - binary_sensor.door_closet_hallway_his
-      from: "off"
-      to: "on"
-      id: His Closet Door Did OPEN
-      trigger: state
-    - entity_id:
-        - binary_sensor.door_closet_hallway_his
-      from: "on"
-      to: "off"
-      id: His Closet Door Did CLOSE
-      trigger: state
-    - entity_id:
-        - binary_sensor.door_closet_hallway_his
-      from: "off"
-      to: "on"
-      id: His Closet Door Left OPEN
-      for:
-        hours: 0
-        minutes: 10
-        seconds: 0
-      trigger: state
-    - entity_id:
-        - binary_sensor.door_closet_hallway_hers
-      from: "off"
-      to: "on"
-      id: Her Closet Door Did OPEN
-      trigger: state
-    - entity_id:
-        - binary_sensor.door_closet_hallway_hers
-      from: "on"
-      to: "off"
-      id: Her Closet Door Did CLOSE
-      trigger: state
-    - entity_id:
-        - binary_sensor.door_closet_hallway_hers
-      from: "off"
-      to: "on"
-      id: Her Closet Door Left OPEN
-      for:
-        hours: 0
-        minutes: 10
-        seconds: 0
-      trigger: state
-  conditions: []
-  actions:
-    - alias: Room Activity Actions
-      choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - His Closet Door Did OPEN
-          sequence:
-            - action: light.turn_on
-              metadata: {}
-              data: {}
-              target:
-                entity_id: light.closet_hallway_light_his
-          alias: When His Closet Door was OPENED
-        - conditions:
-            - condition: trigger
-              id:
-                - His Closet Door Did CLOSE
-          sequence:
-            - action: light.turn_off
-              target:
-                entity_id:
-                  - light.closet_hallway_light_his
-              data: {}
-          alias: When His Closet Door was CLOSED
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - His Closet Door Left OPEN
-                - condition: state
-                  entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
-                  state: "on"
-          sequence:
-            - action: light.turn_off
-              data: {}
-              target:
-                entity_id: light.closet_hallway_light_his
-          alias: When His Closet Door was left OPEN
-        - conditions:
-            - condition: trigger
-              id:
-                - Her Closet Door Did OPEN
-          sequence:
-            - action: light.turn_on
-              metadata: {}
-              data: {}
-              target:
-                entity_id: light.closet_hallway_light_hers
-          alias: When Her Closet Door was OPENED
-        - conditions:
-            - condition: trigger
-              id:
-                - Her Closet Door Did CLOSE
-          sequence:
-            - action: light.turn_off
-              data: {}
-              target:
-                entity_id: light.closet_hallway_light_hers
-          alias: When Her Closet Door was CLOSED
-        - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - Her Closet Door Left OPEN
-                - condition: state
-                  entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
-                  state: "on"
-          sequence:
-            - action: light.turn_off
-              data: {}
-              target:
-                entity_id: light.closet_hallway_light_hers
-          alias: When Her Closet Door was left OPEN
-  mode: queued
-  max: 0
 - id: "1730055951025"
   alias: Bedroom 3, Room Occupancy
   description: ""
@@ -3491,10 +3364,7 @@
                   target:
                     entity_id: light.bedroom_3_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear:
-        hours: 0
-        minutes: 5
-        seconds: 0
+      delay_occupancy_clear: 60
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -3523,20 +3393,25 @@
                 minutes: 0
                 seconds: 3
                 milliseconds: 0
-            - alias: Turn off fan
-              action: fan.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id: fan.bedroom_3_ceiling
-            - alias: Turn off lights
-              action: light.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - light.bedroom_3_ceiling_fan
-                  - light.bedroom_3_floor_lamp
+            - if:
+                - condition: motion.is_not_detected
+                  target:
+                    entity_id: binary_sensor.bedroom_3_group_all_occupancy
+              then:
+                - alias: Turn off fan
+                  action: fan.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: fan.bedroom_3_ceiling
+                - alias: Turn off lights
+                  action: light.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - light.bedroom_3_ceiling_fan
+                      - light.bedroom_3_floor_lamp
 - id: "1730985202477"
   alias: Foyer, Light
   description: Control primary lights in the foyer via a SONOFF Wireless Switch device.
@@ -5875,19 +5750,65 @@
       remote: 40f20e1ce82540f050a373b1a0c233ab
       event_button_type: action
       event_button_press_on_single:
-        - action: script.turn_on
-          metadata: {}
-          target:
-            entity_id: script.security_generate
-          data: {}
-          alias: Run Script, Security ACTIVATE
+        - if:
+            - condition: switch.is_off
+              target:
+                entity_id: input_boolean.security_lights_active
+              options:
+                behavior: any
+                for: 00:00:00
+          then:
+            - action: input_boolean.turn_on
+              metadata: {}
+              target:
+                entity_id: input_boolean.security_lights_active
+              data: {}
+            - action: script.turn_on
+              metadata: {}
+              target:
+                entity_id: script.security_lights_generate
+              data: {}
+          else:
+            - action: input_boolean.turn_off
+              metadata: {}
+              target:
+                entity_id: input_boolean.security_lights_active
+              data: {}
+            - action: script.turn_on
+              metadata: {}
+              target:
+                entity_id: script.security_lights_restore
+              data: {}
       event_button_press_off_single:
-        - alias: Run Script, Security RESTORE
-          action: script.turn_on
-          metadata: {}
-          data: {}
-          target:
-            entity_id: script.security_restore
+        - if:
+            - condition: switch.is_off
+              target:
+                entity_id: input_boolean.security_cameras_active
+              options:
+                behavior: any
+                for: 00:00:00
+          then:
+            - action: input_boolean.turn_on
+              metadata: {}
+              target:
+                entity_id: input_boolean.security_cameras_active
+              data: {}
+            - action: script.turn_on
+              metadata: {}
+              target:
+                entity_id: script.security_cameras_generate
+              data: {}
+          else:
+            - action: input_boolean.turn_off
+              metadata: {}
+              target:
+                entity_id: input_boolean.security_cameras_active
+              data: {}
+            - action: script.turn_on
+              metadata: {}
+              target:
+                entity_id: script.security_cameras_restore
+              data: {}
 - id: "1768139848733"
   alias: Outside, Backyard String Lights
   description: Control the backyard string lights via a Lutron paddle remote.
@@ -6140,10 +6061,7 @@
                   target:
                     entity_id: light.bedroom_4_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear:
-        hours: 0
-        minutes: 5
-        seconds: 0
+      delay_occupancy_clear: 60
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -6175,23 +6093,28 @@
                 minutes: 0
                 seconds: 3
                 milliseconds: 0
-            - alias: Turn off fan
-              action: fan.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id: fan.bedroom_4_ceiling
-            - alias: Turn off lights
-              action: light.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - light.bedroom_4_ceiling_fan
-                  - light.bedroom_4_accent_lamp_left
-                  - light.bedroom_4_accent_lamp_right
-                  - light.bedroom_4_lightstrip
-                  - light.bedroom_4_tie_fighter_lamp
+            - if:
+                - condition: motion.is_not_detected
+                  target:
+                    entity_id: binary_sensor.bedroom_4_group_all_occupancy
+              then:
+                - alias: Turn off fan
+                  action: fan.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: fan.bedroom_4_ceiling
+                - alias: Turn off lights
+                  action: light.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - light.bedroom_4_ceiling_fan
+                      - light.bedroom_4_accent_lamp_left
+                      - light.bedroom_4_accent_lamp_right
+                      - light.bedroom_4_lightstrip
+                      - light.bedroom_4_tie_fighter_lamp
 - id: "1776429120813"
   alias: Bedroom 2, Room Occupancy
   description: ""
@@ -6287,10 +6210,7 @@
                   target:
                     entity_id: light.bedroom_2_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear:
-        hours: 0
-        minutes: 5
-        seconds: 0
+      delay_occupancy_clear: 60
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -6320,21 +6240,26 @@
                 minutes: 0
                 seconds: 3
                 milliseconds: 0
-            - alias: Turn off fan
-              action: fan.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id: fan.bedroom_2_ceiling
-            - alias: Turn off lights
-              action: light.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id:
-                  - light.bedroom_2_ceiling_fan
-                  - light.bedroom_2_lamp_left
-                  - light.bedroom_2_lamp_right
+            - if:
+                - condition: motion.is_not_detected
+                  target:
+                    entity_id: binary_sensor.bedroom_2_group_all_occupancy
+              then:
+                - alias: Turn off fan
+                  action: fan.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id: fan.bedroom_2_ceiling
+                - alias: Turn off lights
+                  action: light.turn_off
+                  metadata: {}
+                  data: {}
+                  target:
+                    entity_id:
+                      - light.bedroom_2_ceiling_fan
+                      - light.bedroom_2_lamp_left
+                      - light.bedroom_2_lamp_right
 - id: "1776429827326"
   alias: Bedroom 1, Room Occupancy
   description: ""
@@ -6380,7 +6305,11 @@
               - action: SNOOZE_HOUSEHOLD_ACTIVITY
                 title: Snooze
                 icon: sfsymbols:clock
-      sensor_occupancy: binary_sensor.bedroom_1_group_all_occupancy
+      sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
+      action_occupancy_detect: []
+      delay_occupancy_detect: "00:00:00"
+      action_occupancy_clear: []
+      delay_occupancy_clear: "00:00:00"
 - id: "1783261217609"
   alias: Bedroom 1, Closet Doors Open/Close
   description:
@@ -6466,9 +6395,6 @@
                 - condition: trigger
                   id:
                     - HIS Closet Door Remained OPEN
-        - condition: state
-          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
-          state: "on"
           sequence:
             - action: light.turn_off
               metadata: {}
@@ -6504,16 +6430,13 @@
                 - condition: trigger
                   id:
                     - HER Closet Door Remained OPEN
-        - condition: state
-          entity_id: input_boolean.bedroom_1_closet_automation_allow_doors
-          state: "on"
           sequence:
             - action: light.turn_off
               metadata: {}
               data: {}
               target:
                 entity_id: light.closet_hallway_light_hers
-          alias: If triggered by HIS Closet Door LEFT OPEN
+          alias: If triggered by HER Closet Door LEFT OPEN
   mode: single
 - id: "1783262234415"
   alias: Bedroom 1, Door Open/Close
@@ -6602,4 +6525,126 @@
                   target:
                     entity_id: light.bedroom_1_group_occupancy_lights
                   data: {}
+  mode: single
+- id: "1786809237462"
+  alias: Remote, Security - Foyer
+  description: ""
+  triggers:
+    - entity_id: sensor.remote_security_action
+      to:
+        - 1_single
+        - 2_single
+        - 3_single
+      trigger: state
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: sensor.remote_security_action
+              state: 1_single
+          sequence:
+            - if:
+                - condition: switch.is_off
+                  target:
+                    entity_id: input_boolean.security_lights_active
+                  options:
+                    behavior: any
+                    for: 00:00:00
+              then:
+                - action: input_boolean.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.security_lights_active
+                  data: {}
+                - action: script.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: script.security_lights_generate
+                  data: {}
+              else:
+                - action: input_boolean.turn_off
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.security_lights_active
+                  data: {}
+                - action: script.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: script.security_lights_restore
+                  data: {}
+        - conditions:
+            - condition: state
+              entity_id: sensor.remote_security_action
+              state: 2_single
+          sequence:
+            - if:
+                - condition: switch.is_off
+                  target:
+                    entity_id: input_boolean.security_cameras_active
+                  options:
+                    behavior: any
+                    for: 00:00:00
+              then:
+                - action: input_boolean.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.security_cameras_active
+                  data: {}
+                - action: script.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: script.security_cameras_generate
+                  data: {}
+              else:
+                - action: input_boolean.turn_off
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.security_cameras_active
+                  data: {}
+                - action: script.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: script.security_cameras_restore
+                  data: {}
+        - conditions:
+            - condition: state
+              entity_id: sensor.remote_security_action
+              state: 3_single
+          sequence: []
+  mode: single
+- id: "1789509150326"
+  alias: A/C Issue
+  description: ""
+  triggers:
+    - trigger: temperature.crossed_threshold
+      target:
+        entity_id: sensor.temperature_foyer
+      options:
+        for:
+          hours: 0
+          minutes: 30
+          seconds: 0
+        threshold:
+          type: above
+          value:
+            active_choice: number
+            number: 78
+            unit_of_measurement: °F
+  conditions:
+    - condition: state
+      entity_id: climate.ecobee
+      state:
+        - cool
+  actions:
+    - action: script.push_notification_to_ios_devices
+      metadata: {}
+      data:
+        send_to:
+          - all
+          - thomas
+        notification_type: type_info
+        interruption_level: time-sensitive
+        title: Home Assistant
+        message: The A/C temperature is over 78°
   mode: single
