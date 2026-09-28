@@ -54,7 +54,6 @@ blueprint:
             - integration: hue
               manufacturer: Signify Netherlands B.V.
               model: Hue dimmer switch (RWL022)
-
     light:
       name: Light(s)
       description: Select the light(s) you wish to control.
@@ -63,8 +62,9 @@ blueprint:
         entity:
           multiple: true
           filter:
-            domain: light
-
+            - domain:
+                - light
+          reorder: false
     top_button_config:
       name: Top Button Configuration
       icon: mdi:power
@@ -72,51 +72,50 @@ blueprint:
       input:
         event_button_top:
           name: Button Event Type
-          description: >-
-            Select the event you want the **Top Button** to do.
-            <br>&bull; _Turn on light_: Turn on the light(s)
-            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom action_: Trigger your own custom action
-          default: turn_on_light
+          description:
+            "Select the event you want the **Top Button** to do. <br>&bull;
+            _Turn on light_: Turn on the light(s) <br>&bull; _Toggle light_: Toggle
+            the power state of the light(s) <br>&bull; _Custom Action_: Trigger your
+            own custom action"
+          default: turn_on
           selector:
             select:
               options:
-                - label: Turn on light
-                  value: turn_on_light
+                - label: Turn on Light
+                  value: turn_on
                 - label: Toggle light
-                  value: toggle_light
+                  value: toggle
                 - label: Custom action
                   value: action
-
+              multiple: false
+              sort: false
+              custom_value: false
         brightness_on_percent:
           name: Brightness Level When Light Turns on
-          description: >-
+          description:
             Level of brightness to set the light(s) to when turning on.
-            <br>&bull; Set 1-100 to use a specific brightness level
-            <br>&bull; Set to 0 to use the lights last brightness level
+            <br>&bull; Set 1-100 to use a specific brightness level <br>&bull; Set
+            to 0 to use the lights last brightness level
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0
+              min: 0.0
               max: 100.0
               step: 1.0
           default: 0
-
         action_button_press_top_single:
           name: Top Button, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_top_hold:
           name: Top Button, Press and Hold Action
           description: The action to perform on _press and hold_.
           default: []
           selector:
-            action: null
-
+            action: {}
     brightness_buttons_config:
       name: Brightness Button Configuration
       icon: mdi:brightness-6
@@ -124,19 +123,21 @@ blueprint:
       input:
         event_buttons_brightness:
           name: Button Event Type
-          description: >-
-            Select the event you want the **Brightness Buttons** to do.
+          description:
+            "Select the event you want the **Brightness Buttons** to do.
             <br>&bull; _Adjust brightness_: Increase/Decrease brightness of the light(s)
-            <br>&bull; _Custom action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action"
           default: brightness
           selector:
             select:
               options:
-                - label: Adjust brightness
+                - label: Adjust Brightness
                   value: brightness
                 - label: Custom action
                   value: action
-
+              multiple: false
+              sort: false
+              custom_value: false
         brightness_step:
           name: Brightness Step
           description: Incremental value to increase or decrease light brightness.
@@ -144,39 +145,34 @@ blueprint:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 5
-              max: 100
+              min: 5.0
+              max: 100.0
               step: 5.0
           default: 20
-
         action_button_press_raise_single:
           name: Brightness Increase, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_raise_hold:
           name: Brightness Increase, Press and Hold Action
           description: The action to perform on _press and hold_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_lower_single:
           name: Brightness Decrease, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_lower_hold:
           name: Brightness Decrease, Press and Hold Action
           description: The action to perform on _press and hold_.
           default: []
           selector:
-            action: null
-
+            action: {}
     bottom_button_config:
       name: Bottom Button Configuration
       icon: mdi:power-off
@@ -184,33 +180,33 @@ blueprint:
       input:
         event_button_bottom:
           name: Button Event Type
-          description: >-
-            Select the event you want the **Bottom Button** to do.
-            <br>&bull; _Turn off light_: Turn off the light(s)
-            <br>&bull; _Custom action_: Trigger your own custom action
-          default: turn_off_light
+          description:
+            "Select the event you want the **Bottom Button** to do. <br>&bull;
+            _Turn off light_: Turn off the light(s) <br>&bull; _Custom Action_: Trigger
+            your own custom action"
+          default: turn_off
           selector:
             select:
               options:
-                - label: "Turn off light"
-                  value: turn_off_light
-                - label: "Custom action"
+                - label: Turn off Light
+                  value: turn_off
+                - label: Custom action
                   value: action
-
+              multiple: false
+              sort: false
+              custom_value: false
         action_button_press_bottom_single:
           name: Bottom Button, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_bottom_hold:
           name: Bottom Button, Press and Hold Action
           description: The action to perform on _press and hold_.
           default: []
           selector:
-            action: null
-
+            action: {}
     automation_config:
       name: Configuration
       icon: mdi:cog
@@ -223,43 +219,44 @@ blueprint:
           selector:
             select:
               options:
-                - single
-                - restart
-                - queued
-                - parallel
+                - label: Single
+                  value: single
+                - label: Restart
+                  value: restart
+                - label: Queued
+                  value: queued
+                - label: Parallel
+                  value: parallel
               custom_value: false
               multiple: false
-
+              sort: false
         config_max_num:
           name: Mode Max
-          description: >
-            Maximum number of runs that can be executed or queued at a time.
-            <br>Ignored by _Single_ and _Restart_ Modes.
+          description:
+            "Maximum number of runs that can be executed or queued at a
+            time. <br>Ignored by _Single_ and _Restart_ Modes.
+
+            "
           default: 10
           selector:
             number:
               mode: slider
-              unit_of_measurement: "runs"
+              unit_of_measurement: runs
               min: 1.0
               max: 15.0
               step: 1.0
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
-
 variables:
   var_remote: !input remote
   var_light: !input light
-
   var_event_button_top: !input event_button_top
   var_event_buttons_brightness: !input event_buttons_brightness
   var_event_button_bottom: !input event_button_bottom
-
   var_brightness_on_percent: !input brightness_on_percent
   var_brightness_step: !input brightness_step
-
-trigger:
+triggers:
   - alias: Top Button Press (via HUE event)
     trigger: device
     domain: hue
@@ -267,7 +264,6 @@ trigger:
     type: short_release
     subtype: 1
     id: trigger_top_press_hue
-
   - alias: Brightness Increase Button Press (via HUE event)
     trigger: device
     domain: hue
@@ -275,7 +271,6 @@ trigger:
     type: short_release
     subtype: 2
     id: trigger_raise_press_hue
-
   - alias: Brightness Decrease Button Press (via HUE event)
     trigger: device
     domain: hue
@@ -283,7 +278,6 @@ trigger:
     type: short_release
     subtype: 3
     id: trigger_lower_press_hue
-
   - alias: Bottom Button Press (via HUE event)
     trigger: device
     domain: hue
@@ -291,7 +285,6 @@ trigger:
     type: short_release
     subtype: 4
     id: trigger_bottom_press_hue
-
   - alias: Top Button Press and Hold (via HUE event)
     trigger: device
     domain: hue
@@ -299,7 +292,6 @@ trigger:
     type: repeat
     subtype: 1
     id: trigger_top_press_hold_hue
-
   - alias: Brightness Increase Button Press and Hold (via HUE event)
     trigger: device
     domain: hue
@@ -307,7 +299,6 @@ trigger:
     type: repeat
     subtype: 2
     id: trigger_raise_press_hold_hue
-
   - alias: Brightness Decrease Button Press and Hold (via HUE event)
     trigger: device
     domain: hue
@@ -315,7 +306,6 @@ trigger:
     type: repeat
     subtype: 3
     id: trigger_lower_press_hold_hue
-
   - alias: Bottom Button Press and Hold (via HUE event)
     trigger: device
     domain: hue
@@ -323,305 +313,287 @@ trigger:
     type: repeat
     subtype: 4
     id: trigger_bottom_press_hold_hue
-
 conditions:
-  - alias: "Check if remote to use is set"
+  - alias: Check if remote to use is set
     condition: template
     value_template: "{{ var_remote | count > 0 }}"
-
 actions:
   - variables:
-      var_all_lights_on: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list }}
-      var_all_lights_off: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | list }}
-      var_first_light_on: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | list | first }}
-
-  - alias: "Determine button event to execute"
+      var_all_lights_on:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "on" )
+        | map( attribute = "entity_id" ) | list }}'
+      var_all_lights_off:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "off"
+        ) | map( attribute = "entity_id" ) | list }}'
+      var_first_light_on:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "on"
+        ) | map( attribute = "entity_id" ) | list | first }}'
+  - alias: Determine button event to execute
     choose:
       - alias: "Button: Top, Press"
         conditions:
-          - alias: "Check if triggered by top button press"
+          - alias: Check if triggered by top button press
             condition: trigger
             id: trigger_top_press_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Top button press, manage light state"
+              - alias: For Top button press, manage light state
                 conditions:
-                  - alias: "Check if should toggle light(s)"
+                  - alias: Check if should toggle light(s)
                     condition: template
-                    value_template: "{{ var_event_button_top == 'toggle_light' }}"
+                    value_template: "{{ var_event_button_top == 'toggle' }}"
                 sequence:
-                  - alias: "Toggle light(s) on and off"
+                  - alias: Toggle light(s) on and off
                     if:
-                      - alias: "Check that all light(s) are off"
+                      - alias: Check that all light(s) are off
                         condition: template
                         value_template: "{{ var_all_lights_on | length == 0 }}"
                     then:
-                      - alias: "Check if should adjust brightness when turning on light(s)"
+                      - alias: Check if should adjust brightness when turning on light(s)
                         if:
-                          - alias: "Check if light brightness option is greater than 0"
+                          - alias: Check if light brightness option is greater than 0
                             condition: template
                             value_template: "{{ var_brightness_on_percent | int > 0 }}"
                         then:
-                          - alias: "Turn on light(s) with the set brightness option"
+                          - alias: Turn on light(s) with the set brightness option
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                             data:
                               brightness_pct: !input brightness_on_percent
                         else:
-                          - alias: "Turn on light(s)"
+                          - alias: Turn on light(s)
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                     else:
-                      - alias: "Turn off light(s)"
+                      - alias: Turn off light(s)
                         action: light.turn_off
                         target:
                           entity_id: "{{ var_all_lights_on }}"
-
-              - alias: "For Top button press, turn on light(s)"
+              - alias: For Top button press, turn on light(s)
                 conditions:
-                  - alias: "Check if should toggle light(s)"
+                  - alias: Check if should toggle light(s)
                     condition: template
-                    value_template: "{{ var_event_button_top == 'turn_on_light' }}"
+                    value_template: "{{ var_event_button_top == 'turn_on' }}"
                 sequence:
-                  - alias: "Check if should adjust brightness when turning on light(s)"
+                  - alias: Check if should adjust brightness when turning on light(s)
                     if:
-                      - alias: "Check if light brightness option is greater than 0"
+                      - alias: Check if light brightness option is greater than 0
                         condition: template
                         value_template: "{{ var_brightness_on_percent | int > 0 }}"
                     then:
-                      - alias: "Turn on light(s) with the set brightness option"
+                      - alias: Turn on light(s) with the set brightness option
                         action: light.turn_on
                         target:
                           entity_id: "{{ var_all_lights_off }}"
                         data:
                           brightness_pct: !input brightness_on_percent
                     else:
-                      - alias: "Turn on light(s)"
+                      - alias: Turn on light(s)
                         action: light.turn_on
                         target:
                           entity_id: "{{ var_all_lights_off }}"
-
-              - alias: "For Top button press, run custom action"
+              - alias: For Top button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_button_top == 'action' }}"
                 sequence: !input action_button_press_top_single
-
       - alias: "Button: Top, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Top button press and hold"
+          - alias: Check if triggered by Top button press and hold
             condition: trigger
             id: trigger_top_press_hold_hue
-
         sequence: !input action_button_press_top_hold
-
       - alias: "Button: Increase Brightness, Press"
         conditions:
-          - alias: "Check if triggered by Brightness Increase button press"
+          - alias: Check if triggered by Brightness Increase button press
             condition: trigger
             id: trigger_raise_press_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Increase Brightness button press, manage light on/off state"
+              - alias: For Increase Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                        value_template:
+                          "{{ var_event_buttons_brightness == 'brightness'
+                          }}"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
-
                 sequence:
-                  - alias: "Determine if to turn on or increase brightness for light(s)"
+                  - alias: Determine if to turn on or increase brightness for light(s)
                     if:
-                      - alias: "Check if light(s) are on or off"
+                      - alias: Check if light(s) are on or off
                         condition: state
                         entity_id: !input light
                         state: "off"
                     then:
-                      - alias: "Determine how to turn on light(s)"
+                      - alias: Determine how to turn on light(s)
                         if:
-                          - alias: "Check if light brightness option is greater than 0"
+                          - alias: Check if light brightness option is greater than 0
                             condition: template
                             value_template: "{{ var_brightness_on_percent | int > 0 }}"
                         then:
-                          - alias: "Turn on light(s) with the configured brightness level"
+                          - alias: Turn on light(s) with the configured brightness level
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                             data:
                               brightness_pct: !input brightness_on_percent
                         else:
-                          - alias: "Turn on light(s)"
+                          - alias: Turn on light(s)
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
-
-              - alias: "For Increase Brightness button press, run custom action"
+              - alias: For Increase Brightness button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_raise_single
-
       - alias: "Button: Increase Brightness, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Brightness Increase button press and hold"
+          - alias: Check if triggered by Brightness Increase button press and hold
             condition: trigger
             id: trigger_raise_press_hold_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Increase Brightness button press, manage light on/off state"
+              - alias: For Increase Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                        value_template:
+                          "{{ var_event_buttons_brightness == 'brightness'
+                          }}"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
-
                 sequence:
-                  - alias: "Increase brightness for light(s) that are on"
+                  - alias: Increase brightness for light(s) that are on
                     action: light.turn_on
                     target:
                       entity_id: "{{ var_all_lights_on }}"
                     data:
                       brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-
-              - alias: "For Increase Brightness button press and hold, run custom action"
+              - alias: For Increase Brightness button press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_raise_hold
-
       - alias: "Button: Decrease Brightness, Press"
         conditions:
-          - alias: "Check if triggered by Brightness Decrease button press"
+          - alias: Check if triggered by Brightness Decrease button press
             condition: trigger
             id: trigger_lower_press_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Decrease Brightness button press, manage light on/off state"
+              - alias: For Decrease Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                        value_template:
+                          "{{ var_event_buttons_brightness == 'brightness'
+                          }}"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
-
                 sequence:
-                  - alias: "Decrease brightness for light(s) that are on"
+                  - alias: Decrease brightness for light(s) that are on
                     action: light.turn_on
                     target:
                       entity_id: "{{ var_all_lights_on }}"
                     data:
                       brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-
-              - alias: "For Decrease Brightness button press, run custom action"
+              - alias: For Decrease Brightness button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_lower_single
-
       - alias: "Button: Decrease Brightness, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Brightness Decrease button press and hold"
+          - alias: Check if triggered by Brightness Decrease button press and hold
             condition: trigger
             id: trigger_lower_press_hold_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Decrease Brightness button press, manage light on/off state"
+              - alias: For Decrease Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
-                        value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                        value_template:
+                          "{{ var_event_buttons_brightness == 'brightness'
+                          }}"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
-
                 sequence:
-                  - alias: "Decrease brightness for light(s) that are on"
+                  - alias: Decrease brightness for light(s) that are on
                     action: light.turn_on
                     target:
                       entity_id: "{{ var_all_lights_on }}"
                     data:
                       brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-
-              - alias: "For Decrease Brightness button press and hold, run custom action"
+              - alias: For Decrease Brightness button press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_lower_hold
-
       - alias: "Button: Bottom, Press"
         conditions:
-          - alias: "Check if triggered by bottom button press"
+          - alias: Check if triggered by bottom button press
             condition: trigger
             id: trigger_bottom_press_hue
-
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Bottom button press, turn off light(s)"
+              - alias: For Bottom button press, turn off light(s)
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should turn off light(s)"
+                      - alias: Check if should turn off light(s)
                         condition: template
-                        value_template: "{{ var_event_button_bottom == 'turn_off_light' }}"
-                      - alias: "Check if any light(s) are currently on"
+                        value_template: "{{ var_event_button_bottom == 'turn_off' }}"
+                      - alias: Check if any light(s) are currently on
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Turn off light(s)"
+                  - alias: Turn off light(s)
                     action: light.turn_off
                     target:
                       entity_id: "{{ var_all_lights_on }}"
-
-              - alias: "For Bottom button press, run custom action"
+              - alias: For Bottom button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_button_bottom == 'action' }}"
                 sequence: !input action_button_press_bottom_single
-
       - alias: "Button: Bottom, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Bottom button press and hold"
+          - alias: Check if triggered by Bottom button press and hold
             condition: trigger
             id: trigger_bottom_press_hold_hue
-
         sequence: !input action_button_press_bottom_hold

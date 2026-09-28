@@ -12,11 +12,25 @@
 # | Main Button   | Press & Hold | - Run custom action     |
 # | ------------- | ------------ | ----------------------- |
 
+# This blueprint uses an IKEA TRÅDFRI 1 Button Remote Control connected through ZHA or MQTT.
+# This blueprint allows you to control lights and run custom actions with the remote's buttons
+#
+# | Button Type   | Interaction  | Action Choices          |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Single Press | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Double Press | - Toggle light(s) state |
+# |               |              | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+# | Main Button   | Press & Hold | - Run custom action     |
+# | ------------- | ------------ | ----------------------- |
+
 blueprint:
   name: IKEA TRÅDFRI, 1 Button Remote Control
   description: Control devices with your IKEA TRÅDFRI 1 button remote.
   author: Thomas Maxson
-  source_url: https://gist.github.com/thomasmaxson/7ae34b9b25540efe685c03440d315ec8
+  # source_url: https://gist.github.com/thomasmaxson/1b776b184882ba9c85c90c20c02b423a
   homeassistant:
     min_version: 2024.6.0
   domain: automation
@@ -189,6 +203,14 @@ triggers:
       command: "off"
     id: trigger_press_double_zha
 
+  - alias: Button Press Twice (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "off"
+    id: trigger_press_double_mqtt
+
   - alias: Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -196,6 +218,14 @@ triggers:
       device_id: !input remote
       command: "move_with_on_off"
     id: trigger_hold_zha
+
+  - alias: Button Press and Hold (via MQTT event)
+    trigger: device
+    domain: mqtt
+    device_id: !input remote
+    type: action
+    subtype: "brightness_move_up"
+    id: trigger_hold_mqtt
 
 conditions:
   - alias: "Check if remote to use is set"

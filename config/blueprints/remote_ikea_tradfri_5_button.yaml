@@ -57,7 +57,6 @@ blueprint:
             - integration: zha
               manufacturer: IKEA of Sweden
               model: TRADFRI remote control
-
     light:
       name: Light(s)
       description: Select the light entities you wish to control.
@@ -66,8 +65,9 @@ blueprint:
         entity:
           multiple: true
           filter:
-            domain: light
-
+            - domain:
+                - light
+          reorder: false
     power_button_config:
       name: Power Button Configuration
       icon: mdi:power
@@ -75,10 +75,10 @@ blueprint:
       input:
         event_button_power:
           name: Button Event Type
-          description: >-
-            Select the event you want the **Power Button** to do.
-            <br>&bull; _Toggle light_: Toggle the power state of the light(s)
-            <br>&bull; _Custom action_: Trigger your own custom action
+          description:
+            "Select the event you want the **Power Button** to do. <br>&bull;
+            _Toggle light_: Toggle the power state of the light(s) <br>&bull; _Custom
+            action_: Trigger your own custom action"
           default: toggle_light
           selector:
             select:
@@ -87,29 +87,29 @@ blueprint:
                   value: toggle
                 - label: Custom action
                   value: action
-
+              multiple: false
+              custom_value: false
+              sort: false
         brightness_on_percent:
           name: Brightness Level When Light Turns on
-          description: >-
+          description:
             Level of brightness to set the light(s) to when turning on.
-            <br>&bull; Set 1-100 to use a specific brightness level
-            <br>&bull; Set to 0 to use the lights last brightness level
+            <br>&bull; Set 1-100 to use a specific brightness level <br>&bull; Set
+            to 0 to use the lights last brightness level
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0
+              min: 0.0
               max: 100.0
               step: 1.0
           default: 0
-
         action_button_press_power_toggle:
           name: Custom Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
     brightness_buttons_config:
       name: Brightness Button Configuration
       icon: mdi:brightness-6
@@ -117,10 +117,10 @@ blueprint:
       input:
         event_buttons_brightness:
           name: Button Event Type
-          description: >-
-            Select the event you want the **Brightness Buttons** to do.
+          description:
+            "Select the event you want the **Brightness Buttons** to do.
             <br>&bull; _Adjust brightness_: Increase/Decrease brightness of the light(s)
-            <br>&bull; _Custom action_: Trigger your own custom action
+            <br>&bull; _Custom action_: Trigger your own custom action"
           default: brightness
           selector:
             select:
@@ -129,7 +129,9 @@ blueprint:
                   value: brightness
                 - label: Custom action
                   value: action
-
+              multiple: false
+              custom_value: false
+              sort: false
         brightness_step:
           name: Brightness Step
           description: Incremental value to increase or decrease light brightness.
@@ -137,43 +139,38 @@ blueprint:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 5
-              max: 100
+              min: 5.0
+              max: 100.0
               step: 5.0
           default: 20
-
         action_button_press_raise_single:
           name: Brightness Increase, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_raise_hold:
           name: Brightness Increase, Press and Hold Action
-          description: >-
-            The action to perform on _press and hold_.
-            <br>Use with care, before the _press and hold_ action, this buttons _press_ action gets triggered.
+          description:
+            The action to perform on _press and hold_. <br>Use with care,
+            before the _press and hold_ action, this buttons _press_ action gets triggered.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_lower_single:
           name: Brightness Decrease, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_lower_hold:
           name: Brightness Decrease, Press and Hold Action
-          description: >-
-            The action to perform on _press and hold_.
-            <br>Use with care, before the _press and hold_ action, this buttons _press_ action gets triggered.
+          description:
+            The action to perform on _press and hold_. <br>Use with care,
+            before the _press and hold_ action, this buttons _press_ action gets triggered.
           default: []
           selector:
-            action: null
-
+            action: {}
     arrow_buttons_config:
       name: Arrow Button Configuration
       icon: mdi:code-tags
@@ -181,18 +178,15 @@ blueprint:
       input:
         event_buttons_arrows:
           name: Left/Right Arrow Button Event
-          description: >-
-            Select what you wish for the left/right arrow buttons to manage.
-            <br>
-            <br>_Adjust light hue and saturation_: Adjust your selected light(s) hue and saturation.
-            <br>&bull; Left arrow adjusts your light(s) saturation
-            <br>&bull; Right arrow adjusts your light(s) hue
-            <br>
-            <br>_Adjust color temperature_: Adjust your selected light(s) color temperature.
-            <br>&bull; Left arrow decreases your light(s) color temperature
-            <br>&bull; Right arrow increases your light(s) color temperature
-            <br>
-            <br>_Custom action_: Trigger your own custom actions
+          description:
+            "Select what you wish for the left/right arrow buttons to manage.
+            <br> <br>_Adjust light hue and saturation_: Adjust your selected light(s)
+            hue and saturation. <br>&bull; Left arrow adjusts your light(s) saturation
+            <br>&bull; Right arrow adjusts your light(s) hue <br> <br>_Adjust color
+            temperature_: Adjust your selected light(s) color temperature. <br>&bull;
+            Left arrow decreases your light(s) color temperature <br>&bull; Right
+            arrow increases your light(s) color temperature <br> <br>_Custom action_:
+            Trigger your own custom actions"
           default: hue_saturation
           selector:
             select:
@@ -203,140 +197,126 @@ blueprint:
                   value: hue_saturation
                 - label: Custom action
                   value: action
-
+              multiple: false
+              custom_value: false
+              sort: false
         kelvin_temp_min:
           name: Color Temperature, Minimum
-          description: >-
-            Only used when _Adjust color temperature_ is selected
+          description: Only used when _Adjust color temperature_ is selected
           selector:
             number:
               mode: slider
-              unit_of_measurement: "K"
-              min: 2000
-              max: 6500
-              step: 100
+              unit_of_measurement: K
+              min: 2000.0
+              max: 6500.0
+              step: 100.0
           default: 2000
-
         kelvin_temp_max:
           name: Color Temperature, Maximum
-          description: >-
-            Only used when _Adjust color temperature_ is selected
+          description: Only used when _Adjust color temperature_ is selected
           selector:
             number:
               mode: slider
-              unit_of_measurement: "K"
-              min: 2000
-              max: 6500
-              step: 100
+              unit_of_measurement: K
+              min: 2000.0
+              max: 6500.0
+              step: 100.0
           default: 6500
-
         kelvin_step:
           name: Color Temperature, Step
-          description: >-
-            Only used when _Adjust color temperature_ is selected
+          description: Only used when _Adjust color temperature_ is selected
           selector:
             number:
               mode: slider
-              min: 0
-              max: 1000
-              step: 100
+              min: 0.0
+              max: 1000.0
+              step: 100.0
           default: 250
-
         hue_max:
           name: Hue, Maximum Level
-          description: >-
-            Only used when _Adjust light hue and saturation_ is selected
+          description: Only used when _Adjust light hue and saturation_ is selected
           selector:
             number:
               mode: slider
-              unit_of_measurement: "degrees"
-              min: 0
-              max: 360
-              step: 1
+              unit_of_measurement: degrees
+              min: 0.0
+              max: 360.0
+              step: 1.0
           default: 360
-
         hue_step:
           name: Hue, Step
-          description: >-
-            Only used when _Adjust light hue and saturation_ is selected
+          description: Only used when _Adjust light hue and saturation_ is selected
           selector:
             number:
               mode: slider
-              min: 0
-              max: 36
-              step: 1
+              min: 0.0
+              max: 36.0
+              step: 1.0
           default: 10
-
         saturation_min:
           name: Saturation, Minimum Level
-          description: >-
-            Only used when _Adjust light hue and saturation_ is selected
+          description: Only used when _Adjust light hue and saturation_ is selected
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0
-              max: 100
-              step: 1
+              min: 0.0
+              max: 100.0
+              step: 1.0
           default: 0
-
         saturation_max:
           name: Saturation, Maximum Level
-          description: >-
-            Only used when _Adjust light hue and saturation_ is selected
+          description: Only used when _Adjust light hue and saturation_ is selected
           selector:
             number:
               mode: slider
               unit_of_measurement: "%"
-              min: 0
-              max: 100
-              step: 1
+              min: 0.0
+              max: 100.0
+              step: 1.0
           default: 100
-
         saturation_step:
           name: Saturation, Step
-          description: >-
-            Only used when _Adjust light hue and saturation_ is selected
+          description: Only used when _Adjust light hue and saturation_ is selected
           selector:
             number:
               mode: slider
-              min: 0
-              max: 100
-              step: 1
+              min: 0.0
+              max: 100.0
+              step: 1.0
           default: 10
-
         action_button_press_left_single:
           name: Left Arrow, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_left_hold:
           name: Left Arrow, Press and Hold Action
-          description: >
-            The action to perform on _press and hold_.
-            <br>Use with care, before the _press and hold_ action, this buttons _press_ action gets triggered.
+          description:
+            "The action to perform on _press and hold_. <br>Use with care,
+            before the _press and hold_ action, this buttons _press_ action gets triggered.
+
+            "
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_right_single:
           name: Right Arrow, Press Action
           description: The action to perform on _press_.
           default: []
           selector:
-            action: null
-
+            action: {}
         action_button_press_right_hold:
           name: Right Arrow, Press and Hold Action
-          description: >
-            The action to perform on _press and hold_.
-            <br>Use with care, before the _press and hold_ action, this buttons _press_ action gets triggered.
+          description:
+            "The action to perform on _press and hold_. <br>Use with care,
+            before the _press and hold_ action, this buttons _press_ action gets triggered.
+
+            "
           default: []
           selector:
-            action: null
-
+            action: {}
     automation_config:
       name: Configuration
       icon: mdi:cog
@@ -344,12 +324,12 @@ blueprint:
       input:
         sync_lights:
           name: Synchronize Lights
-          description: >-
-            Choose if all the lights will change to the same state or if all the lights should update individually based on their current state.
+          description:
+            Choose if all the lights will change to the same state or if
+            all the lights should update individually based on their current state.
           default: true
           selector:
-            boolean:
-
+            boolean: {}
         repeat_delay:
           name: Repeat Delay
           description: Delay between interations when pressing and holding a button.
@@ -358,24 +338,23 @@ blueprint:
               mode: slider
               unit_of_measurement: seconds
               min: 0.5
-              max: 5
+              max: 5.0
               step: 0.5
           default: 1
-
         repeat_max_count:
           name: Maximum loop repeats
-          description: >-
-            Maximum number of times to repeat event(s).
-            <br>&bull; Used as a safety limit to prevent an endless loop, just in case the corresponding stop event is not received.
+          description:
+            Maximum number of times to repeat event(s). <br>&bull; Used
+            as a safety limit to prevent an endless loop, just in case the corresponding
+            stop event is not received.
           default: 10
           selector:
             number:
               mode: slider
-              unit_of_measurement: "times"
-              min: 1
-              max: 100
-              step: 1
-
+              unit_of_measurement: times
+              min: 1.0
+              max: 100.0
+              step: 1.0
         config_mode:
           name: Automation Mode
           description: Mode that automation runs in.
@@ -389,37 +368,34 @@ blueprint:
                 - parallel
               custom_value: false
               multiple: false
-
+              sort: false
         config_max_num:
           name: Mode Max
-          description: >
-            Maximum number of runs that can be executed or queued at a time.
-            <br>Ignored by _Single_ and _Restart_ Modes.
+          description:
+            "Maximum number of runs that can be executed or queued at a
+            time. <br>Ignored by _Single_ and _Restart_ Modes.
+
+            "
           default: 10
           selector:
             number:
               mode: slider
-              unit_of_measurement: "runs"
+              unit_of_measurement: runs
               min: 1.0
               max: 15.0
               step: 1.0
-
 mode: !input config_mode
 max: !input config_max_num
 max_exceeded: silent
-
 variables:
   var_remote: !input remote
   var_light: !input light
-
   var_event_button_power: !input event_button_power
   var_event_buttons_brightness: !input event_buttons_brightness
   var_event_buttons_arrows: !input event_buttons_arrows
-
   var_sync_lights: !input sync_lights
   var_brightness_on_percent: !input brightness_on_percent
   var_brightness_step: !input brightness_step
-
   var_kelvin_temp_min: !input kelvin_temp_min
   var_kelvin_temp_max: !input kelvin_temp_max
   var_kelvin_step: !input kelvin_step
@@ -428,10 +404,8 @@ variables:
   var_saturation_min: !input saturation_min
   var_saturation_max: !input saturation_max
   var_saturation_step: !input saturation_step
-
   var_repeat_delay: !input repeat_delay
   var_repeat_max_count: !input repeat_max_count
-
 triggers:
   - alias: Power Button Press (via ZHA event)
     trigger: event
@@ -445,9 +419,8 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "toggle"
+    subtype: toggle
     id: trigger_power_single_press_mqtt
-
   - alias: Brightness Increase Button Press (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -460,9 +433,8 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_up_click"
+    subtype: brightness_up_click
     id: trigger_raise_single_press_mqtt
-
   - alias: Brightness Increase Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -475,9 +447,8 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_up_hold"
+    subtype: brightness_up_hold
     id: trigger_raise_hold_press_mqtt
-
   - alias: Brightness Increase Button Release (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -490,24 +461,22 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_up_release"
+    subtype: brightness_up_release
     id: trigger_raise_release_mqtt
-
   - alias: Brightness Decrease Button Press (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
-      command: "step"
+      command: step
     id: trigger_lower_single_press_zha
   - alias: Brightness Decrease Button Press (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_down_click"
+    subtype: brightness_down_click
     id: trigger_lower_single_press_mqtt
-
   - alias: Brightness Decrease Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -520,9 +489,8 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_down_hold"
+    subtype: brightness_down_hold
     id: trigger_lower_hold_press_mqtt
-
   - alias: Brightness Decrease Button Release (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -535,41 +503,43 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "brightness_down_release"
+    subtype: brightness_down_release
     id: trigger_lower_release_mqtt
-
   - alias: Left Arrow Button Press (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: press
-      args: [257, 13, 0]
+      args:
+        - 257
+        - 13
+        - 0
     id: trigger_left_single_press_zha
   - alias: Left Button Press (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_left_click"
+    subtype: arrow_left_click
     id: trigger_left_single_press_mqtt
-
   - alias: Left Arrow Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: hold
-      args: [3329, 0]
+      args:
+        - 3329
+        - 0
     id: trigger_left_hold_press_zha
   - alias: Left Arrow Button Press and Hold (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_left_hold"
+    subtype: arrow_left_hold
     id: trigger_left_hold_press_mqtt
-
   - alias: Left Arrow Button Release (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -582,41 +552,43 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_left_release"
+    subtype: arrow_left_release
     id: trigger_left_release_mqtt
-
   - alias: Right Arrow Button Press (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: press
-      args: [256, 13, 0]
+      args:
+        - 256
+        - 13
+        - 0
     id: trigger_right_single_press_zha
   - alias: Right Arrow Button Press (via ZHA event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_right_click"
+    subtype: arrow_right_click
     id: trigger_right_single_press_mqtt
-
   - alias: Right Arrow Button Press and Hold (via ZHA event)
     trigger: event
     event_type: zha_event
     event_data:
       device_id: !input remote
       command: hold
-      args: [3328, 0]
+      args:
+        - 3328
+        - 0
     id: trigger_right_hold_press_zha
   - alias: Right Arrow Button Press and Hold (via MQTT event)
     trigger: device
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_right_hold"
+    subtype: arrow_right_hold
     id: trigger_right_hold_press_mqtt
-
   - alias: Right Arrow Button Release (via ZHA event)
     trigger: event
     event_type: zha_event
@@ -629,613 +601,561 @@ triggers:
     domain: mqtt
     device_id: !input remote
     type: action
-    subtype: "arrow_right_release"
+    subtype: arrow_right_release
     id: trigger_right_release_mqtt
-
 conditions:
-  - alias: "Check if remote to use is set"
+  - alias: Check if remote to use is set
     condition: template
     value_template: "{{ var_remote | count > 0 }}"
-
 actions:
   - variables:
-      var_all_lights_on: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list }}
-      var_all_lights_off: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "off" ) | map( attribute = "entity_id" ) | unique | list }}
-      var_first_light_on: >-
-        {{ expand( var_light ) | selectattr( "state", "eq", "on" ) | map( attribute = "entity_id" ) | unique | list | first }}
-
-  - alias: "Determine button event to execute"
+      var_all_lights_on:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "on" )
+        | map( attribute = "entity_id" ) | unique | list }}'
+      var_all_lights_off:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "off"
+        ) | map( attribute = "entity_id" ) | unique | list }}'
+      var_first_light_on:
+        '{{ expand( var_light ) | selectattr( "state", "eq", "on"
+        ) | map( attribute = "entity_id" ) | unique | list | first }}'
+  - alias: Determine button event to execute
     choose:
       - alias: "Button: Power, Press"
         conditions:
-          - alias: "Check if triggered by Power button press"
+          - alias: Check if triggered by Power button press
             condition: trigger
             id:
               - trigger_power_single_press_zha
               - trigger_power_single_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Power button press, manage light on/off state"
+              - alias: For Power button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should toggle light(s)"
+                      - alias: Check if should toggle light(s)
                         condition: template
                         value_template: "{{ var_event_button_power == 'toggle' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_light | length > 0 }}"
                 sequence:
-                  - alias: "Determine weather to turn the light(s) on or off"
+                  - alias: Determine weather to turn the light(s) on or off
                     if:
-                      - alias: "Check if the light(s) are currently off"
+                      - alias: Check if the light(s) are currently off
                         condition: template
                         value_template: "{{ var_all_lights_on | length == 0 }}"
                     then:
-                      - alias: "Determine how to turn on light(s)"
+                      - alias: Determine how to turn on light(s)
                         if:
-                          - alias: "Check if light brightness option is greater than 0"
+                          - alias: Check if light brightness option is greater than 0
                             condition: template
                             value_template: "{{ var_brightness_on_percent | int > 0 }}"
                         then:
-                          - alias: "Turn on light(s) with the set brightness option"
+                          - alias: Turn on light(s) with the set brightness option
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                             data:
                               brightness_pct: !input brightness_on_percent
                         else:
-                          - alias: "Turn on light(s)"
+                          - alias: Turn on light(s)
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                     else:
-                      - alias: "Turn off light(s)"
+                      - alias: Turn off light(s)
                         action: light.turn_off
                         target:
                           entity_id: "{{ var_all_lights_on }}"
-
-              - alias: "For Power button press, run custom action"
+              - alias: For Power button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_button_power == 'action' }}"
                 sequence: !input action_button_press_power_toggle
-
       - alias: "Button: Increase Brightness, Press"
         conditions:
-          - alias: "Check if triggered by Brightness Increase button press"
+          - alias: Check if triggered by Brightness Increase button press
             condition: trigger
             id:
               - trigger_raise_single_press_zha
               - trigger_raise_single_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Increase Brightness button press, manage light on/off state"
+              - alias: For Increase Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
                         value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Determine if to turn on or increase brightness for light(s)"
+                  - alias: Determine if to turn on or increase brightness for light(s)
                     if:
-                      - alias: "Check if light(s) are on or off"
+                      - alias: Check if light(s) are on or off
                         condition: state
                         entity_id: !input light
                         state: "off"
                     then:
-                      - alias: "Determine how to turn on light(s)"
+                      - alias: Determine how to turn on light(s)
                         if:
-                          - alias: "Check if light brightness option is greater than 0"
+                          - alias: Check if light brightness option is greater than 0
                             condition: template
                             value_template: "{{ var_brightness_on_percent | int > 0 }}"
                         then:
-                          - alias: "Turn on light(s) with the configured brightness level"
+                          - alias: Turn on light(s) with the configured brightness level
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
                             data:
                               brightness_pct: !input brightness_on_percent
                         else:
-                          - alias: "Turn on light(s)"
+                          - alias: Turn on light(s)
                             action: light.turn_on
                             target:
                               entity_id: "{{ var_all_lights_off }}"
-
-              - alias: "For Increase Brightness button press, run custom action"
+              - alias: For Increase Brightness button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_raise_single
-
       - alias: "Button: Increase Brightness, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Brightness Increase button press and hold"
+          - alias: Check if triggered by Brightness Increase button press and hold
             condition: trigger
             id:
               - trigger_raise_hold_press_zha
               - trigger_raise_hold_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Increase Brightness button press, manage light on/off state"
+              - alias: For Increase Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
                         value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeat brightness increase for the light(s) that are on"
+                  - alias: Repeat brightness increase for the light(s) that are on
                     repeat:
                       until:
-                        - alias: "Check if triggered by button press"
+                        - alias: Check if triggered by button press
                           condition: trigger
                           id:
                             - trigger_raise_release_zha
                             - trigger_raise_release_mqtt
-                        - alias: "Check if the maximum repeat count reached"
+                        - alias: Check if the maximum repeat count reached
                           condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                        - alias: "Wait for button to be released"
+                        - alias: Wait for button to be released
                           condition: template
                           value_template: "{{ wait.trigger is not none }}"
                       sequence:
-                        - alias: "Increase brightness for light(s) that are on"
+                        - alias: Increase brightness for light(s) that are on
                           action: light.turn_on
                           target:
                             entity_id: "{{ var_all_lights_on }}"
                           data:
                             brightness_step_pct: "{{ var_brightness_step * 1 | int }}"
-                        - alias: "Delay between brightness increase steps"
+                        - alias: Delay between brightness increase steps
                           delay:
                             hours: 0
                             minutes: 0
                             seconds: "{{ var_repeat_delay | float }}"
                             milliseconds: 0
-
-              - alias: "For Increase Brightness button press and hold, run custom action"
+              - alias: For Increase Brightness button press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_raise_hold
-
       - alias: "Button: Decrease Brightness, Press"
         conditions:
-          - alias: "Check if triggered by Brightness Decrease button press"
+          - alias: Check if triggered by Brightness Decrease button press
             condition: trigger
             id:
               - trigger_lower_single_press_zha
               - trigger_lower_single_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Decrease Brightness button press, manage light on/off state"
+              - alias: For Decrease Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
                         value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Decrease brightness for light(s) that are on"
+                  - alias: Decrease brightness for light(s) that are on
                     action: light.turn_on
                     target:
                       entity_id: "{{ var_all_lights_on }}"
                     data:
                       brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-
-              - alias: "For Decrease Brightness button press, run custom action"
+              - alias: For Decrease Brightness button press, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_lower_single
-
       - alias: "Button: Decrease Brightness, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Brightness Decrease button press and hold"
+          - alias: Check if triggered by Brightness Decrease button press and hold
             condition: trigger
             id:
               - trigger_lower_hold_press_zha
               - trigger_lower_hold_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Decrease Brightness button press, manage light on/off state"
+              - alias: For Decrease Brightness button press, manage light on/off state
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: and
                     conditions:
-                      - alias: "Check if should adjust brightness"
+                      - alias: Check if should adjust brightness
                         condition: template
                         value_template: "{{ var_event_buttons_brightness == 'brightness' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeat brightness decrease for the light(s) that are on"
+                  - alias: Repeat brightness decrease for the light(s) that are on
                     repeat:
                       until:
-                        - alias: "Check if triggered by button press"
+                        - alias: Check if triggered by button press
                           condition: trigger
                           id:
                             - trigger_lower_release_zha
                             - trigger_lower_release_mqtt
-                        - alias: "Check if the maximum repeat count reached"
+                        - alias: Check if the maximum repeat count reached
                           condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                        - alias: "Wait for button to be released"
+                        - alias: Wait for button to be released
                           condition: template
                           value_template: "{{ wait.trigger is not none }}"
                       sequence:
-                        - alias: "Decrease brightness for light(s) that are on"
+                        - alias: Decrease brightness for light(s) that are on
                           action: light.turn_on
                           target:
                             entity_id: "{{ var_all_lights_on }}"
                           data:
                             brightness_step_pct: "{{ var_brightness_step * -1 | int }}"
-                        - alias: "Delay between brightness decrease steps"
+                        - alias: Delay between brightness decrease steps
                           delay:
                             hours: 0
                             minutes: 0
                             seconds: "{{ var_repeat_delay | float }}"
                             milliseconds: 0
-
-              - alias: "For Decrease Brightness button press and hold, run custom action"
+              - alias: For Decrease Brightness button press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_brightness == 'action' }}"
                 sequence: !input action_button_press_lower_hold
-
       - alias: "Button: Left Arrow, Press"
         conditions:
-          - alias: "Check if triggered by Left Arrow button press"
+          - alias: Check if triggered by Left Arrow button press
             condition: trigger
             id:
               - trigger_left_single_press_zha
               - trigger_left_single_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Left Arrow press, manage light saturation setting"
+              - alias: For Left Arrow press, manage light saturation setting
                 conditions:
-                  - alias: "Confirm all conditions are met to proceed"
+                  - alias: Confirm all conditions are met to proceed
                     condition: and
                     conditions:
-                      - alias: "Check if correct action choice is selected"
+                      - alias: Check if correct action choice is selected
                         condition: or
                         conditions:
-                          - alias: "Check if should adjust light color temperature"
+                          - alias: Check if should adjust light color temperature
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
-                          - alias: "Check if should adjust light hue and saturation"
+                          - alias: Check if should adjust light hue and saturation
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeat for each light"
+                  - alias: Repeat for each light
                     repeat:
                       for_each: "{{ var_all_lights_on }}"
                       sequence:
-                        - alias: "Adjust individual light"
+                        - alias: Adjust individual light
                           action: light.turn_on
                           target:
                             entity_id: "{{ repeat.item }}"
-                          data: >-
-                            {%- if var_sync_lights == 'false' -%}
-                              {%- set current_light = repeat.item -%}
-                            {%- else -%}
-                              {%- set current_light = var_first_light_on -%}
-                            {%- endif -%}
-
-                            {%- if event_buttons_arrows == "hue_saturation" -%}
-                              {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
-                              {%- set current_hue = hue_sat_values[0] -%}
-                              {%- set current_sat = hue_sat_values[1] -%}
-                              {%- set min_sat = var_saturation_min | float -%}
-                              {%- set max_sat = var_saturation_max | float -%}
-                              {%- set target_sat = ( current_sat + var_saturation_step ) | float -%}
-                              {%- set updated_sat = min_sat if target_sat < min_sat else ( max_sat if target_sat > max_sat else target_sat ) -%}
-
-                              {{ dict( **{ 'hs_color' : [ current_hue, updated_sat ] } ) }}
-
-                            {%- elif event_buttons_arrows == "temperature" -%}
-                              {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
-                              {%- set min_temp = var_kelvin_temp_min | float -%}
-                              {%- set max_temp = var_kelvin_temp_max | float -%}
-                              {%- set target_temp = ( current_temp - var_kelvin_step ) | float -%}
-                              {%- set updated_temp = min_temp if target_temp < min_temp else ( max_temp if target_temp > max_temp else target_temp ) -%}
-
-                              {{ dict( **{ 'color_temp_kelvin' : updated_temp } ) }}
-
-                            {%- endif -%}
-
-              - alias: "For Left Arrow press, trigger custom events"
+                          data:
+                            "{%- if var_sync_lights == 'false' -%}\n  {%- set current_light
+                            = repeat.item -%}\n{%- else -%}\n  {%- set current_light = var_first_light_on
+                            -%}\n{%- endif -%}\n{%- if event_buttons_arrows == \"hue_saturation\"
+                            -%}\n  {%- set hue_sat_values = state_attr( current_light, 'hs_color'
+                            ) | list -%}\n  {%- set current_hue = hue_sat_values[0] -%}\n  {%-
+                            set current_sat = hue_sat_values[1] -%}\n  {%- set min_sat = var_saturation_min
+                            | float -%}\n  {%- set max_sat = var_saturation_max | float -%}\n
+                            \ {%- set target_sat = ( current_sat + var_saturation_step ) | float
+                            -%}\n  {%- set updated_sat = min_sat if target_sat < min_sat else
+                            ( max_sat if target_sat > max_sat else target_sat ) -%}\n\n  {{ dict(
+                            **{ 'hs_color' : [ current_hue, updated_sat ] } ) }}\n\n{%- elif event_buttons_arrows
+                            == \"temperature\" -%}\n  {%- set current_temp = state_attr( current_light,
+                            'color_temp_kelvin' ) | int -%}\n  {%- set min_temp = var_kelvin_temp_min
+                            | float -%}\n  {%- set max_temp = var_kelvin_temp_max | float -%}\n
+                            \ {%- set target_temp = ( current_temp - var_kelvin_step ) | float
+                            -%}\n  {%- set updated_temp = min_temp if target_temp < min_temp else
+                            ( max_temp if target_temp > max_temp else target_temp ) -%}\n\n  {{
+                            dict( **{ 'color_temp_kelvin' : updated_temp } ) }}\n\n{%- endif -%}"
+              - alias: For Left Arrow press, trigger custom events
                 conditions:
-                  - alias: "Check if button press should trigger custom events"
+                  - alias: Check if button press should trigger custom events
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_left_single
-
       - alias: "Button: Left Arrow, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Left Arrow button press and hold"
+          - alias: Check if triggered by Left Arrow button press and hold
             condition: trigger
             id:
               - trigger_left_hold_press_zha
               - trigger_left_hold_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Left Arrow press and hold, manage light saturation setting"
+              - alias: For Left Arrow press and hold, manage light saturation setting
                 conditions:
-                  - alias: "Confirm all conditions are met to proceed"
+                  - alias: Confirm all conditions are met to proceed
                     condition: and
                     conditions:
-                      - alias: "Check if correct action choice is selected"
+                      - alias: Check if correct action choice is selected
                         condition: or
                         conditions:
-                          - alias: "Check if should adjust light color temperature"
+                          - alias: Check if should adjust light color temperature
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
-                          - alias: "Check if should adjust light hue and saturation"
+                          - alias: Check if should adjust light hue and saturation
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeated key press for the light(s) that are on"
+                  - alias: Repeated key press for the light(s) that are on
                     repeat:
                       until:
-                        - alias: "Check if triggered by button press"
+                        - alias: Check if triggered by button press
                           condition: trigger
                           id:
                             - trigger_left_release_zha
                             - trigger_left_release_mqtt
-                        - alias: "Check if the maximum repeat count reached"
+                        - alias: Check if the maximum repeat count reached
                           condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                        - alias: "Wait for button to be released"
+                        - alias: Wait for button to be released
                           condition: template
                           value_template: "{{ wait.trigger is not none }}"
                       sequence:
-                        - alias: "Repeat for each light"
+                        - alias: Repeat for each light
                           repeat:
                             for_each: "{{ var_all_lights_on }}"
                             sequence:
-                              - alias: "Adjust individual light"
+                              - alias: Adjust individual light
                                 action: light.turn_on
                                 target:
                                   entity_id: "{{ repeat.item }}"
-                                data: >-
-                                  {%- if var_sync_lights == 'false' -%}
-                                    {%- set current_light = repeat.item -%}
-                                  {%- else -%}
-                                    {%- set current_light = var_first_light_on -%}
-                                  {%- endif -%}
-
-                                  {%- if event_buttons_arrows == "hue_saturation" -%}
-                                    {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
-                                    {%- set current_hue = hue_sat_values[0] -%}
-                                    {%- set current_sat = hue_sat_values[1] -%}
-                                    {%- set min_sat = var_saturation_min | float -%}
-                                    {%- set max_sat = var_saturation_max | float -%}
-                                    {%- set target_sat = ( current_sat + var_saturation_step ) | float -%}
-                                    {%- set updated_sat = min_sat if target_sat < min_sat else ( max_sat if target_sat > max_sat else target_sat ) -%}
-
-                                    {{ dict( **{ 'hs_color' : [ current_hue, updated_sat ] } ) }}
-
-                                  {%- elif event_buttons_arrows == "temperature" -%}
-                                    {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
-                                    {%- set min_temp = var_kelvin_temp_min | float -%}
-                                    {%- set max_temp = var_kelvin_temp_max | float -%}
-                                    {%- set target_temp = ( current_temp - var_kelvin_step ) | float -%}
-                                    {%- set updated_temp = min_temp if target_temp < min_temp else ( max_temp if target_temp > max_temp else target_temp ) -%}
-
-                                    {{ dict( **{ 'color_temp_kelvin' : updated_temp } ) }}
-
-                                  {%- endif -%}
-
-                  - alias: "Delay between right arrow adjust hue steps"
+                                data:
+                                  "{%- if var_sync_lights == 'false' -%}\n  {%- set current_light
+                                  = repeat.item -%}\n{%- else -%}\n  {%- set current_light = var_first_light_on
+                                  -%}\n{%- endif -%}\n{%- if event_buttons_arrows == \"hue_saturation\"
+                                  -%}\n  {%- set hue_sat_values = state_attr( current_light, 'hs_color'
+                                  ) | list -%}\n  {%- set current_hue = hue_sat_values[0] -%}\n
+                                  \ {%- set current_sat = hue_sat_values[1] -%}\n  {%- set min_sat
+                                  = var_saturation_min | float -%}\n  {%- set max_sat = var_saturation_max
+                                  | float -%}\n  {%- set target_sat = ( current_sat + var_saturation_step
+                                  ) | float -%}\n  {%- set updated_sat = min_sat if target_sat <
+                                  min_sat else ( max_sat if target_sat > max_sat else target_sat
+                                  ) -%}\n\n  {{ dict( **{ 'hs_color' : [ current_hue, updated_sat
+                                  ] } ) }}\n\n{%- elif event_buttons_arrows == \"temperature\" -%}\n
+                                  \ {%- set current_temp = state_attr( current_light, 'color_temp_kelvin'
+                                  ) | int -%}\n  {%- set min_temp = var_kelvin_temp_min | float
+                                  -%}\n  {%- set max_temp = var_kelvin_temp_max | float -%}\n  {%-
+                                  set target_temp = ( current_temp - var_kelvin_step ) | float -%}\n
+                                  \ {%- set updated_temp = min_temp if target_temp < min_temp else
+                                  ( max_temp if target_temp > max_temp else target_temp ) -%}\n\n
+                                  \ {{ dict( **{ 'color_temp_kelvin' : updated_temp } ) }}\n\n{%-
+                                  endif -%}"
+                  - alias: Delay between right arrow adjust hue steps
                     delay:
                       hours: 0
                       minutes: 0
                       seconds: 0
                       milliseconds: 500
-
-              - alias: "For Left Arrow press and hold, run custom action"
+              - alias: For Left Arrow press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_left_hold
-
       - alias: "Button: Right Arrow, Press"
         conditions:
-          - alias: "Check if triggered by Right Arrow button press"
+          - alias: Check if triggered by Right Arrow button press
             condition: trigger
             id:
               - trigger_right_single_press_zha
               - trigger_right_single_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Right Arrow press, manage light saturation setting"
+              - alias: For Right Arrow press, manage light saturation setting
                 conditions:
-                  - alias: "Confirm all conditions are met to proceed"
+                  - alias: Confirm all conditions are met to proceed
                     condition: and
                     conditions:
-                      - alias: "Check if correct action choice is selected"
+                      - alias: Check if correct action choice is selected
                         condition: or
                         conditions:
-                          - alias: "Check if should adjust light color temperature"
+                          - alias: Check if should adjust light color temperature
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
-                          - alias: "Check if should adjust light hue and saturation"
+                          - alias: Check if should adjust light hue and saturation
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeat for each light"
+                  - alias: Repeat for each light
                     repeat:
                       for_each: "{{ var_all_lights_on }}"
                       sequence:
-                        - alias: "Adjust individual light"
+                        - alias: Adjust individual light
                           action: light.turn_on
                           target:
                             entity_id: "{{ repeat.item }}"
-                          data: >-
-                            {%- if var_sync_lights == 'false' -%}
-                              {%- set current_light = repeat.item -%}
-                            {%- else -%}
-                              {%- set current_light = var_first_light_on -%}
-                            {%- endif -%}
-
-                            {%- if event_buttons_arrows == "hue_saturation" -%}
-                              {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
-                              {%- set current_hue = hue_sat_values[0] -%}
-                              {%- set current_sat = hue_sat_values[1] -%}
-                              {%- set max_hue = var_hue_max | float -%}
-                              {%- set target_hue = ( current_hue + var_hue_step ) | float -%}
-                              {%- set updated_hue = ( target_hue - max_hue ) if target_hue > max_hue else target_hue -%}
-
-                              {{ dict( **{ 'hs_color' : [ updated_hue, current_sat ] } ) }}
-
-                            {%- elif event_buttons_arrows == "temperature" -%}
-                              {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
-                              {%- set min_temp = var_kelvin_temp_min | float -%}
-                              {%- set max_temp = var_kelvin_temp_max | float -%}
-                              {%- set target_temp = ( current_temp + var_kelvin_step ) | float -%}
-                              {%- set updated_temp = min_temp if target_temp < min_temp else ( max_temp if target_temp > max_temp else target_temp ) -%}
-
-                              {{ dict( **{ 'color_temp_kelvin' : updated_temp } ) }}
-
-                            {%- endif -%}
-
-              - alias: "For Right Arrow press, trigger custom events"
+                          data:
+                            "{%- if var_sync_lights == 'false' -%}\n  {%- set current_light
+                            = repeat.item -%}\n{%- else -%}\n  {%- set current_light = var_first_light_on
+                            -%}\n{%- endif -%}\n{%- if event_buttons_arrows == \"hue_saturation\"
+                            -%}\n  {%- set hue_sat_values = state_attr( current_light, 'hs_color'
+                            ) | list -%}\n  {%- set current_hue = hue_sat_values[0] -%}\n  {%-
+                            set current_sat = hue_sat_values[1] -%}\n  {%- set max_hue = var_hue_max
+                            | float -%}\n  {%- set target_hue = ( current_hue + var_hue_step )
+                            | float -%}\n  {%- set updated_hue = ( target_hue - max_hue ) if target_hue
+                            > max_hue else target_hue -%}\n\n  {{ dict( **{ 'hs_color' : [ updated_hue,
+                            current_sat ] } ) }}\n\n{%- elif event_buttons_arrows == \"temperature\"
+                            -%}\n  {%- set current_temp = state_attr( current_light, 'color_temp_kelvin'
+                            ) | int -%}\n  {%- set min_temp = var_kelvin_temp_min | float -%}\n
+                            \ {%- set max_temp = var_kelvin_temp_max | float -%}\n  {%- set target_temp
+                            = ( current_temp + var_kelvin_step ) | float -%}\n  {%- set updated_temp
+                            = min_temp if target_temp < min_temp else ( max_temp if target_temp
+                            > max_temp else target_temp ) -%}\n\n  {{ dict( **{ 'color_temp_kelvin'
+                            : updated_temp } ) }}\n\n{%- endif -%}"
+              - alias: For Right Arrow press, trigger custom events
                 conditions:
-                  - alias: "Check if button press should trigger custom events"
+                  - alias: Check if button press should trigger custom events
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_right_single
-
       - alias: "Button: Right Arrow, Press and Hold"
         conditions:
-          - alias: "Check if triggered by Right Arrow button press and hold"
+          - alias: Check if triggered by Right Arrow button press and hold
             condition: trigger
             id:
               - trigger_right_hold_press_zha
               - trigger_right_hold_press_mqtt
         sequence:
-          - alias: "Determine event action to trigger"
+          - alias: Determine event action to trigger
             choose:
-              - alias: "For Right Arrow press and hold, manage light saturation setting"
+              - alias: For Right Arrow press and hold, manage light saturation setting
                 conditions:
-                  - alias: "Confirm all conditions are met to proceed"
+                  - alias: Confirm all conditions are met to proceed
                     condition: and
                     conditions:
-                      - alias: "Check if correct action choice is selected"
+                      - alias: Check if correct action choice is selected
                         condition: or
                         conditions:
-                          - alias: "Check if should adjust light color temperature"
+                          - alias: Check if should adjust light color temperature
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'temperature' }}"
-                          - alias: "Check if should adjust light hue and saturation"
+                          - alias: Check if should adjust light hue and saturation
                             condition: template
                             value_template: "{{ var_event_buttons_arrows == 'hue_saturation' }}"
-                      - alias: "Check if light(s) to be controlled are set"
+                      - alias: Check if light(s) to be controlled are set
                         condition: template
                         value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
-                  - alias: "Repeated key press for the light(s) that are on"
+                  - alias: Repeated key press for the light(s) that are on
                     repeat:
                       until:
-                        - alias: "Check if triggered by button press"
+                        - alias: Check if triggered by button press
                           condition: trigger
                           id:
                             - trigger_right_release_zha
                             - trigger_right_release_mqtt
-                        - alias: "Check if the maximum repeat count reached"
+                        - alias: Check if the maximum repeat count reached
                           condition: template
                           value_template: "{{ repeat.index > var_repeat_max_count | int }}"
-                        - alias: "Wait for button to be released"
+                        - alias: Wait for button to be released
                           condition: template
                           value_template: "{{ wait.trigger is not none }}"
                       sequence:
-                        - alias: "Repeat for each light"
+                        - alias: Repeat for each light
                           repeat:
                             for_each: "{{ var_all_lights_on }}"
                             sequence:
-                              - alias: "Adjust individual light"
+                              - alias: Adjust individual light
                                 action: light.turn_on
                                 target:
                                   entity_id: "{{ repeat.item }}"
-                                data: >-
-                                  {%- if var_sync_lights == 'false' -%}
-                                    {%- set current_light = repeat.item -%}
-                                  {%- else -%}
-                                    {%- set current_light = var_first_light_on -%}
-                                  {%- endif -%}
-
-                                  {%- if event_buttons_arrows == "hue_saturation" -%}
-                                    {%- set hue_sat_values = state_attr( current_light, 'hs_color' ) | list -%}
-                                    {%- set current_hue = hue_sat_values[0] -%}
-                                    {%- set current_sat = hue_sat_values[1] -%}
-                                    {%- set max_hue = var_hue_max | float -%}
-                                    {%- set target_hue = ( current_hue + var_hue_step ) | float -%}
-                                    {%- set updated_hue = ( target_hue - max_hue ) if target_hue > max_hue else target_hue -%}
-
-                                    {{ dict( **{ 'hs_color' : [ updated_hue, current_sat ] } ) }}
-
-                                  {%- elif event_buttons_arrows == "temperature" -%}
-                                    {%- set current_temp = state_attr( current_light, 'color_temp_kelvin' ) | int -%}
-                                    {%- set min_temp = var_kelvin_temp_min | float -%}
-                                    {%- set max_temp = var_kelvin_temp_max | float -%}
-                                    {%- set target_temp = ( current_temp + var_kelvin_step ) | float -%}
-                                    {%- set updated_temp = min_temp if target_temp < min_temp else ( max_temp if target_temp > max_temp else target_temp ) -%}
-
-                                    {{ dict( **{ 'color_temp_kelvin' : updated_temp } ) }}
-
-                                  {%- endif -%}
-
-                  - alias: "Delay between right arrow adjust hue steps"
+                                data:
+                                  "{%- if var_sync_lights == 'false' -%}\n  {%- set current_light
+                                  = repeat.item -%}\n{%- else -%}\n  {%- set current_light = var_first_light_on
+                                  -%}\n{%- endif -%}\n{%- if event_buttons_arrows == \"hue_saturation\"
+                                  -%}\n  {%- set hue_sat_values = state_attr( current_light, 'hs_color'
+                                  ) | list -%}\n  {%- set current_hue = hue_sat_values[0] -%}\n
+                                  \ {%- set current_sat = hue_sat_values[1] -%}\n  {%- set max_hue
+                                  = var_hue_max | float -%}\n  {%- set target_hue = ( current_hue
+                                  + var_hue_step ) | float -%}\n  {%- set updated_hue = ( target_hue
+                                  - max_hue ) if target_hue > max_hue else target_hue -%}\n\n  {{
+                                  dict( **{ 'hs_color' : [ updated_hue, current_sat ] } ) }}\n\n{%-
+                                  elif event_buttons_arrows == \"temperature\" -%}\n  {%- set current_temp
+                                  = state_attr( current_light, 'color_temp_kelvin' ) | int -%}\n
+                                  \ {%- set min_temp = var_kelvin_temp_min | float -%}\n  {%- set
+                                  max_temp = var_kelvin_temp_max | float -%}\n  {%- set target_temp
+                                  = ( current_temp + var_kelvin_step ) | float -%}\n  {%- set updated_temp
+                                  = min_temp if target_temp < min_temp else ( max_temp if target_temp
+                                  > max_temp else target_temp ) -%}\n\n  {{ dict( **{ 'color_temp_kelvin'
+                                  : updated_temp } ) }}\n\n{%- endif -%}"
+                  - alias: Delay between right arrow adjust hue steps
                     delay:
                       hours: 0
                       minutes: 0
                       seconds: 0
                       milliseconds: 500
-
-              - alias: "For Right Arrow press and hold, run custom action"
+              - alias: For Right Arrow press and hold, run custom action
                 conditions:
-                  - alias: "Check if correct action choice is selected"
+                  - alias: Check if correct action choice is selected
                     condition: template
                     value_template: "{{ var_event_buttons_arrows == 'action' }}"
                 sequence: !input action_button_press_right_hold

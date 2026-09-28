@@ -32,6 +32,40 @@
 # |                      |              | - Run custom action                        |
 # | -------------------- | ------------ | ------------------------------------------ |
 
+# This blueprint uses an IKEA STYRBAR Remote Control connected through ZHA or MQTT
+# This blueprint allows you to control lights and run custom actions with the remote's buttons
+#
+# | Button Type          | Interaction  | Action Choices                             |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Increase | Press        | - Turn on the light(s)                     |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Increase | Press & Hold | - Increase light brightness (repeat)       |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Decrease | Press        | - Turn off the light(s)                    |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Brightness, Decrease | Press & Hold | - Decrease light brightness (repeat)       |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Left          | Press        | - Adjust color temperature (once)          |
+# |                      |              | - Adjust light hue and saturation (once)   |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Left          | Press & Hold | - Adjust color temperature (repeat)        |
+# |                      |              | - Adjust light hue and saturation (repeat) |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Right         | Press        | - Adjust color temperature (once)          |
+# |                      |              | - Adjust light hue and saturation (once)   |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+# | Arrow, Right         | Press & Hold | - Adjust color temperature (repeat)        |
+# |                      |              | - Adjust light hue and saturation (repeat) |
+# |                      |              | - Run custom action                        |
+# | -------------------- | ------------ | ------------------------------------------ |
+
 blueprint:
   name: IKEA STYRBAR, 4 Button Remote Control
   description: Control devices with your IKEA STYRBAR 4 button remote.
@@ -574,7 +608,7 @@ triggers:
     event_data:
       device_id: !input remote
       command: "press"
-      args: [255, 13, 0]
+      args: [256, 13, 0]
     id: trigger_right_single_press_zha
   - alias: Right Arrow Button Press (via ZHA event)
     trigger: device
@@ -651,7 +685,7 @@ actions:
                         value_template: "{{ var_event_button_power == 'toggle' }}"
                       - alias: "Check if the light(s) are currently off"
                         condition: template
-                        value_template: "{{ var_all_lights_on | length == 0 }}"
+                        value_template: "{{ var_all_lights_on | length > 0 }}"
                 sequence:
                   - alias: "Determine how to turn on light(s)"
                     if:
