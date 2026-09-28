@@ -32,12 +32,11 @@ sensor:
       - startUrl
       - currentPage
       - screenOrientation
-      - screenBrightness
       - screenLocked
       - screenOn
       - batteryTemperature
     value_template: "{{ value_json.screenOn }}"
-    scan_interval: 10
+    scan_interval: 60
 
   - platform: rest
     name: Kitchen Tablet Settings
@@ -53,4 +52,4 @@ sensor:
       - darknessLevel
     resource: !secret rest_url_kiosk_device_settings
     value_template: "{{ value_json.startURL }}"
-    scan_interval: 10
+    scan_interval: 60
