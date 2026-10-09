@@ -149,7 +149,7 @@ actions:
                 id: trigger_motion_detect
               - alias: Check if custom action is defined
                 condition: template
-                value_template: "{{ var_action_occupancy_detect is not defined }}"
+                value_template: "{{ var_action_occupancy_detect is defined }}"
         sequence: !input action_occupancy_detect
       - alias: Actions to perform when MOTION CLEARED
         conditions:
@@ -160,7 +160,7 @@ actions:
                 id: trigger_motion_clear
               - alias: Check if custom action is defined
                 condition: template
-                value_template: "{{ var_action_occupancy_clear is not defined }}"
+                value_template: "{{ var_action_occupancy_clear is defined }}"
         sequence: !input action_occupancy_clear
 
 mode: queued

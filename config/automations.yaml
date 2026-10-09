@@ -668,9 +668,17 @@
                     icon: sfsymbols:clock
             - alias: If Allowed Run Automations
               if:
-                - condition: state
-                  entity_id: cover.garage_door
-                  state: closed
+                - condition: and
+                  conditions:
+                    - condition: state
+                      entity_id: cover.garage_door
+                      state: closed
+                    - condition: switch.is_on
+                      target:
+                        entity_id: input_boolean.garage_automation_allow_occupancy_lights
+                      options:
+                        behavior: any
+                        for: 00:00:00
               then:
                 - action: light.turn_on
                   metadata: {}
@@ -706,6 +714,12 @@
               if:
                 - condition: and
                   conditions:
+                    - condition: switch.is_on
+                      target:
+                        entity_id: input_boolean.garage_automation_allow_occupancy_lights
+                      options:
+                        behavior: any
+                        for: 00:00:00
                     - condition: state
                       entity_id: cover.garage_door
                       state: closed
@@ -730,6 +744,12 @@
               if:
                 - condition: and
                   conditions:
+                    - condition: switch.is_on
+                      target:
+                        entity_id: input_boolean.garage_automation_allow_occupancy_lights
+                      options:
+                        behavior: any
+                        for: 00:00:00
                     - condition: state
                       entity_id: cover.garage_door
                       state: closed
@@ -1301,7 +1321,7 @@
             - alias: If Allowed Run Automations
               if:
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
               then:
                 - action: light.turn_on
@@ -1318,7 +1338,7 @@
                   id:
                     - Door has been OPEN for 2 min
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: binary_sensor.door_garage_interior
@@ -1337,7 +1357,7 @@
                   id:
                     - Door has been OPEN for 10 min
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: binary_sensor.door_garage_interior
@@ -1373,7 +1393,7 @@
                     icon: sfsymbols:clock
             - if:
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: binary_sensor.door_garage_interior
@@ -1392,7 +1412,7 @@
                   id:
                     - Presence was DETECTED
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
                 - condition: or
                   conditions:
@@ -1417,7 +1437,7 @@
                   id:
                     - Presence was CLEARED
                 - condition: state
-                  entity_id: input_boolean.laundry_room_automation_allow_occupancy
+                  entity_id: input_boolean.laundry_room_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: binary_sensor.door_garage_interior
@@ -1490,17 +1510,26 @@
                     entity_id:
                       - cover.blinds_kitchen
                   data: {}
+                - alias: Maybe OPEN Bedroom 1 Curtains
+                  if:
+                    - condition: state
+                      entity_id: input_boolean.bedroom_1_automation_allow_occupancy_covers
+                      state: "on"
+                  then:
+                    - action: cover.open_cover
+                      metadata: {}
+                      target:
+                        entity_id:
+                          - cover.curtain_large_left_bedroom_1
+                          - cover.curtain_large_right_bedroom_1
+                          - cover.curtain_small_left_bedroom_1
+                          - cover.curtain_small_right_bedroom_1
+                      data: {}
                 - alias: Maybe OPEN Bedroom 2 Blinds
                   if:
-                    - condition: and
-                      conditions:
-                        - condition: state
-                          entity_id: input_boolean.bedroom_2_automation_allow_occupancy
-                          state: "on"
-                        - condition: state
-                          entity_id: input_boolean.guests_home
-                          state: "off"
-                          alias: If Guests are Not Home
+                    - condition: state
+                      entity_id: input_boolean.bedroom_2_automation_allow_occupancy_covers
+                      state: "on"
                   then:
                     - alias: OPEN Bedroom 2 Blinds
                       action: cover.open_cover_tilt
@@ -1510,7 +1539,7 @@
                 - alias: Maybe OPEN Bedroom 3 Blinds
                   if:
                     - condition: state
-                      entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+                      entity_id: input_boolean.bedroom_3_automation_allow_occupancy_covers
                       state: "on"
                   then:
                     - action: cover.open_cover_tilt
@@ -1518,16 +1547,16 @@
                         entity_id:
                           - cover.blinds_bedroom_3
                       data: {}
-                - alias: Maybe OPEN Bedroom 4 Blinds
+                - alias: Maybe OPEN Bedroom 3 Blinds
                   if:
                     - condition: state
-                      entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                      entity_id: input_boolean.bedroom_3_automation_allow_occupancy_covers
                       state: "on"
                   then:
                     - action: cover.open_cover_tilt
                       target:
                         entity_id:
-                          - cover.blinds_bedroom_4
+                          - cover.blinds_bedroom_3
                       data: {}
   mode: queued
   max: 10
@@ -3327,7 +3356,7 @@
                     - home
                 - alias: Confirm occupancy automations are allowed
                   condition: state
-                  entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_3_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: light.bedroom_3_group_occupancy_lights
@@ -3364,7 +3393,10 @@
                   target:
                     entity_id: light.bedroom_3_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear: 60
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -3376,7 +3408,7 @@
                     - home
                 - alias: Confirm occupancy automations are allowed
                   condition: state
-                  entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_3_automation_allow_occupancy_lights
                   state: "on"
           then:
             - alias: Generate scene
@@ -3397,6 +3429,9 @@
                 - condition: motion.is_not_detected
                   target:
                     entity_id: binary_sensor.bedroom_3_group_all_occupancy
+                  options:
+                    behavior: any
+                    for: 00:00:00
               then:
                 - alias: Turn off fan
                   action: fan.turn_off
@@ -3522,14 +3557,14 @@
       event_button_press_preset_single:
         - if:
             - condition: state
-              entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+              entity_id: input_boolean.bedroom_3_automation_allow_occupancy_lights
               state: "on"
           then:
             - action: input_boolean.turn_off
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_3_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -3541,7 +3576,7 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_3_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_3_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -3672,14 +3707,14 @@
       event_button_press_preset_single:
         - if:
             - condition: state
-              entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+              entity_id: input_boolean.bedroom_4_automation_allow_occupancy_lights
               state: "on"
           then:
             - action: input_boolean.turn_off
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_4_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -3691,7 +3726,7 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_4_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -3836,14 +3871,14 @@
       event_button_press_preset_single:
         - if:
             - condition: state
-              entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+              entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
               state: "on"
           then:
             - action: input_boolean.turn_off
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -3855,7 +3890,7 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_2_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_2_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -4011,14 +4046,14 @@
       event_button_press_preset_single:
         - if:
             - condition: state
-              entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+              entity_id: input_boolean.bedroom_1_automation_allow_occupancy_lights
               state: "on"
           then:
             - action: input_boolean.turn_off
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_1_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -4030,7 +4065,7 @@
               metadata: {}
               data: {}
               target:
-                entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                entity_id: input_boolean.bedroom_1_automation_allow_occupancy_lights
             - action: script.amazon_echo_announcement
               metadata: {}
               data:
@@ -5163,9 +5198,6 @@
                 - condition: trigger
                   id:
                     - AppleTV is PAUSED
-                - condition: state
-                  entity_id: switch.sync_box_light_sync
-                  state: "on"
           sequence:
             - action: scene.create
               metadata: {}
@@ -5174,8 +5206,6 @@
                 snapshot_entities:
                   - switch.sync_box_light_sync
                   - number.sync_box_brightness
-                  - light.tv_ambient_wrap
-                  - light.tv_ambient_base
                   - light.living_room_corner_lamp
                   - light.living_room_couch_lamp
             - action: light.turn_on
@@ -5186,34 +5216,14 @@
               target:
                 entity_id:
                   - light.living_room_corner_lamp
-            - action: switch.turn_off
-              metadata: {}
-              data: {}
-              target:
-                entity_id: switch.sync_box_light_sync
-            - delay:
-                hours: 0
-                minutes: 0
-                seconds: 1
-                milliseconds: 100
             - action: light.turn_on
               metadata: {}
               data:
-                brightness_pct:
-                  "{% set brightness = state_attr( 'light.living_room_corner_lamp',
-                  'brightness' ) | int %} {{ ( ( brightness / 255 ) * 100 ) | float |
-                  int }}
-
-                  "
-                rgb_color:
-                  "{{ state_attr( 'light.living_room_corner_lamp', 'rgb_color'
-                  ) | list }}
-
-                  "
+                brightness_pct: 20
+                transition: 1
               target:
                 entity_id:
-                  - light.tv_ambient_wrap
-                  - light.tv_ambient_base
+                  - light.living_room_couch_lamp
           alias: PLAYING to PAUSED
         - conditions:
             - condition: and
@@ -5221,9 +5231,6 @@
                 - condition: trigger
                   id:
                     - AppleTV is PLAYING
-                - condition: state
-                  entity_id: switch.sync_box_light_sync
-                  state: "off"
           sequence:
             - action: scene.turn_on
               metadata: {}
@@ -5692,20 +5699,51 @@
                       state:
                         - "on"
               then:
-                - action: light.turn_off
+                - action: light.turn_on
                   metadata: {}
                   data: {}
                   target:
                     entity_id:
                       - light.backyard_string_lights
-              else:
                 - action: light.turn_off
                   metadata: {}
                   data: {}
                   target:
                     entity_id:
-                      - light.backyard_string_lights
                       - light.patio_string_lights
+              else:
+                - if:
+                    - condition: and
+                      conditions:
+                        - condition: state
+                          entity_id: light.backyard_string_lights
+                          state:
+                            - "on"
+                        - condition: state
+                          entity_id: light.patio_string_lights
+                          state:
+                            - "off"
+                  then:
+                    - action: light.turn_off
+                      metadata: {}
+                      data: {}
+                      target:
+                        entity_id:
+                          - light.backyard_string_lights
+                    - action: light.turn_on
+                      metadata: {}
+                      data: {}
+                      target:
+                        entity_id:
+                          - light.patio_string_lights
+                  else:
+                    - action: light.turn_off
+                      metadata: {}
+                      data: {}
+                      target:
+                        entity_id:
+                          - light.backyard_string_lights
+                          - light.patio_string_lights
       lights_dot_4:
         - light.christmas_tree
       action_dial_left_dot_4:
@@ -6024,7 +6062,7 @@
                     - home
                 - alias: Confirm occupancy automations are allowed
                   condition: state
-                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy_lights
                   state: "on"
                 - condition: state
                   entity_id: light.bedroom_4_group_occupancy_lights
@@ -6061,7 +6099,10 @@
                   target:
                     entity_id: light.bedroom_4_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear: 60
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -6073,7 +6114,7 @@
                     - home
                 - alias: Confirm occupancy automations are allowed
                   condition: state
-                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_4_automation_allow_occupancy_lights
                   state: "on"
           then:
             - alias: Generate scene
@@ -6097,6 +6138,9 @@
                 - condition: motion.is_not_detected
                   target:
                     entity_id: binary_sensor.bedroom_4_group_all_occupancy
+                  options:
+                    behavior: any
+                    for: 00:00:00
               then:
                 - alias: Turn off fan
                   action: fan.turn_off
@@ -6210,7 +6254,10 @@
                   target:
                     entity_id: light.bedroom_2_group_occupancy_lights
                   data: {}
-      delay_occupancy_clear: 60
+      delay_occupancy_clear:
+        hours: 0
+        minutes: 5
+        seconds: 0
       action_occupancy_clear:
         - alias: Check if can run custom actions
           if:
@@ -6244,6 +6291,9 @@
                 - condition: motion.is_not_detected
                   target:
                     entity_id: binary_sensor.bedroom_2_group_all_occupancy
+                  options:
+                    behavior: any
+                    for: 00:00:00
               then:
                 - alias: Turn off fan
                   action: fan.turn_off
@@ -6307,9 +6357,12 @@
                 icon: sfsymbols:clock
       sensor_occupancy: binary_sensor.bedroom_4_group_all_occupancy
       action_occupancy_detect: []
-      delay_occupancy_detect: "00:00:00"
+      delay_occupancy_detect: 00:00:00
       action_occupancy_clear: []
-      delay_occupancy_clear: "00:00:00"
+      delay_occupancy_clear:
+        hours: 8
+        minutes: 5
+        seconds: 0
 - id: "1783261217609"
   alias: Bedroom 1, Closet Doors Open/Close
   description:
@@ -6484,7 +6537,7 @@
             - alias: If Allowed Run Automations
               if:
                 - condition: state
-                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy_lights
                   state: "on"
               then:
                 - action: light.turn_on
@@ -6517,7 +6570,7 @@
             - alias: If Allowed Run Automations
               if:
                 - condition: state
-                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy
+                  entity_id: input_boolean.bedroom_1_automation_allow_occupancy_lights
                   state: "on"
               then:
                 - action: light.turn_off

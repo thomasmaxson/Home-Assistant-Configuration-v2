@@ -259,3 +259,16 @@ themes:
 
         sidebar--text-color: "rgba( var( --black-color-rgb ), 0.6 )"
         sidebar--text-color--priority: "var( --tile-card--name-color )"
+
+    card-mod-theme: casamaxson
+    card-mod-row-yaml: |
+      hui-toggle-entity-row:
+          hui-generic-entity-row:
+            $: |
+              .info,
+              .info > * {
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                border: 1px solid teal;
+              }

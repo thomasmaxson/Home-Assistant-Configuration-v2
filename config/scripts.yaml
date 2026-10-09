@@ -117,7 +117,7 @@ amazon_echo_announcement:
               variables:
                 media_players:
                   "{%- set ns = namespace( players = [] ) -%}\n{%- set media_data
-                  = state_attr( 'sensor.media_player_parameters', 'data_array' ) -%}\n{%-
+                  = state_attr( 'sensor.media_player_data_parameters', 'data_array' ) -%}\n{%-
                   for device in media_data -%}\n  {%- if ( device.key in send_to ) and (
                   is_state( device.permission, 'on' ) ) -%}\n    {% set ns.players = ns.players
                   + [ device.announce ] -%}\n  {%- endif -%}\n{%- endfor -%}\n{{ ns.players
@@ -1392,12 +1392,12 @@ lights_security_all_on:
         color: Red
         effect: Fast Blink
         duration: Forever
-      level: 100
-      entity_ids:
-        - light.bedroom_1_ceiling_fan_switch
-        - light.bedroom_2_ceiling_fan_switch
-        - light.bedroom_3_ceiling_fan_switch
-        - light.bedroom_4_ceiling_fan_switch
+        level: 100
+        entity_ids:
+          - light.bedroom_1_ceiling_fan_switch
+          - light.bedroom_2_ceiling_fan_switch
+          - light.bedroom_3_ceiling_fan_switch
+          - light.bedroom_4_ceiling_fan_switch
     - alias: CREATE Scene – Household Lights
       action: scene.create
       metadata: {}
@@ -1645,3 +1645,249 @@ toggle_cover_tilt_position:
           "{% set current_tilt = state_attr(target_entity, 'current_tilt_position')
           | int(0) %} {% if current_tilt >= 95 %}\n  50\n{% else %}\n  100\n{% endif
           %}\n"
+security_generate_duplicate:
+  sequence:
+    - action: script.update_inovelli_light_switch_led_s
+      metadata: {}
+      data:
+        led: All
+        color: Red
+        effect: Fast Blink
+        duration: Forever
+        level: 100
+        entity_ids:
+          - light.bedroom_1_ceiling_fan_switch
+          - light.bedroom_2_ceiling_fan_switch
+          - light.bedroom_3_ceiling_fan_switch
+          - light.bedroom_4_ceiling_fan_switch
+    - alias: CREATE Scene – Household Lights
+      action: scene.create
+      metadata: {}
+      data:
+        scene_id: snapshot_house_lights
+        snapshot_entities:
+          - light.kitchen_light_1
+          - light.kitchen_light_2
+          - light.kitchen_light_3
+          - light.kitchen_light_4
+          - light.kitchen_light_5
+          - light.kitchen_light_6
+          - light.dining_room_chandelier
+          - light.living_room_corner_lamp
+          - light.living_room_couch_lamp
+          - light.foyer_exterior_entryway
+          - light.foyer_hallway_ceiling
+          - light.foyer_ceiling_ledge
+          - light.foyer_under_table
+          - light.foyer_entryway_ceiling
+          - light.bedroom_1_ceiling_fan
+          - light.bedroom_1_lamp_hers
+          - light.bedroom_1_lamp_his
+          - light.closet_hallway_ceiling_light
+          - light.closet_hallway_light_hers
+          - light.closet_hallway_light_his
+          - light.switch_1_bathroom_main_light
+          - light.switch_2_bathroom_main_light
+          - light.bedroom_2_ceiling_fan
+          - light.bedroom_2_lamp_left
+          - light.bedroom_2_lamp_right
+          - light.bedroom_3_ceiling_fan
+          - light.bedroom_3_floor_lamp
+          - light.bedroom_4_ceiling_fan
+          - light.bedroom_4_accent_lamp_right
+          - light.bedroom_4_lightstrip
+          - light.bedroom_4_tie_fighter_lamp
+          - light.laundry_hallway_light
+          - light.laundry_ceiling_light
+          - light.guest_hallway_light
+          - light.garage_ceiling
+          - light.ceiling_fan_bar
+    - alias: Turn ON Lights
+      parallel:
+        - alias: Lights On - Common Areas
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.kitchen_ceiling_lights
+              - light.dining_room_chandelier
+              - light.living_room_corner_lamp
+              - light.living_room_couch_lamp
+              - light.foyer_entryway_ceiling
+              - light.foyer_hallway_ceiling
+        - alias: Lights On - Bedroom 1
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.bedroom_1_ceiling_fan
+              - light.bedroom_1_lamp_hers
+              - light.bedroom_1_lamp_his
+              - light.closet_hallway_ceiling_light
+              - light.switch_1_bathroom_main_light
+              - light.switch_2_bathroom_main_light
+          enabled: true
+        - alias: Lights On - Bedroom 2
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.bedroom_2_ceiling_fan
+              - light.bedroom_2_lamp_left
+              - light.bedroom_2_lamp_right
+        - alias: Lights On - Bedroom 3
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.bedroom_3_ceiling_fan
+              - light.bedroom_3_floor_lamp
+        - alias: Lights On - Bedroom 4
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.bedroom_4_ceiling_fan
+              - light.bedroom_4_accent_lamp_right
+              - light.bedroom_4_lightstrip
+        - alias: Lights On - Other
+          action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 100
+          target:
+            entity_id:
+              - light.foyer_hallway_ceiling
+              - light.guest_hallway_light
+              - light.laundry_hallway_light
+              - light.laundry_ceiling_light
+              - light.ceiling_fan_bar
+  alias: Security, GENERATE (Lights)
+  description: ""
+security_generate_duplicate_2:
+  sequence:
+    - alias: Create Scene – Security, Privacy Mode
+      action: scene.create
+      metadata: {}
+      data:
+        scene_id: snapshot_house_security_privacy
+        snapshot_entities:
+          - input_boolean.camera_int_privacy_mode
+          - switch.camera_ext_backyard_northeast_privacy_mode
+          - switch.camera_ext_backyard_southeast_privacy_mode
+          - switch.camera_ext_doorbell_privacy_mode
+          - switch.camera_ext_front_yard_northeast_privacy_mode
+          - switch.camera_ext_front_yard_southeast_privacy_mode
+          - switch.camera_ext_side_yard_north_east_privacy_mode
+          - switch.camera_ext_side_yard_north_west_privacy_mode
+          - switch.camera_ext_side_yard_south_east_privacy_mode
+          - switch.camera_ext_garage_privacy_mode
+          - switch.camera_int_bdr1_privacy_mode
+          - switch.camera_int_bdr3_privacy_mode
+          - switch.camera_int_bdr4_privacy_mode
+          - switch.camera_int_foyer_entry_privacy_mode
+          - switch.camera_int_dining_room_privacy_mode
+          - switch.camera_int_kitchen_privacy_mode
+          - switch.camera_int_living_room_privacy_mode
+    - alias: Create Scene – Security, Recording Mode
+      action: scene.create
+      metadata: {}
+      data:
+        scene_id: snapshot_house_security_recording
+        snapshot_entities:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
+          - select.camera_ext_backyard_northeast_recording_mode
+          - select.camera_ext_backyard_southeast_recording_mode
+          - select.camera_ext_doorbell_recording_mode
+          - select.camera_ext_front_yard_northeast_recording_mode
+          - select.camera_ext_front_yard_southeast_recording_mode
+          - select.camera_ext_side_yard_north_east_recording_mode
+          - select.camera_ext_side_yard_north_west_recording_mode
+          - select.camera_ext_side_yard_south_east_recording_mode
+          - select.camera_ext_garage_recording_mode
+          - select.camera_int_bdr1_recording_mode
+          - select.camera_int_bdr3_recording_mode
+          - select.camera_int_bdr4_recording_mode
+          - select.camera_int_foyer_entry_recording_mode
+          - select.camera_int_dining_room_recording_mode
+          - select.camera_int_kitchen_recording_mode
+          - select.camera_int_living_room_recording_mode
+    - alias: DISABLED Interior Privacy Mode
+      action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.camera_int_privacy_mode
+    - alias: ENABLE Recording for All Cameras
+      action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - input_boolean.enable_exterior_camera_recording
+          - input_boolean.enable_interior_camera_recording
+          - input_boolean.enable_motion_camera_recording
+  alias: Security, GENERATE (Cameras)
+  description: ""
+security_restore_duplicate:
+  sequence:
+    - alias: ACTIVATE Scene(s)
+      action: scene.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
+    - alias: DELETE Scene(s)
+      action: scene.delete
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - scene.snapshot_house_security_privacy
+          - scene.snapshot_house_security_recording
+  alias: Security, RESTORE (Cameras)
+  description: ""
+security_restore_duplicate_2:
+  sequence:
+    - action: script.update_inovelli_light_switch_led_s
+      data:
+        led: All
+        effect: "Off"
+        duration: Forever
+        entity_ids:
+          - light.bedroom_1_ceiling_fan_switch
+          - light.bedroom_2_ceiling_fan_switch
+          - light.bedroom_3_ceiling_fan_switch
+          - light.bedroom_4_ceiling_fan_switch
+        color: Blue
+    - alias: ACTIVATE Scene(s)
+      action: scene.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - scene.snapshot_house_lights
+    - alias: DELETE Scene(s)
+      action: scene.delete
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - scene.snapshot_house_lights
+          - scene.snapshot_house_switches
+  alias: Security, RESTORE (Lights)
+  description: ""

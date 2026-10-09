@@ -487,11 +487,9 @@ views:
                                 name: Sync Ceiling Lights
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.foyer_automation_door_night_lights
+                              - entity: input_boolean.foyer_automation_door_night_lights
                                 name: Turn on lights when door opens at night
-                              - entity: >-
-                                  input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
+                              - entity: input_boolean.toggle_lights_when_doorbell_pressed_automation_allow
                                 name: Toggle lights when doorbell is pressed
       - type: custom:button-card
         view_layout:
@@ -884,8 +882,7 @@ views:
                                 label: Lights Configuration
                               - entity: input_boolean.sync_kitchen_ceiling_lights
                                 name: Sync Ceiling Lights
-                              - entity: >-
-                                  switch.circadian_lighting_kitchen_ceiling_lights_circadian
+                              - entity: switch.circadian_lighting_kitchen_ceiling_lights_circadian
                                 name: Ceiling Lights Adaptive Color
                               - entity: input_boolean.sync_cabinet_above_lights
                                 name: Sync Cabinet Up Lights
@@ -1098,8 +1095,7 @@ views:
                           - entities:
                               - type: section
                                 label: Lights Configuration
-                              - entity: >-
-                                  switch.circadian_lighting_light_corner_lamp_circadian
+                              - entity: switch.circadian_lighting_light_corner_lamp_circadian
                                 name: Corner Lamp Adaptive Color
                               - type: section
                                 label: Voice Assistant
@@ -1107,11 +1103,9 @@ views:
                                 name: Allow Annoucements
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.living_room_automation_door_night_lights
+                              - entity: input_boolean.living_room_automation_door_night_lights
                                 name: Turn on lights when door opens at night
-                              - entity: >-
-                                  input_boolean.living_room_automation_allow_tv_pause
+                              - entity: input_boolean.living_room_automation_allow_tv_pause
                                 name: Turn on lights when TV is paused at night
       - type: custom:button-card
         view_layout:
@@ -1378,23 +1372,26 @@ views:
                                 label: Lights Configuration
                               - entity: input_boolean.bedroom_1_sync_lights
                                 name: Sync Bedside Lamps
-                              - entity: >-
-                                  switch.circadian_lighting_bedside_lamp_hers_circadian
+                              - entity: switch.circadian_lighting_bedside_lamp_hers_circadian
                                 name: Her Bedside Lamp Adaptive Color
-                              - entity: >-
-                                  switch.circadian_lighting_bedside_lamp_his_circadian
+                              - entity: switch.circadian_lighting_bedside_lamp_his_circadian
                                 name: His Bedside Lamp Adaptive Color
+                              - type: section
+                                label: Cover Configuration
+                              - entity: input_boolean.bedroom_1_sync_curtains
+                                name: Sync Curtains
                               - type: section
                                 label: Voice Assistant
                               - entity: input_boolean.household_notify_bedroom_1
                                 name: Allow Annoucements
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.bedroom_1_automation_allow_occupancy
-                                name: Allow Occupancy Automations
-                              - entity: >-
-                                  input_boolean.bedroom_1_closet_automation_allow_doors
+                              - entity: input_boolean.bedroom_1_automation_allow_occupancy_covers
+                                name: Allow Room Blinds Automations
+                                label: Automations
+                              - entity: input_boolean.bedroom_1_automation_allow_occupancy_lights
+                                name: Allow Room Light Automations
+                              - entity: input_boolean.bedroom_1_closet_automation_allow_doors
                                 name: Toggle closet light when door opens/closes
                               - entity: input_boolean.closet_automatic_turn_off
                                 name: Automatically turn off closet lights
@@ -1602,11 +1599,9 @@ views:
                                 label: Lights Configuration
                               - entity: input_boolean.bedroom_2_sync_lights
                                 name: Sync Bedside Lamps
-                              - entity: >-
-                                  switch.circadian_lighting_bedside_lamp_left_circadian
+                              - entity: switch.circadian_lighting_bedside_lamp_left_circadian
                                 name: Left Bedside Lamp Adaptive Color
-                              - entity: >-
-                                  switch.circadian_lighting_bedside_lamp_right_circadian
+                              - entity: switch.circadian_lighting_bedside_lamp_right_circadian
                                 name: Right Bedside Lamp Adaptive Color
                               - type: section
                                 label: Voice Assistant
@@ -1614,12 +1609,10 @@ views:
                                 name: Allow Annoucements
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.bedroom_2_automation_allow_occupancy
+                              - entity: input_boolean.bedroom_2_automation_allow_occupancy_covers
                                 name: Allow Room Blinds Automations
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.bedroom_2_automation_allow_occupancy_lights
+                              - entity: input_boolean.bedroom_2_automation_allow_occupancy_lights
                                 name: Allow Room Light Automations
       - type: custom:button-card
         view_layout:
@@ -1661,6 +1654,9 @@ views:
                       - type: custom:button-card
                         template: chip_detail__door
                         entity: binary_sensor.door_bedroom_3
+                      - type: custom:button-card
+                        template: chip_detail__occupancy
+                        entity: binary_sensor.bedroom_3_group_all_occupancy
               - type: custom:decluttering-card
                 template: room_popup__chips
                 variables:
@@ -1786,9 +1782,11 @@ views:
                                 name: Allow Annoucements
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.bedroom_3_automation_allow_occupancy
-                                name: Allow Room Occupancy Automations
+                              - entity: input_boolean.bedroom_3_automation_allow_occupancy_covers
+                                name: Allow Room Blinds Automations
+                                label: Automations
+                              - entity: input_boolean.bedroom_3_automation_allow_occupancy_lights
+                                name: Allow Room Light Automations
       - type: custom:button-card
         view_layout:
           grid-area: tileBdr4
@@ -2086,14 +2084,11 @@ views:
                                 row:
                                   entity: input_boolean.bedroom_4_sync_accent_lights
                                   name: Sync accent lights
-                              - entity: >-
-                                  switch.circadian_lighting_light_accent_lamp_left_circadian
+                              - entity: switch.circadian_lighting_light_accent_lamp_left_circadian
                                 name: Accent Lamp (Left) Adaptive Color
-                              - entity: >-
-                                  switch.circadian_lighting_light_accent_lamp_right_circadian
+                              - entity: switch.circadian_lighting_light_accent_lamp_right_circadian
                                 name: Accent Lamp (Right) Adaptive Color
-                              - entity: >-
-                                  switch.circadian_lighting_lightstrip_baseboard_circadian
+                              - entity: switch.circadian_lighting_lightstrip_baseboard_circadian
                                 name: Lightstrip Adaptive Color
                               - type: section
                                 label: Voice Assistant
@@ -2101,19 +2096,11 @@ views:
                                 name: Allow Annoucements
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.bedroom_4_automation_allow_occupancy
-                                name: Allow Occupancy Automations
-                              - type: conditional
-                                conditions:
-                                  - condition: state
-                                    entity: >-
-                                      timer.bedroom_4_automation_last_motion_idle_reset
-                                    state: active
-                                row:
-                                  entity: >-
-                                    timer.bedroom_4_automation_last_motion_idle_reset
-                                  name: "Occupancy Idle In:"
+                              - entity: input_boolean.bedroom_4_automation_allow_occupancy_covers
+                                name: Allow Room Blinds Automations
+                                label: Automations
+                              - entity: input_boolean.bedroom_4_automation_allow_occupancy_lights
+                                name: Allow Room Light Automations
       - type: custom:button-card
         view_layout:
           grid-area: tileLaund
@@ -2310,9 +2297,8 @@ views:
                           - entities:
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.laundry_room_automation_allow_occupancy
-                                name: Allow Occupancy Automations
+                              - entity: input_boolean.laundry_room_automation_allow_occupancy_lights
+                                name: Allow Room Light Automations
       - type: custom:button-card
         view_layout:
           grid-area: tileGar
@@ -2462,9 +2448,8 @@ views:
                           - entities:
                               - type: section
                                 label: Automations
-                              - entity: >-
-                                  input_boolean.garage_automation_allow_occupancy
-                                name: Allow Occupancy Automations
+                              - entity: input_boolean.garage_automation_allow_occupancy_lights
+                                name: Allow Room Light Automations
       - type: custom:button-card
         view_layout:
           grid-area: tileOut
@@ -2758,19 +2743,15 @@ views:
                                       - type: custom:button-card
                                         template: entity_card__leak
                                         name: Left Sink
-                                        entity: >-
-                                          binary_sensor.leak_sink_bathroom_main_hers
+                                        entity: binary_sensor.leak_sink_bathroom_main_hers
                                         variables:
-                                          data_entity: >-
-                                            sensor.leak_sink_bathroom_main_hers_battery
+                                          data_entity: sensor.leak_sink_bathroom_main_hers_battery
                                       - type: custom:button-card
                                         template: entity_card__leak
                                         name: Right Sink
-                                        entity: >-
-                                          binary_sensor.leak_sink_bathroom_main_his
+                                        entity: binary_sensor.leak_sink_bathroom_main_his
                                         variables:
-                                          data_entity: >-
-                                            sensor.leak_sink_bathroom_main_his_battery
+                                          data_entity: sensor.leak_sink_bathroom_main_his_battery
                                       - type: custom:button-card
                                         template: entity_card__leak
                                         name: Toilet
@@ -2788,8 +2769,7 @@ views:
                                   - entities:
                                       - type: section
                                         label: Voice Assistant
-                                      - entity: >-
-                                          input_boolean.household_notify_bathroom_1
+                                      - entity: input_boolean.household_notify_bathroom_1
                                         name: Allow Annoucements
                   - type: vertical-stack
                     cards:
@@ -3191,7 +3171,7 @@ views:
                               name: Recycling Drop Off
                           - type: conditional
                             conditions:
-                              - entity: schedule.house_cleaning
+                              - entity: schedule.clean_house
                                 state_not: unknown
                               - entity: sensor.days_until_cleaning_day
                                 state_not: unavailable
@@ -3244,27 +3224,29 @@ views:
                             label: Triggered By
                           - entity: input_boolean.foyer_automation_door_night_lights
                             name: Main Entry Doors
-                          - entity: input_boolean.garage_automation_allow_occupancy
+                          - entity: input_boolean.garage_automation_allow_occupancy_lights
                             name: Garage (Interior) Door
-                          - entity: >-
-                              input_boolean.living_room_automation_door_night_lights
+                          - entity: input_boolean.living_room_automation_door_night_lights
                             name: Sliding Glass Door
-                          - entity: >-
-                              input_boolean.living_room_automation_allow_tv_pause
+                          - entity: input_boolean.living_room_automation_allow_tv_pause
                             name: Lights when TV is paused
-                          - entity: input_boolean.bedroom_1_automation_allow_occupancy
+                          - entity: input_boolean.bedroom_1_automation_allow_occupancy_lights
                             name: Main Bedroom Door
-                          - entity: >-
-                              input_boolean.bedroom_1_closet_automation_allow_doors
+                          - entity: input_boolean.bedroom_1_closet_automation_allow_doors
                             name: Auto-Shutoff Closet Lights
-                          - entity: input_boolean.bedroom_2_automation_allow_occupancy
+                          - entity: input_boolean.bedroom_2_automation_allow_occupancy_covers
+                            name: Guest Bedroom Blinds
+                          - entity: input_boolean.bedroom_2_automation_allow_occupancy_lights
                             name: Guest Bedroom Door
-                          - entity: input_boolean.bedroom_3_automation_allow_occupancy
+                          - entity: input_boolean.bedroom_3_automation_allow_occupancy_covers
+                            name: Jess' Office Blinds
+                          - entity: input_boolean.bedroom_3_automation_allow_occupancy_lights
                             name: Jess' Office Door
-                          - entity: input_boolean.bedroom_4_automation_allow_occupancy
+                          - entity: input_boolean.bedroom_4_automation_allow_occupancy_covers
+                            name: Tom's Office Blinds
+                          - entity: input_boolean.bedroom_4_automation_allow_occupancy_lights
                             name: Tom's Office Door
-                          - entity: >-
-                              input_boolean.laundry_room_automation_allow_occupancy
+                          - entity: input_boolean.laundry_room_automation_allow_occupancy_lights
                             name: Laundry Room Door
                   - type: vertical-stack
                     cards:
@@ -7708,10 +7690,10 @@ views:
                 - type: conditional
                   conditions:
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state_not: unavailable
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state: "on"
                   row:
                     type: custom:mushroom-light-card
@@ -7724,10 +7706,10 @@ views:
                 - type: conditional
                   conditions:
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state_not: unavailable
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state: "off"
                   row:
                     type: custom:mushroom-light-card
@@ -7740,10 +7722,10 @@ views:
                 - type: conditional
                   conditions:
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state_not: unavailable
                     - condition: state
-                      entity: input_boolean.sync_bedroom_2_bedside_lamps
+                      entity: input_boolean.bedroom_2_sync_lights
                       state: "off"
                   row:
                     type: custom:mushroom-light-card
@@ -8887,15 +8869,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_tom
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_tom_alert_activity_door_exterior
+                                  entity: input_boolean.app_notify_tom_alert_activity_door_exterior
                                   name: Exterior Door Status
                               - type: conditional
                                 conditions:
@@ -8903,15 +8882,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_tom
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_tom_alert_activity_door_interior
+                                  entity: input_boolean.app_notify_tom_alert_activity_door_interior
                                   name: Interior Door Status
                               - type: conditional
                                 conditions:
@@ -8919,15 +8895,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_tom
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_tom_alert_activity
+                                  - entity: input_boolean.app_notify_tom_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_tom_alert_activity_person_location
+                                  entity: input_boolean.app_notify_tom_alert_activity_person_location
                                   name: Person Location
                               - type: conditional
                                 conditions:
@@ -9044,15 +9017,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_jess
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_jess_alert_activity_door_exterior
+                                  entity: input_boolean.app_notify_jess_alert_activity_door_exterior
                                   name: Exterior Door Status
                               - type: conditional
                                 conditions:
@@ -9060,15 +9030,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_jess
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_jess_alert_activity_door_interior
+                                  entity: input_boolean.app_notify_jess_alert_activity_door_interior
                                   name: Interior Door Status
                               - type: conditional
                                 conditions:
@@ -9076,15 +9043,12 @@ views:
                                     state: "on"
                                   - entity: input_boolean.app_notify_jess
                                     state_not: unavailable
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state: "on"
-                                  - entity: >-
-                                      input_boolean.app_notify_jess_alert_activity
+                                  - entity: input_boolean.app_notify_jess_alert_activity
                                     state_not: unavailable
                                 row:
-                                  entity: >-
-                                    input_boolean.app_notify_jess_alert_activity_person_location
+                                  entity: input_boolean.app_notify_jess_alert_activity_person_location
                                   name: Person Location
                               - type: conditional
                                 conditions:
