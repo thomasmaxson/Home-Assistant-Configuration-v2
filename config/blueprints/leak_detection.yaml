@@ -6,15 +6,13 @@ blueprint:
     min_version: 2024.6.0
   domain: automation
   input:
-    device:
-      name: Aqara Leak Sensor
-      description: "The Aqara water leak sensor that is being monitored."
+    entity:
+      name: Leak Sensor
+      description: "The water leak sensor entity that is being monitored."
       selector:
-        device:
-          filter:
-            - integration: zha
-              manufacturer: LUMI
-              model: lumi.sensor_wleak.aq1
+        entity:
+          domain: binary_sensor
+          device_class: moisture
 
     action_alert:
       name: Actions
@@ -61,15 +59,9 @@ max: !input config_max_num
 max_exceeded: silent
 
 triggers:
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_id: !input device
+  - trigger: state
+    entity_id: !input entity
+    to: "on"
 
 actions:
-  - variables:
-      device_state: "{{ trigger.event.data.new_state.state }}"
-  - choose:
-      - conditions:
-          - '{{ device_state == "on" }}'
-        sequence: !input action_alert
+  - sequence: !input action_alert
