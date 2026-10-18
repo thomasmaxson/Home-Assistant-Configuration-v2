@@ -1547,7 +1547,7 @@
                         entity_id:
                           - cover.blinds_bedroom_3
                       data: {}
-                - alias: Maybe OPEN Bedroom 3 Blinds
+                - alias: Maybe OPEN Bedroom 4 Blinds
                   if:
                     - condition: state
                       entity_id: input_boolean.bedroom_3_automation_allow_occupancy_covers
@@ -1556,7 +1556,7 @@
                     - action: cover.open_cover_tilt
                       target:
                         entity_id:
-                          - cover.blinds_bedroom_3
+                          - cover.blinds_bedroom_4
                       data: {}
   mode: queued
   max: 10
@@ -3197,7 +3197,8 @@
     - trigger: state
       entity_id:
         - sensor.toothbrush_j_state
-      to: Running
+      to:
+        - running
       id: Tooth Brush is RUNNING
     - minutes: "00"
       id: On 00:00 of every hour
