@@ -31,6 +31,22 @@ script: !include scripts.yaml
 frontend: !include themes.yaml
 
 #
+# CUSTOM: Homekit Doorbell Integration
+# ----------------------------------------
+
+homekit:
+  - name: HA to HK Doorbell
+    port: 21061
+    mode: accessory
+    filter:
+      include_entities:
+        - camera.ext_doorbell_high
+    entity_config:
+      camera.ext_doorbell_high:
+        name: Doorbell Motion
+        linked_doorbell_sensor: binary_sensor.doorbell_motion_detected
+
+#
 # CUSTOM: Delete integration
 # ----------------------------------------
 
