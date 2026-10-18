@@ -4413,7 +4413,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 9105473c4abc54acb9272f702eac9ddd
+      entity: binary_sensor.leak_air_conditioner
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4457,7 +4457,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 83875f47d69895f805ffee3784ffdded
+      entity: binary_sensor.leak_washing_machine
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4501,7 +4501,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 6bd2c853acb282d85e9968c62bb29aaa
+      entity: binary_sensor.leak_sink_kitchen
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4539,7 +4539,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: f0706e0f97f9cc10b194cecc9edd13d3
+      entity: binary_sensor.leak_sink_bathroom_main_his
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4579,7 +4579,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 5417f745a698208c494dfda0747d01bc
+      entity: binary_sensor.leak_sink_bathroom_main_hers
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4619,7 +4619,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 09f89e0d53eea01f3b331123d2d301cb
+      entity: binary_sensor.leak_toilet_bathroom_main
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4659,7 +4659,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 7a9df4008e35b6407605dd95b9861fdb
+      entity: binary_sensor.leak_sink_bathroom_guest
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4699,7 +4699,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: e0841d5a6df0fd6591a82c3d2f54c648
+      entity: binary_sensor.leak_toilet_bathroom_guest
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4739,7 +4739,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 0358df5dd4d6317165009562dff8c8c1
+      entity: binary_sensor.leak_toilet_bathroom_half
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4779,7 +4779,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 940b6fbbc3f55027431599fa5fe79e09
+      entity: binary_sensor.leak_sink_bathroom_half
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4819,7 +4819,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: f861e9ce3413e989a3b43bd0ad9c885d
+      entity: binary_sensor.leak_dishwasher
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
@@ -4857,7 +4857,7 @@
   use_blueprint:
     path: maxson/leak_detection.yaml
     input:
-      device: 100d2b250232ab143f458bfa8894e786
+      entity: binary_sensor.leak_wine_cooler
       action_alert:
         - parallel:
             - action: script.push_notification_to_ios_devices
