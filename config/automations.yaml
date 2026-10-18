@@ -6664,7 +6664,26 @@
             - condition: state
               entity_id: sensor.remote_security_action
               state: 3_single
-          sequence: []
+          sequence:
+            - if:
+                - condition: switch.is_off
+                  target:
+                    entity_id: input_boolean.doorbell_allow_motion_notifications
+                  options:
+                    behavior: any
+                    for: 00:00:00
+              then:
+                - action: input_boolean.turn_on
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.doorbell_allow_motion_notifications
+                  data: {}
+              else:
+                - action: input_boolean.turn_off
+                  metadata: {}
+                  target:
+                    entity_id: input_boolean.doorbell_allow_motion_notifications
+                  data: {}
   mode: single
 - id: "1789509150326"
   alias: A/C Issue
@@ -6700,4 +6719,50 @@
         interruption_level: time-sensitive
         title: Home Assistant
         message: The A/C temperature is over 78°
+  mode: single
+- id: "1791890709942"
+  alias: Motion Detected via Doorbell, Send to AppleTV
+  description: ""
+  triggers:
+    - trigger: webhook
+      allowed_methods:
+        - GET
+        - POST
+        - PUT
+        - HEAD
+      local_only: false
+      webhook_id: -NHpl5E2lE_BjAGy6JO5WkR97
+  conditions:
+    - condition: and
+      conditions:
+        - condition: switch.is_on
+          target:
+            entity_id: input_boolean.doorbell_allow_motion_notifications
+          options:
+            behavior: any
+            for: 00:00:00
+        - condition: door.is_closed
+          target:
+            entity_id: binary_sensor.door_front_primary
+          options:
+            for:
+              hours: 0
+              minutes: 2
+              seconds: 30
+  actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      target:
+        entity_id: input_boolean.doorbell_motion_detected
+      data: {}
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 1
+        milliseconds: 0
+    - action: input_boolean.turn_off
+      metadata: {}
+      target:
+        entity_id: input_boolean.doorbell_motion_detected
+      data: {}
   mode: single
