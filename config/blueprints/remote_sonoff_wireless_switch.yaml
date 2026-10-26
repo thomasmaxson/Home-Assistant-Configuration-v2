@@ -254,7 +254,7 @@ actions:
                         condition: template
                         value_template: "{{ var_light_press_single | length > 0 }}"
                 sequence:
-                  - alias: Determine whether to turn the light(s) on or off
+                  - alias: Determine weather to turn the light(s) on or off
                     if:
                       - alias: Check if the light(s) are currently off
                         condition: template
@@ -297,7 +297,7 @@ actions:
                         condition: template
                         value_template: "{{ var_light_press_double | length > 0 }}"
                 sequence:
-                  - alias: Determine whether to turn the light(s) on or off
+                  - alias: Determine weather to turn the light(s) on or off
                     if:
                       - alias: Check if the light(s) are currently off
                         condition: template
