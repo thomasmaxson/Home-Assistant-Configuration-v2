@@ -59,9 +59,13 @@ max: !input config_max_num
 max_exceeded: silent
 
 triggers:
-  - trigger: state
-    entity_id: !input entity
-    to: "on"
+  # - trigger: state
+  #   entity_id:
+  #   from: "off"
+  #   to: "on"
+  - trigger: moisture.detected
+    target:
+      entity_id: !input entity
 
 actions:
   - sequence: !input action_alert
