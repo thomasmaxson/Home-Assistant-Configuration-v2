@@ -3141,7 +3141,10 @@ views:
                             }
                         entities:
                           - type: section
-                            label: Household
+                          - entity: sensor.time_next_sunrise
+                            name: Next Sunrise
+                          - entity: sensor.time_next_sunset
+                            name: Next Sunset
                           - type: conditional
                             conditions:
                               - entity: schedule.waste_take_out_solid
@@ -3187,22 +3190,15 @@ views:
                               entity: sensor.days_until_cleaning_day
                               name: House Cleaning
                           - type: section
-                            label: Daily
-                          - entity: sensor.time_next_sunrise
-                            name: Next Sunrise
-                          - entity: sensor.time_next_sunset
-                            name: Next Sunset
-                      - type: entities
-                        title: Household Alerts
-                        show_header_toggle: false
-                        card_mod:
-                          style: |
-                            ha-card.type-entities { 
-                              margin: var( --popup--card-stacks );
-                            }
-                        entities:
-                          - entity: input_boolean.notification_household_safe_activiy
-                            name: Safe Activity
+                            label: Automations Run at
+                          - entity: sensor.sunrise_automations_status
+                            name: Sunrise
+                          - entity: sensor.sunset_automations_status
+                            name: Sunset
+                          - entity: sensor.bedtime_automations_status
+                            name: Bedtime
+                          - entity: sensor.late_night_automations_status
+                            name: Late Night
                   - type: vertical-stack
                     cards:
                       - type: entities
