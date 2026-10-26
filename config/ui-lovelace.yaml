@@ -3202,36 +3202,29 @@ views:
                   - type: vertical-stack
                     cards:
                       - type: entities
-                        title: Automations
+                        title: Permissions
                         show_header_toggle: false
                         card_mod:
-                          style: >
+                          style: |
                             ha-card.type-entities { 
                               margin: var( --popup--card-stacks );
                             }
-
-                            #states > div:nth-child( 7 ),  #states >
-                            div:nth-child( 8 ),  #states > div:nth-child( 9 ), 
-                            #states > div:nth-child( 10 ),  #states >
-                            div:nth-child( 13 ),  #states > div:nth-child( 14
-                            ),  #states > div:nth-child( 15 ),  #states >
-                            div:nth-child( 16 ),  #states > div:nth-child( 17
-                            ),  #states > div:nth-child( 18 ),  #states >
-                            div:nth-child( 19 ),  #states > div:nth-child( 20
-                            ){ 
+                            #states > div:nth-child( 3 ), 
+                            #states > div:nth-child( 4 ), 
+                            #states > div:nth-child( 5 ), 
+                            #states > div:nth-child( 6 ), 
+                            #states > div:nth-child( 9 ), 
+                            #states > div:nth-child( 10 ), 
+                            #states > div:nth-child( 11 ), 
+                            #states > div:nth-child( 12 ), 
+                            #states > div:nth-child( 13 ), 
+                            #states > div:nth-child( 14 ), 
+                            #states > div:nth-child( 15 ), 
+                            #states > div:nth-child( 16 ){ 
                               padding-left: 45px !important;
                             }
                         entities:
                           - type: section
-                            label: Run Daily at
-                          - entity: sensor.status_automations_sunrise
-                            name: Sunrise
-                          - entity: sensor.status_automations_sunset
-                            name: Sunset
-                          - entity: sensor.status_automations_bedtime
-                            name: Bedtime
-                          - type: section
-                            label: Window Curtains/Blinds
                           - entity: input_boolean.allow_automate_covers_household
                             name: Allow Curtain/Blind Automations
                           - type: conditional
@@ -3263,9 +3256,8 @@ views:
                               entity: input_boolean.allow_automate_covers_bedroom_4
                               name: Tom's Office Blinds
                           - type: section
-                            label: Allow Light Automations
                           - entity: input_boolean.allow_automate_occupancy_household
-                            name: Automation Permissions
+                            name: Allow Occupancy Automations
                           - type: conditional
                             conditions:
                               - entity: input_boolean.allow_automate_occupancy_household
@@ -3329,7 +3321,7 @@ views:
                   - type: vertical-stack
                     cards:
                       - type: entities
-                        title: Send To
+                        title: Notifications
                         show_header_toggle: false
                         card_mod:
                           style: |
@@ -3337,27 +3329,26 @@ views:
                               margin: var( --popup--card-stacks );
                             }
 
-                            #states > div:nth-child(3), 
+                            #states > div:nth-child( 3 ), 
 
-                            #states > div:nth-child(4), 
+                            #states > div:nth-child( 4 ), 
 
-                            #states > div:nth-child(8), 
+                            #states > div:nth-child( 7 ), 
 
-                            #states > div:nth-child(9), 
+                            #states > div:nth-child( 8 ), 
 
-                            #states > div:nth-child(10), 
+                            #states > div:nth-child( 9 ), 
 
-                            #states > div:nth-child(11), 
+                            #states > div:nth-child( 10 ), 
 
-                            #states > div:nth-child(12), 
+                            #states > div:nth-child( 11 ), 
 
-                            #states > div:nth-child(13), 
+                            #states > div:nth-child( 12 ), 
 
-                            #states > div:nth-child(14) { padding-left: 45px
+                            #states > div:nth-child( 13 ) { padding-left: 45px
                             !important;}
                         entities:
                           - type: section
-                            label: Mobile Devices
                           - entity: input_boolean.app_notify
                             name: Mobile Devices
                           - type: conditional
@@ -3375,9 +3366,6 @@ views:
                               entity: input_boolean.app_notify_jess
                               name: Jess' iPhone
                           - type: section
-                            label: Amazon Alexa Devices
-                          - entity: input_boolean.app_notify_via_thirdparty
-                            name: Use Third-Party Voice
                           - entity: input_boolean.household_notify
                             name: Amazon Alexa Devices
                           - type: conditional
@@ -3429,6 +3417,9 @@ views:
                             row:
                               entity: input_boolean.household_notify_bedroom_4
                               name: Tom's Office Echo Dot
+                          - type: section
+                          - entity: input_boolean.notification_household_safe_activiy
+                            name: Safe Activity
   - title: Devices
     path: map-devices
     type: custom:grid-layout
@@ -9308,9 +9299,10 @@ views:
           cards:
             - type: entities
               title: Sunrise Automations
+              show_header_toggle: false
               entities:
-                - entity: sensor.time_next_sunrise
-                  name: Next Sunrise
+                - entity: sensor.sunrise_automations_status
+                  name: Runs at
                 - entity: input_boolean.sunrise_automations_allow
                   name: Allow Automations
                 - type: conditional
@@ -9319,7 +9311,10 @@ views:
                       state: "on"
                   row:
                     entity: input_button.sunrise_automations_trigger
-                    name: Trigger Automations
+                    name: Trigger this Automation
+                - type: section
+                - entity: input_boolean.sunrise_automations_active
+                  name: is Active
                 - type: conditional
                   conditions:
                     - entity: input_boolean.sunrise_automations_allow
@@ -9334,30 +9329,12 @@ views:
                   row:
                     entity: input_number.sunrise_automations_offset_after
                     name: Time Offset, After
-                - type: conditional
-                  conditions:
-                    - entity: input_boolean.sunrise_automations_allow
-                      state: "on"
-                  row:
-                    entity: sensor.status_automations_sunrise
-                    name: Runs at
-            - type: entities
-              title: Noon Automations
-              entities:
-                - entity: input_boolean.noon_automations_allow
-                  name: Allow Automations
-                - type: conditional
-                  conditions:
-                    - entity: input_boolean.noon_automations_allow
-                      state: "on"
-                  row:
-                    entity: input_button.noon_automations_trigger
-                    name: Trigger Automation
             - type: entities
               title: Sunset Automations
+              show_header_toggle: false
               entities:
-                - entity: sensor.time_next_sunset
-                  name: Next Sunset
+                - entity: sensor.sunset_automations_status
+                  name: Runs at
                 - entity: input_boolean.sunset_automations_allow
                   name: Allow Automations
                 - type: conditional
@@ -9366,7 +9343,10 @@ views:
                       state: "on"
                   row:
                     entity: input_button.sunset_automations_trigger
-                    name: Trigger Automations
+                    name: Trigger this Automation
+                - type: section
+                - entity: input_boolean.sunset_automations_active
+                  name: is Active
                 - type: conditional
                   conditions:
                     - entity: input_boolean.sunset_automations_allow
@@ -9381,23 +9361,12 @@ views:
                   row:
                     entity: input_number.sunset_automations_offset_after
                     name: Time Offset, After
-                - type: conditional
-                  conditions:
-                    - entity: input_boolean.sunset_automations_allow
-                      state: "on"
-                  row:
-                    entity: sensor.status_automations_sunset
-                    name: Runs at
-                - type: conditional
-                  conditions:
-                    - entity: input_boolean.sunset_automations_allow
-                      state: "on"
-                  row:
-                    entity: input_boolean.evening_mode_active
-                    name: Evening Mode Active
             - type: entities
               title: Bedtime Automations
+              show_header_toggle: false
               entities:
+                - entity: sensor.bedtime_automations_status
+                  name: Runs at
                 - entity: input_boolean.bedtime_automations_allow
                   name: Allow Automations
                 - type: conditional
@@ -9406,14 +9375,17 @@ views:
                       state: "on"
                   row:
                     entity: input_button.bedtime_automations_trigger
-                    name: Trigger Automations
+                    name: Trigger this Automation
+                - type: section
+                - entity: input_boolean.bedtime_automations_active
+                  name: is Active
                 - type: conditional
                   conditions:
                     - entity: input_boolean.bedtime_automations_allow
                       state: "on"
                   row:
                     entity: input_datetime.bedtime_automations_time_manual
-                    name: Latest Run Time
+                    name: Latest Trigger Time
                 - type: conditional
                   conditions:
                     - entity: input_boolean.bedtime_automations_allow
@@ -9428,25 +9400,29 @@ views:
                   row:
                     entity: input_number.bedtime_automations_offset_after
                     name: Time Offset, After
+            - type: entities
+              title: Late Night Automations
+              show_header_toggle: false
+              entities:
                 - type: conditional
                   conditions:
-                    - entity: input_boolean.bedtime_automations_allow
+                    - entity: input_boolean.late_night_automations_allow
                       state: "on"
                   row:
-                    entity: sensor.status_automations_bedtime
-                    name: Runs At
-            - type: entities
-              title: Midnight Automations
-              entities:
-                - entity: input_boolean.midnight_automations_allow
+                    entity: input_datetime.late_night_automations_time_manual
+                    name: Runs at
+                - entity: input_boolean.late_night_automations_allow
                   name: Allow Automations
                 - type: conditional
                   conditions:
-                    - entity: input_boolean.midnight_automations_allow
+                    - entity: input_boolean.late_night_automations_allow
                       state: "on"
                   row:
-                    entity: input_button.midnight_automations_trigger
-                    name: Trigger Automation
+                    entity: input_button.late_night_automations_trigger
+                    name: Trigger this Automation
+                - type: section
+                - entity: input_boolean.late_night_automations_active
+                  name: is Active
     subview: true
 button_card_templates:
   button_data_setup:

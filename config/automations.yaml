@@ -105,43 +105,57 @@
   description: ""
   triggers:
     - trigger: state
+      id: Triggered by Now
       entity_id:
-        - sensor.status_automations_bedtime
-      to: Now
+        - sensor.bedtime_automations_status
+      to:
+        - Now
     - trigger: time
+      id: Triggered by Time - 12:00
       at: 00:00:00
     - trigger: time
+      id: Triggered by Time - 01:00
       at: 01:00:00
     - trigger: time
+      id: Triggered by Time - 02:00
       at: 02:00:00
     - trigger: time
+      id: Triggered by Time - 03:00
       at: 03:00:00
     - trigger: time
+      id: Triggered by Time - 04:00
       at: 04:00:00
-    - trigger: time
-      at: 05:00:00
-    - trigger: state
-      entity_id:
-        - input_button.bedtime_automations_trigger
-    - trigger: state
-      entity_id:
-        - input_boolean.bedtime_automations_run
-      from:
-        - "off"
-      to:
-        - "on"
-  conditions:
-    - condition: state
-      entity_id: input_boolean.bedtime_automations_allow
-      state:
-        - "on"
-  actions:
-    - action: input_boolean.turn_off
-      metadata: {}
-      data: {}
+    - trigger: button.pressed
+      id: Triggered by Button
       target:
-        entity_id:
-          - input_boolean.evening_mode_active
+        entity_id: input_button.bedtime_automations_trigger
+      options: {}
+  conditions:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.bedtime_automations_allow
+          state:
+            - "on"
+  actions:
+    - if:
+        - condition: trigger
+          id:
+            - Triggered by Now
+      then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+              - input_boolean.sunset_automations_active
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+              - input_boolean.bedtime_automations_active
+      alias: If triggered naturally via time change
     - alias: Mange Lighting
       parallel:
         - action: light.turn_off
@@ -252,7 +266,7 @@
               data:
                 tilt_position: 100
           alias: Maybe Close Blinds, Bedroom 4
-      alias: Maybe Close Blinds
+      alias: Manage Blinds
   mode: queued
   max: 10
 - id: "1726488231167"
@@ -260,18 +274,16 @@
   description: ""
   triggers:
     - trigger: state
+      id: Triggered by Now
       entity_id:
-        - sensor.status_automations_sunset
-      to: Now
-    - trigger: state
-      entity_id:
-        - input_button.sunset_automations_trigger
-    - trigger: state
-      entity_id:
-        - input_boolean.sunset_automations_run
-      from:
-        - "off"
-        - "on"
+        - sensor.sunset_automations_status
+      to:
+        - Now
+    - trigger: button.pressed
+      id: Triggered by Button
+      target:
+        entity_id: input_button.sunset_automations_trigger
+      options: {}
   conditions:
     - condition: and
       conditions:
@@ -279,17 +291,26 @@
           entity_id: input_boolean.sunset_automations_allow
           state:
             - "on"
-        - condition: state
-          entity_id: input_boolean.evening_mode_active
-          state:
-            - "off"
   actions:
-    - parallel:
-        - alias: Flag ACTIVATE
-          action: input_boolean.turn_on
-          data: {}
+    - if:
+        - condition: trigger
+          id:
+            - Triggered by Now
+      then:
+        - action: input_boolean.turn_on
+          metadata: {}
           target:
-            entity_id: input_boolean.evening_mode_active
+            entity_id:
+              - input_boolean.sunset_automations_active
+          data: {}
+        - action: input_boolean.turn_off
+          metadata: {}
+          target:
+            entity_id:
+              - input_boolean.sunrise_automations_active
+          data: {}
+      alias: If triggered naturally via time change
+    - parallel:
         - alias: Front Garden Lights Turn ON
           action: light.turn_on
           metadata: {}
@@ -418,39 +439,52 @@
   description: ""
   triggers:
     - trigger: time
+      id: Triggered by Time - 00:00
       at: 00:00:00
-      id: Time is 12:00 AM
     - trigger: time
+      id: Triggered by Time - 01:00
       at: 01:00:00
-      id: Time is 1:30 AM
     - trigger: time
+      id: Triggered by Time - 02:00
       at: 02:00:00
-      id: Time is 3:00 AM
     - trigger: time
+      id: Triggered by Time - 03:00
       at: 03:00:00
-      id: Time is 3:00 AM
     - trigger: time
+      id: Triggered by Time - 04:00
       at: 04:00:00
-      id: Time is 4:30 AM
     - trigger: time
+      id: Triggered by Time - 05:00
       at: 05:00:00
-      id: Time is 4:30 AM
-    - trigger: state
-      entity_id:
-        - input_button.midnight_automations_trigger
-      id: Manually Triggered
-    - trigger: state
-      entity_id:
-        - input_boolean.midnight_automations_run
-      from:
-        - "off"
-        - "on"
+    - trigger: button.pressed
+      id: Triggered by Button
+      target:
+        entity_id: input_button.late_night_automations_trigger
+      options: {}
   conditions:
-    - condition: state
-      entity_id: input_boolean.midnight_automations_allow
-      state:
-        - "on"
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.late_night_automations_allow
+          state:
+            - "on"
   actions:
+    - if:
+        - condition: trigger
+          id:
+            - Triggered by Time - 00:00
+      then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.bedtime_automations_active
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.late_night_automations_active
+      alias: If triggered naturally via time change
     - action: light.turn_off
       metadata: {}
       target:
@@ -498,24 +532,40 @@
     based on occupancy and other conditions.
   triggers:
     - trigger: state
+      id: Triggered by Now
       entity_id:
-        - sensor.status_automations_sunrise
-      to: Now
-    - entity_id:
-        - input_button.sunrise_automations_trigger
-      trigger: state
-    - trigger: state
-      entity_id:
-        - input_boolean.sunrise_automations_run
-      from:
-        - "off"
-        - "on"
+        - sensor.sunrise_automations_status
+      to:
+        - Now
+    - trigger: button.pressed
+      id: Triggered by Button
+      target:
+        entity_id: input_button.sunrise_automations_trigger
+      options: {}
   conditions:
-    - condition: state
-      entity_id: input_boolean.sunrise_automations_allow
-      state:
-        - "on"
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.sunrise_automations_allow
+          state:
+            - "on"
   actions:
+    - if:
+        - condition: trigger
+          id:
+            - Triggered by Now
+      then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.late_night_automations_active
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.sunrise_automations_active
+      alias: If triggered naturally via time change
     - parallel:
         - alias: Lights Turn OFF
           action: light.turn_off
@@ -623,7 +673,7 @@
     - at: 01:00:00
       trigger: time
     - entity_id:
-        - input_button.midnight_automations_trigger
+        - input_button.late_night_automations_trigger
       trigger: state
   conditions: []
   actions:
@@ -2662,7 +2712,7 @@
                   before: sunrise
                   after: sunset
                 - condition: state
-                  entity_id: input_boolean.evening_mode_active
+                  entity_id: input_boolean.sunset_automations_active
                   state:
                     - "off"
               then:
@@ -2713,7 +2763,7 @@
                   before: sunrise
                   after: sunset
                 - condition: state
-                  entity_id: input_boolean.evening_mode_active
+                  entity_id: input_boolean.sunset_automations_active
                   state:
                     - "off"
               then:
@@ -3383,7 +3433,7 @@
                   before: sunrise
                   after: sunset
                 - condition: state
-                  entity_id: input_boolean.evening_mode_active
+                  entity_id: input_boolean.sunset_automations_active
                   state: "off"
           sequence:
             - action: light.turn_off
@@ -5892,14 +5942,13 @@
         - condition: time
           after: sensor.sun_next_dusk
           before: sensor.sun_next_dawn
+          enabled: false
   actions:
     - choose:
         - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - AppleTV is PAUSED
+            - condition: trigger
+              id:
+                - AppleTV is PAUSED
           sequence:
             - action: scene.create
               metadata: {}
@@ -5928,11 +5977,9 @@
                   - light.living_room_couch_lamp
           alias: PLAYING to PAUSED
         - conditions:
-            - condition: and
-              conditions:
-                - condition: trigger
-                  id:
-                    - AppleTV is PLAYING
+            - condition: trigger
+              id:
+                - AppleTV is PLAYING
           sequence:
             - action: scene.turn_on
               metadata: {}
