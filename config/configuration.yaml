@@ -40,9 +40,9 @@ homekit:
     mode: accessory
     filter:
       include_entities:
-        - camera.ext_doorbell_high
+        - camera.ext_doorbell_medium
     entity_config:
-      camera.ext_doorbell_high:
+      camera.ext_doorbell_medium:
         name: Doorbell Motion
         linked_doorbell_sensor: binary_sensor.doorbell_motion_detected
 
