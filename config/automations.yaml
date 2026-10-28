@@ -297,17 +297,17 @@
           id:
             - Triggered by Now
       then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          target:
+            entity_id:
+              - input_boolean.midday_automations_active
+          data: {}
         - action: input_boolean.turn_on
           metadata: {}
           target:
             entity_id:
               - input_boolean.sunset_automations_active
-          data: {}
-        - action: input_boolean.turn_off
-          metadata: {}
-          target:
-            entity_id:
-              - input_boolean.sunrise_automations_active
           data: {}
       alias: If triggered naturally via time change
     - parallel:
@@ -365,7 +365,7 @@
                       action: light.turn_on
                       metadata: {}
                       data:
-                        transition: 120
+                        transition: 60
                         brightness_pct: 100
                       target:
                         entity_id:
@@ -435,27 +435,45 @@
   mode: queued
   max: 10
 - id: "1726489353796"
-  alias: 4) Run at Midnight
+  alias: 5) Run at Late Night
   description: ""
   triggers:
-    - trigger: time
-      id: Triggered by Time - 00:00
-      at: 00:00:00
-    - trigger: time
-      id: Triggered by Time - 01:00
-      at: 01:00:00
-    - trigger: time
-      id: Triggered by Time - 02:00
-      at: 02:00:00
-    - trigger: time
-      id: Triggered by Time - 03:00
-      at: 03:00:00
-    - trigger: time
-      id: Triggered by Time - 04:00
-      at: 04:00:00
-    - trigger: time
-      id: Triggered by Time - 05:00
-      at: 05:00:00
+    - trigger: state
+      id: Triggered by Now
+      entity_id:
+        - sensor.late_night_automations_status
+      to:
+        - Now
+    - trigger: state
+      id: Triggered by Tomorrow + 1 Hour
+      entity_id:
+        - sensor.late_night_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 1
+        minutes: 0
+        seconds: 0
+    - trigger: state
+      id: Triggered by Tomorrow + 2 Hours
+      entity_id:
+        - sensor.late_night_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 2
+        minutes: 0
+        seconds: 0
+    - trigger: state
+      id: Triggered by Tomorrow + 3 Hours
+      entity_id:
+        - sensor.late_night_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 3
+        minutes: 0
+        seconds: 0
     - trigger: button.pressed
       id: Triggered by Button
       target:
@@ -472,7 +490,7 @@
     - if:
         - condition: trigger
           id:
-            - Triggered by Time - 00:00
+            - Triggered by Now
       then:
         - action: input_boolean.turn_off
           metadata: {}
@@ -2163,8 +2181,8 @@
             - if:
                 - condition: template
                   value_template:
-                    "{{ states.scene.bedroom_3_occupancy_state_management
-                    != None }}"
+                    "{{ states( 'scene.bedroom_3_occupancy_state_management'
+                    ) != 'unknown' }}"
               then:
                 - alias: Activate generated scene
                   action: scene.turn_on
@@ -2356,8 +2374,8 @@
             - if:
                 - condition: template
                   value_template:
-                    "{{ states.scene.bedroom_4_occupancy_state_management
-                    != None }}"
+                    "{{ states( 'scene.bedroom_4_occupancy_state_management'
+                    ) != 'unknown' }}"
               then:
                 - alias: Activate generated scene
                   action: scene.turn_on
@@ -2511,8 +2529,8 @@
             - if:
                 - condition: template
                   value_template:
-                    "{{ states.scene.bedroom_2_occupancy_state_management
-                    != None }}"
+                    "{{ states( 'scene.bedroom_2_occupancy_state_management'
+                    ) != 'unknown' }}"
               then:
                 - alias: Activate generated scene
                   action: scene.turn_on
@@ -5696,7 +5714,6 @@
       to: "on"
       id: Take Out Schedule Turned ON
       trigger: state
-      enabled: false
     - entity_id:
         - schedule.waste_bring_in_recycle
       from: "off"
@@ -5747,7 +5764,6 @@
                 - condition: state
                   entity_id: input_boolean.reminder_waste_take_out_recycle
                   state: "on"
-              enabled: false
           sequence:
             - action: script.push_notification_to_ios_devices
               metadata: {}
@@ -5766,8 +5782,7 @@
                   - action: SNOOZE_RECYCLE_TAKE_OUT
                     title: Snooze
                     icon: sfsymbols:clock
-              enabled: false
-          alias: "TAKE OUT: When Unfinished Send Notification - DISABLED"
+          alias: "TAKE OUT: When Unfinished Send Notification"
         - conditions:
             - condition: trigger
               id:
@@ -6739,3 +6754,76 @@
               target:
                 entity_id: scene.accent_lights_streaming_reversed
   mode: single
+- id: "1792967732056"
+  alias: 2) Run at Midday
+  description:
+    Orchestrates midday routines including toggling automation status triggers
+    or manual input.
+  triggers:
+    - trigger: state
+      id: Triggered by Now
+      entity_id:
+        - sensor.midday_automations_status
+      to:
+        - Now
+    - trigger: state
+      id: Triggered by Tomorrow + 1 Hour
+      entity_id:
+        - sensor.midday_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 1
+        minutes: 0
+        seconds: 0
+    - trigger: state
+      id: Triggered by Tomorrow + 2 Hours
+      entity_id:
+        - sensor.midday_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 2
+        minutes: 0
+        seconds: 0
+    - trigger: state
+      id: Triggered by Tomorrow + 3 Hours
+      entity_id:
+        - sensor.midday_automations_status
+      to:
+        - Tomorrow
+      for:
+        hours: 3
+        minutes: 0
+        seconds: 0
+    - trigger: button.pressed
+      id: Triggered by Button
+      target:
+        entity_id: input_button.midday_automations_trigger
+      options: {}
+  conditions:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.midday_automations_allow
+          state:
+            - "on"
+  actions:
+    - if:
+        - condition: trigger
+          id:
+            - Triggered by Now
+      then:
+        - action: input_boolean.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.sunrise_automations_active
+        - action: input_boolean.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: input_boolean.midday_automations_active
+      alias: If triggered naturally via time change
+  mode: queued
+  max: 10
