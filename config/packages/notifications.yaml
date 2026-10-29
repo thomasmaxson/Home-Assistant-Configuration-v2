@@ -11,47 +11,43 @@ template:
       - unique_id: notifications
         state: template
         attributes:
+          dishwasher_complete: |
+            {%- if is_state( 'input_boolean.reminder_dishwasher_complete', 'on' ) %}
+              Your dishes are clean and are ready to be put away.
+            {% endif %}
+
           laundry_complete_washer: |
             {%- if is_state( 'input_boolean.reminder_laundry_complete_washer', 'on' ) -%}
               {{ [
                 'Your washed clothes are ready to be dried.',
-                'Unless you're trying to grow a mold colony, it’s time to move your clothes to the dryer.', 
+                'Unless you’re trying to grow a mold colony, it’s time to move your clothes to the dryer.', 
                 'Your clothes are officially clean and currently marinating in their own dampness.', 
                 'Congratulations, the washer did its job. Now it’s your turn.'
               ] | random }}
             {%- endif -%}
+
           laundry_complete_dryer: |
             {%- if is_state( 'input_boolean.reminder_laundry_complete_dryer', 'on' ) -%}
               {{ [
                 'Your dried clothes are ready to be folded.', 
                 'Your clothes are bone dry and awaiting your minimal effort.', 
-                'Congratulations, the dryer did all the hard work, now it's your turn.', 
+                'Congratulations, the dryer did all the hard work, now it’s your turn.', 
                 'The dryer is complete. Your warm pile of procrastination is ready.', 
                 'Please remove your clothes from the dryer and place them on the designated laundry chair.'
               ] | random }}
             {%- endif -%}
+
           waste_bring_in: |
             {%- if is_state( 'input_boolean.reminder_waste_bring_in_solid', 'on' ) %}
-              {%- set ignore = [null, 'off', 'unknown', 'unavailable'] %}
-              {%- set state_bring_in_solid = states( 'schedule.waste_bring_in_solid' ) %}
-              {%- set state_take_out_recycle = states( 'schedule.waste_take_out_recycle' ) %}
+              {%- set bins = [
+                ( 'trash', 'schedule.waste_bring_in_solid' ),
+                ( 'recycling', 'schedule.waste_bring_in_recycling' )
+              ] | selectattr( 1, 'eq', 'on' ) | map( attribute = 0 ) | list %}
 
-              {%- if state_bring_in_solid not in ignore and state_take_out_recycle not in ignore %}
+              {%- if bins %}
+                {%- set labels = bins[:-1] | join( ', ' ) ~ ' and ' ~ bins[-1] if bins | length > 1 else bins[0] %}
                 {{ [
-                  'Do not forget to bring the trash and recycling bins in.',
-                  'The bins will feel lonely if you leave them outside.',
-                  'The HOA will get mad if you leave the bins out on the street.'
-                ] | random }}
-              {%- elif state_bring_in_solid not in ignore %}
-                {{ [
-                  'Do not forget to bring the trash bins in.',
-                  'The bins will feel lonely if you leave them outside.',
-                  'The HOA will get mad if you leave the bins out on the street.'
-                ] | random }}
-
-              {%- elif state_take_out_recycle not in ignore %}
-                {{ [
-                  'Do not forget to bring the recycling bins in.',
+                  'Do not forget to bring the ' ~ labels ~ ' bins in.',
                   'The bins will feel lonely if you leave them outside.',
                   'The HOA will get mad if you leave the bins out on the street.'
                 ] | random }}
@@ -60,69 +56,18 @@ template:
 
           waste_take_out: |
             {%- if is_state( 'input_boolean.reminder_waste_take_out_solid', 'on' ) %}
-              {%- set ignore = [null, 'off', 'unknown', 'unavailable'] %}
-              
-              {%- set state_take_out_solid = states( 'schedule.waste_take_out_solid' ) %}
-              {%- set state_take_out_recycle = states( 'schedule.waste_take_out_recycle' ) %}
-              {%- set state_take_out_bulk = states( 'schedule.waste_take_out_bulk' ) %}
-              
-              {%- set is_take_out_solid = state_take_out_solid not in ignore %}
-              {%- set is_take_out_recycle = state_take_out_recycle not in ignore %}
-              {%- set is_take_out_bulk = state_take_out_bulk not in ignore %}
+              {%- set bins = [
+                ( 'trash', 'schedule.waste_take_out_solid' ),
+                ( 'recycling', 'schedule.waste_take_out_recycling' ),
+                ( 'bulk trash', 'schedule.waste_take_out_bulk' )
+              ] | selectattr( 1, 'eq', 'on' ) | map( attribute = 0 ) | list %}
 
-              {%- if is_take_out_solid and is_take_out_bulk and is_take_out_recycle %}
+              {%- if bins %}
+                {%- set labels = bins[:-1] | join( ', ' ) ~ ' and ' ~ bins[-1] if bins | length > 1 else bins[0] %}
                 {{ [
-                  'Tomorrow is the big day: trash, recycling and bulk trash day!',
-                  'Trash, recycling and bulk trash should go out before tomorrow morning.',
-                  'Do not forget to take the trash, recycling and bulk trash out.'
+                  'Tomorrow is the big day: ' ~ labels ~ ' day!',
+                  labels | capitalize ~ ' should go out before tomorrow morning.',
+                  'Do not forget to take the ' ~ labels ~ ' out.'
                 ] | random }}
-
-              {%- elif is_take_out_solid and is_take_out_bulk %}
-                {{ [
-                  'Tomorrow is the big day: trash and bulk trash day!',
-                  'Trash and bulk trash should go out before tomorrow morning.',
-                  'Do not forget to take the trash and bulk trash out.'
-                ] | random }}
-
-              {%- elif is_take_out_solid and is_take_out_recycle %}
-                {{ [
-                  'Tomorrow is the big day: trash and recycling day!',
-                  'Trash and recycling should go out before tomorrow morning.',
-                  'Do not forget to take the trash and recycling out.'
-                ] | random }}
-
-              {%- elif is_take_out_recycle and is_take_out_bulk %}
-                {{ [
-                  'Tomorrow is the big day: bulk trash and recycling day!',
-                  'Bulk trash and recycling should go out before tomorrow morning.',
-                  'Do not forget to take the bulk trash and recycling out.'
-                ] | random }}
-
-              {%- elif is_take_out_solid %}
-                {{ [
-                  'Tomorrow is the big day, trash day!',
-                  'Trash should go out before tomorrow morning.',
-                  'Do not forget to take the trash out.'
-                ] | random }}
-
-              {%- elif is_take_out_recycle %}
-                {{ [
-                  'Tomorrow is the big day, recycling day!',
-                  'Recycling should go out before tomorrow morning.',
-                  'Do not forget to take the recycling out.'
-                ] | random }}
-
-              {%- elif is_take_out_bulk %}
-                {{ [
-                  'Tomorrow is the big day, bulk trash day!',
-                  'Bulk trash should go out before tomorrow morning.',
-                  'Do not forget to take the bulk trash out.'
-                ] | random }}
-
               {%- endif %}
-            {% endif %}
-
-          dishwasher_complete: |
-            {%- if is_state( 'input_boolean.reminder_dishwasher_complete', 'on' ) %}
-              Your dishes are clean and are ready to be put away.
             {% endif %}
