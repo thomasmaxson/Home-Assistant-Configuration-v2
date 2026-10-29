@@ -41,8 +41,8 @@ template:
             {%- if is_state( 'input_boolean.reminder_waste_bring_in_solid', 'on' ) %}
               {%- set bins = [
                 ( 'trash', 'schedule.waste_bring_in_solid' ),
-                ( 'recycling', 'schedule.waste_bring_in_recycling' )
-              ] | selectattr( 1, 'eq', 'on' ) | map( attribute = 0 ) | list %}
+                ( 'recycle', 'schedule.waste_bring_in_recycle' )
+              ] | selectattr( '1', 'is_state', 'on' ) | map( attribute = 0 ) | list %}
 
               {%- if bins %}
                 {%- set labels = bins[:-1] | join( ', ' ) ~ ' and ' ~ bins[-1] if bins | length > 1 else bins[0] %}
@@ -58,9 +58,9 @@ template:
             {%- if is_state( 'input_boolean.reminder_waste_take_out_solid', 'on' ) %}
               {%- set bins = [
                 ( 'trash', 'schedule.waste_take_out_solid' ),
-                ( 'recycling', 'schedule.waste_take_out_recycling' ),
+                ( 'recycle', 'schedule.waste_take_out_recycle' ),
                 ( 'bulk trash', 'schedule.waste_take_out_bulk' )
-              ] | selectattr( 1, 'eq', 'on' ) | map( attribute = 0 ) | list %}
+              ] | selectattr( '1', 'is_state', 'on' ) | map( attribute = 0 ) | list %}
 
               {%- if bins %}
                 {%- set labels = bins[:-1] | join( ', ' ) ~ ' and ' ~ bins[-1] if bins | length > 1 else bins[0] %}
